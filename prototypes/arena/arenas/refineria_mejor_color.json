@@ -12,8 +12,8 @@
     ]
   },
   "pieces": {
-    "pasarela_abajo_izq": {"src": "refineria/pasarela_abajo_izq.png", "w": 729, "h": 225, "solids": [{"kind": "bridge", "x": 0, "y": 17, "w": 654, "ledge": "both"}], "front": [[0, 8, 662, 62]], "legs": [80, 160], "legsGap": 8},
-    "pasarela_abajo_der": {"src": "refineria/pasarela_abajo_der.png", "w": 729, "h": 225, "solids": [{"kind": "bridge", "x": 75, "y": 17, "w": 654, "ledge": "both"}], "front": [[67, 8, 662, 62]], "legs": [80, 160], "legsGap": 8},
+    "pasarela_abajo_izq": {"src": "refineria/pasarela_abajo_izq.png", "w": 729, "h": 225, "solids": [{"kind": "bridge", "x": 0, "y": 17, "w": 654, "ledge": "both"}], "front": [[0, 8, 656, 62]], "legs": [80, 160], "legsGap": 8},
+    "pasarela_abajo_der": {"src": "refineria/pasarela_abajo_der.png", "w": 729, "h": 225, "solids": [{"kind": "bridge", "x": 75, "y": 17, "w": 654, "ledge": "both"}], "front": [[73, 8, 656, 62]], "legs": [80, 160], "legsGap": 8},
     "pasarela_medio_izq": {"src": "refineria/pasarela_medio_izq.png", "w": 436, "h": 192, "solids": [{"kind": "bridge", "x": 8, "y": 15, "w": 421, "ledge": "both"}], "front": [[1, 7, 434, 58]], "legs": [68, 178], "legsGap": 15},
     "pasarela_medio_der": {"src": "refineria/pasarela_medio_der.png", "w": 440, "h": 192, "solids": [{"kind": "bridge", "x": 11, "y": 15, "w": 421, "ledge": "both"}], "front": [[5, 7, 434, 58]], "legs": [68, 178], "legsGap": 15},
     "pasarela_arriba_izq": {"src": "refineria/pasarela_arriba_izq.png", "w": 528, "h": 192, "solids": [{"kind": "bridge", "x": 0, "y": 13, "w": 518, "ledge": "both"}], "front": [[0, 6, 526, 58]], "legs": [78, 176], "legsGap": 13},
