@@ -20,7 +20,9 @@ se copia de arenas/<arena>.json) y una edición del modelo con las pasarelas sac
    queda píxel a píxel.
 Escribe arenas/<arena>/fondo.webp, arenas/<arena>/<pieza>.png y arenas/<arena>.json, la arena en capas del menú del
 juego (con las piezas donde estaban en la lámina). Si esa ya está en capas no la pisa (pueden ser cambios del editor),
-salvo con --force. --check deja imágenes para comprobar: la arena armada de nuevo contra la lámina, y las piezas.
+salvo con --force. Con --keep-boxes rehace sólo las imágenes (fondo y piezas) en las mismas cajas de las piezas de
+arenas/<arena>.json (su "cut", o donde está su objeto), sin tocar el resto del JSON: colisión, front, patas, color y
+objetos quedan como están. --check deja imágenes para comprobar: la arena armada de nuevo contra la lámina, y las piezas.
 """
 import argparse
 import json
@@ -40,7 +42,7 @@ AW, AH = 1920, 1080
 # Las de la derecha son las de la izquierda espejadas (la arena es simétrica)
 LEFT = {
     "refineria": [
-        ("pasarela_abajo", 1, 4, [[0, 708, 668, 78], [112, 784, 614, 147], [636, 724, 92, 207]]),
+        ("pasarela_abajo", 1, 4, [[0, 708, 668, 78], [112, 784, 614, 147], [636, 708, 92, 223]]),
         ("pasarela_medio", 3, 2, [[362, 518, 442, 70], [376, 586, 316, 122]]),
         ("pasarela_arriba", 5, 0, [[0, 328, 530, 70], [200, 398, 330, 120]]),
     ],
@@ -84,6 +86,7 @@ def main() -> None:
     ap.add_argument("--fill-ref", help="la referencia de --fill: la edición alineada, con lo que sobraba en magenta")
     ap.add_argument("--check", type=Path, help="carpeta donde dejar las imágenes de comprobación")
     ap.add_argument("--force", action="store_true", help="pisar arenas/<arena>.json aunque ya esté en capas")
+    ap.add_argument("--keep-boxes", action="store_true", help="sólo las imágenes, en las cajas de las piezas que ya hay")
     args = ap.parse_args()
 
     out_dir = ARENA / "arenas" / args.arena
@@ -94,8 +97,12 @@ def main() -> None:
             raise SystemExit(f"{menu.relative_to(ROOT)} ya está en capas y no hay {src.relative_to(ROOT)}")
         src.write_text(menu.read_text(encoding="utf-8"), encoding="utf-8")
         print(f"  {menu.relative_to(ROOT)} → {src.relative_to(ROOT)} (la fuente, de lámina entera)")
-    if menu.exists() and "pieces" in json.loads(menu.read_text(encoding="utf-8")) and not args.force:
-        raise SystemExit(f"{menu.relative_to(ROOT)} ya está en capas (¿cambios del editor?): --force para pisarla")
+    cur = json.loads(menu.read_text(encoding="utf-8")) if menu.exists() else {}
+    if args.keep_boxes and "pieces" not in cur:
+        raise SystemExit(f"--keep-boxes: {menu.relative_to(ROOT)} todavía no está en capas")
+    if "pieces" in cur and not (args.force or args.keep_boxes):
+        raise SystemExit(f"{menu.relative_to(ROOT)} ya está en capas (¿cambios del editor?): --force para pisarla, "
+                         "o --keep-boxes para rehacer sólo las imágenes")
     arena = json.loads(src.read_text(encoding="utf-8"))
     plate_rgb = np.asarray(Image.open(ARENA / "arenas" / arena["plate"]["src"]).convert("RGB")).astype(np.float32)
     pieces = pieces_for(args.arena, arena)
@@ -132,6 +139,8 @@ def main() -> None:
     # la neblina es clara (las sombras azul oscuro de un andamio no), y el brillo alrededor de una luz cian es de la luz
     bright = cv2.dilate(((G > 200) & (B > 220)).astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool)
     haze = (B - R > 30) & (B - G > 15) & (G < 190) & (G < 0.72 * B) & (B >= 95) & ~bright
+    bluish = (B - R > 50) & (B - G > 10) & (G < 0.8 * B) & (B >= 90) & ~bright   # el antialias con el cielo (no los contornos oscuros)
+    glowish = (B - R > 45) & (B > 110)   # azul o cian: cielo, o una luz (propia, si está encerrada en la pieza)
 
     # lo que el modelo dejó igual, en manchas grandes, es del fondo aunque toque la pasarela (un caño que pasa por
     # debajo, la pared): no va en la pieza. Las motas sueltas iguales son ruido y quedan
@@ -146,38 +155,70 @@ def main() -> None:
     alike = np.abs(cv2.GaussianBlur(plate_rgb, (5, 5), 0) - cv2.GaussianBlur(empty, (5, 5), 0)).max(2) < 20
     kept_bg = big(same > 0, 2500) | cv2.dilate(big(alike, 1500, red=True).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
 
-    defs, objects, allmask, allcore = {}, [], np.zeros((AH, AW), np.float32), np.zeros((AH, AW), bool)
+    defs, objects, allmask, allcore, cut = {}, [], np.zeros((AH, AW), np.float32), np.zeros((AH, AW), bool), {}
     for k, (name, si, fi, rects) in enumerate(pieces):
         mine = owner == k
-        # la losa, entera: el recorte de adelante (plate.solid) es opaco aunque el modelo haya dejado algo parecido
+        # la losa (el recorte de adelante, plate.solid) es la semilla: va lo que no es neblina y está pegado a ella. No se
+        # fuerza entera: el rectángulo pasa las tapas de las puntas y adentro hay cielo, que delante del colgado lo tapaba
         fx, fy, fw, fh = arena["plate"]["solid"][fi]
         deck = np.zeros((AH, AW), bool)
         deck[fy:fy + fh, max(0, fx):fx + fw] = True
         deck &= mine
-        core = (mine & ~haze & ~kept_bg) | deck
-        # sin líneas sueltas de 1 o 2 px (el contorno de algo del fondo que quedó afuera)
-        core = cv2.morphologyEx(core.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)).astype(bool) | deck
+        core = mine & ~haze & ~kept_bg
+        # sin líneas sueltas de 1 o 2 px (el contorno de algo del fondo que quedó afuera); la losa, sin tocar
+        core = cv2.morphologyEx(core.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)).astype(bool) | (core & deck)
         # sólo lo que está pegado a la losa: los pedazos sueltos (un caño, una mota) quedan en el fondo
         n, lab = cv2.connectedComponents(core.astype(np.uint8), connectivity=8)
-        keep = np.unique(lab[deck & (lab > 0)])
+        keep = np.unique(lab[deck & core & (lab > 0)])
         core = np.isin(lab, keep) & (lab > 0)
-        # los agujeros chicos (el brillo de una luz, una mota de neblina en un panel) se tapan; los grandes (entre las
-        # cruces de un andamio) son fondo y quedan
+        # los agujeros muy chicos (una mota en un panel) se tapan; los de neblina entre las cruces son fondo y quedan
         n, lab, st, _ = cv2.connectedComponentsWithStats((~core).astype(np.uint8), connectivity=4)
-        for i in np.nonzero(st[1:, cv2.CC_STAT_AREA] < 600)[0] + 1:
-            core |= (lab == i) & mine
+        for i in np.nonzero(st[1:, cv2.CC_STAT_AREA] < 120)[0] + 1:
+            core |= (lab == i) & mine & ~haze
+        # el borde, pelado: el antialias del contorno con el cielo deja una línea azulada (sobre todo arriba de la losa)
+        for _ in range(2):
+            edge = core & ~cv2.erode(core.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+            core &= ~(edge & bluish)
+        # y lo azul que toca el afuera de la pieza y sigue en el fondo sin pasarelas (las luces de una torre lejana pegadas
+        # a una punta) se va; las luces de los postes, que el modelo sacó con la pasarela, quedan. Después, otra vez sólo
+        # lo pegado a la losa
+        n, lab = cv2.connectedComponents((~core | (core & glowish)).astype(np.uint8), connectivity=4)
+        outside = np.unique(lab[~core & (lab > 0)])
+        core &= ~(np.isin(lab, outside) & glowish & alike)
+        # las manchitas azules que quedan sueltas en el borde (pedazos de esas luces) también; una luz de poste es más grande
+        n, lab, st, _ = cv2.connectedComponentsWithStats((core & glowish).astype(np.uint8), connectivity=8)
+        rim = cv2.dilate((~core).astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+        small = [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] < 150]
+        core &= ~(np.isin(lab, [i for i in small if rim[lab == i].any()]))
+        n, lab = cv2.connectedComponents(core.astype(np.uint8), connectivity=8)
+        core = np.isin(lab, np.unique(lab[deck & core & (lab > 0)])) & (lab > 0)
         m8 = core.astype(np.uint8)
         allcore |= core
-        alpha = np.clip(cv2.GaussianBlur(m8.astype(np.float32), (3, 3), 0) * 1.35, 0, 1)   # borde de 1 px, suave
-        ys, xs = np.nonzero(alpha > 0.02)
-        bx, by, bx1, by1 = int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
+        # el alfa: duro adentro; suave (1 px) sólo en el borde que da al cielo, donde estaba el antialias. Donde la zona corta
+        # la pieza contra una pared queda duro, y así calza con la lámina de al lado sin costura
+        soft = np.clip(cv2.GaussianBlur(m8.astype(np.float32), (3, 3), 0) * 1.35, 0, 1)
+        sky_edge = cv2.dilate((haze & ~core).astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+        alpha = np.where(core, np.where(sky_edge, soft, 1.0), 0.0).astype(np.float32)
+        if args.keep_boxes:   # la caja de la pieza que ya está en el JSON: no cambia nada más
+            d0 = cur["pieces"][name]
+            org = d0.get("cut") or next([o["x"], o["y"]] for o in cur.get("objects", []) if o.get("piece") == name)
+            bx, by, bx1, by1 = int(org[0]), int(org[1]), int(org[0]) + d0["w"], int(org[1]) + d0["h"]
+            box = np.zeros((AH, AW), bool); box[max(0, by):by1, max(0, bx):bx1] = True
+            out = float(alpha[~box].sum())
+            if out > 50:
+                print(f"  ojo: {name} tiene {out:.0f} px de alfa fuera de su caja (quedan afuera)")
+            alpha = alpha * box
+            cut[name] = [bx, by]
+        else:
+            ys, xs = np.nonzero(alpha > 0.02)
+            bx, by, bx1, by1 = int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
         rgba = plate_rgba[by:by1, bx:bx1].copy()
         rgba[..., 3] = np.round(alpha[by:by1, bx:bx1] * 255).astype(np.uint8)
         Image.fromarray(rgba, "RGBA").save(out_dir / f"{name}.png", optimize=True)
         allmask = np.maximum(allmask, alpha)
         s = arena["solids"][si]
         defs[name] = {
-            "src": f"{args.arena}/{name}.png", "w": bx1 - bx, "h": by1 - by,
+            "src": f"{args.arena}/{name}.png", "w": bx1 - bx, "h": by1 - by, "cut": [bx, by],
             "solids": [{"kind": s["kind"], "x": s["x"] - bx, "y": s["y"] - by, "w": s["w"], "ledge": "both"}],
             "front": [[fx - bx, fy - by, fw, fh]],
         }
@@ -194,11 +235,31 @@ def main() -> None:
     if left.any():
         empty = cv2.inpaint(np.clip(empty, 0, 255).astype(np.uint8), left, 9, cv2.INPAINT_TELEA).astype(np.float32)
     # el fondo: la lámina, y la edición sólo donde había pieza (un poco más ancho, sin salir de su zona, con transición)
-    grow = (cv2.dilate((allmask > 0.02).astype(np.uint8), np.ones((7, 7), np.uint8)).astype(bool) & anyzone).astype(np.float32)
-    grow = cv2.GaussianBlur(grow, (7, 7), 0)[..., None]
+    # (debajo de la pieza, siempre; alrededor, hasta 3 px, sólo sobre la neblina del cielo, para que al mover la pieza no
+    # quede el fantasma de su contorno: al lado de una pared, la de la edición no es la de la lámina y se vería el corte)
+    piece = (allmask > 0.02).astype(np.uint8)
+    grow = (piece.astype(bool) | (cv2.dilate(piece, np.ones((7, 7), np.uint8)).astype(bool) & haze)).astype(np.float32)
+    grow = np.where(piece.astype(bool) | haze, cv2.GaussianBlur(grow, (5, 5), 0), 0)[..., None]   # sin desbordar a una pared
     fondo = plate_rgb * (1 - grow) + empty * grow
     Image.fromarray(np.clip(np.round(fondo), 0, 255).astype(np.uint8), "RGB").save(out_dir / "fondo.webp", quality=92, method=6)
 
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("serve", HERE / "serve.py")
+    serve = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(serve)
+    if args.keep_boxes:   # del JSON sólo se suma, si faltaba, de dónde salió cada pieza ("cut")
+        if any("cut" not in cur["pieces"][n] for n in cut):
+            for n, c in cut.items():
+                cur["pieces"][n] = {**{k: v for k, v in cur["pieces"][n].items() if k in ("src", "w", "h")}, "cut": c,
+                                    **{k: v for k, v in cur["pieces"][n].items() if k not in ("src", "w", "h", "cut")}}
+            menu.write_text(serve.fmt(cur) + "\n", encoding="utf-8")
+        print(f"✓ {out_dir.relative_to(ROOT)}/: fondo.webp y {len(cut)} piezas, en sus cajas; {menu.relative_to(ROOT)} igual")
+    else:
+        write_layered(args, arena, pieces, defs, objects, menu, out_dir, serve)
+    check(args, out_dir, objects, plate_rgb, allmask, empty)
+
+
+def write_layered(args, arena, pieces, defs, objects, menu, out_dir, serve) -> None:
     # la arena en capas: lo fijo (piso, columna y su recorte) queda; las pasarelas pasan a objetos con su pieza
     used_s = {si for _, si, _, _ in pieces}
     used_f = {fi for _, _, fi, _ in pieces}
@@ -221,13 +282,11 @@ def main() -> None:
     layered["objects"] = objects + arena.get("objects", [])
     order = ["name", "note", "size", "seed", "plate", "pieces", "solids", "objects", "spawns", "decor", "pipes"]
     layered = {k: layered[k] for k in order if k in layered} | {k: v for k, v in layered.items() if k not in order}
-    import importlib.util
-    spec = importlib.util.spec_from_file_location("serve", HERE / "serve.py")
-    serve = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(serve)
     menu.write_text(serve.fmt(layered) + "\n", encoding="utf-8")
     print(f"✓ {out_dir.relative_to(ROOT)}/: fondo.webp y {len(defs)} piezas; {menu.relative_to(ROOT)} en capas")
 
+
+def check(args, out_dir, objects, plate_rgb, allmask, empty) -> None:
     if args.check:   # la arena armada de nuevo (fondo + piezas en su lugar) contra la lámina, y la máscara
         args.check.mkdir(parents=True, exist_ok=True)
         comp = Image.open(out_dir / "fondo.webp").convert("RGBA")
