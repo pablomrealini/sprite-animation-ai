@@ -65,7 +65,7 @@ name = "shoot2h"          # r02: disparo a dos manos
 file = "clips/raw/r02.mp4"
 color_matrix = "bt601"
 clean = { cut_muzzle = true }
-body_height_px = 658      # medido por la cara y el casco contra r04 (1,40×), no por el alto: abre mucho las piernas
+body_height_px = 680      # por el ancho del casco contra el disparo de r04 (a 658 seguía 3% más grande): abre mucho las piernas
                           # y queda más bajo, así que igualar el alto lo agrandaba ~8%
 model = "seedance-2.0"
 prompt = "prompts/shoot2h.txt"

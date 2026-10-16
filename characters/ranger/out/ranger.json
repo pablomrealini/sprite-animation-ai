@@ -9,19 +9,19 @@
   "variants": {
     "1x": {
       "canvas": {
-        "w": 160,
+        "w": 159,
         "h": 233
       },
       "pivot_px": {
-        "x": 80.0,
+        "x": 79.5,
         "y": 208.96
       },
       "atlas": [
         {
           "image": "ranger_1x-0.png",
           "data": "ranger_1x-0.json",
-          "w": 1407,
-          "h": 1389
+          "w": 1408,
+          "h": 1408
         }
       ],
       "animations": {
@@ -820,8 +820,8 @@
         {
           "image": "ranger_0.5x-0.png",
           "data": "ranger_0.5x-0.json",
-          "w": 726,
-          "h": 738
+          "w": 743,
+          "h": 681
         }
       ],
       "animations": {
