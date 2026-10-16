@@ -85,7 +85,7 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
       <h2 id="hControls">Controles</h2>
       <dl class="keys">
         <dt><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd></dt><dd>Correr</dd>
-        <dt><kbd>W</kbd><kbd>↑</kbd><kbd>Espacio</kbd></dt><dd>Saltar. Colgado de una cornisa: subir</dd>
+        <dt><kbd>W</kbd><kbd>↑</kbd><kbd>Espacio</kbd></dt><dd>Saltar. En el aire, otra vez: doble salto con mortal. Colgado de una cornisa: subir</dd>
         <dt><kbd>S</kbd><kbd>↓</kbd></dt><dd>Agacharse. Colgado: soltarse</dd>
         <dt><kbd>Clic</kbd><kbd>J</kbd></dt><dd>Disparar con una mano. Con el mouse, apunta al lado del cursor</dd>
         <dt><kbd>Clic der.</kbd><kbd>K</kbd></dt><dd>Disparar con las dos manos: más lento y pega doble</dd>
@@ -96,6 +96,13 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
 
     <section class="box" aria-labelledby="hSettings">
       <h2 id="hSettings">Ajustes de prueba</h2>
+      <div class="row">
+        <span class="lbl" id="lblSet">Animaciones</span>
+        <div class="seg" role="group" aria-labelledby="lblSet">
+          <button type="button" id="setNew" aria-pressed="true">Nuevas (API)</button>
+          <button type="button" id="setOld" aria-pressed="false">Anteriores</button>
+        </div>
+      </div>
       <div class="row">
         <span class="lbl" id="lblRS">Correr y disparar</span>
         <div class="seg" role="group" aria-labelledby="lblRS">
@@ -139,7 +146,8 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
       </div>
       <div class="readout mono" id="readout" aria-live="off">quieto · idle 1/3</div>
       <p class="note"><b>Feel "reporte":</b> 300 px/s, salto de 192 px (1,5 alturas) que sube en 0,36 s y cae en 0,28, coyote y buffer de 0,1 s, corrección de esquina, 12 disparos/s y retroceso de 2,5 px por código. "Anterior" es como estaba, para comparar.</p>
-      <p class="note"><b>Provisorio:</b> el idle es un cuadro quieto, la subida a la cornisa es un salto de posición con la animación de pararse (falta el clip de trepar) y al correr dispara desde la mano que balancea, porque no hay run disparando. Los rayos, chispas y el fogonazo son efectos de código.</p>
+      <p class="note"><b>Animaciones nuevas (API):</b> idle respirando, run con las manos arriba de la cintura (para correr con y sin disparar con las mismas piernas) y doble salto con mortal, generados con Seedance 2.0 por fal.ai. "Anteriores" vuelve al idle quieto y al run viejo, para comparar.</p>
+      <p class="note"><b>Provisorio:</b> con "Anteriores" el idle es un cuadro quieto, la subida a la cornisa es un salto de posición con la animación de pararse (falta el clip de trepar) y al correr dispara desde la mano que balancea, porque no hay run disparando. Los rayos, chispas y el fogonazo son efectos de código.</p>
     </section>
   </div>
 </div>
@@ -179,11 +187,21 @@ const HANG_WALL = 30, HANG_GRIP = 6;                 // del pivot a la cara de l
 // correr disparando con cuerpo partido: piernas del run debajo de la cintura y torso del disparo arriba, con el rebote
 // de cada frame del run (medido en la punta del casco). La costura va a 46 px de los pies y el torso la tapa 6 px
 const RS_CUT = 46, RS_OVER = 6;
-const RS_DY = anim("run").f.map(f => f[10] - anim("shoot").f[0][10]);
+const RS_DY = Object.fromEntries(["run", "run_legs"].filter(n => SPR.anims[n]).map(n => [n, anim(n).f.map(f => f[10] - anim("shoot").f[0][10])]));
+const RUN = () => (S.runSet === "nuevo" && SPR.anims.run_legs ? "run_legs" : "run");
+const IDLE = () => (S.runSet === "nuevo" && SPR.anims.idle_breath ? "idle_breath" : "idle");
+// doble salto: el mortal son los frames de double_jump con el cuerpo girado (más anchos que altos o encogidos);
+// se dibujan centrados en el cuerpo, porque el clip trae el giro y un corrimiento hacia adelante
+const FLIP = (() => {   // del primer al último frame girado, contiguos (cabeza abajo el cuerpo vuelve a ser alto)
+  if (!SPR.anims.double_jump) return [];
+  const turned = anim("double_jump").f.map((f, i) => [i, f]).filter(([, f]) => f[2] / f[3] > 0.95 || f[3] < 100).map(([i]) => i);
+  return turned.length ? Array.from({ length: turned[turned.length - 1] - turned[0] + 1 }, (_, k) => turned[0] + k) : [];
+})();
+const FLIP_DUR = 0.42, DOUBLE_V = 0.9;
 const GRAB_FRAMES = [6, 7, 8, 9];                    // de hang_in: el momento en que agarra
 
 /* ---------- ajustes ---------- */
-const S = { jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte", runShoot: "split" };
+const S = { jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte", runShoot: "split", runSet: "nuevo" };
 function seg(ids, onPick) {
   ids.forEach(([id, val]) => document.getElementById(id).addEventListener("click", () => {
     ids.forEach(([o]) => document.getElementById(o).setAttribute("aria-pressed", String(o === id)));
@@ -196,6 +214,7 @@ seg([["dOff", false], ["dOn", true]], v => { S.debug = v; });
 const runSpeedEl = document.getElementById("runSpeed");
 runSpeedEl.addEventListener("input", () => { S.runSpeed = +runSpeedEl.value; document.getElementById("runVal").textContent = S.runSpeed + " px/s"; });
 seg([["rsSplit", "split"], ["rsSwing", "swing"]], v => { S.runShoot = v; });
+seg([["setNew", "nuevo"], ["setOld", "anterior"]], v => { S.runSet = v; });
 seg([["fRep", "reporte"], ["fAnt", "anterior"]], v => { S.feel = v; FEEL = FEELS[v]; S.runSpeed = FEEL.run; runSpeedEl.value = FEEL.run; document.getElementById("runVal").textContent = FEEL.run + " px/s"; });
 function setDebug(v) { S.debug = v; document.getElementById("dOff").setAttribute("aria-pressed", String(!v)); document.getElementById("dOn").setAttribute("aria-pressed", String(v)); }
 
@@ -334,7 +353,9 @@ function update(dt) {
   const fire1 = active && (mouseL || held("KeyJ")), fire2 = active && (mouseR || held("KeyK"));
   const firing = fire1 || fire2;
   const dir = (right ? 1 : 0) - (left ? 1 : 0);
-  P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt;
+  P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt; P.idleT = (P.idleT || 0) + dt;
+  if (P.flipT > 0) P.flipT += dt;
+  if (P.onGround || P.state === "hang") { P.canDouble = true; P.flipT = 0; }
   P.coyoteT = P.onGround ? 0 : P.coyoteT + dt;
 
   // ---- colgado de una cornisa ----
@@ -388,6 +409,8 @@ function update(dt) {
     P.onGround = false; P.landT = 0; P.aim = "none"; P.crouch = "none";
     if (S.jumpMode === "root") P.jump = { mode: "root", t: 0, baseY: P.y };
     else { P.jump = { mode: "phys" }; P.vy = -FEEL.v0; }
+  } else if (jumpPressed && !P.onGround && P.canDouble && FLIP.length && (!P.jump || P.jump.mode === "phys")) {
+    P.canDouble = false; P.bufferT = 0; P.jump = { mode: "phys" }; P.vy = -FEEL.v0 * DOUBLE_V; P.flipT = 1e-4;
   }
   jumpPressed = false; downPressed = false;
 
@@ -434,9 +457,13 @@ function update(dt) {
   if (!name) {
     if (!P.onGround || P.jump) {
       // en el aire con física: la fase sale de la velocidad; disparando, el frame con el brazo extendido
-      if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
+      if (P.flipT > 0 && P.flipT < FLIP_DUR) {
+        name = "double_jump"; idx = FLIP[Math.min(FLIP.length - 1, Math.floor(P.flipT / FLIP_DUR * FLIP.length))];
+        const f = anim(name).f[idx];
+        torso = { centered: true, x: P.x - P.facing * (f[4] + f[2] / 2 - PIV_X), y: P.y - BODY_H / 2 - 8 - (f[5] + f[3] / 2 - PIV_Y) };
+      } else if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
       else { name = "jump"; idx = P.vy < -240 ? JP.rise[0] : P.vy < -60 ? (JP.rise[1] ?? JP.apex) : P.vy < 160 ? JP.apex : (JP.fall[0] ?? JP.apex); }
-      drawY = P.y + anim(name).f[idx][8];
+      drawY = torso && torso.centered ? torso.y : P.y + anim(name).f[idx][8];
     } else if (crouching) {
       P.crouchT += dt;
       if (P.crouch === "in") { idx = Math.floor(P.crouchT / 0.04); name = "crouch_in"; if (idx >= anim("crouch_in").f.length) { P.crouch = "hold"; P.crouchT = 0; } }
@@ -447,10 +474,10 @@ function update(dt) {
     if (!name) {
       if (P.landT > 0 && !moving) { P.landT -= dt; name = "jump"; idx = JP.land[Math.min(JP.land.length - 1, Math.floor((0.2 - P.landT) / 0.07))] ?? 0; }
       else if (moving) {
-        P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = "run"; idx = Math.floor(P.t * 12) % anim("run").f.length;   // el ciclo acompaña la velocidad
+        P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = RUN(); idx = Math.floor(P.t * 12) % anim(name).f.length;   // el ciclo acompaña la velocidad
         if (firing && S.runShoot === "split") {
           const n = anim("shoot").f.length, per = Math.max(0.1, FEEL.rate1);
-          torso = { name: "shoot", i: P.shotT < per ? Math.min(n - 1, Math.floor(P.shotT / (per / n))) : 0, dy: RS_DY[idx] };
+          torso = { name: "shoot", i: P.shotT < per ? Math.min(n - 1, Math.floor(P.shotT / (per / n))) : 0, dy: RS_DY[name][idx] };
         }
       }
       else {
@@ -472,16 +499,17 @@ function update(dt) {
           if (P.aimAnim === "out") { name = b + "_out"; idx = Math.floor(P.aimT / 0.045); if (idx >= anim(name).f.length) { P.aim = "none"; name = null; } }
           if (name) idx = Math.min(idx, anim(name).f.length - 1);
         }
-        if (!name) { name = "idle"; idx = 0; }
+        if (!name) { name = IDLE(); idx = Math.floor(P.idleT * 12) % anim(name).f.length; }
       }
       drawY = P.y;
     }
   }
-  setDraw(name, idx, P.x, drawY, torso);
+  if (torso && torso.centered) setDraw(name, idx, torso.x, drawY);
+  else setDraw(name, idx, P.x, drawY, torso);
 
   // disparo: sale de la boca del frame que se está mostrando
   const aimedReady = !(P.aimAnim === "in" && P.aim !== "none" && !moving && P.onGround && !crouching);
-  if (firing && P.fireCD <= 0 && aimedReady && P.crouch !== "in" && P.crouch !== "out") {
+  if (firing && P.fireCD <= 0 && aimedReady && !(P.flipT > 0 && P.flipT < FLIP_DUR) && P.crouch !== "in" && P.crouch !== "out") {
     const two = fire2 && !moving && P.onGround && !crouching;
     const T = P.draw.torso, fr = T ? anim(T.name).f[T.i] : anim(P.draw.name).f[P.draw.i];
     fire(fr, P.draw.y + (T ? T.dy : 0), two ? 2 : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1; P.kickT = 0.06;

@@ -1,17 +1,17 @@
 {
   "character": "ranger",
-  "created": "2026-10-16T02:57:24+00:00",
+  "created": "2026-10-16T13:55:05+00:00",
   "tool": "spritepipe 0.1",
   "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
-  "config": "# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).\n# Los comandos van desde la raíz del repo.\n#\n# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).\n#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,\n#    poses/ranger_jump_magenta_16x9.png.\n# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)\n#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno\n#    se retocó en Davinci, reemplazarlo.\n#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)\n#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos\n# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver \"Limpieza previa\" en\n#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,\n#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en\n#    work/00_clean/ y se reusan mientras no cambie nada.\n#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).\n# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml\n#\n# Los clips vienen \"on twos\" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.\n# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin\n# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = \"bt601\".\n# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios\n# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.\n\n[character]\nname = \"ranger\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"run\"\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo\nhole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo\n\n[output]\nextra_scales = [0.5]\n\n# --- clips de Davinci ----------------------------------------------------------------------------\n# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.\n\n[[clip]]\nname = \"run\"              # r01\nfile = \"clips/raw/r01.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run2.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot\"            # r04: disparo con una mano\nfile = \"clips/raw/r04.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot2h\"          # r02: disparo a dos manos\nfile = \"clips/raw/r02.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 604.6    # el personaje viene ~27% más grande: 474 / 0,784 (la escala con que se validó; medido, ~606)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot2h.txt\"\n\n[[clip]]\nname = \"crouch_shoot\"     # r06: agachado disparando\nfile = \"clips/raw/r06.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/crouch_shoot.txt\"\n\n[[clip]]\nname = \"jump\"             # r08: saltos\nfile = \"clips/raw/r08.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"jump_shoot\"       # r05: salto disparando, con fondo en degradé\nfile = \"clips/raw/r05.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"hang\"             # r07: salta, agarra la barra y cuelga\nfile = \"clips/raw/r07.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }   # la barra de la que se cuelga\nbody_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande\nmodel = \"seedance-2.0\"\nprompt = \"prompts/hang.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n# --- quieto y correr ---------------------------------------------------------------------------\n[[animation]]\nname = \"idle\"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad\nclip = \"shoot\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"            # los frames 2 y 3 son iguales: con \"sharpest\" se queda con uno solo\n\n[[animation]]\nname = \"run\"\nclip = \"run\"\nkind = \"cycle\"\nskip_seconds = 0.6        # los primeros 12 frames está parado\nloop_seconds = [0.4, 1.1]\n\n# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [14, 20]\n\n[[animation]]\nname = \"shoot\"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga\nclip = \"shoot\"\nkind = \"cycle\"\nloop_start = 38\nloop_length = 8\n\n[[animation]]\nname = \"shoot_out\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [84, 92]\n\n# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nkind = \"cycle\"\nloop_start = 36\nloop_length = 10\n\n[[animation]]\nname = \"shoot2h_out\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]            # el mismo tramo que shoot2h_in, al revés\nreverse = true\n\n# --- agachado: baja, dispara en loop, se para ---------------------------------------------------\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [10, 16]\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch_shoot\"\nkind = \"cycle\"\nloop_start = 58\nloop_length = 10\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [85, 92]\npick = \"first\"            # con \"sharpest\" el 90 le gana al 89 por poco y la salida pierde un frame\n\n# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------\n[[animation]]\nname = \"jump\"\nclip = \"jump\"\nkind = \"oneshot\"\ntrim = [10, 29]\n\n[[animation]]\nname = \"jump_shoot\"\nclip = \"jump_shoot\"\nkind = \"oneshot\"\ntrim = [10, 35]\n\n# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [12, 32]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.5, 2.0]\n\n# --- trepar a la cornisa (todavía sin clip) -------------------------------------------------------\n# La pose arranca colgado y con el personaje más chico, así que su alto (521 px) no es el cuerpo parado.\n# poses/ranger_hang_concept.png es el frame 94 del hang limpio de los scripts sueltos (r07 a ×0,975, el\n# tamaño con que sale hang), donde el ranger mide 473 px parado y 556 colgado: parado mediría\n# 521 × 473 / 556 ≈ 443 px de la pose. Con eso el clip sale a la escala del run.\n# [[animation]]\n# name = \"climb\"\n# clip = \"clips/climb.mp4\"\n# kind = \"oneshot\"\n# loop = false\n# model = \"seedance-2.0\"\n# prompt = \"prompts/climb.txt\"\n# pose = \"../../poses/ranger_climb_magenta_16x9.png\"\n# pose_body_height_px = 443\n",
+  "config": "# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).\n# Los comandos van desde la raíz del repo.\n#\n# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).\n#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,\n#    poses/ranger_jump_magenta_16x9.png.\n# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)\n#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno\n#    se retocó en Davinci, reemplazarlo.\n#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)\n#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos\n# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver \"Limpieza previa\" en\n#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,\n#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en\n#    work/00_clean/ y se reusan mientras no cambie nada.\n#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).\n# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml\n#\n# Los clips vienen \"on twos\" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.\n# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin\n# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = \"bt601\".\n# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios\n# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.\n\n[character]\nname = \"ranger\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"run\"\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo\nhole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo\n\n[output]\nextra_scales = [0.5]\n\n# --- clips de Davinci ----------------------------------------------------------------------------\n# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.\n\n[[clip]]\nname = \"run\"              # r01\nfile = \"clips/raw/r01.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run2.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot\"            # r04: disparo con una mano\nfile = \"clips/raw/r04.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot2h\"          # r02: disparo a dos manos\nfile = \"clips/raw/r02.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 604.6    # el personaje viene ~27% más grande: 474 / 0,784 (la escala con que se validó; medido, ~606)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot2h.txt\"\n\n[[clip]]\nname = \"crouch_shoot\"     # r06: agachado disparando\nfile = \"clips/raw/r06.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/crouch_shoot.txt\"\n\n[[clip]]\nname = \"jump\"             # r08: saltos\nfile = \"clips/raw/r08.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"jump_shoot\"       # r05: salto disparando, con fondo en degradé\nfile = \"clips/raw/r05.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"hang\"             # r07: salta, agarra la barra y cuelga\nfile = \"clips/raw/r07.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }   # la barra de la que se cuelga\nbody_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande\nmodel = \"seedance-2.0\"\nprompt = \"prompts/hang.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n# --- quieto y correr ---------------------------------------------------------------------------\n[[animation]]\nname = \"idle\"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad\nclip = \"shoot\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"            # los frames 2 y 3 son iguales: con \"sharpest\" se queda con uno solo\n\n[[animation]]\nname = \"run\"\nclip = \"run\"\nkind = \"cycle\"\nskip_seconds = 0.6        # los primeros 12 frames está parado\nloop_seconds = [0.4, 1.1]\n\n# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [14, 20]\n\n[[animation]]\nname = \"shoot\"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga\nclip = \"shoot\"\nkind = \"cycle\"\nloop_start = 38\nloop_length = 8\n\n[[animation]]\nname = \"shoot_out\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [84, 92]\n\n# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nkind = \"cycle\"\nloop_start = 36\nloop_length = 10\n\n[[animation]]\nname = \"shoot2h_out\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]            # el mismo tramo que shoot2h_in, al revés\nreverse = true\n\n# --- agachado: baja, dispara en loop, se para ---------------------------------------------------\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [10, 16]\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch_shoot\"\nkind = \"cycle\"\nloop_start = 58\nloop_length = 10\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [85, 92]\npick = \"first\"            # con \"sharpest\" el 90 le gana al 89 por poco y la salida pierde un frame\n\n# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------\n[[animation]]\nname = \"jump\"\nclip = \"jump\"\nkind = \"oneshot\"\ntrim = [10, 29]\n\n[[animation]]\nname = \"jump_shoot\"\nclip = \"jump_shoot\"\nkind = \"oneshot\"\ntrim = [10, 35]\n\n# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [12, 32]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.5, 2.0]\n\n# --- trepar a la cornisa (todavía sin clip) -------------------------------------------------------\n# La pose arranca colgado y con el personaje más chico, así que su alto (521 px) no es el cuerpo parado.\n# poses/ranger_hang_concept.png es el frame 94 del hang limpio de los scripts sueltos (r07 a ×0,975, el\n# tamaño con que sale hang), donde el ranger mide 473 px parado y 556 colgado: parado mediría\n# 521 × 473 / 556 ≈ 443 px de la pose. Con eso el clip sale a la escala del run.\n# [[animation]]\n# name = \"climb\"\n# clip = \"clips/climb.mp4\"\n# kind = \"oneshot\"\n# loop = false\n# model = \"seedance-2.0\"\n# prompt = \"prompts/climb.txt\"\n# pose = \"../../poses/ranger_climb_magenta_16x9.png\"\n# pose_body_height_px = 443\n\n# --- clips generados por API (spritepipe bakeoff con generate.toml: Seedance 2.0 en fal.ai) ---------\n# fal devuelve magenta puro (#FF26FF), y la compresión lo hace \"sangrar\" en los blancos del casco: con\n# key_method = \"chroma\" el despill lo limpia (con distancia quedaban manchas semitransparentes). Con magenta\n# puro el rojo de la armadura no corre peligro: la pantalla es min(R, B) - G y en el rojo B es bajo.\n# body_height_px = 363 en los tres: medido idle contra idle (misma pose parada), así salen a 129 px como el resto.\n# g01 es la primera prueba de run_legs (sin el prompt mate); quedó en raw/ pero no se usa.\n\n[[clip]]\nname = \"run_legs\"         # g02: run con las manos arriba de la cintura, para el cuerpo partido\nfile = \"clips/raw/g02_run_legs.mp4\"\ncolor_matrix = \"bt601\"    # fal tampoco etiqueta el color; con BT.601 el rojo coincide con el concept\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs.txt\"\n\n[[clip]]\nname = \"idle_breath\"      # g03: idle respirando, con la pose como primer y último frame\nfile = \"clips/raw/g03_idle_breath.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_breath.txt\"\n\n[[clip]]\nname = \"double_jump\"      # g04: dos saltos con mortal\nfile = \"clips/raw/g04_double_jump.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/double_jump.txt\"\n\n[[animation]]\nname = \"run_legs\"\nclip = \"run_legs\"\nkind = \"cycle\"\nskip_seconds = 0.5\nloop_seconds = [0.4, 1.1]\n\n[[animation]]\nname = \"idle_breath\"\nclip = \"idle_breath\"\nkind = \"cycle\"\nskip_seconds = 0.2\nloop_seconds = [1.5, 4.5]\n\n[[animation]]\nname = \"double_jump\"      # el primer salto con mortal\nclip = \"double_jump\"\nkind = \"oneshot\"\ntrim = [22, 54]\n",
   "align": {
     "canvas": {
       "w": 632,
-      "h": 699
+      "h": 895
     },
     "pivot_px": {
       "x": 316,
-      "y": 624
+      "y": 820
     },
     "scale": 0.27321237993596587,
     "pixel_factor": null,
@@ -20,12 +20,12 @@
   "variants": {
     "1x": {
       "w": 173,
-      "h": 191,
+      "h": 245,
       "scale": 0.27321237993596587
     },
     "0.5x": {
       "w": 86,
-      "h": 95,
+      "h": 122,
       "scale": 0.13660618996798293
     }
   },
@@ -2120,6 +2120,476 @@
         "scale_xy": [
           0.975,
           0.975
+        ]
+      }
+    },
+    "run_legs": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g02_run_legs.mp4",
+      "clip_sha256": "689c02ac0130d35d892e70c5ae9a20759610243f88eac90a6d0f72ca31fed77a",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "run_legs",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/run_legs-c5762b48.mp4",
+        "key": "c5762b486eff622963cc517b2d200631ed9303cfe839960ffea6610d7fb0bbd9",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g02_run_legs.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#F600FB",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 144458
+      },
+      "model": "seedance-2.0 (fal)",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character runs in place like on a treadmill, facing right, no forward travel. Fast arcade run with big strides, knees lift high, the body bounces on every step. Both hands stay above the waist the whole time: the blaster is held in front of the chest pointing forward, and the free hand is a fist at chest height; the arms pump only a little and never swing down to the hips. The blaster stays in the same hand as in the input image. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#F600F9",
+          "key_strength": 0.965,
+          "key_method": "chroma",
+          "char_height_px": 357.3,
+          "char_height_pct": 49.6,
+          "drift_pct": 0.3,
+          "drift_px_per_s": [
+            -0.17,
+            0.14
+          ],
+          "zoom_pct": 0.4,
+          "frames_touching_edge": 0,
+          "bg_std": 0.17,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 54.22,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 92,
+        "length": 12,
+        "score": 0.13,
+        "seam": 1.23,
+        "motion": 9.48,
+        "seconds": 0.5,
+        "candidates": [
+          {
+            "start": 92,
+            "length": 12,
+            "score": 0.13
+          },
+          {
+            "start": 93,
+            "length": 12,
+            "score": 0.138
+          },
+          {
+            "start": 30,
+            "length": 24,
+            "score": 0.154
+          },
+          {
+            "start": 105,
+            "length": 12,
+            "score": 0.157
+          },
+          {
+            "start": 95,
+            "length": 12,
+            "score": 0.161
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          -0.0041,
+          0.0137
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          92,
+          94,
+          96,
+          98,
+          100,
+          102
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#F600F9",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 363.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 357.0,
+        "scale": 1.3058,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          1.30547,
+          1.30556
+        ]
+      }
+    },
+    "idle_breath": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g03_idle_breath.mp4",
+      "clip_sha256": "cb4fbe6c6e0fe1391b82edba314020f1a30ff158365161fd87288308371e000c",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "idle_breath",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/idle_breath-76752a95.mp4",
+        "key": "76752a953557a7729159f73c736453540c7cfe24f41dde83f1925a9ff9031d04",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g03_idle_breath.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#F200F7",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 161936
+      },
+      "model": "seedance-2.0 (fal)",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame and the last frame. The character stands in place facing right in an alert idle: clear, visible breathing, chest and shoulders rise and fall, the head bobs slightly with each breath, the blaster hand bounces a little, he shifts his weight from one foot to the other once, one blink. Feet stay planted. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#F201F7",
+          "key_strength": 0.945,
+          "key_method": "chroma",
+          "char_height_px": 352.0,
+          "char_height_pct": 48.9,
+          "drift_pct": 0.3,
+          "drift_px_per_s": [
+            -0.23,
+            -0.0
+          ],
+          "zoom_pct": 0.1,
+          "frames_touching_edge": 0,
+          "bg_std": 0.17,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 2.7,
+          "static_tail_frames": 6
+        }
+      },
+      "selection": {
+        "start": 56,
+        "length": 36,
+        "score": 0.629,
+        "seam": 1.03,
+        "motion": 1.64,
+        "seconds": 1.5,
+        "candidates": [
+          {
+            "start": 56,
+            "length": 36,
+            "score": 0.629
+          },
+          {
+            "start": 55,
+            "length": 36,
+            "score": 0.663
+          },
+          {
+            "start": 57,
+            "length": 36,
+            "score": 0.663
+          },
+          {
+            "start": 6,
+            "length": 98,
+            "score": 0.687
+          },
+          {
+            "start": 6,
+            "length": 100,
+            "score": 0.693
+          }
+        ],
+        "quality": "aceptable",
+        "camera_drift_px_per_native_frame": [
+          0.0021,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82,
+          84,
+          86,
+          88,
+          90
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#F201F7",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 363.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 351.0,
+        "scale": 1.3058,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          1.30547,
+          1.30556
+        ]
+      }
+    },
+    "double_jump": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g04_double_jump.mp4",
+      "clip_sha256": "9cd0f46a90af8ce8c86304f11d201f7dee806556d06bd097bff94add72f0d956",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "double_jump",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/double_jump-3b67bc8d.mp4",
+        "key": "3b67bc8d69bda2e5b372221663dd93ede2b30ac81338be05e3b305d694c9d8a1",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g04_double_jump.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#FA06FC",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 104903
+      },
+      "model": "seedance-2.0 (fal)",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character jumps straight up in place, facing right, no forward travel. At the top of the jump he does one fast forward somersault: tucks into a tight ball, spins one full turn, opens up into a falling pose and lands with a squash. Very fast and snappy. The blaster stays in his hand. Do it twice in a row. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#FA06FB",
+          "key_strength": 0.957,
+          "key_method": "chroma",
+          "char_height_px": 309.3,
+          "char_height_pct": 43.0,
+          "drift_pct": 17.3,
+          "drift_px_per_s": [
+            -0.26,
+            10.7
+          ],
+          "zoom_pct": 1.3,
+          "frames_touching_edge": 0,
+          "bg_std": 0.14,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 77.89,
+          "static_tail_frames": 3
+        }
+      },
+      "selection": {
+        "start": 22,
+        "length": 32,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          22,
+          25,
+          26,
+          28,
+          31,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          53
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#FA06FB",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 363.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 352.0,
+        "scale": 1.3058,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          1.30547,
+          1.30556
         ]
       }
     }

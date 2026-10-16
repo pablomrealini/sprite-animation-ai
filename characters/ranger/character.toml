@@ -224,3 +224,60 @@ loop_seconds = [0.5, 2.0]
 # prompt = "prompts/climb.txt"
 # pose = "../../poses/ranger_climb_magenta_16x9.png"
 # pose_body_height_px = 443
+
+# --- clips generados por API (spritepipe bakeoff con generate.toml: Seedance 2.0 en fal.ai) ---------
+# fal devuelve magenta puro (#FF26FF), y la compresión lo hace "sangrar" en los blancos del casco: con
+# key_method = "chroma" el despill lo limpia (con distancia quedaban manchas semitransparentes). Con magenta
+# puro el rojo de la armadura no corre peligro: la pantalla es min(R, B) - G y en el rojo B es bajo.
+# body_height_px = 363 en los tres: medido idle contra idle (misma pose parada), así salen a 129 px como el resto.
+# g01 es la primera prueba de run_legs (sin el prompt mate); quedó en raw/ pero no se usa.
+
+[[clip]]
+name = "run_legs"         # g02: run con las manos arriba de la cintura, para el cuerpo partido
+file = "clips/raw/g02_run_legs.mp4"
+color_matrix = "bt601"    # fal tampoco etiqueta el color; con BT.601 el rojo coincide con el concept
+clean = true
+key_method = "chroma"
+body_height_px = 363
+model = "seedance-2.0 (fal)"
+prompt = "prompts/run_legs.txt"
+
+[[clip]]
+name = "idle_breath"      # g03: idle respirando, con la pose como primer y último frame
+file = "clips/raw/g03_idle_breath.mp4"
+color_matrix = "bt601"
+clean = true
+key_method = "chroma"
+body_height_px = 363
+model = "seedance-2.0 (fal)"
+prompt = "prompts/idle_breath.txt"
+
+[[clip]]
+name = "double_jump"      # g04: dos saltos con mortal
+file = "clips/raw/g04_double_jump.mp4"
+color_matrix = "bt601"
+clean = true
+key_method = "chroma"
+body_height_px = 363
+model = "seedance-2.0 (fal)"
+prompt = "prompts/double_jump.txt"
+
+[[animation]]
+name = "run_legs"
+clip = "run_legs"
+kind = "cycle"
+skip_seconds = 0.5
+loop_seconds = [0.4, 1.1]
+
+[[animation]]
+name = "idle_breath"
+clip = "idle_breath"
+kind = "cycle"
+skip_seconds = 0.2
+loop_seconds = [1.5, 4.5]
+
+[[animation]]
+name = "double_jump"      # el primer salto con mortal
+clip = "double_jump"
+kind = "oneshot"
+trim = [22, 54]

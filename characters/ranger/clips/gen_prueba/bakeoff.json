@@ -1,0 +1,43 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_run_legs_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "run_legs",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a144e1-93f6-73b3-8d35-6e499654d6be",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144e1-93f6-73b3-8d35-6e499654d6be/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144e1-93f6-73b3-8d35-6e499654d6be"
+      },
+      "submitted": "2026-10-16T13:23:16+00:00",
+      "detail": "",
+      "finished": "2026-10-16T13:27:55+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_run_legs_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "run_legs",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.5,
+      "zoom_pct": 0.6,
+      "edge_frames": 0,
+      "pose_mad": 90.18,
+      "loop_score": 0.09,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 90.18): el modelo re-renderizó"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

@@ -34,7 +34,8 @@ class Clean:
 COLOR_MATRICES = ("bt601", "bt709")
 # Lo que un [[clip]] le pasa a las animaciones que lo usan, además del archivo
 CLIP_KEYS = ("clean", "color_matrix", "model", "prompt", "pose", "scale_pose", "pose_body_height_px",
-             "body_height_px")
+             "body_height_px", "key_method")
+KEY_METHODS = ("auto", "chroma", "distance")
 
 
 @dataclass
@@ -68,6 +69,7 @@ class Animation:
     color_matrix: str | None = None  # pisa la matriz de color del video ("bt601" | "bt709")
     reverse: bool = False  # el tramo elegido (trim o loop, en frames del clip) se reproduce al revés
     source: str | None = None  # el [[clip]] del que sale, si sale de uno
+    key_method: str | None = None  # pisa [key].method para este clip (p. ej. "chroma" con fondo magenta puro)
 
 
 @dataclass
@@ -215,6 +217,8 @@ def load(path: str | Path) -> Character:
             raise ValueError(f"{a['name']}: scale_pose o pose_body_height_px, no los dos")
         if a.get("color_matrix") not in (None, *COLOR_MATRICES):
             raise ValueError(f"{a['name']}: color_matrix tiene que ser {' o '.join(COLOR_MATRICES)}")
+        if a.get("key_method") not in (None, *KEY_METHODS):
+            raise ValueError(f"{a['name']}: key_method tiene que ser uno de {', '.join(KEY_METHODS)}")
         if not isinstance(a.get("reverse", False), bool):
             raise ValueError(f"{a['name']}: reverse tiene que ser true o false")
         anims.append(
@@ -242,6 +246,7 @@ def load(path: str | Path) -> Character:
                 color_matrix=a.get("color_matrix"),
                 reverse=a.get("reverse", False),
                 source=source["name"] if source else None,
+                key_method=a.get("key_method"),
             )
         )
     if not anims:

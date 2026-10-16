@@ -1,0 +1,228 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_run_legs_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "run_legs",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a144ec-c1b4-7073-aab6-46ee40d71f82",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144ec-c1b4-7073-aab6-46ee40d71f82/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144ec-c1b4-7073-aab6-46ee40d71f82"
+      },
+      "submitted": "2026-10-16T13:35:29+00:00",
+      "detail": "",
+      "finished": "2026-10-16T13:39:51+00:00"
+    },
+    {
+      "clip": "seedance-2.0_run_legs_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "run_legs",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a144ec-c433-7bd0-a885-63bac4638a14",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144ec-c433-7bd0-a885-63bac4638a14/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144ec-c433-7bd0-a885-63bac4638a14"
+      },
+      "submitted": "2026-10-16T13:35:29+00:00",
+      "detail": "",
+      "finished": "2026-10-16T13:40:29+00:00"
+    },
+    {
+      "clip": "seedance-2.0_idle_breath_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_breath",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a144ec-c65b-76f0-8295-4b0c4b38028a",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144ec-c65b-76f0-8295-4b0c4b38028a/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144ec-c65b-76f0-8295-4b0c4b38028a"
+      },
+      "submitted": "2026-10-16T13:35:30+00:00",
+      "detail": "",
+      "finished": "2026-10-16T13:40:32+00:00"
+    },
+    {
+      "clip": "seedance-2.0_idle_breath_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_breath",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a144f0-ee27-72b2-ad82-4bea513a4bf4",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144f0-ee27-72b2-ad82-4bea513a4bf4/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144f0-ee27-72b2-ad82-4bea513a4bf4"
+      },
+      "submitted": "2026-10-16T13:40:02+00:00",
+      "detail": "",
+      "finished": "2026-10-16T13:46:19+00:00"
+    },
+    {
+      "clip": "seedance-2.0_double_jump_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "double_jump",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a144f1-94b9-7f71-9f53-1a7332560c63",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144f1-94b9-7f71-9f53-1a7332560c63/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144f1-94b9-7f71-9f53-1a7332560c63"
+      },
+      "submitted": "2026-10-16T13:40:45+00:00",
+      "detail": "",
+      "finished": "2026-10-16T13:45:44+00:00"
+    },
+    {
+      "clip": "seedance-2.0_double_jump_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "double_jump",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a144f1-972a-7902-9693-aab6073cc79c",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144f1-972a-7902-9693-aab6073cc79c/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a144f1-972a-7902-9693-aab6073cc79c"
+      },
+      "submitted": "2026-10-16T13:40:46+00:00",
+      "detail": "",
+      "finished": "2026-10-16T13:45:30+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_run_legs_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "run_legs",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.2,
+      "zoom_pct": 0.4,
+      "edge_frames": 0,
+      "pose_mad": 83.24,
+      "loop_score": 0.165,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 83.24): el modelo re-renderizó"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_run_legs_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "run_legs",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.3,
+      "zoom_pct": 0.2,
+      "edge_frames": 0,
+      "pose_mad": 87.5,
+      "loop_score": 0.094,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 87.5): el modelo re-renderizó"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_idle_breath_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_breath",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 0.3,
+      "zoom_pct": 0.2,
+      "edge_frames": 0,
+      "pose_mad": 25.82,
+      "loop_score": 0.383,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 25.82)"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_idle_breath_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_breath",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 0.6,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 25.94,
+      "loop_score": 0.59,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 25.94)"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_double_jump_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "double_jump",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 27.8,
+      "zoom_pct": 6.5,
+      "edge_frames": 0,
+      "pose_mad": 58.64,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 58.64): el modelo re-renderizó"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_double_jump_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "double_jump",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 17.4,
+      "zoom_pct": 1.6,
+      "edge_frames": 0,
+      "pose_mad": 29.14,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 29.14)"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

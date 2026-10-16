@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import hashlib
 import shutil
 import sys
@@ -111,6 +112,11 @@ def _select(anim: config.Animation, an, fps: float, K: int) -> dict:
     return sel
 
 
+def anim_key(ch: config.Character, anim: config.Animation) -> config.Character:
+    """El personaje con el método de key que pide la animación (o su [[clip]]), si pide uno."""
+    return dataclasses.replace(ch, key_method=anim.key_method) if anim.key_method else ch
+
+
 def run_character(cfg_path: Path, strict: bool) -> int:
     ch = config.load(cfg_path)
     missing = [a for a in ch.animations if not a.clip.exists()]
@@ -153,7 +159,7 @@ def run_character(cfg_path: Path, strict: bool) -> int:
         an = analyze(raw, fixed_key)
         qres = qa.run(an, raw[0], anim.kind, info["fps"], anim.pose)
         _print_qa(qres)
-        bodies[anim.name] = align.clip_body(ch, anim, imgio.load(raw[0]), qres["metrics"].get("pose_mad_region"),
+        bodies[anim.name] = align.clip_body(anim_key(ch, anim), anim, imgio.load(raw[0]), qres["metrics"].get("pose_mad_region"),
                                             fixed_key)
         if qres["verdict"] == "fail":
             failed = True
@@ -181,7 +187,7 @@ def run_character(cfg_path: Path, strict: bool) -> int:
             drifts[anim.name] = (dx * sign, dy * sign)  # por frame de salida
             sel["camera_drift_px_per_native_frame"] = [round(dx, 4), round(dy, 4)]
         print(f"    {len(timing['native_indices'])} frames a {timing['effective_fps']:g} fps (K={K}, {anim.pick})")
-        kinfo = key.run(w / "02_fps", w / "03_key", ch)
+        kinfo = key.run(w / "02_fps", w / "03_key", anim_key(ch, anim))
         print(f"    key {kinfo['key_color']}: " + ", ".join(f"{m} ({mode})" for m, mode in kinfo["method"]))
         key_dirs[anim.name], kinds[anim.name] = w / "03_key", anim.kind
         records[anim.name] = {
