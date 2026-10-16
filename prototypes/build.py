@@ -22,13 +22,15 @@ EXPORT = 2      # px de las imágenes del fondo por px del juego (el canvas dibu
 
 # fondos de spritepipe gen-images (backgrounds/<set>/post/): la opción elegida de cada asset. Las capas de
 # parallax llevan el lienzo del modelo al alto de la pantalla (`view_h`) y quedan alineadas abajo; el kit de
-# plataformas y los props van a `scale` px del juego por px de la hoja
+# plataformas y los props van a `scale` px del juego por px de la hoja. `deco` es la utilería de otro set: su
+# picked.json (ver backgrounds/ranger_props/integrar.md) trae cada pieza con su k, su papel y sus puntos medidos
 BACKGROUNDS = {
     "ranger": {
         "set": "ranger_base", "view_h": 540,
         "layers": {"sky": "nano-banana-2.1_3", "far": "nano-banana-2.1_2", "mid": "nano-banana-2.1_1", "near": "nano-banana-2.1_2"},
         "sheets": {"kit": ("platform_kit", "gpt-image-2.5-sunburst-fal_1", 0.2),     # el tope de un bloque, 71 px
                    "props": ("props", "gpt-image-2.5-sunburst-fal_1", 92 / 876)},   # el blanco, al alto del tablero
+        "deco": "ranger_props",
     },
 }
 
@@ -99,6 +101,12 @@ def export_backgrounds(name: str, dist: Path) -> dict:
         for piece, f in post["files"].items():
             export_image(base / "post" / asset / opt / f["file"], bg / f"{piece}.png", k * EXPORT)
             data[key][piece] = {"src": f"bg/{piece}.png", "w": round(f["w"] * k, 2), "h": round(f["h"] * k, 2), "k": round(k, 5)}
+    if "deco" in cfg:   # cada pieza ya trae su tamaño en px del juego; los puntos van en px de la hoja (por k)
+        dset = ROOT / "backgrounds" / cfg["deco"]
+        data["deco"] = {}
+        for piece, p in json.loads((dset / "picked.json").read_text())["pieces"].items():
+            export_image(dset / p["file"], bg / f"{piece}.png", p["k"] * EXPORT)
+            data["deco"][piece] = {key: v for key, v in p.items() if key not in ("file", "sheet", "option")} | {"src": f"bg/{piece}.png"}
     return data
 
 

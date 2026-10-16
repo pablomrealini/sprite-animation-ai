@@ -1,0 +1,521 @@
+<meta charset="utf-8">
+<title>Banco de efectos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Barlow:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Mismo aspecto que el Polígono del Ranger: escenario 16:9 arriba; abajo, comparar | sprites, en una columna en el teléfono. */
+:root {
+  --bg: #121522;
+  --panel: #1b2032;
+  --line: #2f3750;
+  --fg: #eef0f6;
+  --muted: #9aa3bd;
+  --red: #e8392e;
+  --cyan: #59e3ec;
+  --font-display: "Chakra Petch", "Arial Narrow", Arial, sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); margin: 0; }
+body { font: 15px/1.5 var(--font-body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+h1 { font: 700 clamp(26px, 4vw, 38px)/1.05 var(--font-display); margin: 0; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance; }
+h1 span { color: var(--red); }
+.eyebrow { font: 600 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.stage { position: relative; border: 2px solid var(--line); border-radius: 6px; overflow: hidden; background: #241a46; aspect-ratio: 16 / 9; max-width: 100%; }
+.stage canvas { display: block; width: 100%; height: 100%; outline: none; }
+.stage canvas:focus-visible { box-shadow: inset 0 0 0 3px var(--red); }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font: 600 14px var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+.loading[hidden] { display: none; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.box h2 { margin: 0; font: 700 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.row > .lbl { font: 600 13px var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 110px; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.seg button, .btn { font: 600 14px var(--font-display); color: var(--muted); background: transparent; border: 0; padding: 6px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--red); color: #fff; }
+.btn { border: 1px solid var(--line); border-radius: 5px; color: var(--fg); }
+.btn[aria-pressed="true"] { background: var(--red); color: #fff; border-color: var(--red); }
+.seg button:focus-visible, .btn:focus-visible, input:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+input[type="range"] { accent-color: var(--red); width: 150px; max-width: 100%; }
+.mono { font: 500 13px/1.4 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--fg); }
+.readout { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; overflow-x: auto; white-space: nowrap; }
+.note { margin: 0; color: var(--muted); font-size: 14px; max-width: 65ch; }
+.note b { color: var(--fg); font-weight: 600; }
+kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 4px; padding: 3px 5px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Banco de <span>efectos</span></h1>
+    <div class="eyebrow">Ranger · fogonazo e impactos · código, sprites IA o mezcla</div>
+  </header>
+
+  <div class="stage">
+    <canvas id="lab" tabindex="0" aria-label="El ranger dispara en loop contra un bloque; el fogonazo y los impactos se dibujan con la técnica elegida"></canvas>
+    <p class="loading" id="loadMsg">Cargando sprites…</p>
+  </div>
+
+  <div class="cols">
+    <section class="box" aria-labelledby="hCmp">
+      <h2 id="hCmp">Comparar</h2>
+      <div class="row"><span class="lbl">Elegida</span>
+        <button type="button" class="btn" id="chosenBtn">La elegida: mezcla, pegada a la boca y sin el destello del clip</button></div>
+      <div class="row"><span class="lbl" id="lTech">Técnica <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></span>
+        <div class="seg" role="group" aria-labelledby="lTech" data-key="tech">
+          <button type="button" data-v="code">Código (hoy)</button><button type="button" data-v="sprite">Sprites IA</button><button type="button" data-v="mix">Mezcla</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lView">Vista <kbd>V</kbd></span>
+        <div class="seg" role="group" aria-labelledby="lView" data-key="view">
+          <button type="button" data-v="one">Una, con lupa</button><button type="button" data-v="three">Las tres en fila</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lSpeed">Velocidad</span>
+        <div class="seg" role="group" aria-labelledby="lSpeed" data-key="speed">
+          <button type="button" data-v="1">1×</button><button type="button" data-v="0.5">½×</button><button type="button" data-v="0.25">¼×</button><button type="button" data-v="0.1">⅒×</button>
+        </div>
+        <button type="button" class="btn" id="pauseBtn" aria-pressed="false">Pausa <kbd>Espacio</kbd></button>
+        <button type="button" class="btn" id="stepBtn">Paso <kbd>→</kbd></button></div>
+      <div class="row"><span class="lbl" id="lPose">Pose</span>
+        <div class="seg" role="group" aria-labelledby="lPose" data-key="pose">
+          <button type="button" data-v="one">Una mano</button><button type="button" data-v="two">Dos manos</button><button type="button" data-v="crouch">Agachado</button><button type="button" data-v="run">Corriendo</button><button type="button" data-v="air">Saltando</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lCad">Cadencia</span>
+        <div class="seg" role="group" aria-labelledby="lCad" data-key="cadence">
+          <button type="button" data-v="burst">Ráfaga, como el juego</button><button type="button" data-v="single">Tiro a tiro (2/s)</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lAnchor">Ancla</span>
+        <div class="seg" role="group" aria-labelledby="lAnchor" data-key="anchor">
+          <button type="button" data-v="world">Queda donde salió (el juego)</button><button type="button" data-v="follow">Sigue al arma, sin el hundido</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lBaked">Destello del clip</span>
+        <div class="seg" role="group" aria-labelledby="lBaked" data-key="baked">
+          <button type="button" data-v="keep">Queda (el juego)</button><button type="button" data-v="off">Sacado</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lBg">Fondo</span>
+        <div class="seg" role="group" aria-labelledby="lBg" data-key="bg">
+          <button type="button" data-v="night">Noche</button><button type="button" data-v="grey">Gris</button><button type="button" data-v="light">Claro</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lShake">Sacudón</span>
+        <div class="seg" role="group" aria-labelledby="lShake" data-key="shake">
+          <button type="button" data-v="on">Sí (el juego)</button><button type="button" data-v="off">No</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lDbg">Guías <kbd>G</kbd></span>
+        <div class="seg" role="group" aria-labelledby="lDbg" data-key="guides">
+          <button type="button" data-v="off">Ocultas</button><button type="button" data-v="on">Boca y anclas</button>
+        </div></div>
+      <div class="readout mono" id="readout" aria-live="off">…</div>
+      <p class="note"><b>Código (hoy):</b> el <code>drawFlash</code> del juego copiado tal cual (halo y cruz con suma de color, 0,06 s), más el destello redondo y las chispas cuadradas de cada impacto. <b>Sprites IA:</b> sólo las hojas de <code>backgrounds/ranger_fx</code> (GPT Image 2.5), sin nada de código. <b>Mezcla:</b> los mismos sprites, más un halo con suma de color y tres chispas en la boca, y en el impacto un destello y chispas que salen hacia atrás.</p>
+      <p class="note"><b>Ancla:</b> el juego deja el fogonazo donde salió el tiro; corriendo o saltando el ranger se le va de abajo. <b>Destello del clip:</b> el frame de disparo del video trae un destello cortado delante de la boca, y el juego lo muestra en cada tiro.</p>
+    </section>
+
+    <section class="box" aria-labelledby="hSpr">
+      <h2 id="hSpr">Sprites IA</h2>
+      <div class="row"><span class="lbl" id="lMOpt">Hoja fogonazos</span>
+        <div class="seg" role="group" aria-labelledby="lMOpt" data-key="mOpt" id="mOptSeg"></div></div>
+      <div class="row"><span class="lbl" id="lIOpt">Hoja impactos</span>
+        <div class="seg" role="group" aria-labelledby="lIOpt" data-key="iOpt" id="iOptSeg"></div></div>
+      <div class="row"><span class="lbl" id="lBlend">Color</span>
+        <div class="seg" role="group" aria-labelledby="lBlend" data-key="blend">
+          <button type="button" data-v="source-over">Normal</button><button type="button" data-v="lighter">Suma (aditivo)</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lVary">Variación</span>
+        <div class="seg" role="group" aria-labelledby="lVary" data-key="vary">
+          <button type="button" data-v="alt">Alterna 1-2-3</button><button type="button" data-v="rand">Azar y espejo</button><button type="button" data-v="fixed">Siempre la 1</button>
+        </div></div>
+      <div class="row"><span class="lbl" id="lSparks">Chispas (mezcla)</span>
+        <div class="seg" role="group" aria-labelledby="lSparks" data-key="sparks">
+          <button type="button" data-v="back">Hacia atrás (Blazing Chrome)</button><button type="button" data-v="through">Siguen la bala (Hard Corps)</button>
+        </div></div>
+      <div class="row"><label class="lbl" for="aTicks">Fogonazo, frame 1</label>
+        <input type="range" id="aTicks" data-key="aTicks" min="1" max="4" step="1"><span class="mono" data-out="aTicks"></span></div>
+      <div class="row"><label class="lbl" for="bTicks">Fogonazo, frame 2</label>
+        <input type="range" id="bTicks" data-key="bTicks" min="0" max="4" step="1"><span class="mono" data-out="bTicks"></span></div>
+      <div class="row"><label class="lbl" for="mLen">Largo del fogonazo</label>
+        <input type="range" id="mLen" data-key="mLen" min="12" max="72" step="2"><span class="mono" data-out="mLen"></span></div>
+      <div class="row"><label class="lbl" for="iTicks">Impacto, por frame</label>
+        <input type="range" id="iTicks" data-key="iTicks" min="1" max="5" step="1"><span class="mono" data-out="iTicks"></span></div>
+      <div class="row"><label class="lbl" for="iSize">Alto del impacto</label>
+        <input type="range" id="iSize" data-key="iSize" min="16" max="96" step="2"><span class="mono" data-out="iSize"></span></div>
+      <p class="note"><b>Frames a 60 Hz</b>, como cuentan los juegos de consola: 1 frame = 16,7 ms. A 12 disparos/s hay un tiro cada 5 frames. <b>H</b> es la altura del ranger en el juego (102 px: 128 del atlas al 80%). El tiro a dos manos agranda todo un 30%, como el código.</p>
+      <p class="note"><b>Fogonazos:</b> 3 formas del primer frame y el segundo frame de cada una, ancladas por el borde izquierdo a la boca. <b>Impactos:</b> 2 animaciones de 4 frames que alternan tiro a tiro; el primer frame va centrado en el punto de contacto y los demás salpican hacia atrás desde la punta derecha. Con <kbd>G</kbd> se ven la boca (amarillo) y las anclas (cian).</p>
+    </section>
+  </div>
+</div>
+
+<script>
+"use strict";
+const SPR = __SPRITE_DATA__;
+// piezas de backgrounds/ranger_fx achicadas por prototypes/fx_lab/build.py: por asset y opción (la n de
+// gpt-image-2.5-sunburst-fal_n), cada pieza con su tamaño y su ancla en px de la imagen exportada
+const FXD = __FX_DATA__;
+const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
+const VIEW_W = 960, VIEW_H = 540, GROUND = 474;
+const ZOOM = 0.75;                 // la cámara del juego
+const S = { char: 0.8 };            // el ranger al 80% del atlas, como en el juego (lo usan las funciones copiadas)
+const H = 128 * S.char;             // alto del ranger en px del juego
+const BULLET_V = 1350, RUN_V = 300, TICK = 1 / 60;
+const X0 = 300, WALL_DX = 520;      // el ranger y la cara del bloque, en px del juego desde el borde izquierdo
+// el juego dibuja al ranger 3 px hundido en el piso (FOOT_SINK, el contorno del kit), pero la bala y el fogonazo salen
+// de la boca sin ese hundido: 3 px arriba de la lente. "Sigue al arma" lo corrige
+const SINK = 3;
+const sinkFix = () => (L.anchor === "follow" ? SINK : 0);
+const LENS = 4;                     // aumento de la lupa sobre la escala del juego
+let camX = 0;                       // las funciones copiadas restan camX; acá la cámara va en la transformación
+const cv = document.getElementById("lab"), ctx = cv.getContext("2d");
+
+/* ---------- ajustes: los valores por defecto reproducen el juego ---------- */
+const L = { tech: "code", view: "one", speed: 1, pose: "one", cadence: "burst", anchor: "world", baked: "keep", bg: "night",
+            shake: "on", guides: "off", mOpt: "2", iOpt: "1", blend: "source-over", vary: "alt",
+            aTicks: 2, bTicks: 3, mLen: 26, iTicks: 2, iSize: 50, sparks: "back" };
+// la elegida el 2026-10-16: la mezcla con los valores de sprites que dejó Pablo, pegada a la boca y sin el destello del clip
+const CHOSEN = { tech: "mix", anchor: "follow", baked: "off", mOpt: "2", iOpt: "1", blend: "source-over", vary: "alt",
+                 aTicks: 2, bTicks: 3, mLen: 26, iTicks: 2, iSize: 50, sparks: "back" };
+const OUTS = {
+  aTicks: v => `${v} (${Math.round(v * 1000 / 60)} ms)`, bTicks: v => v ? `${v} (${Math.round(v * 1000 / 60)} ms)` : "sin frame 2",
+  mLen: v => `${v} px = ${(v / H).toFixed(2).replace(".", ",")} H`, iTicks: v => `${v} (${Math.round(4 * v * 1000 / 60)} ms en total)`,
+  iSize: v => `${v} px = ${(v / H).toFixed(2).replace(".", ",")} H`,
+};
+const BGS = { night: ["#2a2050", "#171230", "#3a3270"], grey: ["#6c7184", "#3d4150", "#868ba0"], light: ["#d9dce8", "#9fa3b5", "#c3c7d6"] };
+const TECH_ES = { code: "Código (hoy)", sprite: "Sprites IA", mix: "Mezcla" };
+
+/* ---------- sprites ---------- */
+const anim = n => SPR.anims[n];
+const JS = anim("jump_shoot").f;
+// copiado del juego: el frame en el aire con el brazo extendido, sin el fogonazo dibujado
+const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
+// copiado del juego: el disparo en loop arranca en el frame del fogonazo y termina en el de reposo
+const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
+const shotFrame = (n, t, per) => { const s = SHOT(n); return t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]; };
+// "sacado": el frame con el destello dibujado se cambia por el anterior del clip
+const noBaked = (n, i) => (anim(n).f[i][11] ? (i - 1 + anim(n).f.length) % anim(n).f.length : i);
+
+const POSES = {
+  one:    { anim: "shoot", rate: 1 / 12, per: 0.1, power: 1 },
+  two:    { anim: "shoot2h", rate: 1 / 7, per: 1 / 7, power: 3 },
+  crouch: { anim: "crouch_shoot", rate: 1 / 12, per: 0.15, power: 1 },
+  run:    { anim: "run_gun", rate: 1 / 12, power: 1, run: true },
+  air:    { anim: "jump_shoot", rate: 1 / 12, power: 1, air: true },
+};
+const period = () => (L.cadence === "burst" ? POSES[L.pose].rate : 0.5);
+// saltitos seguidos de 110 px (sube en 0,30 s, cae en 0,24), para que entren en la vista de las tres
+const HOP = { h: 110, up: 0.30, down: 0.24 };
+function hop(t) {
+  const p = ((t % (HOP.up + HOP.down)) + HOP.up + HOP.down) % (HOP.up + HOP.down);
+  return p < HOP.up ? HOP.h * (1 - (1 - p / HOP.up) ** 2) : HOP.h * (1 - ((p - HOP.up) / HOP.down) ** 2);
+}
+// dónde está el ranger, qué frame muestra y dónde queda la boca, en px del juego (piso en y = 0)
+function rangerAt(t) {
+  const P = POSES[L.pose], name = P.anim, n = anim(name).f.length;
+  const x = X0 + (P.run ? RUN_V * t : 0);
+  let idx, y = 0;
+  if (P.run) idx = ((Math.floor(t * 12 * RUN_V / 260) % n) + n) % n;   // el ciclo acompaña la velocidad, como el juego
+  else if (P.air) { idx = AIR_SHOT; y = -hop(t); }
+  else { const T = period(), ts = Math.floor(t / T) * T; idx = shotFrame(name, t - ts, P.per); if (L.baked === "off") idx = noBaked(name, idx); }
+  const f = anim(name).f[idx], drawY = y + (P.air ? f[8] * S.char : 0);
+  return { x, y, drawY, name, idx, f, mx: x + f[6] * S.char, my: drawY + f[7] * S.char };
+}
+const camAt = t => (POSES[L.pose].run ? RUN_V * t : 0);
+const wallAt = t => X0 + WALL_DX + camAt(t);    // corriendo, el bloque va con la cámara: se acerca el piso, no el bloque
+
+/* ---------- azar reproducible: el mismo tiro sale igual en las tres vistas ---------- */
+function hash(n) { let h = Math.imul((n + 0x9e37) | 0, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16; return h >>> 0; }
+// copiado del juego
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+// los tiros salen cada `period` desde t = 0; todo lo demás se calcula a partir del tiempo, así la cámara lenta
+// y el paso a paso no cambian nada
+function shot(n) {
+  const P = POSES[L.pose], ts = n * period(), R = rangerAt(ts - 1e-6);   // fire() del juego usa el frame que estaba en pantalla
+  const len = P.power > 1 ? 46 : 32, wv = P.run ? RUN_V : 0;
+  const th = ts + Math.max(0, (wallAt(ts) - (R.mx + len)) / (BULLET_V - wv));
+  return { n, ts, th, x0: R.mx, y: R.my + sinkFix(), len, big: P.power > 1, power: P.power, seed: hash(n) };
+}
+function shotsAround(t, back) {
+  const T = period(), out = [];
+  for (let n = Math.max(0, Math.ceil((t - back) / T)); n * T <= t; n++) out.push(shot(n));
+  return out;
+}
+function variant(n) {   // qué forma de fogonazo, si va espejada, y cuánto gira y crece
+  if (L.vary === "fixed") return { v: 1, flip: false, rot: 0, k: 1 };
+  if (L.vary === "alt") return { v: (n % 3) + 1, flip: false, rot: 0, k: 1 };
+  const pick = k => 1 + (hash(k * 31 + 7) % 3);
+  let v = pick(n);
+  if (n > 0 && v === pick(n - 1)) v = (v % 3) + 1;   // nunca la misma dos veces seguidas
+  const r = rng(hash(n * 29 + 11));   // ±12° sobre el eje del cañón y ×0,9–1,1, como estiran pocos dibujos los juegos
+  return { v, flip: hash(n * 17 + 3) % 2 === 1, rot: (r() - 0.5) * 0.42, k: 0.9 + r() * 0.2 };
+}
+
+/* ---------- imágenes ---------- */
+const atlas = new Image();
+const IMG = {};   // "muzzle/1/a1" -> Image
+let toLoad = 1, ready = false;
+function loaded() { if (--toLoad === 0) { ready = true; document.getElementById("loadMsg").hidden = true; } }
+function failed(what) { document.getElementById("loadMsg").textContent = `No se pudo cargar ${what}`; }
+for (const [asset, opts] of Object.entries(FXD)) for (const [opt, pieces] of Object.entries(opts)) for (const [name, p] of Object.entries(pieces)) {
+  const im = new Image(); toLoad++; im.onload = loaded; im.onerror = () => failed(p.src); im.src = p.src; IMG[`${asset}/${opt}/${name}`] = im;
+}
+atlas.onload = loaded; atlas.onerror = () => failed("el atlas (ranger_1x-0.png)"); atlas.src = "ranger_1x-0.png";
+
+/* ---------- código del juego, copiado de prototypes/ranger/src.html sin cambios ---------- */
+function drawFlash(Fl) {
+  // chico y pegado a la punta del cañón: un halo corto y un destello en cruz alargado hacia adelante, a la escala
+  // del personaje. Nada por detrás de la boca
+  const r = rng(Math.floor(Fl.seed)), s = (Fl.big ? 1.3 : 1) * S.char, life = 1 - Fl.t / 0.06;
+  ctx.save(); ctx.translate(Fl.x - camX, Fl.y); ctx.scale(Fl.dir, 1); ctx.globalCompositeOperation = "lighter";
+  ctx.beginPath(); ctx.rect(0, -40, 120, 80); ctx.clip();
+  const R = 11 * s * (1 + 0.3 * life), glow = ctx.createRadialGradient(1, 0, 0.5, R * 0.35, 0, R);
+  glow.addColorStop(0, "rgba(235,255,255,1)"); glow.addColorStop(0.5, "rgba(130,240,248,0.55)"); glow.addColorStop(1, "rgba(89,227,236,0)");
+  ctx.fillStyle = glow; ctx.beginPath(); ctx.ellipse(R * 0.35, 0, R, R * 0.6, 0, 0, Math.PI * 2); ctx.fill();
+  const L = (14 + r() * 6) * s, Wd = (4 + r() * 2) * s;   // la punta larga, hacia adelante
+  ctx.fillStyle = "rgba(240,255,255,0.95)";
+  ctx.beginPath(); ctx.moveTo(0, -Wd / 2); ctx.lineTo(L, 0); ctx.lineTo(0, Wd / 2); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(2 * s, -7 * s); ctx.lineTo(4 * s, 0); ctx.lineTo(2 * s, 7 * s); ctx.lineTo(0, 0); ctx.closePath(); ctx.fill();   // los brazos cortos de la cruz
+  ctx.restore();
+}
+// el destello de impacto del render() del juego, para un impacto I = { x, y, t (lo que le queda), life, big }
+function drawImpactGlow(I) {
+  const k = 1 - I.t / I.life, r = (I.big ? 26 : 18) * (0.5 + k);
+  ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - k;
+  const g = ctx.createRadialGradient(I.x - camX, I.y, 1, I.x - camX, I.y, r); g.addColorStop(0, "rgba(240,255,255,1)"); g.addColorStop(1, "rgba(89,227,236,0)");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(I.x - camX, I.y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+}
+// la bala del render() del juego
+function drawBullet(B) {
+  const dir = Math.sign(B.vx), x = B.x - camX, tail = (dir > 0 ? Math.max(B.x - B.len, B.x0) : Math.min(B.x + B.len, B.x0)) - camX, t = x - tail;
+  ctx.save(); ctx.globalCompositeOperation = "lighter";
+  ctx.strokeStyle = "rgba(89,227,236,0.55)"; ctx.lineWidth = B.power > 1 ? 10 : 7; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(x, B.y); ctx.lineTo(x - t, B.y); ctx.stroke();
+  ctx.strokeStyle = "#f2ffff"; ctx.lineWidth = B.power > 1 ? 4 : 3; ctx.beginPath(); ctx.moveTo(x, B.y); ctx.lineTo(x - t * 0.8, B.y); ctx.stroke();
+  ctx.restore();
+}
+// las chispas cuadradas de burst() del juego (gravedad 900, se apagan con la vida), calculadas a la edad `age`
+// en vez de simuladas, con el azar sembrado. `spread`: de qué ángulo a qué ángulo salen (el juego: toda la vuelta)
+function drawBurst(x, y, color, n, speed, life, size, age, seed, spread = [0, Math.PI * 2], blend = "source-over") {
+  if (age < 0 || age >= life) return;
+  const r = rng(seed);
+  ctx.save(); ctx.globalCompositeOperation = blend; ctx.fillStyle = color; ctx.globalAlpha = 1 - age / life;
+  for (let i = 0; i < n; i++) {
+    const a = spread[0] + r() * (spread[1] - spread[0]), v = speed * (0.4 + r() * 0.6), sz = size * (0.6 + r() * 0.6);
+    const px = x + Math.cos(a) * v * age, py = y + (Math.sin(a) * v - speed * 0.3) * age + 450 * age * age;
+    ctx.fillRect(px - sz / 2, py - sz / 2, sz, sz);
+  }
+  ctx.restore();
+}
+
+/* ---------- sprites de efecto ---------- */
+// dibuja la pieza con su ancla en (x, y), con `scale` px del juego por px de la imagen
+function drawPiece(asset, opt, name, x, y, scale, flip, blend, rot = 0) {
+  const p = FXD[asset][opt]?.[name], im = IMG[`${asset}/${opt}/${name}`];
+  if (!p || !im) return;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(scale, flip ? -scale : scale);
+  ctx.globalCompositeOperation = blend;
+  ctx.drawImage(im, -p.ax, -p.ay, p.w, p.h);
+  if (L.guides === "on") {
+    ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.lineWidth = 1 / scale;
+    ctx.strokeStyle = "rgba(89,227,236,0.7)"; ctx.strokeRect(-p.ax, -p.ay, p.w, p.h);
+    ctx.fillStyle = "#59e3ec"; ctx.beginPath(); ctx.arc(0, 0, 2 / scale, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+const avg = a => a.reduce((s, v) => s + v, 0) / a.length;
+const muzzleScale = big => L.mLen / avg(["a1", "a2", "a3"].map(k => FXD.muzzle[L.mOpt][k].w)) * (big ? 1.3 : 1);
+const impactScale = big => L.iSize / avg(["a2", "b2"].map(k => FXD.impact[L.iOpt][k].h)) * (big ? 1.3 : 1);
+
+/* ---------- el fogonazo y el impacto de cada técnica ---------- */
+// el último tiro, si su fogonazo sigue vivo: como el juego, un fogonazo nuevo pisa al anterior
+function muzzleOf(tech, t, R, shots) {
+  const last = shots[shots.length - 1];
+  if (!last) return;
+  const age = t - last.ts, at = L.anchor === "world" ? { x: last.x0, y: last.y } : { x: R.mx, y: R.my + SINK };
+  if (tech === "code") {
+    if (age < 0.06) drawFlash({ x: at.x, y: at.y, t: 0.06 - age, dir: 1, big: last.big, seed: last.seed % 1000 });
+    return;
+  }
+  const A = L.aTicks * TICK, B = L.bTicks * TICK;
+  if (age >= A + B) return;
+  const { v, flip, rot, k } = variant(last.n), sc = muzzleScale(last.big) * k;
+  if (tech === "mix") {   // halo con suma de color, más grande que el del código y que se apaga con el fogonazo;
+    // como en el código, casi nada por detrás de la boca (4 px: la luz toca la punta del cañón)
+    const k = age / (A + B), Rr = L.mLen * (last.big ? 1.3 : 1) * (0.5 + 0.2 * k);
+    ctx.save(); ctx.beginPath(); ctx.rect(at.x - 4, at.y - 200, 400, 400); ctx.clip();
+    ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.85 * (1 - k);
+    const g = ctx.createRadialGradient(at.x + 2, at.y, 1, at.x + Rr * 0.45, at.y, Rr);
+    g.addColorStop(0, "rgba(235,255,255,0.9)"); g.addColorStop(0.45, "rgba(89,227,236,0.45)"); g.addColorStop(1, "rgba(89,227,236,0)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(at.x + Rr * 0.45, at.y, Rr, Rr * 0.65, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }
+  drawPiece("muzzle", L.mOpt, (age < A ? "a" : "b") + v, at.x, at.y, sc, flip, L.blend, rot);
+  if (tech === "mix") {   // tres chispas finas hacia adelante, 0,08 s
+    const r = rng(last.seed ^ 0x5bd1), life = 0.08;
+    if (age < life) {
+      ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.strokeStyle = "#eaffff"; ctx.lineCap = "round";
+      ctx.lineWidth = 1.6; ctx.globalAlpha = 1 - age / life;
+      for (let i = 0; i < 3; i++) {
+        const a = (r() - 0.5) * 1.1, sp = 380 + r() * 260, d = L.mLen * 0.5 + sp * age, ln = 4 + r() * 4;
+        ctx.beginPath(); ctx.moveTo(at.x + Math.cos(a) * d, at.y + Math.sin(a) * d); ctx.lineTo(at.x + Math.cos(a) * (d + ln), at.y + Math.sin(a) * (d + ln)); ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+}
+function impactsOf(tech, t, shots) {
+  for (const s of shots) {
+    const age = t - s.th;
+    if (age < 0) continue;
+    const x = wallAt(t), y = s.y;   // pegado al bloque (corriendo, el bloque se mueve con la cámara)
+    if (tech === "code") {   // finishUpdate() del juego al pegar en un blanco: burst() más impact()
+      drawBurst(x, y, "#9ff5fa", s.big ? 16 : 11, 320, 0.38, s.big ? 8 : 6, age, s.seed);
+      if (age < 0.09) drawImpactGlow({ x, y, t: 0.09 - age, life: 0.09, big: s.big });
+      continue;
+    }
+    const per = L.iTicks * TICK, i = Math.floor(age / per);
+    if (tech === "mix") {
+      if (age < 0.06) drawImpactGlow({ x, y, t: 0.06 - age, life: 0.06, big: s.big });
+      if (L.sparks === "back")   // hacia atrás, como la salpicadura (Blazing Chrome)
+        drawBurst(x, y, "#9ff5fa", s.big ? 10 : 6, 280, 0.3, s.big ? 5 : 4, age, s.seed, [Math.PI * 0.55, Math.PI * 1.45], "lighter");
+      else   // una nube de puntos que sigue a la bala (el Vulcan Laser de Hard Corps)
+        drawBurst(x, y, "#e6ffff", s.big ? 14 : 10, 620, 0.12, 2.5, age, s.seed, [-Math.PI * 0.22, Math.PI * 0.22], "lighter");
+    }
+    if (i < 4) {
+      const row = s.n % 2 ? "b" : "a", flip = L.vary === "rand" && hash(s.n * 13 + 5) % 2 === 1;
+      drawPiece("impact", L.iOpt, row + (i + 1), x, y, impactScale(s.big), flip, L.blend);
+    }
+  }
+}
+
+/* ---------- escena ---------- */
+function drawWorld(tech, t, R, shots, x0, x1) {
+  const [sky, ground, mark] = BGS[L.bg];
+  ctx.fillStyle = sky; ctx.fillRect(x0, -1000, x1 - x0, 1000);
+  ctx.fillStyle = ground; ctx.fillRect(x0, 0, x1 - x0, 200);
+  ctx.fillStyle = mark; ctx.fillRect(x0, 0, x1 - x0, 3);
+  for (let gx = Math.floor(x0 / 64) * 64; gx < x1; gx += 64) ctx.fillRect(gx, 3, 3, 10);   // marcas: se ve que corre
+  const wx = wallAt(t);
+  ctx.fillStyle = "#565f7c"; ctx.fillRect(wx, -170, 90, 170);
+  ctx.strokeStyle = "#0d0f18"; ctx.lineWidth = 3; ctx.strokeRect(wx + 1.5, -168.5, 87, 167);
+  ctx.fillStyle = "#e8b51c"; ctx.fillRect(wx + 3, -167, 84, 8);
+  // sombra y ranger (drawSprite del juego, sin el cuerpo partido)
+  const w = 30 * S.char * Math.max(0.4, 1 - Math.max(0, -R.y) / 220);
+  ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(R.x, 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
+  const g = R.f;
+  ctx.save(); ctx.translate(R.x, R.drawY + SINK); ctx.scale(S.char, S.char);
+  ctx.drawImage(atlas, g[0], g[1], g[2], g[3], -PIV_X + g[4], -PIV_Y + g[5], g[2], g[3]);
+  ctx.restore();
+  // como el render() del juego: balas, fogonazo, impactos
+  for (const s of shots) if (t >= s.ts && t < s.th) drawBullet({ x: s.x0 + s.len + BULLET_V * (t - s.ts), x0: s.x0, y: s.y, vx: 1, len: s.len, power: s.power });
+  muzzleOf(tech, t, R, shots);
+  impactsOf(tech, t, shots);
+  if (L.guides === "on") { ctx.fillStyle = "#ffef5a"; ctx.beginPath(); ctx.arc(R.mx, R.my, 2, 0, Math.PI * 2); ctx.fill(); }
+}
+function shakeAt(t, shots) {   // el sacudón del juego: ±1,5 px durante 0,04 s (0,07 a dos manos) después de cada tiro
+  const last = shots[shots.length - 1];
+  if (L.shake !== "on" || !last || t - last.ts >= (last.big ? 0.07 : 0.04)) return [0, 0];
+  const r = rng(hash(Math.floor(t / TICK)));
+  return [(r() - 0.5) * 3, (r() - 0.5) * 3];
+}
+function label(text, x, y, align = "left") {
+  ctx.font = "700 15px 'Chakra Petch', 'Arial Narrow', sans-serif"; ctx.textAlign = align; ctx.textBaseline = "top";
+  const w = ctx.measureText(text).width + 16, bx = align === "left" ? x : x - w;
+  ctx.fillStyle = "rgba(18,21,34,0.8)"; ctx.fillRect(bx, y, w, 24);
+  ctx.fillStyle = "#eef0f6"; ctx.fillText(text, align === "left" ? x + 8 : x - 8, y + 5);
+}
+// la escena con el piso en (sx, groundY) de pantalla y la cámara del juego; la lupa centra un punto del mundo
+function lane(tech, t, R, shots, rect, groundY) {
+  const cam = camAt(t), [kx, ky] = shakeAt(t, shots);
+  ctx.save(); ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+  ctx.translate(rect.x + kx, groundY + ky); ctx.scale(ZOOM, ZOOM); ctx.translate(-cam, 0);
+  drawWorld(tech, t, R, shots, cam - 40, cam + rect.w / ZOOM + 40);
+  ctx.restore();
+}
+function lens(tech, t, R, shots, rect, cx, cy, text) {
+  const z = ZOOM * LENS;
+  ctx.save(); ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+  ctx.translate(rect.x + rect.w / 2, rect.y + rect.h / 2); ctx.scale(z, z); ctx.translate(-cx, -cy);
+  drawWorld(tech, t, R, shots, cx - rect.w / z, cx + rect.w / z);
+  ctx.restore();
+  ctx.strokeStyle = "#eef0f6"; ctx.lineWidth = 2; ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+  label(text, rect.x, rect.y + rect.h - 24);
+}
+function render() {
+  ctx.fillStyle = "#121522"; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+  if (!ready) return;
+  const R = rangerAt(simT), shots = shotsAround(simT, 0.8);
+  if (L.view === "one") {
+    lane(L.tech, simT, R, shots, { x: 0, y: 0, w: VIEW_W, h: VIEW_H }, GROUND);
+    const last = shots[shots.length - 1];
+    lens(L.tech, simT, R, shots, { x: 16, y: 16, w: 300, h: 168 }, R.mx + 14, R.my, `BOCA ×${LENS}`);
+    lens(L.tech, simT, R, shots, { x: VIEW_W - 316, y: 16, w: 300, h: 168 }, wallAt(simT) - 18, last ? last.y : R.my, `IMPACTO ×${LENS}`);
+    label(TECH_ES[L.tech].toUpperCase(), 16, VIEW_H - 40);
+  } else {
+    ["code", "sprite", "mix"].forEach((tech, i) => {
+      const y = i * 180;
+      lane(tech, simT, R, shots, { x: 0, y, w: VIEW_W, h: 180 }, y + 160);
+      label(TECH_ES[tech].toUpperCase(), 12, y + 8);
+      if (i) { ctx.fillStyle = "#121522"; ctx.fillRect(0, y - 1, VIEW_W, 2); }
+    });
+  }
+}
+
+/* ---------- reloj ---------- */
+let simT = 0, paused = false, last = performance.now(), readT = 0;
+const readout = document.getElementById("readout");
+function describe() {
+  const R = rangerAt(simT), shots = shotsAround(simT, 0.8), s = shots[shots.length - 1];
+  let fl = "—";
+  if (s) {
+    const age = simT - s.ts, A = L.aTicks * TICK, B = L.bTicks * TICK;
+    if (L.tech === "code") fl = age < 0.06 ? `código ${Math.floor(age / TICK) + 1}/4` : "—";
+    else if (age < A + B) { const { v, flip } = variant(s.n); fl = `${age < A ? "a" : "b"}${v}${flip ? " espejo" : ""}`; }
+  }
+  return `t ${simT.toFixed(3)} s · frame ${Math.floor(simT / TICK + 1e-6)} · tiro ${s ? s.n + 1 : 0} · ${R.name} ${R.idx + 1}/${anim(R.name).f.length}${R.f[11] ? " (con destello)" : ""} · fogonazo ${fl}`;
+}
+function tick(now) {
+  const dt = Math.min(1 / 30, (now - last) / 1000) * L.speed; last = now;
+  if (!paused && ready) simT += dt;
+  render();
+  readT -= dt;
+  if (paused || readT <= 0) { readT = 0.1; readout.textContent = describe(); }
+  requestAnimationFrame(tick);
+}
+function resize() {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+  ctx.setTransform(cv.width / VIEW_W, 0, 0, cv.height / VIEW_H, 0, 0); ctx.imageSmoothingEnabled = true;
+}
+window.addEventListener("resize", resize);
+
+/* ---------- controles ---------- */
+const pauseBtn = document.getElementById("pauseBtn");
+function setPaused(p) { paused = p; pauseBtn.setAttribute("aria-pressed", String(p)); }
+function step() { setPaused(true); simT = (Math.floor(simT / TICK + 1e-6) + 1) * TICK; }
+function syncSegs() {
+  document.querySelectorAll(".seg[data-key]").forEach(g => g.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(String(L[g.dataset.key]) === b.dataset.v))));
+  document.querySelectorAll("input[data-key]").forEach(el => { el.value = L[el.dataset.key]; document.querySelector(`[data-out="${el.dataset.key}"]`).textContent = OUTS[el.dataset.key](+el.value); });
+}
+function set(key, v) { L[key] = typeof L[key] === "number" ? +v : v; if (key === "pose" || key === "cadence") simT = 0; syncSegs(); }
+for (const [seg, asset] of [["mOptSeg", "muzzle"], ["iOptSeg", "impact"]])
+  document.getElementById(seg).innerHTML = Object.keys(FXD[asset]).map(o => `<button type="button" data-v="${o}">Opción ${o}</button>`).join("");
+document.querySelectorAll(".seg[data-key]").forEach(g => g.addEventListener("click", e => { const b = e.target.closest("button"); if (b) set(g.dataset.key, b.dataset.v); }));
+document.querySelectorAll("input[data-key]").forEach(el => el.addEventListener("input", () => set(el.dataset.key, el.value)));
+pauseBtn.addEventListener("click", () => setPaused(!paused));
+document.getElementById("stepBtn").addEventListener("click", step);
+document.getElementById("chosenBtn").addEventListener("click", () => { Object.assign(L, CHOSEN); syncSegs(); });
+window.addEventListener("keydown", e => {
+  if (e.target.closest && e.target.closest("input")) return;
+  const k = e.code;
+  if (k === "Digit1" || k === "Digit2" || k === "Digit3") set("tech", ["code", "sprite", "mix"][+k.slice(5) - 1]);
+  else if (k === "KeyV") set("view", L.view === "one" ? "three" : "one");
+  else if (k === "KeyG") set("guides", L.guides === "on" ? "off" : "on");
+  else if (k === "Space") setPaused(!paused);
+  else if (k === "ArrowRight" || k === "Period") step();
+  else return;
+  e.preventDefault();
+});
+syncSegs();
+(document.fonts ? document.fonts.ready : Promise.resolve()).finally(() => { resize(); requestAnimationFrame(tick); });
+</script>

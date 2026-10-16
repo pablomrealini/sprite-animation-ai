@@ -4,24 +4,24 @@
   "fps": 12,
   "pivot": {
     "x": 0.5,
-    "y": 0.89683
+    "y": 0.92205
   },
   "variants": {
     "1x": {
       "canvas": {
-        "w": 159,
-        "h": 233
+        "w": 272,
+        "h": 308
       },
       "pivot_px": {
-        "x": 79.5,
-        "y": 208.96
+        "x": 136.0,
+        "y": 283.99
       },
       "atlas": [
         {
           "image": "ranger_1x-0.png",
           "data": "ranger_1x-0.json",
-          "w": 1408,
-          "h": 1408
+          "w": 1566,
+          "h": 1571
         }
       ],
       "animations": {
@@ -804,24 +804,176 @@
             }
           ],
           "sheet": "sheets/1x/run_gun.png"
+        },
+        "climb": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "climb/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0021",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/climb.png"
+        },
+        "hang_two": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang_two/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0005",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/hang_two.png"
         }
       }
     },
     "0.5x": {
       "canvas": {
-        "w": 80,
-        "h": 117
+        "w": 136,
+        "h": 154
       },
       "pivot_px": {
-        "x": 40.0,
-        "y": 104.93
+        "x": 68.0,
+        "y": 142.0
       },
       "atlas": [
         {
           "image": "ranger_0.5x-0.png",
           "data": "ranger_0.5x-0.json",
-          "w": 743,
-          "h": 681
+          "w": 814,
+          "h": 823
         }
       ],
       "animations": {
@@ -1604,6 +1756,158 @@
             }
           ],
           "sheet": "sheets/0.5x/run_gun.png"
+        },
+        "climb": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "climb/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0021",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/climb.png"
+        },
+        "hang_two": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang_two/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0005",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/hang_two.png"
         }
       }
     }

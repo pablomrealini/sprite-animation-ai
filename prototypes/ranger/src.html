@@ -86,7 +86,7 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
       <h2 id="hControls">Controles</h2>
       <dl class="keys">
         <dt><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd></dt><dd>Correr</dd>
-        <dt><kbd>W</kbd><kbd>↑</kbd><kbd>Espacio</kbd></dt><dd>Saltar. En el aire, otra vez: doble salto con mortal. Colgado de una cornisa: subir</dd>
+        <dt><kbd>W</kbd><kbd>↑</kbd><kbd>Espacio</kbd></dt><dd>Saltar. En el aire, otra vez: doble salto con mortal. Colgado de una cornisa: subir; con la dirección contraria a la pared, saltar al otro lado</dd>
         <dt><kbd>S</kbd><kbd>↓</kbd></dt><dd>Agacharse. Colgado: soltarse</dd>
         <dt><kbd>Clic</kbd><kbd>J</kbd></dt><dd>Disparar con una mano. Con el mouse, apunta al lado del cursor</dd>
         <dt><kbd>Clic der.</kbd><kbd>K</kbd></dt><dd>Disparar con las dos manos: te planta en el lugar, más lento y pega triple</dd>
@@ -95,13 +95,13 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
       <h2>Control (Xbox o compatible)</h2>
       <dl class="keys">
         <dt><kbd>Stick izq.</kbd><kbd>Cruceta</kbd></dt><dd>Correr. Abajo: agacharse; colgado, soltarse. Cruceta arriba: subir a la cornisa</dd>
-        <dt><kbd>A</kbd></dt><dd>Saltar, y otra vez en el aire para el doble salto</dd>
+        <dt><kbd>A</kbd></dt><dd>Saltar, y otra vez en el aire para el doble salto. Colgado: sola o hacia la pared, subir; con el stick hacia el otro lado, saltar a la cornisa de enfrente</dd>
         <dt><kbd>X</kbd><kbd>RT</kbd></dt><dd>Disparar con una mano</dd>
         <dt><kbd>B</kbd><kbd>RB</kbd></dt><dd>Disparar con las dos manos: te planta en el lugar y pega triple (vibra)</dd>
         <dt><kbd>Vista</kbd></dt><dd>Mostrar u ocultar las guías</dd>
       </dl>
       <p class="note" id="padStatus" aria-live="polite">Sin control. Conectalo y apretá cualquier botón: el navegador no lo muestra hasta que lo usás.</p>
-      <p class="note">Las cornisas se agarran solas: saltá contra el borde de un bloque y el ranger se cuelga si la mano llega. Los blancos aguantan cuatro impactos de una mano y dos a dos manos y vuelven a los tres segundos.</p>
+      <p class="note">Las cornisas se agarran solas: saltá contra el borde de un bloque y el ranger se cuelga si la mano llega. Colgado, saltá con la dirección contraria a la pared para pasar a la cornisa de enfrente: en la chimenea del final y en la plataforma que queda arriba a la izquierda del último bloque. Los blancos aguantan cuatro impactos de una mano y dos a dos manos y vuelven a los tres segundos.</p>
     </section>
 
     <section class="box" aria-labelledby="hSettings">
@@ -150,6 +150,20 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
         </div>
       </div>
       <div class="row">
+        <span class="lbl" id="lblJfx">Efectos del salto</span>
+        <div class="seg" role="group" aria-labelledby="lblJfx">
+          <button type="button" id="jfxOn" aria-pressed="true">Nuevos</button>
+          <button type="button" id="jfxOff" aria-pressed="false">Anteriores</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblSnd">Sonido</span>
+        <div class="seg" role="group" aria-labelledby="lblSnd">
+          <button type="button" id="sndOn" aria-pressed="true">Sí</button>
+          <button type="button" id="sndOff" aria-pressed="false">No</button>
+        </div>
+      </div>
+      <div class="row">
         <span class="lbl" id="lblTime">Tiempo</span>
         <div class="seg" role="group" aria-labelledby="lblTime">
           <button type="button" id="t1" aria-pressed="true">1×</button>
@@ -171,8 +185,9 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
       </div>
       <div class="readout mono" id="readout" aria-live="off">quieto · idle 1/3</div>
       <p class="note"><b>Feel "reporte":</b> 300 px/s, salto de 192 px (1,5 alturas) que sube en 0,36 s y cae en 0,28, coyote y buffer de 0,1 s, corrección de esquina y 12 disparos/s. "Anterior" es como estaba, para comparar.</p>
-      <p class="note"><b>Generadas por API</b> (Seedance 2.0 en fal.ai, con la pose sobre magenta apagado): el idle de combate, el doble salto con mortal y el <b>run con la pistola al pecho</b>, que se usa también al disparar corriendo. La pose de arranque del run salió de la API de imagen (Nano Banana 2.1). "De piernas" es la prueba vieja, con la pistola que baja a la cadera.</p>
-      <p class="note"><b>Provisorio:</b> la subida a la cornisa es un salto de posición con la animación de pararse (falta el clip de trepar) y con el run "Anterior" dispara desde la mano que balancea. Los rayos, chispas y el fogonazo son efectos de código.</p>
+      <p class="note"><b>Efectos del salto "nuevos"</b> (reports/Saltos con buen feel.md): el golpe del aterrizaje sale de la altura de caída (duro desde 2,8 alturas: polvo, squash, golpe vertical de cámara y agachado), squash y stretch desde los pies, cinco dibujos en el aire elegidos por velocidad, el mortal girado por código en 0,32 s y sonidos sintetizados provisorios. "Anteriores" es como estaba.</p>
+      <p class="note"><b>Generadas por API</b> (Seedance 2.0 en fal.ai, con la pose sobre magenta apagado): el idle de combate, el doble salto con mortal, el <b>run con la pistola al pecho</b>, que se usa también al disparar corriendo, y el <b>colgado con las dos manos y la subida a la cornisa</b>, que arrancan de la misma pose y terminan en la del idle. Las poses de arranque del run y del colgado salieron de la API de imagen (Nano Banana 2.1). "De piernas" es la prueba vieja, con la pistola que baja a la cadera.</p>
+      <p class="note"><b>Provisorio:</b> con el run "Anterior" dispara desde la mano que balancea. La subida usa 10 de los 22 frames del clip, unos 0,5 s; saltar con los pies ya sobre el canto la corta. Los rayos, chispas y el fogonazo son efectos de código.</p>
       <p class="note"><b>Fondo generado por API:</b> cielo, ciudad, base y capa cercana con Nano Banana 2.1; bloques, plataformas, blancos, caja y cartel con GPT Image 2.5 (fal.ai). Los bloques se arman con las piezas del kit; las colisiones son las de antes.</p>
     </section>
   </div>
@@ -182,10 +197,11 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
 "use strict";
 const SPR = __SPRITE_DATA__;
 // fondo: el arte de backgrounds/ranger_base (spritepipe gen-images), que prototypes/build.py achica a bg/;
-// acá vienen las medidas en px del juego (y `k`, px del juego por px de la hoja, en el kit y los props)
+// acá vienen las medidas en px del juego (y `k`, px del juego por px de la hoja, en el kit y los props). En `deco`, la
+// utilería de backgrounds/ranger_props, con su papel y sus puntos medidos en px de la hoja
 const BG = __BG_DATA__;
 const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
-const VIEW_W = 960, VIEW_H = 540, GROUND = 474, WORLD_W = 3900;
+const VIEW_W = 960, VIEW_H = 540, GROUND = 474, WORLD_W = 5000;
 // tamaño del personaje: el sprite se dibuja a CHAR del atlas (128 px a 1) y la colisión, la boca del arma y la mano
 // del colgado lo acompañan. El mundo (bloques, saltos, velocidades) no cambia
 const CHAR_DEFAULT = 0.8;
@@ -220,11 +236,23 @@ const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).re
 // Así no hay destello sin disparar (el agachado traía el fogonazo en el frame 0, que era el de reposo)
 const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
 const shotFrame = (n, t, per) => { const s = SHOT(n); return t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]; };
-const HANG_HAND = anim("hang").f[0];                 // mano del colgado relativa al pivot
-// colgado: la mano del clip viene de agarrar una barra, y donde estaba la barra le queda un hueco (x +29..+38,
-// y -143..-131 del pivot). Se dibuja DETRÁS del bloque: la pared a +28 y el tope del bloque a -144 tapan el hueco
-// y la muñeca, y quedan a la vista sólo los dedos, que asoman sobre el canto
-const HANG_WALL = 28, HANG_GRIP = 8;                 // del pivot a la cara de la pared, y de la punta de la mano al canto
+// colgado: con el clip de dos manos (hang_two, por API) cuelga con el cuerpo contra la pared y las manos sobre el
+// canto, y se dibuja delante del bloque. Sin ese clip queda el de una mano (r07): la mano viene de agarrar una barra,
+// y donde estaba la barra le queda un hueco (x +29..+38, y -143..-131 del pivot). Ése se dibuja DETRÁS del bloque:
+// la pared a +28 y el tope del bloque a -144 tapan el hueco y la muñeca, y quedan a la vista sólo los dedos
+const HANG2 = !!SPR.anims.hang_two;
+const HANG = HANG2 ? "hang_two" : "hang";
+const HANG_HAND = anim(HANG).f[0];                   // mano del colgado (el punto más alto) relativa al pivot
+// con dos manos la pared va al frente del puño de adelante (la cara asoma 6 px más, contra el bloque) y el canto, 6 px
+// bajo el tope de los puños: la pistola queda apoyada arriba
+const HANG_WALL = HANG2 ? 20 : 28, HANG_GRIP = HANG2 ? 6 : 8;   // del pivot a la cara de la pared, y de la punta de la mano al canto
+const HANG_BEHIND = !HANG2;
+// salto desde el colgado, con la dirección contraria a la pared: se despega hacia ese lado mirando para allá, con
+// altura fija (soltar el botón no lo corta) y la dirección trabada un momento, así llega a la cornisa de enfrente.
+// vy en veces el salto normal; lock y regrab en s: la traba y cuánto tarda en poder volver a la misma cornisa.
+// late: si apretó saltar sin dirección y la dirección llega enseguida, la subida se convierte en este salto
+const WALL_JUMP = { vx: 300, vy: 0.92, lock: 0.14, regrab: 0.3, late: 0.08 };
+const HANG_BUFFER = 0.15;                            // saltar apretado mientras agarra la cornisa se guarda hasta que termina, y esto más
 // correr disparando con cuerpo partido: piernas del run debajo de la cintura y torso del disparo arriba, con el rebote
 // de cada frame del run (medido en la punta del casco). La costura va a 46 px de los pies y el torso la tapa 6 px
 const RS_CUT = 46, RS_OVER = 6;
@@ -242,8 +270,37 @@ const FLIP = (() => {   // del primer al último frame girado, contiguos (cabeza
   const turned = anim("double_jump").f.map((f, i) => [i, f]).filter(([, f]) => f[2] / f[3] > 0.95 || f[3] < 100).map(([i]) => i);
   return turned.length ? Array.from({ length: turned[turned.length - 1] - turned[0] + 1 }, (_, k) => turned[0] + k) : [];
 })();
-const FLIP_DUR = 0.42, DOUBLE_V = 0.9;
-const GRAB_FRAMES = [6, 7, 8, 9];                    // de hang_in: el momento en que agarra
+let FLIP_DUR = 0.32;                                 // 0,42 con los efectos anteriores
+const DOUBLE_V = 0.9;
+// efectos del salto (reports/Saltos con buen feel.md): el golpe del aterrizaje sale de la altura de caída, medida en
+// alturas del personaje (H = 128·CHAR), squash y stretch desde los pies que vuelve solo, y el mortal girado por código
+const JFX = {
+  micro: 0.3, hard: 2.8,                    // en H: debajo de micro no hay golpe (suena un paso); desde hard, aterrizaje duro
+  takeoff: [0.87, 1.15], dbl: [0.84, 1.19], // escala x, y al despegar y en el doble salto
+  land: [0.18, 0.15],                       // aterrizaje: lo que suma a x y resta a y a tope (desde 2,8 H); la mitad si se queda quieto
+  back: 0.8,                                // la deformación conserva el 80% de lo que le falta por frame de 60 Hz (~10 frames)
+  bump: 9, bumpDecay: 0.85,                 // golpe vertical de cámara del aterrizaje duro: px de pantalla y decaimiento por frame
+  vy: [-590, -180, 300, 840],               // cortes de vy: subida rápida | subida | ápice | caída | caída larga
+  dblScale: 1.05,                           // los dibujos de double_jump salen 5% más chicos que los de jump (medido por el casco)
+};
+// mortal: dibujos de double_jump con el ángulo del cuerpo (medido por el casco: 0 = parado, + = hacia adelante). En cada
+// frame se muestra el más cercano al ángulo que toca y se lo rota la diferencia alrededor del centro del cuerpo
+const FLIP_ANG = SPR.anims.double_jump && anim("double_jump").f.length > 8 ? [[1, 0], [2, 38], [3, 62], [4, 93], [5, 225], [6, 307], [7, 360]] : null;
+const GRAB_FRAMES = [6, 7, 8, 9];                    // de hang_in: el momento en que agarra (colgado de una mano)
+const GRAB_T = HANG2 ? 0.1 : GRAB_FRAMES.length * 0.05;   // con dos manos no hay clip de agarre: llega amortiguado
+// subida (climb, por API): arranca en la pose del colgado y termina parado sobre el canto en la pose del idle, con
+// la subida adentro del sprite. Se dibuja desde el lugar del colgado; lo que le falte o le sobre al clip para quedar
+// justo sobre el canto se reparte en la subida. Termina donde el último frame coincide con el primero del idle
+// El clip dura 1,8 s y se queda acostado más de medio segundo: se usan 10 de sus 22 frames, ~0,5 s. El modelo apoya
+// las rodillas 31 px detrás de la pared del colgado: cada frame lleva su avance (px del atlas) para que apoyen en el
+// canto y, al pararse, los pies no se muevan. [frame, avance, s]
+const CLIMB_SEQ = [[0, 0, 0.04], [2, 0, 0.05], [3, 12, 0.05], [4, 22, 0.05], [13, 31, 0.06], [15, 31, 0.05], [17, 31, 0.05], [19, 8, 0.05], [20, 0, 0.05], [21, 0, 0.06]];
+const CLIMB = SPR.anims.climb && HANG2 ? (() => {
+  const f = anim("climb").f, last = f[f.length - 1], idle = anim(IDLE()).f[0], hang = anim(HANG).f[0];
+  const cx = g => g[4] + g[2] / 2 - PIV_X;
+  const ox = cx(hang) - cx(f[0]);   // el frame 0 de la subida viene corrido del colgado (cada clip se ancla en el suyo)
+  return { ox, dx: ox + cx(last) - cx(idle), rise: last[8], dur: CLIMB_SEQ.reduce((a, s) => a + s[2], 0), exitRun: 0.7 };
+})() : null;
 
 /* ---------- ajustes ---------- */
 const S = { char: CHAR_DEFAULT, zoom: 0.75, jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte", runShoot: "swing", runSet: SPR.anims.run_gun ? "gun" : "anterior" };
@@ -254,6 +311,9 @@ function seg(ids, onPick) {
   }));
 }
 seg([["jPhys", "phys"], ["jRoot", "root"]], v => { S.jumpMode = v; });
+S.jumpFx = true; S.sound = true;
+seg([["jfxOn", true], ["jfxOff", false]], v => { S.jumpFx = v; FLIP_DUR = v ? 0.32 : 0.42; P.sqX = P.sqY = 1; bumpY = 0; });
+seg([["sndOn", true], ["sndOff", false]], v => { S.sound = v; });
 seg([["t1", 1], ["t05", 0.5], ["t025", 0.25]], v => { S.slow = v; });
 seg([["dOff", false], ["dOn", true]], v => { S.debug = v; });
 const runSpeedEl = document.getElementById("runSpeed");
@@ -278,24 +338,42 @@ block(1960, 150, 150);
 block(2110, 230, 170);        // escalera de bloques
 slab(2420, 330, 200);
 block(2800, 250, 260);        // colgarse desde el piso
-block(3300, 120, 160);
-block(3460, 330, 140);        // alto: desde el bloque de al lado hay que colgarse
+// chimenea: dos bloques enfrentados. Colgado del bajo, del lado del hueco, se salta a la cornisa del alto
+block(3300, 230, 130);
+block(3590, 370, 150);
+// colgado del bloque, la plataforma queda arriba a la izquierda: se salta para atrás y se agarra de su punta
+slab(4125, 360, 160);
+block(4450, 220, 240);
 const targets = [];
 function board(x, y) { targets.push({ kind: "board", x: x - 24, y: y - 92, w: 48, h: 92, hp: 4, max: 4, hit: 0, dead: 0 }); }
 function can(x, y) { targets.push({ kind: "can", x: x - 10, y: y - 26, w: 20, h: 26, hp: 1, max: 1, hit: 0, dead: 0 }); }
 board(640, GROUND); can(930, GROUND - 84); can(1010, GROUND - 84); board(1340, GROUND - 196);
 board(1690, GROUND - 300); can(2030, GROUND - 150); can(2190, GROUND - 230); can(2240, GROUND - 230);
-board(2520, GROUND - 330); board(2620, GROUND); board(2930, GROUND - 250); can(3380, GROUND - 120); board(3700, GROUND); board(3530, GROUND - 330);
+board(2520, GROUND - 330); board(2620, GROUND); board(2930, GROUND - 250); can(3365, GROUND - 230); board(3680, GROUND - 370);
+board(4190, GROUND - 360); can(4600, GROUND - 220); board(4860, GROUND);
 // utilería: sólo se dibuja, no choca ni frena los disparos. x es el centro y y la base
 const props = [];
 const prop = (name, x, y) => props.push({ name, x, y });
 prop("sign", 470, GROUND); prop("sign", 3170, GROUND);   // las cajas se sacaron: no hacían nada
+// utilería de backgrounds/ranger_props (BG.deco): tampoco choca ni frena los disparos. x es el centro y y la base; en
+// el ventilador, el tope del bloque en cuya cara va. La de fondo va detrás de todo lo jugable y teñida: lo voluminoso
+// que no hace nada no tiene que parecer un obstáculo. Adelante, sólo lo chico y fijo, que se anima
+const deco = [], BACK = new Set(["antenna", "cable_coil", "console", "barrel", "fuel_tank", "crate_stack", "turret_off", "signboard"]);
+const put = (name, x, y = GROUND) => { if (BG.deco) deco.push({ name, x, y, i: deco.length, next: 0 }); };
+put("antenna", 120); put("cable_coil", 232); put("console", 385); put("monitor", 548);
+put("beacon", 1055, GROUND - 84); put("barrel", 1122); put("beacon", 1400, GROUND - 196); put("panel_spark", 1512);
+put("fuel_tank", 1680); put("drone", 1885); put("fan", 2195, GROUND - 230); put("crate_stack", 2350);
+put("turret_off", 2730); put("beacon", 3030, GROUND - 250); put("beacon", 3722, GROUND - 370);
+put("fan", 3665, GROUND - 370); put("signboard", 4370);
+let clock = 0;   // reloj de la utilería animada: corre con dt, así la cámara lenta también la frena
 
 /* ---------- personaje ---------- */
 const P = { x: 300, y: GROUND, vx: 0, vy: 0, onGround: true, facing: 1, state: "ground",
             aim: "none", aimAnim: null, aimT: 0, idleAimT: 0, shotT: 1, crouch: "none", crouchT: 0,
-            jump: null, landT: 0, hang: null, climb: null, grabCD: 0, fireCD: 0, t: 0, coyoteT: 0, bufferT: 0, kickT: 0,
+            jump: null, landT: 0, hang: null, climb: null, grabCD: 0, skipLedge: null, wallLockT: 0, fireCD: 0, t: 0, coyoteT: 0, bufferT: 0, kickT: 0,
             draw: { name: "idle", i: 0, x: 300, y: GROUND } };
+// efectos del salto: deformación actual (vuelve sola a 1), punto más alto del vuelo, tipo de aterrizaje y destello
+Object.assign(P, { sqX: 1, sqY: 1, peakY: null, landKind: null, flashT: 0 });
 
 /* ---------- entrada ---------- */
 const keys = new Set();
@@ -412,13 +490,15 @@ function cornerNudge(x, headY) {
   }
   return null;
 }
-// cornisa agarrable: esquina superior de un bloque, con lugar arriba para subir
+// cornisa agarrable: esquina superior de un bloque, con lugar arriba para subir. Después de saltar desde el
+// colgado, la cornisa de la que salió no cuenta por un momento (skipLedge)
 function findLedge() {
   if (P.grabCD > 0 || P.vy < -220) return null;
   const hx = P.x + P.facing * HANG_HAND[9] * S.char, hy = P.y + HANG_HAND[10] * S.char;
   for (const s of solids) {
     if (s.ground) continue;
     const cx = P.facing > 0 ? s.x : s.x + s.w;
+    if (P.skipLedge && P.skipLedge.s === s && P.skipLedge.cx === cx) continue;
     if (Math.abs(hx - cx) > 22 || hy < s.y - 20 || hy > s.y + 26) continue;
     if (P.facing > 0 ? P.x > s.x + 4 : P.x < s.x + s.w - 4) continue;     // tiene que estar afuera del bloque
     const blocked = solids.some(o => o !== s && !o.ground && o.x < cx + 40 && o.x + o.w > cx - 40 && o.y < s.y && o.y + o.h > s.y - BODY_H);
@@ -440,8 +520,14 @@ function dust(x, y, n, speed, size, up = 0.25) {
   }
 }
 function impact(x, y, dir, big) { impacts.push({ x, y, dir, t: 0.09, life: 0.09, big }); }
+// boca del arma en el mundo para un frame dibujado con los pies en footY: la misma cuenta que drawSprite, con el
+// hundido de los pies y el squash del salto (que escala desde los pies). La usan el disparo y los efectos de la boca
+function muzzleAt(frame, footY) {
+  const qx = P.sqX * (P.draw.k || 1), qy = P.sqY * (P.draw.k || 1), sink = P.state === "hang" || P.state === "climb" ? 0 : FOOT_SINK;
+  return { x: P.x + P.facing * frame[6] * S.char * qx, y: footY + sink + frame[7] * S.char * qy };
+}
 function fire(frame, footY, power) {
-  const mx = P.x + P.facing * frame[6] * S.char, my = footY + frame[7] * S.char;
+  const { x: mx, y: my } = muzzleAt(frame, footY);
   const len = power > 1 ? 46 : 32;   // la estela arranca en la boca y no se dibuja por detrás de ella (x0)
   bullets.push({ x: mx + P.facing * len, x0: mx, y: my, vx: 1350 * P.facing, life: 0.75, power, len });
   flash = { x: mx, y: my, t: 0.06, dir: P.facing, big: power > 1, seed: Math.random() * 1000 };
@@ -453,8 +539,90 @@ function burst(x, y, color, n, speed, life, size) {
     fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - speed * 0.3, life, t: life, color, size: size * (0.6 + Math.random() * 0.6), g: 900 }); }
 }
 
+/* ---------- efectos del salto ---------- */
+let bumpY = 0;   // golpe vertical de cámara del aterrizaje duro (px de pantalla), aparte del shake de los disparos
+// polvo del salto: bocanadas que se frenan y se achican. a0..a1: ángulo en grados sobre el piso, hacia cada lado
+// (0 = rasante, 90 = para arriba). Velocidades y tamaños en px de mundo con el personaje al 80%; escalan con él
+function puff(x, y, n, a0, a1, v0, v1, life0, life1, size, alpha, vx = 0) {
+  const k = S.char / 0.8;
+  for (let i = 0; i < n; i++) {
+    const side = i % 2 ? 1 : -1, a = (a0 + Math.random() * (a1 - a0)) * Math.PI / 180, v = (v0 + Math.random() * (v1 - v0)) * k;
+    const life = life0 + Math.random() * (life1 - life0), c = Math.random() < 0.5 ? "169,174,200" : "212,215,230";
+    fx.push({ x: x + side * Math.random() * 8 * k, y: y - 2, vx: side * Math.cos(a) * v + vx, vy: -Math.sin(a) * v, life, t: life,
+              color: `rgba(${c},${alpha})`, size: size * k * (0.7 + Math.random() * 0.6), g: 0, drag: 4, round: true, grow: 0.45 });
+  }
+}
+function squash(x, y) { P.sqX = x; P.sqY = y; }
+// aterrizaje: el golpe sale de la altura de caída (desde la cima del vuelo), no de vy, que con esta gravedad se satura a
+// los ~200 px. Micro: un paso. Suave: polvo bajo y squash. Duro: más polvo, squash a tope, golpe de cámara y agachado.
+// Ninguno bloquea el control: moverse, saltar o disparar cortan los dibujos de aterrizaje
+function land(fallH, vy) {
+  if (!S.jumpFx) {   // como estaba
+    const hard = vy > 900; P.landT = 0.2; P.landKind = null;
+    dust(P.x, P.y, hard ? 22 : 14, hard ? 260 : 190, hard ? 17 : 14); shake = Math.max(shake, hard ? 0.08 : 0.04); return;
+  }
+  const H = 128 * S.char;
+  if (fallH < JFX.micro * H) { P.landT = 0; P.landKind = null; sfx("step"); return; }
+  const hard = fallH >= JFX.hard * H, s = Math.min(1, fallH / (JFX.hard * H)), half = Math.abs(P.vx) > 20 ? 1 : 0.5;
+  squash(1 + JFX.land[0] * s * half, 1 - JFX.land[1] * s * half);
+  P.landKind = hard ? "hard" : "soft"; P.landT = hard ? 0.2 : 1 / 12;
+  if (hard) {
+    puff(P.x, P.y, 16, 8, 22, 150, 260, 0.4, 0.6, 13, 0.5);   // dos abanicos rasantes
+    puff(P.x, P.y, 5, 60, 85, 60, 120, 0.4, 0.55, 11, 0.45);  // y unas que suben
+    if (!reduceMotion) bumpY = Math.max(bumpY, JFX.bump);
+    sfx("landHard"); rumble(90, 0.45, 0.3);
+  } else {
+    puff(P.x, P.y, 7, 10, 20, 60, 150, 0.3, 0.5, 10, 0.6);
+    sfx("land", 0.6 + 0.4 * s);
+  }
+}
+
+/* ---------- sonido provisorio: sintetizado con Web Audio, sin archivos ---------- */
+// salto, doble salto, aterrizaje suave y duro, y paso (también el aterrizaje micro). ±5% de tono por vez.
+// El navegador sólo deja sonar después de una tecla o un clic
+let actx = null;
+const audioOn = () => { try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); else if (actx.state === "suspended") actx.resume(); } catch (e) { /* sin audio */ } };
+window.addEventListener("keydown", audioOn); window.addEventListener("pointerdown", audioOn);
+function sfx(kind, vol = 1) {
+  if (!S.sound || !actx || actx.state !== "running") return;
+  const t = actx.currentTime, p = 1 + (Math.random() - 0.5) * 0.1, out = actx.createGain();
+  out.gain.value = 0.5 * vol; out.connect(actx.destination);
+  const tone = (type, f0, f1, dur, g) => {
+    const o = actx.createOscillator(), e = actx.createGain(); o.type = type;
+    o.frequency.setValueAtTime(f0 * p, t); o.frequency.exponentialRampToValueAtTime(f1 * p, t + dur);
+    e.gain.setValueAtTime(g, t); e.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(e).connect(out); o.start(t); o.stop(t + dur + 0.02);
+  };
+  const noise = (fc, q, dur, g, f1 = fc) => {
+    const n = actx.createBufferSource(), b = actx.createBuffer(1, Math.ceil(actx.sampleRate * dur), actx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const bp = actx.createBiquadFilter(), e = actx.createGain(); n.buffer = b; bp.type = "bandpass"; bp.Q.value = q;
+    bp.frequency.setValueAtTime(fc * p, t); bp.frequency.exponentialRampToValueAtTime(f1 * p, t + dur);
+    e.gain.setValueAtTime(g, t); e.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    n.connect(bp).connect(e).connect(out); n.start(t);
+  };
+  if (kind === "jump") { tone("triangle", 220, 520, 0.09, 0.3); noise(1800, 0.8, 0.06, 0.25); }
+  else if (kind === "double") { tone("triangle", 380, 900, 0.12, 0.22); noise(900, 1.2, 0.22, 0.4, 3200); }
+  else if (kind === "land") { tone("sine", 140, 60, 0.08, 0.6); noise(700, 0.9, 0.07, 0.35); }
+  else if (kind === "landHard") { tone("sine", 110, 38, 0.2, 0.9); noise(420, 0.7, 0.16, 0.6); noise(2400, 1, 0.05, 0.2); }
+  else if (kind === "step") noise(1500, 1.5, 0.035, 0.2);
+}
+
 /* ---------- actualización ---------- */
-function setDraw(name, i, x, y, torso = null) { P.draw.name = name; P.draw.i = i; P.draw.x = x; P.draw.y = y; P.draw.torso = torso; }
+function setDraw(name, i, x, y, torso = null) { P.draw.name = name; P.draw.i = i; P.draw.x = x; P.draw.y = y; P.draw.torso = torso; P.draw.k = 1; P.draw.rot = 0; P.draw.center = false; }
+// del colgado al otro lado: se da vuelta, sale hacia afuera y para arriba, y una bocanada de polvo se despega de la pared
+function wallJump(H) {
+  P.state = "air"; P.onGround = false; P.facing = -P.facing; P.landT = 0; P.aim = "none";
+  P.vx = P.facing * WALL_JUMP.vx; P.vy = -FEEL.v0 * WALL_JUMP.vy;
+  P.jump = { mode: "phys", fixed: true }; P.wallLockT = WALL_JUMP.lock; P.coyoteT = 99; P.bufferT = 0;
+  P.skipLedge = { s: H.s, cx: H.cx, t: WALL_JUMP.regrab };
+  const k = S.char;
+  for (let n = 0; n < 9; n++) {
+    const v = 190 * k * (0.4 + Math.random() * 0.6), a = (Math.random() - 0.5) * 1.4;
+    fx.push({ x: H.cx, y: P.y - (20 + Math.random() * 60) * k, vx: P.facing * Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.35, t: 0.3 + Math.random() * 0.1,
+              color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: 10 * k * (0.7 + Math.random() * 0.6), g: 60, drag: 5, round: true, grow: 1.6 });
+  }
+}
 function update(dt) {
   const left = held("ArrowLeft") || held("KeyA"), right = held("ArrowRight") || held("KeyD");
   const down = held("ArrowDown") || held("KeyS");
@@ -462,41 +630,70 @@ function update(dt) {
   const fire1 = active && (mouseL || held("KeyJ")), fire2 = active && (mouseR || held("KeyK"));
   const firing = fire1 || fire2;
   const dir = (right ? 1 : 0) - (left ? 1 : 0);
-  P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt; P.idleT = (P.idleT || 0) + dt;
+  P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt; P.idleT = (P.idleT || 0) + dt; P.wallLockT -= dt;
+  if (P.skipLedge && (P.skipLedge.t -= dt) <= 0) P.skipLedge = null;
   if (P.flipT > 0) P.flipT += dt;
   if (P.onGround || P.state === "hang") { P.canDouble = true; P.flipT = 0; }
+  if (P.onGround || P.state === "hang" || P.state === "climb") P.peakY = null;   // la altura de caída se mide desde el vuelo actual
   P.coyoteT = P.onGround ? 0 : P.coyoteT + dt;
 
   // ---- colgado de una cornisa ----
   if (P.state === "hang") {
     const H = P.hang; H.t += dt;
-    const grabbing = H.t < GRAB_FRAMES.length * 0.05;
-    const name = grabbing ? "hang_in" : "hang";
-    const i = grabbing ? GRAB_FRAMES[Math.floor(H.t / 0.05)] : Math.floor((H.t - 0.2) * 12) % anim("hang").f.length;
-    // en el sprite, la mano apoya los dedos hacia adelante y el brazo y el torso llegan hasta +30 px del
-    // pivot: la pared va ahí (sin que el cuerpo la pise) y los dedos, 6 px bajo el tope de la mano, sobre la cornisa
+    const grabbing = H.t < GRAB_T;
+    let name = HANG, i = Math.floor(Math.max(0, H.t - GRAB_T) * 12) % anim(HANG).f.length;
+    if (!HANG2 && grabbing) { name = "hang_in"; i = GRAB_FRAMES[Math.floor(H.t / 0.05)]; }
+    // la mano va sobre el canto y el cuerpo, contra la pared (sin que el collider la pise)
     P.x = H.cx - P.facing * HANG_WALL * S.char; P.y = H.top - (HANG_HAND[10] + HANG_GRIP) * S.char;
-    setDraw(name, i, P.x, P.y);
-    if (jumpPressed && !grabbing) { P.state = "climb"; P.climb = { t: 0, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34 * S.char, y: H.top } }; }
+    if (HANG2 && grabbing) {   // llega amortiguado desde donde agarró
+      const k = 1 - (1 - H.t / GRAB_T) ** 2;
+      setDraw(name, i, H.from.x + (P.x - H.from.x) * k, H.from.y + (P.y - H.from.y) * k);
+    } else setDraw(name, i, P.x, P.y);
+    // saltar: con la dirección contraria a la pared, al otro lado; sin dirección o hacia la pared, sube
+    if (jumpPressed) H.jumpT = HANG_BUFFER + (grabbing ? GRAB_T - H.t : 0); else H.jumpT = (H.jumpT || 0) - dt;
+    if (H.jumpT > 0 && !grabbing) {
+      if (dir === -P.facing) wallJump(H);
+      else {
+        P.state = "climb";
+        P.climb = { t: 0, hang: H, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34 * S.char, y: H.top } };
+        if (CLIMB) {   // dónde termina parado, y cuánto hay que corregir el clip para que los pies caigan en el canto
+          P.climb.to = { x: P.x + P.facing * CLIMB.dx * S.char, y: H.top };
+          P.climb.err = H.top + FOOT_SINK + CLIMB.rise * S.char - P.y;
+        }
+      }
+    }
     else if (downPressed) { P.state = "air"; P.onGround = false; P.vy = 60; P.grabCD = 0.35; P.x -= P.facing * 6; }
     jumpPressed = downPressed = false;
     return finishUpdate(dt, false);
   }
-  // ---- subida provisoria: sube en bloque y se para con la animación de salir del agachado ----
+  // ---- subida: el clip de subir si está; si no, la provisoria (sube en bloque y se para con la salida del agachado) ----
   if (P.state === "climb") {
     const C = P.climb; C.t += dt;
-    if (C.t < 0.14) { const k = C.t / 0.14; setDraw("hang", 0, C.from.x + (C.to.x - C.from.x) * k * 0.4, C.from.y + (C.to.y - C.from.y) * k); }
+    if (C.t < WALL_JUMP.late && dir === -P.facing) { P.x = C.from.x; P.y = C.from.y; wallJump(C.hang); jumpPressed = downPressed = false; return finishUpdate(dt, false); }
+    const standUp = () => {   // parado sobre el canto; si sigue apretando hacia adelante, sale corriendo
+      P.x = C.to.x; P.y = C.to.y; P.state = "ground"; P.onGround = true; P.aim = "none"; P.t = 0;
+      P.vx = CLIMB && dir === P.facing ? P.facing * S.runSpeed * CLIMB.exitRun : 0;
+    };
+    if (CLIMB) {
+      let j = 0, t = C.t; while (j < CLIMB_SEQ.length - 1 && t >= CLIMB_SEQ[j][2]) t -= CLIMB_SEQ[j++][2];
+      const [i, push] = CLIMB_SEQ[j], k = Math.min(1, C.t / CLIMB.dur), y = C.from.y + C.err * k * k * (3 - 2 * k);
+      setDraw("climb", i, C.from.x + P.facing * (CLIMB.ox + push) * S.char, y);
+      // con los pies ya sobre el canto, saltar corta la subida: queda parado y el salto sale del piso
+      const feetOver = y - anim("climb").f[i][8] * S.char <= C.to.y + FOOT_SINK + 2;
+      if (C.t >= CLIMB.dur || (jumpPressed && feetOver)) { if (C.t < CLIMB.dur) P.bufferT = Math.max(FEEL.buffer, 0.05); standUp(); }
+    } else if (C.t < 0.14) { const k = C.t / 0.14; setDraw("hang", 0, C.from.x + (C.to.x - C.from.x) * k * 0.4, C.from.y + (C.to.y - C.from.y) * k); }
     else {
       P.x = C.to.x; P.y = C.to.y; const i = Math.floor((C.t - 0.14) / 0.055);
       setDraw("crouch_out", i, P.x, P.y);
-      if (i >= anim("crouch_out").f.length) { P.state = "ground"; P.onGround = true; P.vx = 0; P.aim = "none"; }
+      if (i >= anim("crouch_out").f.length) standUp();
     }
     jumpPressed = downPressed = false;
     return finishUpdate(dt, false);
   }
 
-  // facing: mira al cursor mientras dispara con el mouse; si no, hacia donde corre
-  if (firing && (mouseL || mouseR) && usedMouse) { const px = P.x - camX, mx = mouseX / S.zoom; if (Math.abs(mx - px) > 8) P.facing = mx < px ? -1 : 1; }
+  // facing: mira al cursor mientras dispara con el mouse; si no, hacia donde corre. Recién salido del colgado, no cambia
+  if (P.wallLockT > 0) { /* trabado: sigue mirando hacia donde saltó */ }
+  else if (firing && (mouseL || mouseR) && usedMouse) { const px = P.x - camX, mx = mouseX / S.zoom; if (Math.abs(mx - px) > 8) P.facing = mx < px ? -1 : 1; }
   else if (dir !== 0 && P.crouch === "none") P.facing = dir;
 
   // agacharse (solo en el piso, sin moverse)
@@ -508,7 +705,7 @@ function update(dt) {
   const planted = fire2 && P.onGround && !P.jump && !crouching;
 
   const airborne = !P.onGround || P.jump;
-  const target = crouching || planted ? 0 : dir * S.runSpeed;
+  const target = P.wallLockT > 0 ? P.facing * WALL_JUMP.vx : crouching || planted ? 0 : dir * S.runSpeed;
   const speeding = target !== 0 && Math.sign(target) === Math.sign(P.vx || target) && Math.abs(target) > Math.abs(P.vx);
   const accel = airborne ? FEEL.air : (speeding ? FEEL.accel : FEEL.decel);
   P.vx += Math.sign(target - P.vx) * Math.min(Math.abs(target - P.vx), accel * dt);
@@ -520,15 +717,24 @@ function update(dt) {
     P.onGround = false; P.landT = 0; P.aim = "none"; P.crouch = "none";
     if (S.jumpMode === "root") P.jump = { mode: "root", t: 0, baseY: P.y };
     else { P.jump = { mode: "phys" }; P.vy = -FEEL.v0; }
-    dust(P.x, P.y, 12, 170, 13, 0.6);   // despegue
+    if (S.jumpFx) {   // despegue: estirón en vez de anticipación, unas bocanadas para arriba (para atrás si corre) y sonido
+      squash(...JFX.takeoff); puff(P.x, P.y, 5, 75, 90, 30, 100, 0.3, 0.45, 9, 0.6, -P.vx * 0.15); sfx("jump");
+    } else dust(P.x, P.y, 12, 170, 13, 0.6);   // despegue
   } else if (jumpPressed && !P.onGround && P.canDouble && FLIP.length && (!P.jump || P.jump.mode === "phys")) {
-    P.canDouble = false; P.bufferT = 0; P.jump = { mode: "phys" }; P.vy = -FEEL.v0 * DOUBLE_V; P.flipT = 1e-4;
+    // doble salto: fija la vy (sin frenar si ya subía más rápido) y trae su propio golpe: anillo de aire torcido contra la
+    // dirección, estirón, destello y sonido
+    P.canDouble = false; P.bufferT = 0; P.jump = { mode: "phys" }; P.flipT = 1e-4;
+    P.vy = S.jumpFx ? Math.min(P.vy, -FEEL.v0 * DOUBLE_V) : -FEEL.v0 * DOUBLE_V;
+    const rho = S.jumpFx ? dir * 0.6 : 0, cr = Math.cos(rho), sr = Math.sin(rho);
     for (let k = 0; k < 12; k++) { const a = Math.PI * (0.15 + 0.7 * k / 11), v = 220 * S.char;   // anillo de aire bajo los pies
-      fx.push({ x: P.x, y: P.y, vx: Math.cos(a) * v * (k % 2 ? 1 : -1), vy: Math.sin(a) * v * 0.35, life: 0.3, t: 0.3, color: "#e9f6ff", size: 11 * S.char, g: 0, drag: 5, round: true, grow: 1.5 }); }
+      const vx = Math.cos(a) * v * (k % 2 ? 1 : -1), vy = Math.sin(a) * v * 0.35;
+      fx.push({ x: P.x, y: P.y, vx: vx * cr - vy * sr, vy: vx * sr + vy * cr, life: 0.3, t: 0.3, color: "#e9f6ff", size: 11 * S.char, g: 0, drag: 5, round: true, grow: 1.5 }); }
+    if (S.jumpFx) { squash(...JFX.dbl); P.flashT = 0.05; sfx("double"); }
   }
   jumpPressed = false; downPressed = false;
 
   let name = null, idx = 0, drawY = P.y, torso = null;
+  let drawK = 1, drawRot = 0, drawCenter = false;   // efectos del salto: escala extra, giro del mortal y si gira/escala desde el centro
   if (P.jump && P.jump.mode === "root") {
     const J = P.jump, a = anim("jump"); J.t += dt;
     const fpos = J.t * 1000 / a.ms, i = Math.floor(fpos);
@@ -545,8 +751,9 @@ function update(dt) {
   }
   if (!P.jump || P.jump.mode === "phys") {
     if (!P.onGround) {
-      if (P.jump && !jumpHeld && P.vy < -FEEL.cut) P.vy = -FEEL.cut;          // salto variable
+      if (P.jump && !P.jump.fixed && !jumpHeld && P.vy < -FEEL.cut) P.vy = -FEEL.cut;   // salto variable
       P.vy = Math.min(FEEL.term, P.vy + (P.vy < 0 ? FEEL.gUp : FEEL.gDown) * dt);   // cae más rápido de lo que sube
+      if (P.peakY === null || P.y < P.peakY) P.peakY = P.y;
       const ny = P.y + P.vy * dt;
       moveX(P.vx * dt, P.y);
       if (P.vy < 0) {
@@ -556,11 +763,11 @@ function update(dt) {
       }
       else {
         const top = landingTop(P.x, P.y, ny);
-        if (top !== null) { const hard = P.vy > 900; P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.landT = 0.2; dust(P.x, P.y, hard ? 22 : 14, hard ? 260 : 190, hard ? 17 : 14); shake = Math.max(shake, hard ? 0.08 : 0.04); }
+        if (top !== null) { const fallH = top - (P.peakY ?? top), vy = P.vy; P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.peakY = null; land(fallH, vy); }
         else P.y = ny;
       }
       // ¿llega la mano a una cornisa?
-      if (!P.onGround) { const L = findLedge(); if (L) { P.state = "hang"; P.hang = { t: 0, cx: L.cx, top: L.top }; P.jump = null; P.vx = P.vy = 0; return finishUpdate(dt, false); } }
+      if (!P.onGround) { const L = findLedge(); if (L) { P.state = "hang"; P.hang = { t: 0, s: L.s, cx: L.cx, top: L.top, from: { x: P.x, y: P.y } }; P.jump = null; P.vx = P.vy = 0; P.wallLockT = 0; return finishUpdate(dt, false); } }
     } else {
       moveX(P.vx * dt, P.y);
       if (!supportAt(P.x, P.y)) { P.onGround = false; P.vy = 0; }
@@ -573,9 +780,21 @@ function update(dt) {
       // en el aire con física: la fase sale de la velocidad; disparando, el frame con el brazo extendido
       if (P.flipT > 0 && P.flipT < FLIP_DUR) {
         name = "double_jump"; idx = FLIP[Math.min(FLIP.length - 1, Math.floor(P.flipT / FLIP_DUR * FLIP.length))];
+        if (S.jumpFx && FLIP_ANG) {   // mortal por código, con ease-out: el impulso se lee rápido al principio y termina parado
+          const u = P.flipT / FLIP_DUR, th = 360 * (1 - (1 - u) ** 2);
+          const [fi, fa] = FLIP_ANG.reduce((b, c) => (Math.abs(c[1] - th) < Math.abs(b[1] - th) ? c : b));
+          idx = fi; drawRot = (th - fa) * Math.PI / 180; drawK = JFX.dblScale; drawCenter = true;
+        }
         const f = anim(name).f[idx];
         torso = { centered: true, x: P.x - P.facing * (f[4] + f[2] / 2 - PIV_X) * S.char, y: P.y - BODY_H / 2 - (8 + f[5] + f[3] / 2 - PIV_Y) * S.char };
       } else if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
+      else if (S.jumpFx) {
+        // cinco dibujos por vy, cada uno visible al menos un dibujo de 12 fps en un salto completo; la caída larga es el
+        // dibujo de double_jump con las piernas buscando el piso. Caer de un borde sin saltar entra directo en la caída
+        const [a, b, c, e] = JFX.vy, vy = P.vy;
+        if (vy >= e && FLIP_ANG) { name = "double_jump"; idx = 8; drawK = JFX.dblScale; }
+        else { name = "jump"; idx = vy < a ? JP.rise[0] : vy < b ? (JP.rise[1] ?? JP.apex) : vy < c && P.jump ? JP.apex : (JP.fall[JP.fall.length - 1] ?? JP.apex); }
+      }
       else { name = "jump"; idx = P.vy < -240 ? JP.rise[0] : P.vy < -60 ? (JP.rise[1] ?? JP.apex) : P.vy < 160 ? JP.apex : (JP.fall[0] ?? JP.apex); }
       drawY = torso && torso.centered ? torso.y : P.y + anim(name).f[idx][8] * S.char;
     } else if (crouching) {
@@ -586,7 +805,14 @@ function update(dt) {
       if (name) idx = Math.min(idx, anim(name).f.length - 1);
     }
     if (!name) {
-      if (P.landT > 0 && !moving) { P.landT -= dt; name = "jump"; idx = JP.land[Math.min(JP.land.length - 1, Math.floor((0.2 - P.landT) / 0.07))] ?? 0; }
+      if (S.jumpFx && (moving || firing)) P.landT = 0;   // moverse o disparar corta el aterrizaje (el squash queda igual)
+      if (P.landT > 0 && !moving && S.jumpFx) {
+        // suave: un dibujo de contacto (el apenas agachado del salto); duro: se para desde el agachado profundo de crouch_out
+        P.landT -= dt;
+        if (P.landKind === "hard") { name = "crouch_out"; idx = Math.min(anim(name).f.length - 1, Math.floor((0.2 - P.landT) / 0.05)); }
+        else { name = "jump"; idx = JP.prep; }
+      }
+      else if (P.landT > 0 && !moving) { P.landT -= dt; name = "jump"; idx = JP.land[Math.min(JP.land.length - 1, Math.floor((0.2 - P.landT) / 0.07))] ?? 0; }
       else if (moving) {
         P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = RUN(); idx = Math.floor(P.t * 12) % anim(name).f.length;   // el ciclo acompaña la velocidad
         if (firing && S.runShoot === "split") {
@@ -620,6 +846,7 @@ function update(dt) {
   }
   if (torso && torso.centered) setDraw(name, idx, torso.x, drawY);
   else setDraw(name, idx, P.x, drawY, torso);
+  P.draw.k = drawK; P.draw.rot = drawRot; P.draw.center = drawCenter;
 
   // disparo: sale de la boca del frame que se está mostrando
   const aimedReady = !(P.aimAnim === "in" && P.aim !== "none" && !moving && P.onGround && !crouching);
@@ -653,6 +880,16 @@ function finishUpdate(dt) {
   if (flash) { flash.t -= dt; if (flash.t <= 0) flash = null; }
   if (P.kickT > 0) P.kickT -= dt;
   if (shake > 0) shake -= dt;
+  // utilería: el reloj de las animaciones y las chispas del tablero abierto
+  clock += dt;
+  for (const d of deco) if (d.name === "panel_spark" && clock > d.next) {
+    const A = BG.deco.panel_spark, sx = d.x + (A.spark[0] - (A.solid[0] + A.solid[2]) / 2) * A.k, sy = d.y + (A.spark[1] - A.solid[3]) * A.k;
+    burst(sx, sy, "#9ff5fa", 6, 160, 0.3, 3); burst(sx, sy, "#ffffff", 3, 120, 0.2, 2); d.next = clock + 0.6 + Math.random() * 1.4;
+  }
+  // efectos del salto: el squash y el golpe de cámara vuelven solos (igual a cualquier frame rate y en cámara lenta)
+  const back = Math.pow(JFX.back, dt * 60); P.sqX = 1 + (P.sqX - 1) * back; P.sqY = 1 + (P.sqY - 1) * back;
+  bumpY *= Math.pow(JFX.bumpDecay, dt * 60); if (bumpY < 0.3) bumpY = 0;
+  if (P.flashT > 0) P.flashT -= dt;
   const want = P.x - VW() * 0.42 + P.facing * 70;
   camX += (want - camX) * Math.min(1, dt * 5);
   camX = Math.max(0, Math.min(WORLD_W - VW(), camX));
@@ -664,6 +901,7 @@ function finishUpdate(dt) {
 function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
 const OUT = "#0d0f18", PANEL = "#515f6f", HIT_TINT = "rgba(159,245,250,0.8)";
 const PARALLAX = [["sky", 0.02], ["far", 0.15], ["mid", 0.3], ["near", 0.6]];   // de atrás para adelante: cuánto sigue a la cámara
+const BACK_TINT = "rgba(24,18,52,0.35)";   // la utilería de fondo: como near, un poco menos
 const NEAR_TINT = "rgba(24,18,52,0.4)";   // near va justo detrás de la capa de juego: más oscura y hacia el violeta del cielo
 // cortes del kit en px de la hoja: el tope de un bloque tiene las franjas hasta 150 y el contorno de abajo en 340;
 // el cuerpo se repite cada 302; de la plataforma flotante se repite el tramo 330-489 (una vuelta de las franjas)
@@ -671,9 +909,9 @@ const KIT = { stripes: 150, topH: 340, bodyStep: 302, outline: 12, floatMid: [33
 // los pies se hunden en el contorno negro del borde de arriba de pisos y bloques: parado justo encima, ese
 // contorno se lee como un hueco y el ranger parece flotar
 const FOOT_SINK = Math.round(KIT.outline * BG.kit.top.k) + 1;
-const IMG = {}, baked = { layers: {}, solids: new Map(), props: {}, targets: {} };
+const IMG = {}, baked = { layers: {}, solids: new Map(), props: {}, targets: {}, deco: {} };
 let bgState = "loading", DS = 1, bakeDS = 0, bakeZ = 0;   // DS: px del canvas por px del juego
-const bgFiles = [...new Set([BG.layers, BG.kit, BG.props].flatMap(o => Object.values(o).map(p => p.src)))];
+const bgFiles = [...new Set([BG.layers, BG.kit, BG.props, BG.deco || {}].flatMap(o => Object.values(o).map(p => p.src)))];
 Promise.all(bgFiles.map(src => new Promise((ok, fail) => {
   const im = new Image(); im.onload = () => { IMG[src] = im; ok(); }; im.onerror = () => fail(src); im.src = src;
 }))).then(() => { bgState = "ok"; }, src => {
@@ -729,6 +967,11 @@ function bake() {
   for (const name of ["crate", "sign"]) {
     const A = BG.props[name], [c, g] = surface(px(A.w), px(A.h)); g.drawImage(IMG[A.src], 0, 0, c.width, c.height); baked.props[name] = c;
   }
+  // utilería de ranger_props: cada pieza a su tamaño; la de fondo, teñida (las aspas ya vienen al tamaño del hueco)
+  for (const [name, A] of Object.entries(BG.deco || {})) {
+    const [c, g] = surface(px(A.w), px(A.h)); g.drawImage(IMG[A.src], 0, 0, c.width, c.height);
+    baked.deco[name] = A.role === "back" ? tinted(c, BACK_TINT) : c;
+  }
   // blancos: el del tablero a su alto y el de la lata más chico; el impacto es la misma imagen teñida
   const A = BG.props.target;
   for (const kind of ["board", "can"]) {
@@ -767,6 +1010,31 @@ function drawProp(p) {
   const w = c.width / bakeDS, x = Math.round(p.x - camX - w / 2);
   if (x < VW() && x + w > 0) drawBaked(c, x, p.y - c.height / bakeDS);
 }
+// una pieza de BG.deco con lo opaco (sin el halo) centrado en x y apoyado en y; devuelve su esquina en px del mundo
+function decoPiece(name, x, y) {
+  const A = BG.deco[name], X = x - (A.solid[0] + A.solid[2]) / 2 * A.k, Y = y - A.solid[3] * A.k, c = baked.deco[name];
+  if (c) drawBaked(c, Math.round(X - camX), Math.round(Y));
+  return [X, Y, A];
+}
+function drawDeco(d) {
+  if (d.x - camX < -160 || d.x - camX > VW() + 160) return;
+  if (d.name === "beacon") decoPiece(Math.floor(clock * 2 + d.i) % 2 ? "beacon_off" : "beacon_on", d.x, d.y);   // parpadea, desfasada de la vecina
+  else if (d.name === "monitor") {
+    // estática: 2,8 s prendida, con la pantalla espejada al azar cada 80 ms, y 0,4 s apagada
+    if ((clock + d.i) % 3.2 > 2.8) return decoPiece("monitor_off", d.x, d.y);
+    const [X, Y, M] = decoPiece("monitor_static", d.x, d.y), c = baked.deco.monitor_static, [a, b, w, h] = M.screen.map(v => v * M.k), f = Math.floor(clock / 0.08);
+    if (!c) return;
+    ctx.save(); ctx.translate(Math.round(X - camX) + a + w / 2, Math.round(Y) + b + h / 2); ctx.scale(f % 2 ? -1 : 1, (f >> 1) % 2 ? -1 : 1);
+    ctx.drawImage(c, a * bakeDS, b * bakeDS, w * bakeDS, h * bakeDS, -w / 2, -h / 2, w, h); ctx.restore();
+  } else if (d.name === "fan") {
+    // en la cara del bloque, debajo del tope del kit; las aspas giran en el hueco del marco
+    const H = BG.deco.fan_housing, B = BG.deco.fan_blades, top = d.y + KIT.topH * BG.kit.top.k + 8;
+    const [X, Y] = decoPiece("fan_housing", d.x, top + (H.solid[3] - H.solid[1]) * H.k);
+    if (!baked.deco.fan_blades) return;
+    ctx.save(); ctx.translate(Math.round(X - camX) + H.hole[0] * H.k, Math.round(Y) + H.hole[1] * H.k); ctx.rotate(clock * Math.PI * 1.8 + d.i);
+    drawBaked(baked.deco.fan_blades, -B.w / 2, -B.h / 2); ctx.restore();
+  } else decoPiece(d.name, d.x, d.y);
+}
 function drawTarget(T) {
   if (T.dead) return;
   const art = baked.targets[T.kind], cx = Math.round(T.x + T.w / 2 - camX);
@@ -782,7 +1050,13 @@ function drawSprite() {
   const frame = g => ctx.drawImage(atlas, g[0], g[1], g[2], g[3], -PIV_X + g[4], -PIV_Y + g[5], g[2], g[3]);
   const sink = P.state === "hang" || P.state === "climb" ? 0 : FOOT_SINK;
   ctx.save(); ctx.translate(Math.round(d.x - camX), Math.round(d.y) + sink);
-  ctx.scale(P.facing < 0 ? -S.char : S.char, S.char);
+  // efectos del salto: squash desde los pies; el mortal gira y se deforma desde el centro del dibujo, que el doble salto
+  // pone en el centro del cuerpo. Las escalas por eje van juntas, así el contorno no cambia de grosor más de 1 px
+  const qx = P.sqX * (d.k || 1), qy = P.sqY * (d.k || 1), fs = P.facing < 0 ? -1 : 1;
+  if (d.center) {
+    const ux = f[4] + f[2] / 2 - PIV_X, uy = f[5] + f[3] / 2 - PIV_Y;
+    ctx.translate(fs * S.char * ux, S.char * uy); ctx.rotate(fs * d.rot); ctx.scale(fs * S.char * qx, S.char * qy); ctx.translate(-ux, -uy);
+  } else ctx.scale(fs * S.char * qx, S.char * qy);
   if (d.torso) {
     // cuerpo partido: piernas del run debajo de la cintura; arriba, el torso del disparo con el rebote del run.
     // El retroceso mueve sólo el torso
@@ -792,6 +1066,8 @@ function drawSprite() {
     ctx.beginPath(); ctx.rect(-CELL_W, -CELL_H * 2, CELL_W * 2, CELL_H * 2 - RS_CUT + RS_OVER); ctx.clip(); frame(tf); ctx.restore();
   } else {
     ctx.translate(Math.round(kick), 0); frame(f);
+    // destello del doble salto: el mismo dibujo encima, sumado (ctx.filter frenaba el cuadro la primera vez)
+    if (P.flashT > 0) { ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.7; frame(f); }
   }
   ctx.restore();
 }
@@ -812,15 +1088,18 @@ function drawFlash(Fl) {
 }
 function render() {
   const sx = shake > 0 ? (Math.random() - 0.5) * 3 : 0, sy = shake > 0 ? (Math.random() - 0.5) * 3 : 0;
-  ctx.save(); ctx.translate(sx, sy);
-  drawBackground(sx, sy);
+  ctx.save(); ctx.translate(sx, sy + bumpY);   // bumpY: golpe vertical del aterrizaje duro, aparte del shake de los disparos
+  drawBackground(sx, sy + bumpY);
   // mundo: escalado alrededor de la línea del piso, que queda donde estaba en pantalla
   ctx.save(); ctx.translate(0, GROUND * (1 - S.zoom)); ctx.scale(S.zoom, S.zoom);
   if (bgState === "ok") drawGround();
+  for (const d of deco) if (BACK.has(d.name)) drawDeco(d);   // utilería de fondo: detrás de todo lo jugable
   for (const p of props) drawProp(p);
-  const behind = ready && P.state === "hang";   // colgado: la mano va por detrás del bloque
+  for (const d of deco) if (!BACK.has(d.name) && d.name !== "fan") drawDeco(d);
+  const behind = ready && P.state === "hang" && HANG_BEHIND;   // colgado de una mano: la mano va por detrás del bloque
   if (behind) drawSprite();
   for (const s of solids) if (!s.ground) drawSolid(s);
+  for (const d of deco) if (d.name === "fan") drawDeco(d);   // los ventiladores, en la cara de los bloques
   for (const T of targets) drawTarget(T);
   if (P.state !== "hang" && P.state !== "climb") {
     const shY = supportAt(P.x, P.y) ? P.y : (landingTop(P.x, P.y, GROUND + 1) ?? GROUND), hgt = Math.max(0, shY - P.y), w = 30 * S.char * Math.max(0.4, 1 - hgt / 220);

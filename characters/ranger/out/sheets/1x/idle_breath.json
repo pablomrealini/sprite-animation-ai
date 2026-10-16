@@ -1,17 +1,17 @@
 {
   "cell": {
-    "w": 159,
-    "h": 233
+    "w": 272,
+    "h": 308
   },
-  "cols": 12,
-  "rows": 1,
+  "cols": 7,
+  "rows": 2,
   "count": 12,
   "oversize": false,
   "fps": 12,
   "loop": true,
   "pivot": {
     "x": 0.5,
-    "y": 0.89683
+    "y": 0.92205
   },
   "durations_ms": [
     83.3,

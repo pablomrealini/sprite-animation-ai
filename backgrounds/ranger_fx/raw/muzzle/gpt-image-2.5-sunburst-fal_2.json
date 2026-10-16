@@ -1,0 +1,167 @@
+{
+  "set": "ranger_fx",
+  "asset": "muzzle",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game visual effect sprites, in the rendering style of the reference image: flat cel colors, hard clean edges, bold chunky shapes that still read when shrunk to 30 pixels, no gradients, no airbrushed soft glow, no blur, no texture noise, no painterly brushwork. Orthographic side view. The effects are light, so they have no black outline: their outer edge is a thin rim of deep teal-blue instead. Palette, from the inside out: pure white core, pale icy cyan, bright cyan (the color of the glowing lens on the ranger's blaster in the reference), deep teal-blue rim.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA sprite sheet of six muzzle flashes for a small cyan energy blaster (a sci-fi pistol) that fires to the right, in two rows of three, with wide empty space between them, not touching each other or the image edges. Draw each flash as if the gun's muzzle were exactly at the middle of its left edge: it starts there, narrow, and bursts to the right; nothing extends backwards past that left edge. Each flash is one single connected shape: no detached sparks, dots or fragments.\nTop row: three alternative shapes of the first, brightest frame of the flash, all the same size: a sharp star-shaped burst, longer forward than tall (about 2 to 1), with 3 to 5 pointed spikes, the longest spike pointing straight forward, a big pure white core near the base. The three are clearly different in spike count and angles, so they can alternate shot after shot.\nBottom row: the second frame of each flash above it, about 60% of its size: the burst collapsing, thinner spikes, less white and more cyan and teal, with a small hollow ring at the base.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "fx",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_fx/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1144,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a145af-104d-7082-b815-37e9a4bff319",
+  "created": "2026-10-16T17:08:26+00:00",
+  "sha256": "41b3f6c661a08d4a5bb5c9e1e769674b2c5435a5ff3067b9dceaab956467b85f",
+  "post": {
+    "file": "backgrounds/ranger_fx/post/muzzle/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8774,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "a1": [
+        135,
+        251,
+        784,
+        783
+      ],
+      "a2": [
+        999,
+        265,
+        1638,
+        776
+      ],
+      "a3": [
+        1799,
+        243,
+        2434,
+        779
+      ],
+      "b1": [
+        204,
+        960,
+        642,
+        1243
+      ],
+      "b2": [
+        1087,
+        960,
+        1488,
+        1243
+      ],
+      "b3": [
+        1912,
+        960,
+        2358,
+        1243
+      ]
+    },
+    "trim": {
+      "a1": [
+        0,
+        0,
+        649,
+        532
+      ],
+      "a2": [
+        0,
+        0,
+        639,
+        511
+      ],
+      "a3": [
+        0,
+        0,
+        635,
+        536
+      ],
+      "b1": [
+        0,
+        0,
+        438,
+        283
+      ],
+      "b2": [
+        0,
+        0,
+        401,
+        283
+      ],
+      "b3": [
+        0,
+        0,
+        446,
+        283
+      ]
+    },
+    "files": {
+      "a1": {
+        "file": "a1.png",
+        "w": 649,
+        "h": 532
+      },
+      "a2": {
+        "file": "a2.png",
+        "w": 639,
+        "h": 511
+      },
+      "a3": {
+        "file": "a3.png",
+        "w": 635,
+        "h": 536
+      },
+      "b1": {
+        "file": "b1.png",
+        "w": 438,
+        "h": 283
+      },
+      "b2": {
+        "file": "b2.png",
+        "w": 401,
+        "h": 283
+      },
+      "b3": {
+        "file": "b3.png",
+        "w": 446,
+        "h": 283
+      }
+    }
+  }
+}

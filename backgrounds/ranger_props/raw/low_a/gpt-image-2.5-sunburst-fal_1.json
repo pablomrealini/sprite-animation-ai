@@ -1,0 +1,143 @@
+{
+  "set": "ranger_props",
+  "asset": "low_a",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nFour separate game props in one row, same scale, side view, standing on an implied ground line, with wide empty space between them, not touching the image edges. Left to right:\n1. A plain steel drum barrel, gunmetal blue-grey, with two raised ribs and a small cyan light strip.\n2. An explosive barrel: the same barrel shape and size, but bright red, with a yellow-and-black hazard band and a simple flame pictogram in a yellow triangle, clearly dangerous.\n3. A breakable supply crate, a little lower than the barrels: thin pale blue-grey panels, visibly cracked and dented, with loose bolts, clearly fragile.\n4. A coil of thick black power cable lying on the floor, about half as tall as the barrels, with a plug end and a small yellow junction box.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1708,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a145ab-6fe4-74c1-978a-92b75a20952f",
+  "created": "2026-10-16T17:04:28+00:00",
+  "sha256": "1c1faf5f8c8d237d1b3598c4123546552fafaac76e5a9775ec995c00311737b3",
+  "post": {
+    "file": "backgrounds/ranger_props/post/low_a/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.7689,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 0.892,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (left): puede estar cortado"
+      ]
+    },
+    "pieces": {
+      "barrel": [
+        99,
+        440,
+        540,
+        1078
+      ],
+      "explosive_barrel": [
+        718,
+        439,
+        1160,
+        1078
+      ],
+      "crate_breakable": [
+        1311,
+        674,
+        1793,
+        1080
+      ],
+      "cable_coil": [
+        1904,
+        858,
+        2510,
+        1077
+      ]
+    },
+    "trim": {
+      "barrel": [
+        0,
+        0,
+        441,
+        638
+      ],
+      "explosive_barrel": [
+        0,
+        0,
+        442,
+        639
+      ],
+      "crate_breakable": [
+        0,
+        0,
+        482,
+        406
+      ],
+      "cable_coil": [
+        0,
+        0,
+        606,
+        219
+      ]
+    },
+    "files": {
+      "barrel": {
+        "file": "barrel.png",
+        "w": 441,
+        "h": 638
+      },
+      "explosive_barrel": {
+        "file": "explosive_barrel.png",
+        "w": 442,
+        "h": 639
+      },
+      "crate_breakable": {
+        "file": "crate_breakable.png",
+        "w": 482,
+        "h": 406
+      },
+      "cable_coil": {
+        "file": "cable_coil.png",
+        "w": 606,
+        "h": 219
+      }
+    }
+  }
+}

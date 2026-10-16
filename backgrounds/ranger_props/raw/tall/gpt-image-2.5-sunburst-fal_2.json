@@ -1,0 +1,143 @@
+{
+  "set": "ranger_props",
+  "asset": "tall",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nFour separate game props in one row, same scale, side view, standing on an implied ground line, with wide empty space between them, not touching the image edges. Left to right:\n1. A tall communications mast, the tallest item: a slim steel lattice tower on a squat steel base, a small radar dish halfway up, short antennas and a red light on top.\n2. A large base signboard on two steel legs: a rectangular panel with a yellow-and-black hazard stripe border and a simple military emblem pictogram (a winged shield with a star), a small lamp on top.\n3. A sci-fi blast door frame: a thick steel doorway frame with yellow-and-black hazard stripes on its side posts and a small status light above the opening. The doorway opening is empty: fully transparent inside the frame.\n4. The door leaf alone, as if taken out of that frame: a heavy steel sliding door panel with a horizontal seam and a diagonal hazard stripe, sized to fill the frame's opening.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.171,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a145ac-cf9e-7e73-af3e-411229a6818b",
+  "created": "2026-10-16T17:05:54+00:00",
+  "sha256": "22f7b9e671ae4900697bf9a302a83bd6aaa0f06d173aa11cef1292eef386a1b9",
+  "post": {
+    "file": "backgrounds/ranger_props/post/tall/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.6839,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.998,
+        "left": 0.978,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (left): puede estar cortado"
+      ]
+    },
+    "pieces": {
+      "antenna": [
+        88,
+        120,
+        548,
+        1302
+      ],
+      "signboard": [
+        611,
+        604,
+        1226,
+        1302
+      ],
+      "door_frame": [
+        1294,
+        611,
+        2033,
+        1302
+      ],
+      "door_leaf": [
+        2102,
+        675,
+        2478,
+        1303
+      ]
+    },
+    "trim": {
+      "antenna": [
+        0,
+        0,
+        460,
+        1182
+      ],
+      "signboard": [
+        0,
+        0,
+        615,
+        698
+      ],
+      "door_frame": [
+        0,
+        0,
+        739,
+        691
+      ],
+      "door_leaf": [
+        0,
+        0,
+        376,
+        628
+      ]
+    },
+    "files": {
+      "antenna": {
+        "file": "antenna.png",
+        "w": 460,
+        "h": 1182
+      },
+      "signboard": {
+        "file": "signboard.png",
+        "w": 615,
+        "h": 698
+      },
+      "door_frame": {
+        "file": "door_frame.png",
+        "w": 739,
+        "h": 691
+      },
+      "door_leaf": {
+        "file": "door_leaf.png",
+        "w": 376,
+        "h": 628
+      }
+    }
+  }
+}

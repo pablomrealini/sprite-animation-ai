@@ -1,0 +1,358 @@
+{
+ "set": "ranger_props",
+ "chosen": "2026-10-16",
+ "note": "w y h en px del juego; solid, screen, hole, opening y spark en px de la hoja (por k da px del juego). role: back | fixture | face | target | gate (ver integrar.md)",
+ "pieces": {
+  "barrel": {
+   "file": "post/low_a/gpt-image-2.5-sunburst-fal_2/barrel.png",
+   "sheet": "low_a",
+   "option": 2,
+   "role": "back",
+   "k": 0.07429,
+   "w": 34.1,
+   "h": 50.0,
+   "solid": [
+    1,
+    1,
+    458,
+    672
+   ]
+  },
+  "explosive_barrel": {
+   "file": "post/low_a/gpt-image-2.5-sunburst-fal_2/explosive_barrel.png",
+   "sheet": "low_a",
+   "option": 2,
+   "role": "target",
+   "k": 0.07429,
+   "w": 33.13,
+   "h": 49.92,
+   "solid": [
+    0,
+    1,
+    445,
+    671
+   ]
+  },
+  "crate_breakable": {
+   "file": "post/low_a/gpt-image-2.5-sunburst-fal_2/crate_breakable.png",
+   "sheet": "low_a",
+   "option": 2,
+   "role": "target",
+   "k": 0.07429,
+   "w": 42.64,
+   "h": 28.45,
+   "solid": [
+    2,
+    0,
+    574,
+    382
+   ]
+  },
+  "cable_coil": {
+   "file": "post/low_a/gpt-image-2.5-sunburst-fal_1/cable_coil.png",
+   "sheet": "low_a",
+   "option": 1,
+   "role": "back",
+   "k": 0.07837,
+   "w": 47.49,
+   "h": 17.16,
+   "solid": [
+    1,
+    0,
+    605,
+    218
+   ]
+  },
+  "beacon_off": {
+   "file": "post/low_b/gpt-image-2.5-sunburst-fal_2/beacon_off.png",
+   "sheet": "low_b",
+   "option": 2,
+   "role": "fixture",
+   "k": 0.12712,
+   "w": 30.25,
+   "h": 30.0,
+   "solid": [
+    1,
+    1,
+    237,
+    234
+   ]
+  },
+  "beacon_on": {
+   "file": "post/low_b/gpt-image-2.5-sunburst-fal_2/beacon_on.png",
+   "sheet": "low_b",
+   "option": 2,
+   "role": "fixture",
+   "k": 0.12712,
+   "w": 45.38,
+   "h": 41.82,
+   "solid": [
+    58,
+    94,
+    294,
+    327
+   ]
+  },
+  "switch_off": {
+   "file": "post/low_b/gpt-image-2.5-sunburst-fal_1/switch_off.png",
+   "sheet": "low_b",
+   "option": 1,
+   "role": "gate",
+   "k": 0.10169,
+   "w": 29.08,
+   "h": 72.3,
+   "solid": [
+    2,
+    1,
+    285,
+    710
+   ]
+  },
+  "switch_on": {
+   "file": "post/low_b/gpt-image-2.5-sunburst-fal_1/switch_on.png",
+   "sheet": "low_b",
+   "option": 1,
+   "role": "gate",
+   "k": 0.10169,
+   "w": 29.08,
+   "h": 63.35,
+   "solid": [
+    1,
+    1,
+    284,
+    621
+   ]
+  },
+  "drone": {
+   "file": "post/low_b/gpt-image-2.5-sunburst-fal_1/drone.png",
+   "sheet": "low_b",
+   "option": 1,
+   "role": "fixture",
+   "k": 0.10169,
+   "w": 53.39,
+   "h": 34.17,
+   "solid": [
+    1,
+    1,
+    524,
+    335
+   ]
+  },
+  "console": {
+   "file": "post/mid_a/gpt-image-2.5-sunburst-fal_2/console.png",
+   "sheet": "mid_a",
+   "option": 2,
+   "role": "back",
+   "k": 0.16204,
+   "w": 107.11,
+   "h": 70.0,
+   "solid": [
+    1,
+    1,
+    660,
+    431
+   ]
+  },
+  "fuel_tank": {
+   "file": "post/mid_a/gpt-image-2.5-sunburst-fal_2/fuel_tank.png",
+   "sheet": "mid_a",
+   "option": 2,
+   "role": "back",
+   "k": 0.16204,
+   "w": 107.59,
+   "h": 75.19,
+   "solid": [
+    1,
+    2,
+    663,
+    463
+   ]
+  },
+  "turret_off": {
+   "file": "post/mid_a/gpt-image-2.5-sunburst-fal_2/turret_off.png",
+   "sheet": "mid_a",
+   "option": 2,
+   "role": "back",
+   "k": 0.16204,
+   "w": 86.69,
+   "h": 112.46,
+   "solid": [
+    1,
+    1,
+    535,
+    693
+   ]
+  },
+  "crate_stack": {
+   "file": "post/mid_a/gpt-image-2.5-sunburst-fal_1/crate_stack.png",
+   "sheet": "mid_a",
+   "option": 1,
+   "role": "back",
+   "k": 0.15184,
+   "w": 74.4,
+   "h": 89.59,
+   "solid": [
+    1,
+    2,
+    489,
+    589
+   ]
+  },
+  "monitor_off": {
+   "file": "post/mid_b/gpt-image-2.5-sunburst-fal_1/monitor_off.png",
+   "sheet": "mid_b",
+   "option": 1,
+   "role": "fixture",
+   "k": 0.13823,
+   "w": 52.53,
+   "h": 64.0,
+   "solid": [
+    1,
+    1,
+    379,
+    462
+   ]
+  },
+  "monitor_static": {
+   "file": "post/mid_b/gpt-image-2.5-sunburst-fal_1/monitor_static.png",
+   "sheet": "mid_b",
+   "option": 1,
+   "role": "fixture",
+   "k": 0.13823,
+   "w": 52.11,
+   "h": 64.0,
+   "solid": [
+    1,
+    1,
+    375,
+    462
+   ],
+   "screen": [
+    40,
+    46,
+    262,
+    375
+   ]
+  },
+  "panel_spark": {
+   "file": "post/mid_b/gpt-image-2.5-sunburst-fal_2/panel_spark.png",
+   "sheet": "mid_b",
+   "option": 2,
+   "role": "fixture",
+   "k": 0.11636,
+   "w": 53.87,
+   "h": 79.12,
+   "solid": [
+    1,
+    2,
+    462,
+    679
+   ],
+   "spark": [
+    307.1,
+    345.1
+   ]
+  },
+  "fan_housing": {
+   "file": "post/mid_b/gpt-image-2.5-sunburst-fal_2/fan_housing.png",
+   "sheet": "mid_b",
+   "option": 2,
+   "role": "face",
+   "k": 0.11636,
+   "w": 50.5,
+   "h": 48.99,
+   "solid": [
+    1,
+    1,
+    432,
+    419
+   ],
+   "hole": [
+    215.6,
+    201.7,
+    144.0
+   ]
+  },
+  "fan_blades": {
+   "file": "post/mid_b/gpt-image-2.5-sunburst-fal_2/fan_blades.png",
+   "sheet": "mid_b",
+   "option": 2,
+   "role": "face",
+   "k": 0.09189,
+   "w": 34.18,
+   "h": 32.62,
+   "solid": [
+    1,
+    1,
+    371,
+    354
+   ]
+  },
+  "antenna": {
+   "file": "post/tall/gpt-image-2.5-sunburst-fal_2/antenna.png",
+   "sheet": "tall",
+   "option": 2,
+   "role": "back",
+   "k": 0.2026,
+   "w": 93.2,
+   "h": 239.47,
+   "solid": [
+    1,
+    2,
+    459,
+    1180
+   ]
+  },
+  "signboard": {
+   "file": "post/tall/gpt-image-2.5-sunburst-fal_2/signboard.png",
+   "sheet": "tall",
+   "option": 2,
+   "role": "back",
+   "k": 0.2026,
+   "w": 124.6,
+   "h": 141.41,
+   "solid": [
+    2,
+    2,
+    614,
+    697
+   ]
+  },
+  "door_frame": {
+   "file": "post/tall/gpt-image-2.5-sunburst-fal_1/door_frame.png",
+   "sheet": "tall",
+   "option": 1,
+   "role": "gate",
+   "k": 0.20057,
+   "w": 147.02,
+   "h": 140.0,
+   "solid": [
+    1,
+    1,
+    732,
+    695
+   ],
+   "opening": [
+    169,
+    126,
+    564,
+    698
+   ]
+  },
+  "door_leaf": {
+   "file": "post/tall/gpt-image-2.5-sunburst-fal_1/door_leaf.png",
+   "sheet": "tall",
+   "option": 1,
+   "role": "gate",
+   "k": 0.20057,
+   "w": 82.84,
+   "h": 117.33,
+   "solid": [
+    3,
+    2,
+    411,
+    583
+   ]
+  }
+ }
+}

@@ -1,0 +1,81 @@
+# Efectos del blaster cian del ranger dibujados por IA de imagen: fogonazos y destellos de impacto, para comparar
+# con los de código en prototypes/fx_lab/ (ver reports/Fogonazos y efectos de disparo.md).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/ranger_fx/gen.toml --dry-run
+# Ver "Fondos por API de imagen" en pipeline/README.md.
+#
+# Modelo: GPT Image 2.5 Sunburst por fal, el único con alfa nativo (un brillo keyeado de un verde deja borde).
+# Referencia: el concept del ranger, sólo como guía de estilo (el cian es el de la lente del blaster).
+#
+# Las piezas tienen que salir de una sola mancha cada una: el post separa la hoja por componentes conexos del
+# alfa (a más de 2 px son piezas distintas), así que el prompt pide nada de chispas sueltas. Las chispas sueltas,
+# si hacen falta, las pone el código (la mezcla del fx_lab).
+#
+# Escala en el juego: el ranger mide 128 px a 1x, se dibuja al 80% y la cámara al 75%, unos 77 px de pantalla
+# a 960×540. Un fogonazo de 0,3–0,4 alturas son 25–30 px: el prompt pide formas gruesas que se lean así de
+# chicas. Las piezas quedan a la escala del modelo; prototypes/fx_lab/build.py las achica.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por asset para elegir
+max_usd = 2               # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+fx = """
+2D side-scrolling video game visual effect sprites, in the rendering style of the reference image: flat cel \
+colors, hard clean edges, bold chunky shapes that still read when shrunk to 30 pixels, no gradients, no \
+airbrushed soft glow, no blur, no texture noise, no painterly brushwork. Orthographic side view. The effects \
+are light, so they have no black outline: their outer edge is a thin rim of deep teal-blue instead. Palette, \
+from the inside out: pure white core, pale icy cyan, bright cyan (the color of the glowing lens on the \
+ranger's blaster in the reference), deep teal-blue rim.
+"""
+no_text = "No text, letters, numbers, logos, frames, grid lines or labels anywhere."
+
+[[asset]]
+name = "muzzle"           # 3 formas del primer frame (alternan por disparo) y el segundo frame de cada una
+style = ["fx", "no_text"]
+prompt = """
+A sprite sheet of six muzzle flashes for a small cyan energy blaster (a sci-fi pistol) that fires to the \
+right, in two rows of three, with wide empty space between them, not touching each other or the image edges. \
+Draw each flash as if the gun's muzzle were exactly at the middle of its left edge: it starts there, narrow, \
+and bursts to the right; nothing extends backwards past that left edge. Each flash is one single connected \
+shape: no detached sparks, dots or fragments.
+Top row: three alternative shapes of the first, brightest frame of the flash, all the same size: a sharp \
+star-shaped burst, longer forward than tall (about 2 to 1), with 3 to 5 pointed spikes, the longest spike \
+pointing straight forward, a big pure white core near the base. The three are clearly different in spike \
+count and angles, so they can alternate shot after shot.
+Bottom row: the second frame of each flash above it, about 60% of its size: the burst collapsing, thinner \
+spikes, less white and more cyan and teal, with a small hollow ring at the base.
+"""
+refs = ["../../poses/ranger_concept.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["a1", "a2", "a3", "b1", "b2", "b3"]
+
+[[asset]]
+name = "impact"           # dos animaciones de 4 frames del impacto, para alternar
+style = ["fx", "no_text"]
+prompt = """
+A sprite sheet of two hit-spark animations for a cyan energy bolt that flies to the right and hits a wall, \
+in two rows of four frames, each row left to right in time order, all at the same scale, with wide empty \
+space between the frames, not touching each other or the image edges. In every frame the point of contact \
+is near the right edge, at the vertical middle, and the splash bursts back toward the left (toward the \
+shooter) and up and down, never to the right. Each frame is one single connected shape: no detached \
+sparks, dots or debris.
+Frame 1: a small, very bright, pure white and pale cyan four-pointed star at the point of contact.
+Frame 2: the largest frame, a big jagged starburst with 6 to 8 sharp spikes fanning out to the left, white \
+core, bright cyan body, teal rim.
+Frame 3: the splash opening into a thick crescent with thinning spikes, mostly cyan and teal, hollow center.
+Frame 4: a thin, small teal crescent, the last frame before it disappears.
+The second row is the same four-step animation with a different spike pattern, so the two can alternate.
+"""
+refs = ["../../poses/ranger_concept.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["a1", "a2", "a3", "a4", "b1", "b2", "b3", "b4"]

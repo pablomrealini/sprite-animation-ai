@@ -8,5 +8,9 @@ Modelos: gpt-image-2.5-sunburst-fal, nano-banana-2.1. Abrí `compare.html` para 
 | run_chest | gpt-image-2.5-sunburst-fal #2 | ok | 1440×2160 | ok |  | 0,12 |
 | run_chest | nano-banana-2.1 #1 | ok | 1696×2528 | ok |  | 0,06 |
 | run_chest | nano-banana-2.1 #2 | ok | 1696×2528 | ok |  | 0,06 |
+| hang_two | nano-banana-2.1 #1 | ok | 1696×2528 | ok |  | 0,06 |
+| hang_two | nano-banana-2.1 #2 | ok | 1696×2528 | ok |  | 0,06 |
+| hang_two | nano-banana-2.1 #3 | ok | 1696×2528 | ok |  | 0,06 |
+| hang_two | nano-banana-2.1 #4 | ok | 1696×2528 | ok |  | 0,06 |
 
-Gastado (estimado, a precio de lista): US$ 0,36.
+Gastado (estimado, a precio de lista): US$ 0,60.

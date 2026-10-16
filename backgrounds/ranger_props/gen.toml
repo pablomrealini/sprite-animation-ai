@@ -1,0 +1,160 @@
+# Props de prueba para darle vida a la base de entrenamiento del ranger (backgrounds/ranger_base): decorado,
+# cosas que se pueden animar y cosas que en el futuro pueden tener función. Pruebas de concepto, todavía no
+# están en el juego.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/ranger_props/gen.toml --dry-run
+# Ver "Fondos por API de imagen" en pipeline/README.md.
+#
+# Modelo: GPT Image 2.5 Sunburst por fal, el elegido para la capa de juego en ranger_base (alfa nativo, contorno
+# grueso, colores planos). Referencias: el ranger y el style frame elegido de la base (`ref_role = "level"`).
+#
+# Las hojas van agrupadas por altura, no por tipo: el post separa las piezas por filas según el centro de cada
+# una, y una pieza mucho más alta que sus vecinas cae en otra fila y cambia el orden de los nombres. Lo que se
+# anima va en piezas sueltas (la luz prendida y apagada, el ventilador sin aspas y las aspas, el monitor
+# apagado y con estática, la puerta en marco y hoja) para que el juego las combine.
+#
+# Escala en el juego (vista de 960×540, piso en y = 474): el ranger mide 128 px a 1x y se dibuja al 80%, unos
+# 102 px. Los props actuales (caja, cartel) van a 92/876 px del juego por px de la hoja. El tamaño de cada
+# prop en px del juego y su capa están en props.md.
+#
+# Generadas el 2026-10-16: 2 opciones por hoja, US$1,71 estimados. Elegidas por el usuario el mismo día (17
+# props; PICKED en build_page.py, que escribe picked.json para el juego): opción 2 de barrel,
+# explosive_barrel, crate_breakable, beacon, console, fuel_tank, turret_off, panel_spark, fan, antenna y
+# signboard; opción 1 de cable_coil, switch, drone, crate_stack, monitor y door. Cómo meterlos en el
+# prototipo: integrar.md.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos opciones por hoja para elegir
+max_usd = 3              # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+key_color = "#00FF00"     # no se usa con GPT Image (alfa nativo); queda por si se suma otro modelo
+quality = "high"
+resolution = "2K"
+seed = 7
+ref_bg = "#FFFFFF"
+
+# copia de backgrounds/ranger_base/gen.toml
+[styles]
+game = """
+2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines \
+(thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, \
+no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.
+Setting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the \
+horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, \
+yellow-and-black hazard stripes, small cyan light strips, red warning lights.
+"""
+far = """
+This is a distant background layer: desaturated and low contrast compared to the gameplay layer, colors \
+pushed toward the violet of the night sky (atmospheric perspective), thinner dark-violet outlines instead \
+of black, simple shapes with little detail, so that a red, white and black character in front stands out.
+"""
+mid = """
+This is a middle background layer: a bit desaturated and lower contrast than the gameplay layer, colors \
+leaning toward violet, dark outlines thinner than in the gameplay layer, medium detail.
+"""
+no_text = "No text, letters, numbers, logos or user interface anywhere."
+
+[[asset]]
+name = "low_a"            # bajos: barriles, caja rompible, cables
+style = ["game", "no_text"]
+prompt = """
+Four separate game props in one row, same scale, side view, standing on an implied ground line, with wide \
+empty space between them, not touching the image edges. Left to right:
+1. A plain steel drum barrel, gunmetal blue-grey, with two raised ribs and a small cyan light strip.
+2. An explosive barrel: the same barrel shape and size, but bright red, with a yellow-and-black hazard band \
+and a simple flame pictogram in a yellow triangle, clearly dangerous.
+3. A breakable supply crate, a little lower than the barrels: thin pale blue-grey panels, visibly cracked and \
+dented, with loose bolts, clearly fragile.
+4. A coil of thick black power cable lying on the floor, about half as tall as the barrels, with a plug end and \
+a small yellow junction box.
+"""
+refs = ["../../poses/ranger_concept.png", "../ranger_base/style_frame.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["barrel", "explosive_barrel", "crate_breakable", "cable_coil"]
+
+[[asset]]
+name = "low_b"            # bajos con estados: baliza apagada y prendida, interruptor, dron
+style = ["game", "no_text"]
+prompt = """
+Five separate game props in one row, same scale, side view, standing on an implied ground line, with wide \
+empty space between them, not touching the image edges. Left to right:
+1. A red rotating warning beacon on a small square steel base, switched off: the dome is dark red and unlit.
+2. The identical warning beacon switched on: bright red glowing dome with a short soft red glow around it.
+3. A wall switch box on a short steel post, with a big lever pointing up and a small red indicator light.
+4. The identical switch box with the lever pointing down and the indicator light cyan.
+5. A small quadcopter drone, landed and powered down, resting on a low round charging pad with a cyan ring \
+light; about as tall as the beacons.
+"""
+refs = ["../../poses/ranger_concept.png", "../ranger_base/style_frame.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["beacon_off", "beacon_on", "switch_off", "switch_on", "drone"]
+
+[[asset]]
+name = "mid_a"            # medianos: decorado de la base
+style = ["game", "no_text"]
+prompt = """
+Four separate game props in one row, same scale, side view, standing on an implied ground line, with wide \
+empty space between them, not touching the image edges. Left to right:
+1. A control console desk with two angled screens showing simple cyan bar graphs and a radar sweep, and rows \
+of red and cyan buttons.
+2. A horizontal cylindrical fuel tank on two steel saddle supports, wider than it is tall, with a valve wheel, \
+a round pressure gauge and yellow-and-black hazard bands at both ends.
+3. A deactivated automatic defense turret on a squat steel base: the gun barrel drooping down toward the \
+floor, its round sensor eye dark, a small unlit status light. A bit taller than the console.
+4. Two sci-fi steel supply crates with red stripes stacked on top of each other, the top one smaller and \
+offset to the right, the tallest of the four.
+"""
+refs = ["../../poses/ranger_concept.png", "../ranger_base/style_frame.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["console", "fuel_tank", "turret_off", "crate_stack"]
+
+[[asset]]
+name = "mid_b"            # medianos con vida: monitor, panel con chispas, ventilador
+style = ["game", "no_text"]
+prompt = """
+Five separate game props in one row, same scale, front view, with wide empty space between them, not touching \
+the image edges. Left to right:
+1. A boxy monitor on a short steel post, switched off: the screen is a flat dark navy rectangle.
+2. The identical monitor with its screen full of chunky grey, white and cyan TV static, drawn as flat blocky \
+shapes.
+3. An electrical junction box on a short steel post with its door hanging open, exposed frayed wires and one \
+small bright cyan-white electric spark.
+4. A square wall-mounted ventilation fan housing with a thick steel frame, corner bolts and a round opening; \
+the opening is empty and dark inside, with no fan blades.
+5. The fan rotor alone, as if taken out of that housing: four wide flat blades around a round hub, sized to \
+fit the round opening, seen from the front.
+"""
+refs = ["../../poses/ranger_concept.png", "../ranger_base/style_frame.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["monitor_off", "monitor_static", "panel_spark", "fan_housing", "fan_blades"]
+
+[[asset]]
+name = "tall"             # altos: mástil, cartel grande, puerta
+style = ["game", "no_text"]
+prompt = """
+Four separate game props in one row, same scale, side view, standing on an implied ground line, with wide \
+empty space between them, not touching the image edges. Left to right:
+1. A tall communications mast, the tallest item: a slim steel lattice tower on a squat steel base, a small \
+radar dish halfway up, short antennas and a red light on top.
+2. A large base signboard on two steel legs: a rectangular panel with a yellow-and-black hazard stripe border \
+and a simple military emblem pictogram (a winged shield with a star), a small lamp on top.
+3. A sci-fi blast door frame: a thick steel doorway frame with yellow-and-black hazard stripes on its side \
+posts and a small status light above the opening. The doorway opening is empty: fully transparent inside the \
+frame.
+4. The door leaf alone, as if taken out of that frame: a heavy steel sliding door panel with a horizontal \
+seam and a diagonal hazard stripe, sized to fill the frame's opening.
+"""
+refs = ["../../poses/ranger_concept.png", "../ranger_base/style_frame.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["antenna", "signboard", "door_frame", "door_leaf"]

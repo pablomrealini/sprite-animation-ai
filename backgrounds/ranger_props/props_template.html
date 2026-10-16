@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Props del ranger</title>
+<!-- plantilla: build_page.py reemplaza __DATA__ y escribe props.html -->
+<style>
+:root { --bg: #121522; --panel: #1a1e30; --fg: #eef0f6; --muted: #9aa3bd; --line: #2f3750; --violet: #3d2563;
+        --deco: #8fa3c4; --vida: #5fe3ea; --func: #f2c230; --sel: #e8392e; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.45 system-ui, sans-serif; margin: 0; padding: 16px; }
+h1 { font-size: 20px; margin: 0 0 4px; } h2 { font-size: 17px; margin: 28px 0 6px; } h3.sheet { font-size: 15px; margin: 22px 0 4px; }
+p { color: var(--muted); margin: 4px 0; max-width: 1000px; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin: 10px 0; }
+.bar label { color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; vertical-align: middle; }
+.seg button { background: none; color: var(--fg); border: 0; padding: 4px 10px; cursor: pointer; font: inherit; }
+.seg button.on { background: var(--line); }
+.scene { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: #241a46; }
+canvas { display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); margin: 6px 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+.card.picked { border-color: var(--sel); }
+.card h4 { font-size: 14px; margin: 0 0 4px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.tag { font-size: 11px; font-weight: 600; border-radius: 4px; padding: 1px 6px; color: #121522; }
+.tag.decorado { background: var(--deco); } .tag.vida { background: var(--vida); } .tag.función { background: var(--func); }
+.layer { color: var(--muted); font-size: 12px; font-weight: 400; }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 6px; }
+.opt { background: var(--violet); border-radius: 6px; padding: 8px 6px 0; display: flex; flex-direction: column; cursor: pointer;
+       border: 2px solid transparent; }
+.opt.on { border-color: var(--sel); }
+.opt .imgs { flex: 1; display: flex; gap: 6px; align-items: flex-end; justify-content: center; min-height: 80px;
+             border-bottom: 3px solid #0d0f18; overflow: hidden; }
+.opt img { display: block; }
+.opt span { font-size: 11px; color: #d9cdf2; text-align: center; padding: 3px 0 4px; }
+.idea { font-size: 12px; color: var(--muted); }
+textarea { width: 100%; max-width: 1000px; height: 160px; background: var(--panel); color: var(--fg); border: 1px solid var(--line);
+           border-radius: 6px; padding: 8px; font: 12px/1.4 ui-monospace, monospace; }
+button.copy { background: var(--line); color: var(--fg); border: 0; border-radius: 6px; padding: 6px 12px; cursor: pointer; font: inherit; }
+@media (max-width: 640px) { body { padding: 12px; } .opts { grid-template-columns: 1fr; } }
+</style></head><body>
+<h1>Props de prueba para la base del ranger</h1>
+<p>Las 5 hojas de <code>backgrounds/ranger_props</code> (GPT Image 2.5 Sunburst por fal, dos opciones por hoja), a escala del
+juego: piso en y = 474, el ranger al 80% (102 px de alto) y las capas elegidas de ranger_base. Lo que se anima, se anima por
+código: la baliza que parpadea, el ventilador, la estática, las chispas y la puerta con el interruptor.</p>
+<div class="legend">
+  <span><b>fondo</b>: detrás de todo lo jugable, tinte violeta del 35% (decorado voluminoso que no hace nada)</span>
+  <span><b>juego</b>: fijos chicos que se animan, en el plano del ranger</span>
+  <span><b>blanco</b> y <b>puerta</b>: con función</span>
+</div>
+
+<h2>En el nivel</h2>
+<p>El nivel del prototipo tal como está hoy (5000 px, con los cambios sin commitear de la sesión que lo edita), con los props
+elegidos donde propone <code>integrar.md</code>. Los blancos de siempre (tableros y latas) y los dos carteles ya están en el
+juego. En el juego la cámara arranca al 75%.</p>
+<div class="bar"><label>escala <span id="zoomLevel"></span></label>
+  <label><input type="checkbox" class="animBox" checked> animar</label></div>
+<div class="scene" id="wrapLevel"><canvas id="cvLevel"></canvas></div>
+
+<h2>Muestrario</h2>
+<p>Todos los props generados en dos pantallas de 960, con el bloque del kit, la caja y el cartel que ya usa el juego para
+comparar (los de la punta de cada pantalla). Las opciones de cada hoja se cambian acá; lo elegido abajo manda.</p>
+<div class="bar">
+  <span id="sheetSel"></span>
+  <label>escala <span id="zoomShow"></span></label>
+  <label><input type="checkbox" class="animBox" checked> animar</label>
+  <label><input type="checkbox" id="onlyPicked"> sólo los elegidos</label>
+</div>
+<div class="scene" id="wrapShow"><canvas id="cvShow"></canvas></div>
+
+<h2>Elegir</h2>
+<p>Clic en la opción que queda; clic otra vez para sacarla. Arranca con la elección del 2026-10-16. Se guarda en este navegador, y
+abajo queda el texto para pasárselo a Claude.</p>
+<div id="cards"></div>
+
+<h2>Elección</h2>
+<textarea id="out" readonly></textarea>
+<p><button class="copy" id="copy">copiar</button></p>
+
+<script>
+const D = __DATA__;
+const VIEW_H = 540, GROUND = 474, OUT = "#0d0f18", PANEL = "#515f6f";
+const NEAR_TINT = "rgba(24,18,52,0.4)", BACK_TINT = "rgba(24,18,52,0.35)", CHAR = 0.8;
+const KIT = { stripes: 150, topH: 340, bodyStep: 302, outline: 12, floatMid: [330, 489] };
+const C = Object.fromEntries(Object.entries(D.concepts).map(([n, [s, p]]) => [n, { sheet: s, pieces: p }]));
+
+let pick = {};
+try { const s = JSON.parse(localStorage.getItem("ranger_props_pick") || "null"); pick = s && Object.keys(s).length ? s : { ...D.picked }; } catch (e) { pick = { ...D.picked }; }
+const savePick = () => { try { localStorage.setItem("ranger_props_pick", JSON.stringify(pick)); } catch (e) {} };
+const sheetOpt = Object.fromEntries(Object.keys(D.sheets).map(s => [s, "1"]));
+const piece = (c, name, o) => D.sheets[C[c].sheet][o].pieces[name];
+const animOn = () => document.querySelector(".animBox").checked;
+document.querySelectorAll(".animBox").forEach(b => b.onchange = () => document.querySelectorAll(".animBox").forEach(x => { x.checked = b.checked; }));
+
+/* ---------- los dos mundos ---------- */
+// x es el centro y el segundo número el alto de la base sobre el piso; en el ventilador, el bloque en cuya cara va
+const SHOW = {
+  w: 1920, ranger: 104, blocks: [[590, 150, 200]], slabs: [], boards: [], cans: [], old: [["crate", 905], ["sign", 1850]],
+  place: [["antenna", 372, 0], ["fuel_tank", 1112, 0], ["signboard", 1488, 0], ["barrel", 196, 0], ["explosive_barrel", 238, 0],
+          ["cable_coil", 298, 0], ["console", 440, 0], ["monitor", 527, 0], ["beacon", 614, 150], ["beacon", 766, 150],
+          ["fan", 690, 150, { block: 0 }], ["crate_breakable", 832, 0], ["crate_stack", 1015, 0], ["turret_off", 1185, 0],
+          ["panel_spark", 1282, 0], ["drone", 1372, 0], ["switch", 1588, 0], ["door", 1700, 0]],
+  opt: c => pick[c] || sheetOpt[C[c].sheet],
+};
+const LEVEL = {
+  w: D.level.w, ranger: D.level.ranger, blocks: D.level.blocks, slabs: D.level.slabs, boards: D.level.boards, cans: D.level.cans,
+  old: D.level.signs.map(x => ["sign", x]), place: D.plan, opt: c => pick[c],
+};
+
+/* ---------- imágenes ---------- */
+const IMG = {};
+function load(src) {
+  return IMG[src] ? Promise.resolve() : new Promise(ok => { const im = new Image(); im.onload = () => { IMG[src] = im; ok(); }; im.onerror = () => { console.warn("no cargó", src); ok(); }; im.src = src; });
+}
+const allSrc = () => [
+  ...Object.values(D.base.layers).map(l => l.src), ...Object.values(D.base.kit).map(p => p.src), ...Object.values(D.base.props).map(p => p.src), D.base.ranger.src,
+  ...Object.values(D.sheets).flatMap(o => Object.values(o).flatMap(v => Object.values(v.pieces).map(p => p.src))),
+];
+function surface(w, h) { const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; return [c, g]; }
+function tinted(c, color) { const [t, g] = surface(c.width, c.height); g.drawImage(c, 0, 0); g.globalCompositeOperation = "source-atop"; g.fillStyle = color; g.fillRect(0, 0, t.width, t.height); return t; }
+// cada imagen se achica una sola vez al tamaño en px del canvas, como el bake del juego
+const cache = new Map();
+function baked(src, w, h, DS, tint) {
+  const key = `${src}|${w}|${h}|${DS}|${tint || ""}`;
+  if (!cache.has(key)) {
+    const im = IMG[src]; if (!im) return null;
+    let [c, g] = surface(w * DS, h * DS); g.drawImage(im, 0, 0, c.width, c.height);
+    if (tint) c = tinted(c, tint);
+    cache.set(key, c);
+  }
+  return cache.get(key);
+}
+
+/* ---------- una vista: un canvas que dibuja un mundo ---------- */
+function View(canvasId, wrapId, zoomId, world, zoomDefault) {
+  const cv = document.getElementById(canvasId), ctx = cv.getContext("2d"), V = { world, DS: 1, zoom: zoomDefault, sparks: [], nextSpark: {} };
+  const resize = () => {
+    const wrap = document.getElementById(wrapId).clientWidth, css = V.zoom === 0 ? wrap / world.w : V.zoom;
+    cv.style.width = `${world.w * css}px`; cv.style.height = `${VIEW_H * css}px`;
+    V.DS = css * (window.devicePixelRatio || 1); cv.width = Math.round(world.w * V.DS); cv.height = Math.round(VIEW_H * V.DS);
+  };
+  const zEl = document.getElementById(zoomId), zs = document.createElement("span"); zs.className = "seg";
+  for (const [z, label] of [[0, "ajustar"], [0.75, "75% (juego)"], [1, "1×"], [2, "2×"]]) {
+    const b = document.createElement("button"); b.textContent = label; b.className = z === V.zoom ? "on" : "";
+    b.onclick = () => { V.zoom = z; for (const x of zs.children) x.className = x === b ? "on" : ""; resize(); }; zs.appendChild(b);
+  }
+  zEl.appendChild(zs);
+  window.addEventListener("resize", resize); resize();
+  const bk = (src, w, h, tint) => baked(src, w, h, V.DS, tint);
+  const draw = (c, x, y, w, h) => c && ctx.drawImage(c, x, y, w, h);
+  // arriba a la izquierda de la pieza, en px del juego, con lo opaco (sin halo) centrado en x y apoyado en base
+  const at = (p, x, base) => { const s = p.gw / p.w, [a, , b, d] = p.solid; return [x - (a + b) / 2 * s, base - d * s, s]; };
+  const drawPiece = (c, name, x, base, opt, tint) => {
+    const p = piece(c, name, opt); if (!p) return null;
+    const [X, Y] = at(p, x, base); draw(bk(p.src, p.gw, p.gh, tint), X, Y, p.gw, p.gh); return p;
+  };
+  function layers() {
+    for (const name of ["sky", "far", "mid", "near"]) {
+      const L = D.base.layers[name], c = bk(L.src, L.w, L.h, name === "near" ? NEAR_TINT : null);
+      for (let x = 0; x < world.w; x += L.w) draw(c, x, VIEW_H - L.h, L.w, L.h);
+    }
+  }
+  function ground() {
+    const B = D.base.kit.body, step = KIT.bodyStep * B.k, c = bk(B.src, B.w, B.h);
+    ctx.fillStyle = OUT; ctx.fillRect(0, GROUND, world.w, VIEW_H - GROUND);
+    for (let y = GROUND; y < VIEW_H; y += step) for (let x = 0; x < world.w; x += B.w) draw(c, x, y, B.w, B.h);
+  }
+  function block([x, h, w]) {   // como bakeBlock del prototipo: el tope del kit repetido y el cuerpo abajo
+    const K = D.base.kit, k = K.top.k, y = GROUND - h, body = bk(K.body.src, K.body.w, K.body.h), top = bk(K.top.src, K.top.w, K.top.h);
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+    ctx.fillStyle = PANEL; ctx.fillRect(x, y + KIT.stripes * k, w, h);
+    for (let yy = y + KIT.topH * k; yy < y + h; yy += KIT.bodyStep * k) for (let xx = x; xx < x + w; xx += K.body.w) draw(body, xx, yy, K.body.w, K.body.h);
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, K.top.h); ctx.clip();
+    for (let xx = x; xx < x + w; xx += K.top.w) draw(top, xx, y, K.top.w, K.top.h);
+    ctx.restore();
+    const lw = KIT.outline * k; ctx.fillStyle = OUT; ctx.fillRect(x, y, lw, h); ctx.fillRect(x + w - lw, y, lw, h);
+    ctx.restore();
+  }
+  function slab([x, top, w]) {   // como bakeSlab: el tramo del medio de la plataforma flotante, repetido
+    const F = D.base.kit.floating, im = IMG[F.src]; if (!im) return;
+    const k = F.k, r = im.naturalWidth / (F.w / k), [a, b] = KIT.floatMid, n = Math.max(1, Math.round(w / ((b - a) * k))), y = GROUND - top;
+    for (let i = 0; i < n; i++) { const x0 = x + i * w / n, x1 = x + (i + 1) * w / n; ctx.drawImage(im, a * r, 0, (b - a) * r, im.naturalHeight, x0, y, x1 - x0, F.h); }
+    const lw = KIT.outline * k; ctx.fillStyle = OUT; ctx.fillRect(x, y, lw, 26); ctx.fillRect(x + w - lw, y, lw, 26);
+  }
+  function target(x, y, h) { const A = D.base.props.target, w = h * A.w / A.h; draw(bk(A.src, w, h), x - w / 2, GROUND - y - h, w, h); }
+  function ranger(t) {
+    const R = D.base.ranger, i = Math.floor(t * 1000 / R.ms) % R.n, x = world.ranger, y = GROUND + Math.round(KIT.outline * D.base.kit.top.k) + 1, im = IMG[R.src];
+    if (im) ctx.drawImage(im, i * R.cw, 0, R.cw, R.ch, x - R.px * CHAR, y - R.py * CHAR, R.cw * CHAR, R.ch * CHAR);
+  }
+  function concept(P, idx, t) {
+    const [c, x, up, extra = {}] = P, o = world.opt(c);
+    if (!o || (world === SHOW && document.getElementById("onlyPicked").checked && !pick[c])) return;
+    const anim = animOn(), base = GROUND - up, tint = D.role[c] === "back" ? BACK_TINT : null;
+    if (c === "beacon") {
+      const on = !anim || Math.floor(t * 2 + idx) % 2 === 0;
+      drawPiece(c, on ? "beacon_on" : "beacon_off", x, base, o);
+    } else if (c === "switch" || c === "door") {
+      // ciclo de 5 s: se acciona el interruptor, la puerta sube detrás del marco, espera y baja
+      const ph = anim ? t % 5 : 0, on = ph > 1.2 && ph < 4.6;
+      if (c === "switch") drawPiece(c, on ? "switch_on" : "switch_off", x, base, o);
+      else {
+        const F = piece(c, "door_frame", o), [x0, y0, x1, y1] = F.opening, [fx, fy, s] = at(F, x, base);
+        const open = ph < 1.4 ? 0 : ph < 2 ? (ph - 1.4) / 0.6 : ph < 3.8 ? 1 : ph < 4.4 ? 1 - (ph - 3.8) / 0.6 : 0;
+        ctx.save(); ctx.beginPath(); ctx.rect(fx + x0 * s, fy + y0 * s, (x1 - x0) * s, (y1 - y0) * s); ctx.clip();
+        drawPiece(c, "door_leaf", fx + (x0 + x1) / 2 * s, fy + y1 * s - open * (y1 - y0) * s, o); ctx.restore();
+        drawPiece(c, "door_frame", x, base, o);
+      }
+    } else if (c === "monitor") {
+      const M = piece(c, "monitor_static", o), cyc = anim ? (t + idx) % 3.2 : 0;
+      if (cyc > 2.8) { drawPiece(c, "monitor_off", x, base, o); return; }
+      drawPiece(c, "monitor_static", x, base, o);
+      if (anim && M.screen) {   // la estática: el rectángulo de la pantalla, espejado al azar cada 80 ms
+        const f = Math.floor(t / 0.08), fx = f % 2, fy = (f >> 1) % 2, [X0, Y0, s] = at(M, x, base), [a, b, cw, ch] = M.screen, im = bk(M.src, M.gw, M.gh);
+        ctx.save(); ctx.translate(X0 + (a + cw / 2) * s, Y0 + (b + ch / 2) * s); ctx.scale(fx ? -1 : 1, fy ? -1 : 1);
+        ctx.drawImage(im, a * s * V.DS, b * s * V.DS, cw * s * V.DS, ch * s * V.DS, -cw * s / 2, -ch * s / 2, cw * s, ch * s); ctx.restore();
+      }
+    } else if (c === "fan") {
+      const H = piece(c, "fan_housing", o), B = piece(c, "fan_blades", o), [hx, hy, hr] = H.hole, bl = world.blocks[extra.block];
+      const top = GROUND - bl[1] + KIT.topH * D.base.kit.top.k + 8, sh = H.gw / H.w, [X, Y, s] = at(H, x, top + (H.solid[3] - H.solid[1]) * sh);
+      draw(bk(H.src, H.gw, H.gh), X, Y, H.gw, H.gh);
+      const d = 2 * hr * s * 1.02, bh = d * B.h / B.w;   // las aspas, al diámetro del hueco
+      ctx.save(); ctx.translate(X + hx * s, Y + hy * s); ctx.rotate(anim ? t * Math.PI * 2 * 0.9 + idx : 0);
+      draw(bk(B.src, d, bh), -d / 2, -bh / 2, d, bh); ctx.restore();
+    } else if (c === "panel_spark") {
+      const S = drawPiece(c, "panel_spark", x, base, o);
+      if (anim && S.spark && t > (V.nextSpark[idx] || 0)) {
+        const [X, Y, s] = at(S, x, base), sx = X + S.spark[0] * s, sy = Y + S.spark[1] * s;
+        for (let i = 0; i < 8; i++) { const a = Math.random() * Math.PI * 2, v = 40 + Math.random() * 90; V.sparks.push({ x: sx, y: sy, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 30, t0: t, life: 0.25 + Math.random() * 0.25 }); }
+        V.nextSpark[idx] = t + 0.6 + Math.random() * 1.4;
+      }
+    } else drawPiece(c, C[c].pieces[0], x, base, o, tint);
+  }
+  function sparks(t) {
+    V.sparks = V.sparks.filter(p => t - p.t0 < p.life);
+    for (const p of V.sparks) {
+      const dt = t - p.t0; ctx.globalAlpha = 1 - dt / p.life; ctx.fillStyle = Math.random() < 0.5 ? "#ffffff" : "#9ff5fa";
+      ctx.fillRect(p.x + p.vx * dt - 1, p.y + p.vy * dt + 220 * dt * dt - 1, 2.2, 2.2);
+    }
+    ctx.globalAlpha = 1;
+  }
+  // el orden que propone integrar.md: capas, piso, fondo, utilería, bloques, lo pegado a los bloques, blancos, ranger
+  const order = c => ({ back: 0, fixture: 1, gate: 1, face: 2, target: 3 })[D.role[c]];
+  V.render = t => {
+    ctx.setTransform(V.DS, 0, 0, V.DS, 0, 0); ctx.imageSmoothingQuality = "high"; ctx.clearRect(0, 0, world.w, VIEW_H);
+    layers(); ground();
+    const pl = world.place.map((P, i) => [P, i]);
+    for (const [P, i] of pl) if (order(P[0]) === 0) concept(P, i, t);
+    for (const [name, x] of world.old) { const A = D.base.props[name]; draw(bk(A.src, A.w, A.h), x - A.w / 2, GROUND - A.h, A.w, A.h); }
+    for (const [P, i] of pl) if (order(P[0]) === 1) concept(P, i, t);
+    world.blocks.forEach(block); world.slabs.forEach(slab);
+    for (const [P, i] of pl) if (order(P[0]) === 2) concept(P, i, t);
+    for (const [x, y] of world.boards) target(x, y, 92);
+    for (const [x, y] of world.cans) target(x, y, 26);
+    for (const [P, i] of pl) if (order(P[0]) === 3) concept(P, i, t);
+    sparks(t); ranger(t);
+    ctx.fillStyle = "rgba(255,255,255,0.35)"; for (let x = 960; x < world.w; x += 960) ctx.fillRect(x - 0.5, 0, 1, 12);   // cada pantalla de 960
+  };
+  return V;
+}
+
+/* ---------- controles y tarjetas ---------- */
+function seg(el, items, current, onPick) {
+  const s = document.createElement("span"); s.className = "seg";
+  for (const [v, label] of items) {
+    const b = document.createElement("button"); b.textContent = label; b.className = v === current() ? "on" : "";
+    b.onclick = () => { onPick(v); for (const x of s.children) x.className = x === b ? "on" : ""; }; s.appendChild(b);
+  }
+  el.appendChild(s);
+}
+function sheetBar() {
+  const box = document.getElementById("sheetSel");
+  for (const s of Object.keys(D.sheets)) {
+    const l = document.createElement("label"), btns = document.createElement("span");
+    l.append(`${s} `, btns); l.style.marginRight = "10px"; box.appendChild(l);
+    seg(btns, Object.keys(D.sheets[s]).map(o => [o, o]), () => sheetOpt[s], v => { sheetOpt[s] = v; });
+  }
+}
+function cards() {
+  const root = document.getElementById("cards"); root.innerHTML = "";
+  for (const s of Object.keys(D.sheets)) {
+    const h = document.createElement("h3"); h.className = "sheet"; h.textContent = s; root.appendChild(h);
+    const [anc, ah] = D.anchor[s], note = document.createElement("p");
+    note.textContent = `Escala: ${anc} a ${ah} px de alto; ` + Object.entries(D.sheets[s]).map(([o, v]) => `opción ${o}: ${v.k} px del juego por px de la hoja`).join(", ") + ".";
+    root.appendChild(note);
+    const grid = document.createElement("div"); grid.className = "cards"; root.appendChild(grid);
+    for (const [c, [sh, pieces]] of Object.entries(D.concepts)) {
+      if (sh !== s) continue;
+      const [kind, layer] = D.meta[pieces[0]] || ["?", "?"];
+      const card = document.createElement("div"); card.className = "card" + (pick[c] ? " picked" : "");
+      card.innerHTML = `<h4>${c} <span class="tag ${kind}">${kind}</span> <span class="layer">${layer}</span></h4>`;
+      const opts = document.createElement("div"); opts.className = "opts";
+      for (const [o, v] of Object.entries(D.sheets[s])) {
+        const box = document.createElement("div"), imgs = document.createElement("div"), sizes = [];
+        box.className = "opt" + (pick[c] === o ? " on" : ""); imgs.className = "imgs";
+        for (const pn of pieces) {
+          const p = v.pieces[pn]; if (!p) continue;
+          const im = document.createElement("img"); im.src = p.src; im.alt = pn; im.title = pn;
+          const z = Math.min(2, 120 / p.gh, 130 / (p.gw * pieces.length)); im.style.width = `${p.gw * z}px`; im.style.height = `${p.gh * z}px`;
+          imgs.appendChild(im); sizes.push(`${Math.round(p.gw)}×${Math.round(p.gh)}`);
+        }
+        const cap = document.createElement("span"); cap.textContent = `opción ${o} · ${sizes.join(" / ")} px`;
+        box.append(imgs, cap);
+        box.onclick = () => { if (pick[c] === o) delete pick[c]; else pick[c] = o; savePick(); cards(); summary(); };
+        opts.appendChild(box);
+      }
+      card.appendChild(opts);
+      const i = document.createElement("div"); i.className = "idea"; i.textContent = pieces.map(pn => D.meta[pn]?.[2]).filter((x, j, a) => x && a.indexOf(x) === j).join(" ");
+      card.appendChild(i); grid.appendChild(card);
+    }
+  }
+}
+function summary() {
+  const lines = Object.entries(D.concepts).filter(([c]) => pick[c]).map(([c, [s, pieces]]) => {
+    const p = D.sheets[s][pick[c]].pieces[pieces[0]];
+    return `${c}: ${s} opción ${pick[c]} (${pieces.join(", ")}; ${Math.round(p.gw)}×${Math.round(p.gh)} px; ${D.meta[pieces[0]][1]})`;
+  });
+  document.getElementById("out").value = lines.length ? `Props elegidos (${lines.length}):\n` + lines.join("\n") : "Todavía no hay nada elegido.";
+}
+document.getElementById("copy").onclick = () => { const o = document.getElementById("out"); o.select(); try { navigator.clipboard.writeText(o.value); } catch (e) { document.execCommand("copy"); } };
+
+sheetBar(); cards(); summary();
+const views = [View("cvLevel", "wrapLevel", "zoomLevel", LEVEL, 0.75), View("cvShow", "wrapShow", "zoomShow", SHOW, 0)];
+Promise.all(allSrc().map(load)).then(() => { const loop = ms => { for (const v of views) v.render(ms / 1000); requestAnimationFrame(loop); }; requestAnimationFrame(loop); });
+</script>
+</body></html>

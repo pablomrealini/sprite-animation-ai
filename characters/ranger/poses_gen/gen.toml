@@ -37,3 +37,22 @@ refs = ["../../../poses/ranger_concept.png"]
 ref_role = "character"
 aspect = "2:3"
 alpha = "cutout"
+
+[[asset]]
+name = "hang_two"         # primer frame de la subida a la cornisa y del colgado en loop (climb_frames.py arma los 16:9)
+style = ["same", "no_text"]
+prompt = """
+Change only the pose: he hangs from the top edge of an invisible ledge with both hands. Both arms are raised \
+above the head and both gloved hands grip the edge side by side, at the same height, the fingers curled over \
+the top of the edge. The blaster stays in his right hand, lying flat along the top of the edge and pointing to \
+the right. The body hangs straight down below the hands, close to an invisible wall in front of him: the chest, \
+the knees and the tips of both boots almost touch that wall, the legs together and relaxed, the boots pointing \
+to the right. Nothing is drawn: no ledge, no wall, no platform, no object and no shadow. Matte flat colors with \
+no shine and no reflections.
+"""
+refs = ["../../../poses/ranger_concept.png"]
+ref_role = "character"
+models = ["nano-banana-2.1"]
+n = 4
+aspect = "2:3"
+alpha = "cutout"

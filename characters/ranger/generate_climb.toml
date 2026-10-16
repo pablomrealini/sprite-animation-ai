@@ -1,0 +1,34 @@
+# Subida a la cornisa y colgado con las dos manos, por API (Seedance 2.0 en fal.ai), desde la misma pose.
+# La pose colgada sale de poses_gen (gen-images, asset hang_two, Nano Banana 2.1) y climb_frames.py la pasa a 16:9
+# sobre magenta apagado, chica y abajo, junto con el último frame de la subida: el concept parado sobre el canto,
+# a la misma escala (medida por el blanco del casco). Con primer y último frame fijos, la subida termina en la pose
+# del idle y el avance queda definido.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/ranger/generate_climb.toml --dry-run
+# Sin FAL_KEY en el entorno es siempre un dry-run: muestra los pedidos y el costo, no manda nada.
+
+[bakeoff]
+models = ["seedance-2.0"]
+clips_per_model = 2       # tomas por animación
+duration = 4              # s: el mínimo de Seedance 2.0; la subida dura ~1 s y el resto queda quieto
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 8               # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/gen5"
+
+[[animation]]
+name = "climb"            # colgado con las dos manos → sube → parado sobre el canto
+pose = "../../poses/ranger_climb_first_dullmagenta_16x9.png"
+prompt = "prompts/climb.txt"
+kind = "oneshot"
+last_frame = "../../poses/ranger_climb_last_dullmagenta_16x9.png"
+
+[[animation]]
+name = "hang_two"         # el colgado en loop desde la misma pose, así empalma con la subida
+pose = "../../poses/ranger_climb_first_dullmagenta_16x9.png"
+prompt = "prompts/hang_two.txt"
+kind = "cycle"
+last_frame = true         # la misma pose como último frame: loop cerrado

@@ -1,0 +1,255 @@
+{
+  "attempts": [
+    {
+      "id": "low_b/gpt-image-2.5-sunburst-fal_2",
+      "asset": "low_b",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2560×1440",
+      "usd_estimate": 0.1708,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ab-6dfe-7e83-b9ac-88642ff1a301",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-6dfe-7e83-b9ac-88642ff1a301/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-6dfe-7e83-b9ac-88642ff1a301"
+      },
+      "submitted": "2026-10-16T17:03:44+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:04:31+00:00"
+    },
+    {
+      "id": "low_b/gpt-image-2.5-sunburst-fal_1",
+      "asset": "low_b",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2560×1440",
+      "usd_estimate": 0.1708,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ab-6eb5-76f0-bf50-17c536dca845",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-6eb5-76f0-bf50-17c536dca845/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-6eb5-76f0-bf50-17c536dca845"
+      },
+      "submitted": "2026-10-16T17:03:44+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:04:27+00:00"
+    },
+    {
+      "id": "low_a/gpt-image-2.5-sunburst-fal_1",
+      "asset": "low_a",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2560×1440",
+      "usd_estimate": 0.1708,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ab-6fe4-74c1-978a-92b75a20952f",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-6fe4-74c1-978a-92b75a20952f/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-6fe4-74c1-978a-92b75a20952f"
+      },
+      "submitted": "2026-10-16T17:03:45+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:04:28+00:00"
+    },
+    {
+      "id": "low_a/gpt-image-2.5-sunburst-fal_2",
+      "asset": "low_a",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2560×1440",
+      "usd_estimate": 0.1708,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ab-70c1-7603-b4b8-950f05a12b6b",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-70c1-7603-b4b8-950f05a12b6b/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ab-70c1-7603-b4b8-950f05a12b6b"
+      },
+      "submitted": "2026-10-16T17:03:45+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:04:28+00:00"
+    },
+    {
+      "id": "mid_a/gpt-image-2.5-sunburst-fal_1",
+      "asset": "mid_a",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2560×1440",
+      "usd_estimate": 0.1709,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ac-17fc-7a13-a2b6-0d5989ca17b2",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-17fc-7a13-a2b6-0d5989ca17b2/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-17fc-7a13-a2b6-0d5989ca17b2"
+      },
+      "submitted": "2026-10-16T17:04:28+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:05:09+00:00"
+    },
+    {
+      "id": "mid_a/gpt-image-2.5-sunburst-fal_2",
+      "asset": "mid_a",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2560×1440",
+      "usd_estimate": 0.1709,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ac-1933-7e53-889f-89bdbd4ef8a6",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-1933-7e53-889f-89bdbd4ef8a6/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-1933-7e53-889f-89bdbd4ef8a6"
+      },
+      "submitted": "2026-10-16T17:04:28+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:05:15+00:00"
+    },
+    {
+      "id": "mid_b/gpt-image-2.5-sunburst-fal_1",
+      "asset": "mid_b",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2560×1440",
+      "usd_estimate": 0.1709,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ac-19db-7892-beae-8f52a7c1a1c5",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-19db-7892-beae-8f52a7c1a1c5/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-19db-7892-beae-8f52a7c1a1c5"
+      },
+      "submitted": "2026-10-16T17:04:28+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:05:15+00:00"
+    },
+    {
+      "id": "mid_b/gpt-image-2.5-sunburst-fal_2",
+      "asset": "mid_b",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2560×1440",
+      "usd_estimate": 0.1709,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ac-2627-7722-aad7-7f27fb5b2401",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-2627-7722-aad7-7f27fb5b2401/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-2627-7722-aad7-7f27fb5b2401"
+      },
+      "submitted": "2026-10-16T17:04:31+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:05:15+00:00"
+    },
+    {
+      "id": "tall/gpt-image-2.5-sunburst-fal_1",
+      "asset": "tall",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2560×1440",
+      "usd_estimate": 0.171,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ac-b856-7962-a83b-050bd8e8e137",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-b856-7962-a83b-050bd8e8e137/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-b856-7962-a83b-050bd8e8e137"
+      },
+      "submitted": "2026-10-16T17:05:09+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:05:57+00:00"
+    },
+    {
+      "id": "tall/gpt-image-2.5-sunburst-fal_2",
+      "asset": "tall",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2560×1440",
+      "usd_estimate": 0.171,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_base/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145ac-cf9e-7e73-af3e-411229a6818b",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-cf9e-7e73-af3e-411229a6818b/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a145ac-cf9e-7e73-af3e-411229a6818b"
+      },
+      "submitted": "2026-10-16T17:05:15+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:05:54+00:00"
+    }
+  ],
+  "qa": {}
+}

@@ -1,0 +1,78 @@
+{
+  "set": "poses_gen",
+  "asset": "hang_two",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same ranger, same design, same proportions, same colors and the same art style (bold uniform black outlines, flat cel colors, chunky shapes). Full body, side view facing right, the same size in the frame as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the pose: he hangs from the top edge of an invisible ledge with both hands. Both arms are raised above the head and both gloved hands grip the edge side by side, at the same height, the fingers curled over the top of the edge. The blaster stays in his right hand, lying flat along the top of the edge and pointing to the right. The body hangs straight down below the hands, close to an invisible wall in front of him: the chest, the knees and the tips of both boots almost touch that wall, the legs together and relaxed, the boots pointing to the right. Nothing is drawn: no ledge, no wall, no platform, no object and no shadow. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/ranger/poses_gen/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2:3 2K",
+  "size": [
+    1696,
+    2528
+  ],
+  "seed": 10,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a145cd-6d41-7572-b986-f3d4168f45d7",
+  "created": "2026-10-16T17:41:14+00:00",
+  "sha256": "1f6ebdc8725686be045b072cce7820cbcf262f39ee5f7bc12c1b85ed33df96a3",
+  "post": {
+    "file": "characters/ranger/poses_gen/post/hang_two/nano-banana-2.1_4.png",
+    "source": {
+      "w": 1696,
+      "h": 2528
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FC03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7111,
+      "opaque": 0.2841,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        314,
+        223,
+        1547,
+        2315
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_4.png",
+        "w": 1233,
+        "h": 2092
+      }
+    }
+  }
+}

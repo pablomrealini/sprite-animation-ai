@@ -1,0 +1,158 @@
+{
+  "set": "ranger_props",
+  "asset": "mid_b",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nFive separate game props in one row, same scale, front view, with wide empty space between them, not touching the image edges. Left to right:\n1. A boxy monitor on a short steel post, switched off: the screen is a flat dark navy rectangle.\n2. The identical monitor with its screen full of chunky grey, white and cyan TV static, drawn as flat blocky shapes.\n3. An electrical junction box on a short steel post with its door hanging open, exposed frayed wires and one small bright cyan-white electric spark.\n4. A square wall-mounted ventilation fan housing with a thick steel frame, corner bolts and a round opening; the opening is empty and dark inside, with no fan blades.\n5. The fan rotor alone, as if taken out of that housing: four wide flat blades around a round hub, sized to fit the round opening, seen from the front.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1709,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a145ac-19db-7892-beae-8f52a7c1a1c5",
+  "created": "2026-10-16T17:05:15+00:00",
+  "sha256": "7bbf8551ac38fc3f99563a3d2304c98e1febe25525771e66cc6fafe8d2b389d3",
+  "post": {
+    "file": "backgrounds/ranger_props/post/mid_b/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8031,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 0.982,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "monitor_off": [
+        80,
+        562,
+        460,
+        1025
+      ],
+      "monitor_static": [
+        566,
+        562,
+        943,
+        1025
+      ],
+      "panel_spark": [
+        1064,
+        547,
+        1500,
+        1026
+      ],
+      "fan_housing": [
+        1620,
+        556,
+        2048,
+        970
+      ],
+      "fan_blades": [
+        2124,
+        574,
+        2506,
+        958
+      ]
+    },
+    "trim": {
+      "monitor_off": [
+        0,
+        0,
+        380,
+        463
+      ],
+      "monitor_static": [
+        0,
+        0,
+        377,
+        463
+      ],
+      "panel_spark": [
+        0,
+        0,
+        436,
+        479
+      ],
+      "fan_housing": [
+        0,
+        0,
+        428,
+        414
+      ],
+      "fan_blades": [
+        0,
+        0,
+        382,
+        384
+      ]
+    },
+    "files": {
+      "monitor_off": {
+        "file": "monitor_off.png",
+        "w": 380,
+        "h": 463
+      },
+      "monitor_static": {
+        "file": "monitor_static.png",
+        "w": 377,
+        "h": 463
+      },
+      "panel_spark": {
+        "file": "panel_spark.png",
+        "w": 436,
+        "h": 479
+      },
+      "fan_housing": {
+        "file": "fan_housing.png",
+        "w": 428,
+        "h": 414
+      },
+      "fan_blades": {
+        "file": "fan_blades.png",
+        "w": 382,
+        "h": 384
+      }
+    }
+  }
+}

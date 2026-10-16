@@ -95,6 +95,102 @@
       "detail": "",
       "usage": null,
       "finished": "2026-10-16T16:05:57+00:00"
+    },
+    {
+      "id": "hang_two/nano-banana-2.1_2",
+      "asset": "hang_two",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/poses_gen/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145cc-d90e-75c2-8083-de07e03ac4c8",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cc-d90e-75c2-8083-de07e03ac4c8/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cc-d90e-75c2-8083-de07e03ac4c8"
+      },
+      "submitted": "2026-10-16T17:40:14+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:40:51+00:00"
+    },
+    {
+      "id": "hang_two/nano-banana-2.1_1",
+      "asset": "hang_two",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/poses_gen/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145cc-d910-7741-a532-265f28fe9c5a",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cc-d910-7741-a532-265f28fe9c5a/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cc-d910-7741-a532-265f28fe9c5a"
+      },
+      "submitted": "2026-10-16T17:40:14+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:40:43+00:00"
+    },
+    {
+      "id": "hang_two/nano-banana-2.1_3",
+      "asset": "hang_two",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 3,
+      "seed": 9,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/poses_gen/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145cd-4d6b-7502-9498-8c3c3886fed9",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cd-4d6b-7502-9498-8c3c3886fed9/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cd-4d6b-7502-9498-8c3c3886fed9"
+      },
+      "submitted": "2026-10-16T17:40:44+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:41:20+00:00"
+    },
+    {
+      "id": "hang_two/nano-banana-2.1_4",
+      "asset": "hang_two",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 4,
+      "seed": 10,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/poses_gen/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a145cd-6d41-7572-b986-f3d4168f45d7",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cd-6d41-7572-b986-f3d4168f45d7/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a145cd-6d41-7572-b986-f3d4168f45d7"
+      },
+      "submitted": "2026-10-16T17:40:52+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T17:41:14+00:00"
     }
   ],
   "qa": {}

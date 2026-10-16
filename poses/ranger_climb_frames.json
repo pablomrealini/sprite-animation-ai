@@ -1,0 +1,26 @@
+{
+  "hang": "characters/ranger/poses_gen/post/hang_two/nano-banana-2.1_1.png",
+  "stand": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+  "size": [
+    1920,
+    1080
+  ],
+  "stand_height_px": 348.6,
+  "hang_height_px": 432.0,
+  "ledge_y": 609.1,
+  "wall_x": 860.8,
+  "hang_bbox": [
+    688,
+    594,
+    925,
+    1026
+  ],
+  "stand_bbox": [
+    875,
+    261,
+    1100,
+    609
+  ],
+  "rise_px": 416.9,
+  "forward_px": 159.0
+}

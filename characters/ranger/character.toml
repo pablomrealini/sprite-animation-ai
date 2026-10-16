@@ -213,20 +213,7 @@ kind = "cycle"
 skip_seconds = 1.4
 loop_seconds = [0.5, 2.0]
 
-# --- trepar a la cornisa (todavía sin clip) -------------------------------------------------------
-# La pose arranca colgado y con el personaje más chico, así que su alto (521 px) no es el cuerpo parado.
-# poses/ranger_hang_concept.png es el frame 94 del hang limpio de los scripts sueltos (r07 a ×0,975, el
-# tamaño con que sale hang), donde el ranger mide 473 px parado y 556 colgado: parado mediría
-# 521 × 473 / 556 ≈ 443 px de la pose. Con eso el clip sale a la escala del run.
-# [[animation]]
-# name = "climb"
-# clip = "clips/climb.mp4"
-# kind = "oneshot"
-# loop = false
-# model = "seedance-2.0"
-# prompt = "prompts/climb.txt"
-# pose = "../../poses/ranger_climb_magenta_16x9.png"
-# pose_body_height_px = 443
+# --- trepar a la cornisa: ver "colgado con las dos manos y subida", al final (g09 y g10, por API) ---------------
 
 # --- clips generados por API (spritepipe bakeoff con generate.toml: Seedance 2.0 en fal.ai) ---------
 # fal devuelve magenta puro (#FF26FF), y la compresión lo hace "sangrar" en los blancos del casco: con
@@ -315,3 +302,41 @@ kind = "cycle"
 skip_seconds = 0.3
 loop_seconds = [0.4, 1.2]
 
+# --- colgado con las dos manos y subida a la cornisa (generate_climb.toml, toma 1 de cada uno en clips/gen5) -------
+# La pose colgada es poses_gen hang_two #1 (Nano Banana 2.1). climb_frames.py la pone chica y abajo sobre magenta
+# apagado (primer frame de los dos clips) y arma el último de la subida: el concept parado sobre el canto, a la misma
+# escala (por el ancho del blanco del casco). Los dos clips arrancan en la misma pose, así el colgado empalma con la
+# subida, y la subida termina en la pose del idle. La toma 2 de la subida se funde del colgado a agachado en el aire
+# sin pasar por el canto (frame 11): no sirve. De los colgados quedó la toma 2 (g10, costura 0,95); la 1 es más
+# quieta pero con la costura visible (1,68).
+# body_height_px = 253 en los dos: parado al final de la subida mide 252 px de video, contra 371 del idle_combat
+# (g07, que declara 372). El frame 0 de los dos mide 314 px: la misma pose a la misma escala.
+[[clip]]
+name = "climb"            # g09: colgado → tira para arriba → se tira de panza sobre el canto → se para
+file = "clips/raw/g09_climb.mp4"
+color_matrix = "bt601"
+clean = true
+body_height_px = 253
+model = "seedance-2.0 (fal)"
+prompt = "prompts/climb.txt"
+
+[[clip]]
+name = "hang_two"         # g10: colgado de las dos manos, respira y balancea apenas las piernas
+file = "clips/raw/g10_hang_two.mp4"
+color_matrix = "bt601"
+clean = true
+body_height_px = 253
+model = "seedance-2.0 (fal)"
+prompt = "prompts/hang_two.txt"
+
+[[animation]]
+name = "climb"
+clip = "climb"
+kind = "oneshot"
+trim = [10, 62]
+
+[[animation]]
+name = "hang_two"
+clip = "hang_two"
+kind = "cycle"
+skip_seconds = 0.2

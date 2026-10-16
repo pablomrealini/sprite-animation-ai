@@ -1,0 +1,160 @@
+{
+  "set": "ranger_props",
+  "asset": "low_b",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nFive separate game props in one row, same scale, side view, standing on an implied ground line, with wide empty space between them, not touching the image edges. Left to right:\n1. A red rotating warning beacon on a small square steel base, switched off: the dome is dark red and unlit.\n2. The identical warning beacon switched on: bright red glowing dome with a short soft red glow around it.\n3. A wall switch box on a short steel post, with a big lever pointing up and a small red indicator light.\n4. The identical switch box with the lever pointing down and the indicator light cyan.\n5. A small quadcopter drone, landed and powered down, resting on a low round charging pad with a cyan ring light; about as tall as the beacons.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_props/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1708,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a145ab-6eb5-76f0-bf50-17c536dca845",
+  "created": "2026-10-16T17:04:27+00:00",
+  "sha256": "ffc06c15a0e0f04f91a52cc9d87063bb0ef987dc3058836fb0e1c594c2dfe6b6",
+  "post": {
+    "file": "backgrounds/ranger_props/post/low_b/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.8244,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 0.97,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (left): puede estar cortado"
+      ]
+    },
+    "pieces": {
+      "beacon_off": [
+        96,
+        866,
+        400,
+        1161
+      ],
+      "beacon_on": [
+        521,
+        770,
+        884,
+        1161
+      ],
+      "switch_off": [
+        1044,
+        448,
+        1330,
+        1159
+      ],
+      "switch_on": [
+        1491,
+        536,
+        1777,
+        1159
+      ],
+      "drone": [
+        1938,
+        829,
+        2463,
+        1165
+      ]
+    },
+    "trim": {
+      "beacon_off": [
+        0,
+        0,
+        304,
+        295
+      ],
+      "beacon_on": [
+        0,
+        0,
+        363,
+        391
+      ],
+      "switch_off": [
+        0,
+        0,
+        286,
+        711
+      ],
+      "switch_on": [
+        0,
+        0,
+        286,
+        623
+      ],
+      "drone": [
+        0,
+        0,
+        525,
+        336
+      ]
+    },
+    "files": {
+      "beacon_off": {
+        "file": "beacon_off.png",
+        "w": 304,
+        "h": 295
+      },
+      "beacon_on": {
+        "file": "beacon_on.png",
+        "w": 363,
+        "h": 391
+      },
+      "switch_off": {
+        "file": "switch_off.png",
+        "w": 286,
+        "h": 711
+      },
+      "switch_on": {
+        "file": "switch_on.png",
+        "w": 286,
+        "h": 623
+      },
+      "drone": {
+        "file": "drone.png",
+        "w": 525,
+        "h": 336
+      }
+    }
+  }
+}

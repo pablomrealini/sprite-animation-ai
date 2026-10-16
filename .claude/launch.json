@@ -12,6 +12,30 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8766", "--bind", "127.0.0.1", "--directory", "prototypes/ranger/dist"],
       "port": 8766
+    },
+    {
+      "name": "ranger-props",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8767", "--bind", "127.0.0.1"],
+      "port": 8767
+    },
+    {
+      "name": "ranger-ledge",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8768", "--bind", "127.0.0.1", "--directory", "prototypes/ranger/dist"],
+      "port": 8768
+    },
+    {
+      "name": "ranger-salto",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8770", "--bind", "127.0.0.1", "--directory", "prototypes/ranger/dist"],
+      "port": 8770
+    },
+    {
+      "name": "fx-lab",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8769", "--bind", "127.0.0.1", "--directory", "prototypes/fx_lab/dist"],
+      "port": 8769
     }
   ]
 }
