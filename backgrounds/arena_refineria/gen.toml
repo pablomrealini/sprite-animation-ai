@@ -1,0 +1,170 @@
+# La lámina de la arena Refinería: la imagen de referencia de Pablo del 2026-10-16
+# (prototypes/arena/refs/refineria.webp) sin los cuatro personajes, sus marcadores, los tiros ni el HUD. Es el fondo
+# entero de la arena (1920 × 1080 en el juego); la colisión va aparte, calcada encima, en
+# prototypes/arena/arenas/refineria.json. Es una edición, no un dibujo nuevo: tiene que quedar igual a la referencia.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/arena_refineria/gen.toml --dry-run
+#
+# plate: la referencia limpia (opción 1, la que usa el juego desde el 2026-10-16, US$0,12).
+# plate_bare: esa misma lámina sin las cajas ni la plataforma de la columna, para "lámina + objetos" (2026-10-16): lo
+# fijo pintado y encima objetos del kit con su propia colisión; la plataforma de la columna pasa a ser una flotante
+# del kit que sube y baja. Se manda sola con --assets plate_bare. El juego usa la opción 2.
+# plate_top_up: plate_bare (opción 2) con las dos pasarelas de arriba más altas, para que del medio a las de arriba
+# haya la misma separación que de las de abajo a las del medio (~190 px del juego en vez de 149). --assets plate_top_up.
+# No sirvió (2026-10-16, US$0,12): una opción agregó otro par de pasarelas arriba y la otra no las movió.
+# plate_top_fill: las pasarelas de arriba movidas a mano 43 px para arriba (refs/top_up_hueco.png, armada desde
+# prototypes/arena/arenas/refineria.webp: franja y 370–452, x 0–528 y 1392–1920) y el hueco que dejan, en magenta; el
+# modelo sólo rellena el magenta. --assets plate_top_fill.
+# plate_no_walkways: la lámina del juego (prototypes/arena/arenas/refineria.webp) sin las seis pasarelas, con sus
+# andamios, patas y soportes: queda el fondo (cielo, refinería, paredes de los costados, piso y columna) para la "lámina
+# en capas": cada pasarela se recorta de la lámina por diferencia con este fondo y pasa a ser una pieza que se mueve en
+# el editor (prototypes/arena/editor). --assets plate_no_walkways.
+# Resultado (2026-10-16, US$0,12): la opción 2 dejó las pasarelas de abajo; la 1 sacó casi todo pero dejó un muñón de
+# cada pasarela de arriba y de abajo pegado a las paredes. plate_no_walkways_fill: la opción 1, achicada a 1920 × 1080 y
+# corrida 3 px para arriba (calza con la lámina), con los cuatro muñones en magenta (refs/no_walkways_hueco.png: x 0–242,
+# y 312–402 y x 70–362, y 704–940, y lo mismo espejado); el modelo sólo rellena el magenta. --assets plate_no_walkways_fill.
+
+[gen]
+models = ["nano-banana-2.1"]
+images_per_asset = 2      # dos opciones para elegir
+max_usd = 1
+max_parallel = 2
+quality = "high"
+resolution = "2K"
+seed = 7
+
+[styles]
+empty = "No characters, people, robots, enemies, turrets, drones or vehicles anywhere."
+no_text = "No text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere."
+
+[[asset]]
+name = "plate"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. Remove the four armored player characters, the colored round number markers floating \
+above them (the circles with 1, 2, 3 and 4 and their small triangles), the cyan laser shots and muzzle flashes, \
+and the whole HUD at the top of the image (the four health panels with numbers). Fill every removed area with \
+what would be behind it, continuing the surrounding sky, clouds, background refinery, scaffolding, machinery \
+and pipes seamlessly.
+Keep everything else exactly as it is: the same composition and framing, the same platforms, center pillar, \
+crates, side walls, floor and pipes at exactly the same positions and sizes, the same colors, outlines and line \
+art. Do not move, add, resize or redraw anything else.
+"""
+refs = ["../../prototypes/arena/refs/refineria.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "plate_bare"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. Remove two kinds of things:
+1. Every crate and box: the gray metal crates with X braces and the crates with red X braces that stand on the \
+floor and on the lower walkways, six crate groups in total.
+2. The wide platform with yellow-and-black hazard stripes and red end caps that is attached to the middle of the \
+center pillar. The pillar shaft continues straight through where the platform was, with the same dark frame and \
+glowing cyan light strips above and below; keep the pillar's top cap and its base exactly as they are.
+Fill each removed area with what is behind it, continuing the surrounding scaffolding, X-braced towers, dark \
+columns, machinery, pipes, walkway surfaces and background refinery seamlessly, so that no trace is left.
+Keep everything else exactly as it is: the same composition and framing, the same walkways, center pillar, side \
+walls, floor and pipes at exactly the same positions and sizes, the same colors, outlines and line art. Do not \
+move, add, resize or redraw anything else.
+"""
+refs = ["post/plate/nano-banana-2.1_1.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "plate_top_up"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. Raise the two topmost walkways higher: the upper-left walkway that comes out of the left \
+wall and the upper-right walkway that comes out of the right wall (cream-white decks with red end caps and a small \
+yellow-and-black hazard stripe panel). Today the vertical gap between them and the middle walkways below is \
+clearly smaller than the gap between the middle walkways and the lower walkways. Move both top walkways straight \
+up, by about 4% of the image height, so that the three gaps between floor levels look even: the gap from the \
+middle walkways up to the top walkways must match the gap from the lower walkways up to the middle walkways.
+Move each top walkway as a whole, with its end caps, without changing its size, shape or horizontal position. \
+Make the dark support posts and X braces under each top walkway taller so they still reach down to the middle \
+walkways, and fill what is uncovered with the surrounding background, side walls and pipes.
+Keep everything else exactly as it is: the same framing, the same middle and lower walkways, center pillar, side \
+walls, floor and pipes at exactly the same positions and sizes, the same colors, outlines and line art.
+"""
+refs = ["post/plate_bare/nano-banana-2.1_2.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "plate_top_fill"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. It has two solid magenta (#FF00FF) bands, right under the two topmost walkways. Fill \
+each magenta band with what belongs there, continuing the surroundings so that no magenta is left: the dark \
+support posts, brackets and diagonal braces under each top walkway continue straight up until they meet the \
+underside of the walkway; the side wall machinery, red pipes and cyan lights at the left and right edges \
+continue; and the background refinery and sky continue behind them. Also blend any visible seam just above the \
+two top walkways.
+Do not change anything outside the magenta bands: keep every walkway, the center pillar, the side walls, the \
+floor and the pipes exactly where they are, with the same colors, outlines and line art.
+"""
+refs = ["refs/top_up_hueco.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "plate_no_walkways"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. Remove all six elevated walkways, each one together with everything that holds it up:
+1. The two top walkways that come out of the left and right walls near the top (cream-white decks with red end \
+caps and a small yellow-and-black hazard stripe panel), with the dark posts, brackets and diagonal braces under them.
+2. The two middle walkways that stand free on either side of the center pillar, with the dark X-braced scaffolding \
+towers, posts and feet under them.
+3. The two lower walkways that come out of the left and right walls, with all the dark posts, X braces, brackets and \
+small hazard posts under them, down to the floor.
+Fill every removed area with what is behind it: the blue sky and clouds, and the hazy blue background refinery with \
+its towers, tanks, pipes and distant catwalks, continued seamlessly, so that no trace of the walkways or their \
+supports is left and the middle of the image is open background.
+Keep everything else exactly as it is: the tall machinery walls at the far left and right edges with their red \
+pipes and cyan lights, the center pillar with its top cap and base, the long floor walkway along the bottom with \
+the machinery and red pipes under it, at exactly the same positions and sizes, with the same colors, outlines and \
+line art. Do not move, add, resize or redraw anything else.
+"""
+refs = ["../../prototypes/arena/arenas/refineria.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "plate_no_walkways_fill"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. It has four solid magenta (#FF00FF) rectangles against the left and right side walls: two \
+near the top and two lower down, just above the floor. Fill each magenta rectangle with what belongs there, \
+continuing the surroundings so that no magenta is left: at the far left and right edges the tall side wall machinery \
+continues straight through (dark gray columns and panels, red pipes, cyan lights), and between the wall and the rest \
+of the image the hazy blue background refinery, distant pipes and sky continue. Do not put any walkway, platform, \
+ledge, deck, end cap, post, brace or crate in the magenta areas: they must become open background and wall.
+Do not change anything outside the magenta rectangles: keep the center pillar, the side walls, the floor, the pipes \
+and the background exactly where they are, with the same colors, outlines and line art.
+"""
+refs = ["refs/no_walkways_hueco.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"

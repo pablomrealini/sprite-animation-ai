@@ -1,0 +1,66 @@
+{
+  "set": "arena_refineria",
+  "asset": "plate_top_fill",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nEdit the reference image. It has two solid magenta (#FF00FF) bands, right under the two topmost walkways. Fill each magenta band with what belongs there, continuing the surroundings so that no magenta is left: the dark support posts, brackets and diagonal braces under each top walkway continue straight up until they meet the underside of the walkway; the side wall machinery, red pipes and cyan lights at the left and right edges continue; and the background refinery and sky continue behind them. Also blend any visible seam just above the two top walkways.\nDo not change anything outside the magenta bands: keep every walkway, the center pillar, the side walls, the floor and the pipes exactly where they are, with the same colors, outlines and line art.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/arena_refineria/refs/top_up_hueco.png",
+      "sha256": "f0415753af621e175c78a94fe15b073814c3f1ddb2b372dc8c3cd5e228bcbf17"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/arena_refineria/refs/top_up_hueco.png",
+      "sha256": "f0415753af621e175c78a94fe15b073814c3f1ddb2b372dc8c3cd5e228bcbf17"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a146a4-214d-7783-842e-9120ad3493e2",
+  "created": "2026-10-16T21:35:49+00:00",
+  "sha256": "a7bf02a78313118f592bd27d733373fdba59da559a57d206a24c3ed2d56240f8",
+  "post": {
+    "file": "backgrounds/arena_refineria/post/plate_top_fill/nano-banana-2.1_2.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

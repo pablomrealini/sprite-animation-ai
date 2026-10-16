@@ -1,0 +1,293 @@
+{
+  "attempts": [
+    {
+      "id": "plate/nano-banana-2.1_1",
+      "asset": "plate",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14673-1908-70a0-a624-50ae6be69570",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14673-1908-70a0-a624-50ae6be69570/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14673-1908-70a0-a624-50ae6be69570"
+      },
+      "submitted": "2026-10-16T20:41:49+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T20:42:15+00:00"
+    },
+    {
+      "id": "plate/nano-banana-2.1_2",
+      "asset": "plate",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14673-193c-7e51-9f73-356785bd879f",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14673-193c-7e51-9f73-356785bd879f/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14673-193c-7e51-9f73-356785bd879f"
+      },
+      "submitted": "2026-10-16T20:41:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T20:42:19+00:00"
+    },
+    {
+      "id": "plate_bare/nano-banana-2.1_1",
+      "asset": "plate_bare",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/nano-banana-2.1_1_26ed7764_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1468d-1f81-7d71-9a96-6d817bc2d2a0",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1468d-1f81-7d71-9a96-6d817bc2d2a0/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1468d-1f81-7d71-9a96-6d817bc2d2a0"
+      },
+      "submitted": "2026-10-16T21:10:15+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:10:44+00:00"
+    },
+    {
+      "id": "plate_bare/nano-banana-2.1_2",
+      "asset": "plate_bare",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/nano-banana-2.1_1_26ed7764_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1468d-1f81-7af1-8ec4-8e83978b1b57",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1468d-1f81-7af1-8ec4-8e83978b1b57/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1468d-1f81-7af1-8ec4-8e83978b1b57"
+      },
+      "submitted": "2026-10-16T21:10:15+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:10:45+00:00"
+    },
+    {
+      "id": "plate_top_up/nano-banana-2.1_2",
+      "asset": "plate_top_up",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/nano-banana-2.1_2_0f7bf6e0_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1469b-1b26-70b2-bf85-fe78556b730d",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1469b-1b26-70b2-bf85-fe78556b730d/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1469b-1b26-70b2-bf85-fe78556b730d"
+      },
+      "submitted": "2026-10-16T21:25:32+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:26:09+00:00"
+    },
+    {
+      "id": "plate_top_up/nano-banana-2.1_1",
+      "asset": "plate_top_up",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/nano-banana-2.1_2_0f7bf6e0_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1469b-1df9-7c92-9552-393c4b269f02",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1469b-1df9-7c92-9552-393c4b269f02/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a1469b-1df9-7c92-9552-393c4b269f02"
+      },
+      "submitted": "2026-10-16T21:25:32+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:26:01+00:00"
+    },
+    {
+      "id": "plate_top_fill/nano-banana-2.1_2",
+      "asset": "plate_top_fill",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/top_up_hueco.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a146a4-214d-7783-842e-9120ad3493e2",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146a4-214d-7783-842e-9120ad3493e2/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146a4-214d-7783-842e-9120ad3493e2"
+      },
+      "submitted": "2026-10-16T21:35:23+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:35:49+00:00"
+    },
+    {
+      "id": "plate_top_fill/nano-banana-2.1_1",
+      "asset": "plate_top_fill",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/top_up_hueco.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a146a4-214a-7570-ac91-260bcf0a3dda",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146a4-214a-7570-ac91-260bcf0a3dda/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146a4-214a-7570-ac91-260bcf0a3dda"
+      },
+      "submitted": "2026-10-16T21:35:23+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:35:52+00:00"
+    },
+    {
+      "id": "plate_no_walkways/nano-banana-2.1_1",
+      "asset": "plate_no_walkways",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a146c2-e33c-7de3-9906-49d335212e5d",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146c2-e33c-7de3-9906-49d335212e5d/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146c2-e33c-7de3-9906-49d335212e5d"
+      },
+      "submitted": "2026-10-16T22:08:59+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T22:09:35+00:00"
+    },
+    {
+      "id": "plate_no_walkways/nano-banana-2.1_2",
+      "asset": "plate_no_walkways",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a146c2-e339-74f1-af55-697cdac533ad",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146c2-e339-74f1-af55-697cdac533ad/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146c2-e339-74f1-af55-697cdac533ad"
+      },
+      "submitted": "2026-10-16T22:08:59+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T22:09:56+00:00"
+    },
+    {
+      "id": "plate_no_walkways_fill/nano-banana-2.1_2",
+      "asset": "plate_no_walkways_fill",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/no_walkways_hueco.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a146cf-0fd9-72b3-a544-35418388e89b",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146cf-0fd9-72b3-a544-35418388e89b/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146cf-0fd9-72b3-a544-35418388e89b"
+      },
+      "submitted": "2026-10-16T22:22:16+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T22:22:46+00:00"
+    },
+    {
+      "id": "plate_no_walkways_fill/nano-banana-2.1_1",
+      "asset": "plate_no_walkways_fill",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria/refs/no_walkways_hueco.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a146cf-1080-7702-90ba-ead87fef8e48",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146cf-1080-7702-90ba-ead87fef8e48/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a146cf-1080-7702-90ba-ead87fef8e48"
+      },
+      "submitted": "2026-10-16T22:22:17+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T22:22:47+00:00"
+    }
+  ],
+  "qa": {}
+}

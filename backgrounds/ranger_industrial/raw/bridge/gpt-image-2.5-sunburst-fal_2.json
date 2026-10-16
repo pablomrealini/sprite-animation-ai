@@ -1,0 +1,133 @@
+{
+  "set": "ranger_industrial",
+  "asset": "bridge",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nTwo separate segments of a black steel truss bridge, exactly the same height, in one row, with wide empty space between them, not touching the image edges, orthographic side view. Each segment is about as wide as it is tall: a thick black steel I-beam deck along the top, about a fifth of the segment height, a thinner steel beam along the bottom, and between them one big X of diagonal steel beams. The space between the beams is completely empty and transparent. Both segments tile seamlessly left to right and have identical left and right edges.\n1. The plain segment.\n2. The same segment with a small glowing orange warning lamp set into the middle of the deck beam.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.1709,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a1461c-3594-7531-b489-409cb731249a",
+  "created": "2026-10-16T19:07:32+00:00",
+  "sha256": "00ea482d0f5df0de5ba584047e77cf00609cf2d209e2bc11125b7730efc365cf",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/bridge/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6964,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "height": {
+      "height": 657,
+      "scales": {
+        "bridge_a": 1.0,
+        "bridge_b": 1.0
+      }
+    },
+    "pieces": {
+      "bridge_a": [
+        66,
+        402,
+        1215,
+        1059
+      ],
+      "bridge_b": [
+        1346,
+        402,
+        2494,
+        1059
+      ]
+    },
+    "seam": {
+      "bridge_a:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.39,
+          "peak": 2.88,
+          "verdict": "ok"
+        }
+      },
+      "bridge_b:x": {
+        "before": {
+          "axis": "x",
+          "score": 1.0,
+          "peak": 8.67,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "bridge_a": [
+        0,
+        0,
+        1149,
+        657
+      ],
+      "bridge_b": [
+        0,
+        0,
+        1148,
+        657
+      ]
+    },
+    "files": {
+      "bridge_a": {
+        "file": "bridge_a.png",
+        "w": 1149,
+        "h": 657
+      },
+      "bridge_b": {
+        "file": "bridge_b.png",
+        "w": 1148,
+        "h": 657
+      }
+    }
+  }
+}

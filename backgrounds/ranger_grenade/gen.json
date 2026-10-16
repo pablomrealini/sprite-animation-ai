@@ -1,0 +1,103 @@
+{
+  "attempts": [
+    {
+      "id": "explosion/gpt-image-2.5-sunburst-fal_1",
+      "asset": "explosion",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.114,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_grenade/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14698-8b13-7b43-85f2-f49c4cd2d86d",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-8b13-7b43-85f2-f49c4cd2d86d/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-8b13-7b43-85f2-f49c4cd2d86d"
+      },
+      "submitted": "2026-10-16T21:22:44+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:23:24+00:00"
+    },
+    {
+      "id": "explosion/gpt-image-2.5-sunburst-fal_2",
+      "asset": "explosion",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.114,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_grenade/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14698-8bca-7843-8a4b-3279952fae33",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-8bca-7843-8a4b-3279952fae33/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-8bca-7843-8a4b-3279952fae33"
+      },
+      "submitted": "2026-10-16T21:22:44+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:23:24+00:00"
+    },
+    {
+      "id": "grenade/gpt-image-2.5-sunburst-fal_1",
+      "asset": "grenade",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1701,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_grenade/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_industrial/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14698-94cf-7d61-8e9e-789c26454974",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-94cf-7d61-8e9e-789c26454974/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-94cf-7d61-8e9e-789c26454974"
+      },
+      "submitted": "2026-10-16T21:22:46+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:23:22+00:00"
+    },
+    {
+      "id": "grenade/gpt-image-2.5-sunburst-fal_2",
+      "asset": "grenade",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1701,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_grenade/refs/ranger_concept_f08d29d6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_industrial/style_frame.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14698-9861-7423-81b5-48f12da3e628",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-9861-7423-81b5-48f12da3e628/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14698-9861-7423-81b5-48f12da3e628"
+      },
+      "submitted": "2026-10-16T21:22:47+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-16T21:23:23+00:00"
+    }
+  ],
+  "qa": {}
+}

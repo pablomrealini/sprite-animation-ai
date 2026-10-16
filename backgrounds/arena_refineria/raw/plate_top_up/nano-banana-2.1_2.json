@@ -1,0 +1,66 @@
+{
+  "set": "arena_refineria",
+  "asset": "plate_top_up",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nEdit the reference image. Raise the two topmost walkways higher: the upper-left walkway that comes out of the left wall and the upper-right walkway that comes out of the right wall (cream-white decks with red end caps and a small yellow-and-black hazard stripe panel). Today the vertical gap between them and the middle walkways below is clearly smaller than the gap between the middle walkways and the lower walkways. Move both top walkways straight up, by about 4% of the image height, so that the three gaps between floor levels look even: the gap from the middle walkways up to the top walkways must match the gap from the lower walkways up to the middle walkways.\nMove each top walkway as a whole, with its end caps, without changing its size, shape or horizontal position. Make the dark support posts and X braces under each top walkway taller so they still reach down to the middle walkways, and fill what is uncovered with the surrounding background, side walls and pipes.\nKeep everything else exactly as it is: the same framing, the same middle and lower walkways, center pillar, side walls, floor and pipes at exactly the same positions and sizes, the same colors, outlines and line art.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/arena_refineria/refs/nano-banana-2.1_2_0f7bf6e0_FFFFFF.png",
+      "sha256": "6b72610ab2b1b0a2d13e49f31dd01eb7a02a245af0328bdd5ae6ff123f4e7731"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/arena_refineria/post/plate_bare/nano-banana-2.1_2.png",
+      "sha256": "0f7bf6e04fccab9070abaa99ce2ef54ba0fdd8c40120d84aaca45f2b1fd0524b"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a1469b-1b26-70b2-bf85-fe78556b730d",
+  "created": "2026-10-16T21:26:09+00:00",
+  "sha256": "e9202f0bf1c57538fb48cf712d83fef1f1aa4f38cc5a6222436ebbc1e961b6c0",
+  "post": {
+    "file": "backgrounds/arena_refineria/post/plate_top_up/nano-banana-2.1_2.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "set": "ranger_industrial",
+  "asset": "near",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nThis layer sits right behind the gameplay: a little darker, bluer and less saturated than the gameplay layer, with dark navy outlines, so that the gameplay pieces in front of it read clearly.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nA seamless horizontally tiling parallax layer that sits right behind the gameplay: dark navy-blue industrial structures, storage tanks, lattice towers and red pipe runs with small cyan lights, in the lower half of the image, reaching the bottom edge and continuing past the left and right edges. Nothing in the upper half.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "near",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "key",
+  "size_requested": "21:9 2K",
+  "size": [
+    3168,
+    1344
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a1461f-2691-7320-8ed5-5909e07e5f01",
+  "created": "2026-10-16T19:10:44+00:00",
+  "sha256": "ab0fb69bf45e46707d00542ba44629556d47b4ce25e31b331e7cf7eaff628ba3",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/near/nano-banana-2.1_2.png",
+    "source": {
+      "w": 3168,
+      "h": 1344
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FD03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.4741,
+      "opaque": 0.5162,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.0,
+        "left": 0.406,
+        "right": 0.407
+      },
+      "flags": []
+    },
+    "seam": {
+      "x": {
+        "before": {
+          "axis": "x",
+          "score": 3.57,
+          "peak": 15.53,
+          "verdict": "warn"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 380,
+          "cut_error": 0.01345,
+          "cut_x": [
+            2,
+            377
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.22,
+          "peak": 0.79,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "image": [
+        0,
+        350,
+        2788,
+        1344
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 2788,
+        "h": 994
+      }
+    }
+  }
+}

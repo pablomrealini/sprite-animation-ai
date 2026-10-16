@@ -1,0 +1,66 @@
+{
+  "set": "arena_refineria",
+  "asset": "plate_no_walkways",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nEdit the reference image. Remove all six elevated walkways, each one together with everything that holds it up:\n1. The two top walkways that come out of the left and right walls near the top (cream-white decks with red end caps and a small yellow-and-black hazard stripe panel), with the dark posts, brackets and diagonal braces under them.\n2. The two middle walkways that stand free on either side of the center pillar, with the dark X-braced scaffolding towers, posts and feet under them.\n3. The two lower walkways that come out of the left and right walls, with all the dark posts, X braces, brackets and small hazard posts under them, down to the floor.\nFill every removed area with what is behind it: the blue sky and clouds, and the hazy blue background refinery with its towers, tanks, pipes and distant catwalks, continued seamlessly, so that no trace of the walkways or their supports is left and the middle of the image is open background.\nKeep everything else exactly as it is: the tall machinery walls at the far left and right edges with their red pipes and cyan lights, the center pillar with its top cap and base, the long floor walkway along the bottom with the machinery and red pipes under it, at exactly the same positions and sizes, with the same colors, outlines and line art. Do not move, add, resize or redraw anything else.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria.webp",
+      "sha256": "6015cb72a90d75d2e9113545e4d4ea2cad7b3493e60e4ad3359adcd44675d5d0"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria.webp",
+      "sha256": "6015cb72a90d75d2e9113545e4d4ea2cad7b3493e60e4ad3359adcd44675d5d0"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a146c2-e339-74f1-af55-697cdac533ad",
+  "created": "2026-10-16T22:09:56+00:00",
+  "sha256": "5ce8d99cffd136f99115ca1354a6f05cdbdc3eea98ce17b2b3e38d4efdb1abe7",
+  "post": {
+    "file": "backgrounds/arena_refineria/post/plate_no_walkways/nano-banana-2.1_2.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

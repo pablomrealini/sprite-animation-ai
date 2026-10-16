@@ -1,0 +1,337 @@
+# Mundo industrial de día para el ranger: el kit modular y el fondo del concept (style_frame.png, el de
+# concept_zonas.jpg). Reemplaza el kit de bloques y las capas de noche de backgrounds/ranger_base. Qué es cada
+# pieza, a qué tamaño va y cómo se usa: plan.md (los números de zona son los de concept_zonas.jpg).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/ranger_industrial/gen.toml --dry-run
+# Por fase, con --assets:
+#   fase 1, estructura:              walkway,substructure,bridge,platforms
+#   fase 2, caños, hitos y utilería: pipes,landmarks,small_props
+#   fase 3, fondo de día:            sky,far,mid,near
+#
+# Generadas el 2026-10-16 (US$3,15). Elegidas por el usuario el mismo día en kit.html (build_page.py): opción 1 de
+# walkway, substructure, platforms y pipes; opción 2 de bridge, landmarks y small_props; capas sky 1, far 1, mid 2 y
+# near 1 de nano-banana-2.1. mid2 (otra tanda de la capa media) está configurada pero no se mandó.
+#
+# Modelos: los elegidos en ranger_base. GPT Image 2.5 Sunburst por fal para las piezas del plano de juego (alfa
+# nativo: las vigas caladas necesitan el aire real entre barra y barra), Nano Banana 2.1 para las capas.
+# Referencias: el ranger y el concept como style frame (`ref_role = "level"`). El concept trae HUD, enemigos y una
+# torreta; `empty` le pide al modelo que no los dibuje.
+#
+# Las hojas van agrupadas por altura, como en ranger_props: el post arma las filas por el centro de cada pieza y
+# una mucho más alta que sus vecinas cae en otra fila y cambia el orden de los nombres. Las piezas chicas (menos
+# del 2% del área de la más grande de la hoja) se descartan, así que no hay calcos sueltos: las luces del canto
+# vienen dibujadas en la pasarela. Los caños verticales y los codos para otros lados son los mismos caños rotados
+# y espejados en el juego, y el primer plano (zona 19) es el mismo kit de caños, más grande y oscuro.
+#
+# Escala: con el ranger al 80% (~98 px) las medidas del concept van por ~1,35. Cada hoja sale a la escala que la
+# dibuje el modelo y el juego la lleva a su tamaño con un k por hoja (prototypes/build.py), así que el prompt da
+# proporciones, no px.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1"]
+images_per_asset = 2      # dos opciones por hoja para elegir (las capas piden 3 con `n`)
+max_usd = 5               # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+key_color = "#00FF00"     # Nano Banana dibuja las capas sobre este verde, que tampoco aparece en el mundo de día
+quality = "high"
+resolution = "2K"
+seed = 7
+ref_bg = "#FFFFFF"
+
+[styles]
+game = """
+2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines \
+(thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, \
+no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.
+Setting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, \
+cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan \
+windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.
+"""
+far = """
+This is a distant background layer: desaturated and low contrast compared to the gameplay layer, colors \
+pushed toward the light blue of the daytime sky (atmospheric perspective), thinner dark-blue outlines instead \
+of black, simple shapes with little detail, so that a red, white and black character in front stands out.
+"""
+mid = """
+This is a middle background layer: a bit desaturated and lower contrast than the gameplay layer, colors \
+leaning toward blue, dark-blue outlines thinner than in the gameplay layer, medium detail.
+"""
+near = """
+This layer sits right behind the gameplay: a little darker, bluer and less saturated than the gameplay layer, \
+with dark navy outlines, so that the gameplay pieces in front of it read clearly.
+"""
+empty = "No characters, people, robots, enemies, turrets, drones or vehicles anywhere."
+no_text = "No text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere."
+
+# --- fase 1: estructura ---------------------------------------------------------------------------------------
+
+[[asset]]
+name = "walkway"          # zona 1, 2 y 7: el piso nuevo. Las dos del medio se alternan y empalman entre sí
+style = ["game", "empty", "no_text"]
+prompt = """
+A 2D platformer tileset sheet with four separate pieces of one industrial catwalk floor, all exactly the same \
+height, in a single row, with wide empty space between them, not touching the image edges. Each piece is a \
+thick cream-white steel deck plate on top with a narrow black steel rim below it that carries a row of tiny \
+cyan and green indicator lights. Left to right:
+1. The left end of the catwalk: the plate and rim end in a blunt edge wrapped by a big red metal clamp.
+2. A straight middle segment, about four times wider than tall, that tiles seamlessly left to right, with one \
+red metal clamp wrapping the plate in its center. Its left and right edges are plain plate and rim, identical \
+to each other.
+3. A second middle segment with exactly the same size and the same plain left and right edges, but with a short \
+yellow-and-black hazard stripe panel on the plate instead of the red clamp.
+4. The right end of the catwalk, the mirror image of the left end.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["cap_left", "top_a", "top_b", "cap_right"]
+same_height = true        # las cuatro empalman
+tile = { top_a = "x", top_b = "x" }
+
+[[asset]]
+name = "substructure"     # zona 3: el relleno debajo de cada pasarela, hasta el fondo de la pantalla
+style = ["game", "empty", "no_text"]
+prompt = """
+A 2D platformer tileset sheet with six separate panels of the steel substructure below an industrial catwalk, \
+all exactly the same height, in two rows of three, with wide empty space between them, not touching the image \
+edges, front orthographic view. Every square panel tiles seamlessly with itself in both directions: its left \
+edge matches its right edge and its top edge matches its bottom edge.
+Top row, left to right:
+1. A square lattice panel: a black steel frame with one big X of diagonal steel beams. The space between the \
+beams is completely empty and transparent, so the background shows through.
+2. A second square lattice panel with the same frame and two stacked smaller X braces, also completely empty \
+and transparent between the beams.
+3. A narrow vertical black steel I-beam column, the same height as the panels and a quarter of their width, \
+with bolts, that tiles seamlessly top to bottom.
+Bottom row, left to right:
+4. A solid square dark charcoal machinery panel with one vertical glowing cyan light strip.
+5. A solid square dark charcoal panel with a ventilation grille and corner bolts.
+6. A solid square dark charcoal armored hatch with a small red indicator light and a thin yellow-and-black \
+hazard corner.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["truss_a", "truss_b", "column", "machine_a", "machine_b", "machine_c"]
+same_height = true        # se apilan y se ponen lado a lado
+tile = { truss_a = "xy", truss_b = "xy", column = "y", machine_a = "xy", machine_b = "xy", machine_c = "xy" }
+
+[[asset]]
+name = "bridge"           # zona 6: el puente de vigas, una tercera altura entre los dos pisos
+style = ["game", "empty", "no_text"]
+prompt = """
+Two separate segments of a black steel truss bridge, exactly the same height, in one row, with wide empty space \
+between them, not touching the image edges, orthographic side view. Each segment is about as wide as it is \
+tall: a thick black steel I-beam deck along the top, about a fifth of the segment height, a thinner steel beam \
+along the bottom, and between them one big X of diagonal steel beams. The space between the beams is completely \
+empty and transparent. Both segments tile seamlessly left to right and have identical left and right edges.
+1. The plain segment.
+2. The same segment with a small glowing orange warning lamp set into the middle of the deck beam.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["bridge_a", "bridge_b"]
+same_height = true
+tile = { bridge_a = "x", bridge_b = "x" }
+
+[[asset]]
+name = "platforms"        # zona 9 y 11: las flotantes (reemplazan a las slab) y la repisa de pared
+style = ["game", "empty", "no_text"]
+prompt = """
+Three separate platforms in one row, same scale, orthographic side view, with wide empty space between them, \
+not touching the image edges, all centered on the same horizontal line. Each one has the same cream-white steel \
+deck plate on top with red metal clamps at both ends and a narrow black rim with tiny cyan lights.
+1. A small hovering platform, about three times wider than tall: below the deck, a dark steel underside that \
+narrows down to a blunt point, with a small cyan thruster glow at the bottom.
+2. The same hovering platform, one and a half times longer.
+3. A wall-mounted ledge, as long as the second platform: the right end of the deck is cut straight to attach \
+to a wall, with a vertical black steel wall plate there, and two diagonal black steel brackets that go from \
+under the deck down and to the right to that wall plate.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["float_s", "float_m", "ledge"]
+
+# --- fase 2: caños, hitos y utilería --------------------------------------------------------------------------
+
+[[asset]]
+name = "pipes"            # zona 4 y 19: el juego arma cada caño con rectos y codos, rotados y espejados
+style = ["game", "empty", "no_text"]
+prompt = """
+A tileset sheet of bright red industrial pipe pieces, all at the same scale, orthographic side view, in two \
+rows with wide empty space between the pieces, not touching the image edges. The pipes are flat red with a \
+lighter red band along the top and one darker red shade along the bottom, with black outlines.
+Top row, thick pipes, all centered on the same horizontal line, left to right:
+1. A straight horizontal thick pipe segment, about three times longer than its diameter, with no flanges or \
+bands near its ends, that tiles seamlessly left to right.
+2. A 90-degree elbow of the same thick pipe, coming in from the left and turning down, with a dark steel \
+flange ring at each end.
+3. A T-junction of the same thick pipe: horizontal, with a short branch going down, with dark steel flange \
+rings at its three ends.
+4. A dark steel flange ring that clamps around the thick pipe, seen from the side, a bit taller than the pipe \
+diameter, with bolts.
+5. A round red valve handwheel on a short dark steel stem, seen from the front.
+Bottom row, thin pipes, about half the diameter, left to right:
+6. A straight horizontal thin pipe segment with no bands near its ends, that tiles seamlessly left to right.
+7. A 90-degree elbow of the thin pipe, coming in from the left and turning down.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["thick", "thick_elbow", "thick_tee", "flange", "valve", "thin", "thin_elbow"]
+tile = { thick = "x", thin = "x" }
+
+[[asset]]
+name = "landmarks"        # zona 12, 13 y 14: los hitos del principio, del final y cada ~1500 px
+style = ["game", "empty", "no_text"]
+prompt = """
+Four separate large industrial structures in one row, same scale, side view, standing on an implied ground \
+line, with wide empty space between them, not touching the image edges. Left to right:
+1. An entrance building: a chunky armored block about two thirds as wide as it is tall, with a large doorway \
+framed by thick cream-white and red armor plates, a closed dark steel sliding door inside it with a cyan light \
+bar above, and black steel sides.
+2. A tall armored blast door wall, the tallest of the four, about a third as wide as it is tall: red and \
+cream-white armored panels with big red chevrons pointing sideways, two vertical cyan light strips and \
+yellow-and-black hazard stripes at its base.
+3. A tall cylindrical industrial tank tower in charcoal steel with red bands, a glowing vertical cyan window \
+strip and a short red pipe coming out of its side.
+4. Two shorter tank towers of different heights standing side by side, joined by a short red pipe, with cyan \
+light strips.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["entry_building", "blast_door", "tank_tower", "tank_pair"]
+
+[[asset]]
+name = "small_props"      # zona 8, 10 y 15, y los paneles blindados para las caras de los sólidos altos
+style = ["game", "empty", "no_text"]
+prompt = """
+A sheet of separate game props in two rows, same scale, side view, with wide empty space between them, not \
+touching the image edges.
+Top row, standing on the same ground line, left to right:
+1. A small square grey steel supply crate with a big X brace on its side and a red lid band.
+2. A wide, low grey steel supply crate with two X braces on its side, about twice as wide as the small one and \
+a bit lower.
+3. A small glowing cyan energy capsule standing upright: a glass cylinder full of cyan light with dark steel \
+caps at both ends, about half as tall as the small crate.
+Bottom row, left to right, all about the same height, twice as tall as the small crate:
+4. A thin vertical hazard post: a black steel pole wrapped in diagonal yellow-and-black hazard stripes, with a \
+small yellow cap.
+5. A square armored wall panel of cream-white plates with a red stripe and bolts, that tiles seamlessly in both \
+directions.
+6. A second square armored wall panel of the same size, red with a cream-white stripe and a small vertical cyan \
+light, that also tiles seamlessly in both directions.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["crate_x_s", "crate_x_l", "cell", "hazard_post", "wall_a", "wall_b"]
+tile = { wall_a = "xy", wall_b = "xy" }
+
+# --- fase 3: fondo de día (zona 16, 17 y 18) -------------------------------------------------------------------
+
+[[asset]]
+name = "sky"              # la capa más lenta: opaca, se repite en x
+style = ["game", "far", "empty", "no_text"]
+prompt = """
+Only the daytime sky, as a seamless horizontally tiling parallax background: a saturated medium blue at the top \
+fading to a lighter blue near the bottom, and a few big flat stylized white clouds with light-blue shading in \
+the lower half, away from the left and right edges. No ground, no buildings.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["nano-banana-2.1"]
+n = 3                     # opciones para elegir
+aspect = "16:9"
+alpha = "opaque"
+tile = "x"
+seam = "clear"            # borra las nubes que cruzan el borde: con crossfade quedaban dobles y con cut, partidas
+
+[[asset]]
+name = "far"
+style = ["game", "far", "empty", "no_text"]
+prompt = """
+A seamless horizontally tiling parallax layer: a distant industrial megacity skyline of tall thin spires, \
+refinery towers and chimneys, pale blue silhouettes almost the color of the sky with a few tiny cyan lights, \
+occupying the lower 60% of the image, reaching the bottom edge and continuing past the left and right edges. \
+Nothing above the skyline.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["nano-banana-2.1"]
+n = 3
+aspect = "3:1"
+alpha = "layer"
+tile = "x"
+
+[[asset]]
+name = "mid"
+style = ["game", "mid", "empty", "no_text"]
+prompt = """
+A seamless horizontally tiling parallax layer: a refinery complex at medium distance, with big cylindrical \
+towers that have glowing cyan window strips, red pipes running between them and long horizontal overhead pipe \
+bridges on lattice supports, standing on a common base at the bottom edge, in the lower 70% of the image, \
+continuing past the left and right edges. Nothing above them.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["nano-banana-2.1"]
+n = 3
+aspect = "3:1"
+alpha = "layer"
+tile = "x"
+
+[[asset]]
+name = "mid2"             # otra tanda de mid: las tres de arriba copiaron del concept pasarelas, cajas, escaleras y el
+                          # edificio de entrada, con casi el contraste del juego. Acá el concept va sólo como guía de
+                          # estilo y el prompt prohíbe todo lo que parezca pisable
+style = ["game", "mid", "empty", "no_text"]
+prompt = """
+A seamless horizontally tiling parallax layer of a refinery complex seen from far away, behind the gameplay: big \
+cylindrical towers with glowing cyan window strips, red pipes running between them and long horizontal overhead \
+pipe bridges on thin lattice supports, standing on a common base at the bottom edge, in the lower 70% of the \
+image, continuing past the left and right edges. Nothing above them.
+Only distant buildings and structures: no walkways, catwalks, platforms, floors, ladders, stairs, crates, barrels \
+or doors, nothing that looks like a place to stand or an object to use. Muted blue-grey steel and dull dark red, \
+clearly bluer, lighter and lower in contrast than the gameplay layer, with no cream-white armor plates.
+"""
+refs = ["style_frame.png"]
+ref_role = "style"
+models = ["nano-banana-2.1"]
+n = 3
+aspect = "3:1"
+alpha = "layer"
+tile = "x"
+
+[[asset]]
+name = "near"             # justo detrás de la capa de juego
+style = ["game", "near", "empty", "no_text"]
+prompt = """
+A seamless horizontally tiling parallax layer that sits right behind the gameplay: dark navy-blue industrial \
+structures, storage tanks, lattice towers and red pipe runs with small cyan lights, in the lower half of the \
+image, reaching the bottom edge and continuing past the left and right edges. Nothing in the upper half.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["nano-banana-2.1"]
+n = 3
+aspect = "3:1"
+alpha = "layer"
+tile = "x"

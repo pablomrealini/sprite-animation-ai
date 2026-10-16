@@ -1,0 +1,309 @@
+{
+  "set": "ranger_industrial",
+  "asset": "substructure",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nA 2D platformer tileset sheet with six separate panels of the steel substructure below an industrial catwalk, all exactly the same height, in two rows of three, with wide empty space between them, not touching the image edges, front orthographic view. Every square panel tiles seamlessly with itself in both directions: its left edge matches its right edge and its top edge matches its bottom edge.\nTop row, left to right:\n1. A square lattice panel: a black steel frame with one big X of diagonal steel beams. The space between the beams is completely empty and transparent, so the background shows through.\n2. A second square lattice panel with the same frame and two stacked smaller X braces, also completely empty and transparent between the beams.\n3. A narrow vertical black steel I-beam column, the same height as the panels and a quarter of their width, with bolts, that tiles seamlessly top to bottom.\nBottom row, left to right:\n4. A solid square dark charcoal machinery panel with one vertical glowing cyan light strip.\n5. A solid square dark charcoal panel with a ventilation grille and corner bolts.\n6. A solid square dark charcoal armored hatch with a small red indicator light and a thin yellow-and-black hazard corner.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.1716,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a1461b-a998-7d81-ad06-1f8a2ac59b3d",
+  "created": "2026-10-16T19:07:03+00:00",
+  "sha256": "8b19befd35d219984c80a7ed295f505ba9bde1b0adc8f165a7c0d4b7c96cf418",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/substructure/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.5375,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.975,
+        "left": 0.994,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (bottom): puede estar cortado"
+      ]
+    },
+    "height": {
+      "height": 620,
+      "scales": {
+        "truss_a": 0.9748,
+        "truss_b": 0.9748,
+        "column": 0.9748,
+        "machine_a": 1.0282,
+        "machine_b": 1.0299,
+        "machine_c": 1.0299
+      }
+    },
+    "pieces": {
+      "truss_a": [
+        386,
+        55,
+        990,
+        691
+      ],
+      "truss_b": [
+        1059,
+        55,
+        1660,
+        691
+      ],
+      "column": [
+        1817,
+        55,
+        2020,
+        691
+      ],
+      "machine_a": [
+        382,
+        754,
+        977,
+        1357
+      ],
+      "machine_b": [
+        1025,
+        755,
+        1580,
+        1357
+      ],
+      "machine_c": [
+        1632,
+        755,
+        2193,
+        1357
+      ]
+    },
+    "seam": {
+      "truss_a:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.93,
+          "peak": 3.92,
+          "verdict": "ok"
+        }
+      },
+      "truss_a:y": {
+        "before": {
+          "axis": "y",
+          "score": 1.57,
+          "peak": 13.62,
+          "verdict": "ok"
+        }
+      },
+      "truss_b:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.19,
+          "peak": 0.96,
+          "verdict": "ok"
+        }
+      },
+      "truss_b:y": {
+        "before": {
+          "axis": "y",
+          "score": 1.17,
+          "peak": 9.69,
+          "verdict": "ok"
+        }
+      },
+      "column:y": {
+        "before": {
+          "axis": "y",
+          "score": 5.19,
+          "peak": 16.97,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 74,
+          "cut_error": 0.00041,
+          "cut_x": [
+            25,
+            58
+          ]
+        },
+        "after": {
+          "axis": "y",
+          "score": 0.67,
+          "peak": 1.96,
+          "verdict": "ok"
+        }
+      },
+      "machine_a:x": {
+        "before": {
+          "axis": "x",
+          "score": 3.15,
+          "peak": 15.15,
+          "verdict": "warn"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 73,
+          "cut_error": 0.00039,
+          "cut_x": [
+            19,
+            48
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.3,
+          "peak": 0.68,
+          "verdict": "ok"
+        }
+      },
+      "machine_a:y": {
+        "before": {
+          "axis": "y",
+          "score": 1.19,
+          "peak": 7.93,
+          "verdict": "ok"
+        }
+      },
+      "machine_b:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.98,
+          "peak": 4.71,
+          "verdict": "ok"
+        }
+      },
+      "machine_b:y": {
+        "before": {
+          "axis": "y",
+          "score": 0.4,
+          "peak": 4.03,
+          "verdict": "ok"
+        }
+      },
+      "machine_c:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.7,
+          "peak": 2.24,
+          "verdict": "ok"
+        }
+      },
+      "machine_c:y": {
+        "before": {
+          "axis": "y",
+          "score": 0.58,
+          "peak": 5.37,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "truss_a": [
+        0,
+        0,
+        589,
+        620
+      ],
+      "truss_b": [
+        0,
+        0,
+        586,
+        620
+      ],
+      "column": [
+        0,
+        0,
+        198,
+        546
+      ],
+      "machine_a": [
+        0,
+        0,
+        539,
+        620
+      ],
+      "machine_b": [
+        0,
+        0,
+        572,
+        620
+      ],
+      "machine_c": [
+        0,
+        0,
+        578,
+        620
+      ]
+    },
+    "files": {
+      "truss_a": {
+        "file": "truss_a.png",
+        "w": 589,
+        "h": 620
+      },
+      "truss_b": {
+        "file": "truss_b.png",
+        "w": 586,
+        "h": 620
+      },
+      "column": {
+        "file": "column.png",
+        "w": 198,
+        "h": 546
+      },
+      "machine_a": {
+        "file": "machine_a.png",
+        "w": 539,
+        "h": 620
+      },
+      "machine_b": {
+        "file": "machine_b.png",
+        "w": 572,
+        "h": 620
+      },
+      "machine_c": {
+        "file": "machine_c.png",
+        "w": 578,
+        "h": 620
+      }
+    }
+  }
+}

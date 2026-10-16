@@ -1,0 +1,113 @@
+{
+  "set": "ranger_industrial",
+  "asset": "far",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nThis is a distant background layer: desaturated and low contrast compared to the gameplay layer, colors pushed toward the light blue of the daytime sky (atmospheric perspective), thinner dark-blue outlines instead of black, simple shapes with little detail, so that a red, white and black character in front stands out.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nA seamless horizontally tiling parallax layer: a distant industrial megacity skyline of tall thin spires, refinery towers and chimneys, pale blue silhouettes almost the color of the sky with a few tiny cyan lights, occupying the lower 60% of the image, reaching the bottom edge and continuing past the left and right edges. Nothing above the skyline.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "far",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "key",
+  "size_requested": "21:9 2K",
+  "size": [
+    3168,
+    1344
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a1461e-07d3-7a42-99db-a50b37286d03",
+  "created": "2026-10-16T19:09:30+00:00",
+  "sha256": "53713a87a7d44daac2151d9744d0b6e7411eaeb37fa7ed41c994e15f35809bf0",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/far/nano-banana-2.1_1.png",
+    "source": {
+      "w": 3168,
+      "h": 1344
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#01FD03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.4228,
+      "opaque": 0.5676,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.0,
+        "left": 0.459,
+        "right": 0.458
+      },
+      "flags": []
+    },
+    "seam": {
+      "x": {
+        "before": {
+          "axis": "x",
+          "score": 3.27,
+          "peak": 21.38,
+          "verdict": "warn"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 380,
+          "cut_error": 0.00558,
+          "cut_x": [
+            2,
+            213
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.45,
+          "peak": 3.79,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "image": [
+        0,
+        225,
+        2788,
+        1344
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 2788,
+        "h": 1119
+      }
+    }
+  }
+}

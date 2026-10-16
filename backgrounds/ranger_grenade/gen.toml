@@ -1,0 +1,77 @@
+# La granada del ranger y su explosión, para la arena (prototypes/arena): la granada en dos estados (la luz apagada
+# y prendida, para que titile mientras cuenta) y la explosión en seis dibujos.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/ranger_grenade/gen.toml --dry-run
+# Ver "Fondos por API de imagen" en pipeline/README.md.
+#
+# Modelo: GPT Image 2.5 Sunburst por fal, alfa nativo, como los efectos de backgrounds/ranger_fx. Referencias: el
+# ranger y el style frame del mundo industrial, para que la granada sea de la misma familia que el kit.
+# Cada pieza tiene que salir de una sola mancha: el post separa la hoja por componentes conexos del alfa. Las chispas
+# y los escombros sueltos los pone el código.
+#
+# Escala en el juego (cámara al 50%): la granada mide ~22 px del juego (11 de pantalla) y la explosión, ~240 px de
+# diámetro en el dibujo más grande. El prompt pide formas gruesas que se lean así de chicas.
+#
+# Generadas el 2026-10-16 (US$0,57). Elegida la opción 1 de las dos hojas (GRENADE_ART en prototypes/arena/build.py).
+# La explosión salió en 7 piezas: el humo del último dibujo vino partido en dos, y el juego usa las 6 primeras.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por asset para elegir
+max_usd = 2               # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+game = """
+2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines \
+(thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, \
+no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.
+"""
+blast = """
+2D side-scrolling video game explosion sprites in the rendering style of the reference images: flat cel colors, \
+hard clean edges, bold chunky cartoon shapes that still read when shrunk to 100 pixels, no gradients, no \
+airbrushed soft glow, no blur, no photographic fire. A thick dark outline only around the smoke, not around the \
+fire. Palette from the inside out: pure white core, bright yellow, orange, red-orange, then dark charcoal smoke.
+"""
+no_text = "No text, letters, numbers, logos, frames, grid lines or labels anywhere."
+
+[[asset]]
+name = "grenade"          # la granada: luz apagada y prendida (titila mientras cuenta)
+style = ["game", "no_text"]
+prompt = """
+Two separate game props in one row, same size, with wide empty space between them, not touching the image \
+edges: a small round sci-fi hand grenade that matches the ranger's gear in the reference (white and red armor \
+plates, black outline), with a short dark steel cap and a ring on top and a small round light in the middle of \
+its body.
+1. The grenade with the light off: the light is a dark grey dot.
+2. The identical grenade with the light on: the light is a bright glowing red dot.
+"""
+refs = ["../../poses/ranger_concept.png", "../ranger_industrial/style_frame.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["off", "on"]
+
+[[asset]]
+name = "explosion"        # seis dibujos de la explosión, en orden
+style = ["blast", "no_text"]
+prompt = """
+A sprite sheet of one cartoon grenade explosion animation in six frames, in two rows of three, each row left to \
+right in time order, all centered on the same point and drawn at the same scale, with wide empty space between \
+the frames, not touching each other or the image edges. Each frame is one single connected shape: no detached \
+sparks, fragments or debris.
+Frame 1: a small, very bright white and yellow starburst flash.
+Frame 2: a round fireball twice as big, white core, yellow and orange body with jagged edges.
+Frame 3: the largest frame, a big billowing fireball, orange and red-orange with a yellow core, ragged flame tongues.
+Frame 4: the fireball breaking up, red-orange flames mixed with dark charcoal smoke puffs.
+Frame 5: mostly round dark charcoal smoke puffs with a few small orange embers inside, a bit smaller.
+Frame 6: a few thin grey smoke puffs, the last frame before it disappears.
+"""
+refs = ["../../poses/ranger_concept.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["e1", "e2", "e3", "e4", "e5", "e6"]

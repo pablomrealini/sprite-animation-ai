@@ -1,0 +1,226 @@
+{
+  "set": "ranger_industrial",
+  "asset": "pipes",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nA tileset sheet of bright red industrial pipe pieces, all at the same scale, orthographic side view, in two rows with wide empty space between the pieces, not touching the image edges. The pipes are flat red with a lighter red band along the top and one darker red shade along the bottom, with black outlines.\nTop row, thick pipes, all centered on the same horizontal line, left to right:\n1. A straight horizontal thick pipe segment, about three times longer than its diameter, with no flanges or bands near its ends, that tiles seamlessly left to right.\n2. A 90-degree elbow of the same thick pipe, coming in from the left and turning down, with a dark steel flange ring at each end.\n3. A T-junction of the same thick pipe: horizontal, with a short branch going down, with dark steel flange rings at its three ends.\n4. A dark steel flange ring that clamps around the thick pipe, seen from the side, a bit taller than the pipe diameter, with bolts.\n5. A round red valve handwheel on a short dark steel stem, seen from the front.\nBottom row, thin pipes, about half the diameter, left to right:\n6. A straight horizontal thin pipe segment with no bands near its ends, that tiles seamlessly left to right.\n7. A 90-degree elbow of the thin pipe, coming in from the left and turning down.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1716,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a1461c-c594-7001-8e76-71ad744578ce",
+  "created": "2026-10-16T19:08:22+00:00",
+  "sha256": "373194ec1c66d4859f9f315042d2fc5956bf9f7f3ac3487f2fd6b16424f1cca9",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/pipes/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8291,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "thick": [
+        61,
+        362,
+        652,
+        550
+      ],
+      "thick_elbow": [
+        719,
+        315,
+        1134,
+        689
+      ],
+      "thick_tee": [
+        1190,
+        314,
+        1817,
+        690
+      ],
+      "flange": [
+        1929,
+        315,
+        2082,
+        661
+      ],
+      "valve": [
+        2160,
+        317,
+        2498,
+        657
+      ],
+      "thin": [
+        111,
+        974,
+        669,
+        1071
+      ],
+      "thin_elbow": [
+        768,
+        938,
+        1079,
+        1215
+      ]
+    },
+    "seam": {
+      "thick:x": {
+        "before": {
+          "axis": "x",
+          "score": 1.52,
+          "peak": 8.83,
+          "verdict": "ok"
+        }
+      },
+      "thin:x": {
+        "before": {
+          "axis": "x",
+          "score": 10.27,
+          "peak": 47.32,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 67,
+          "cut_error": 0.00042,
+          "cut_x": [
+            31,
+            49
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.69,
+          "peak": 1.46,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "thick": [
+        0,
+        0,
+        591,
+        188
+      ],
+      "thick_elbow": [
+        0,
+        0,
+        415,
+        374
+      ],
+      "thick_tee": [
+        0,
+        0,
+        627,
+        376
+      ],
+      "flange": [
+        0,
+        0,
+        153,
+        346
+      ],
+      "valve": [
+        0,
+        0,
+        338,
+        340
+      ],
+      "thin": [
+        0,
+        0,
+        491,
+        97
+      ],
+      "thin_elbow": [
+        0,
+        0,
+        311,
+        277
+      ]
+    },
+    "files": {
+      "thick": {
+        "file": "thick.png",
+        "w": 591,
+        "h": 188
+      },
+      "thick_elbow": {
+        "file": "thick_elbow.png",
+        "w": 415,
+        "h": 374
+      },
+      "thick_tee": {
+        "file": "thick_tee.png",
+        "w": 627,
+        "h": 376
+      },
+      "flange": {
+        "file": "flange.png",
+        "w": 153,
+        "h": 346
+      },
+      "valve": {
+        "file": "valve.png",
+        "w": 338,
+        "h": 340
+      },
+      "thin": {
+        "file": "thin.png",
+        "w": 491,
+        "h": 97
+      },
+      "thin_elbow": {
+        "file": "thin_elbow.png",
+        "w": 311,
+        "h": 277
+      }
+    }
+  }
+}

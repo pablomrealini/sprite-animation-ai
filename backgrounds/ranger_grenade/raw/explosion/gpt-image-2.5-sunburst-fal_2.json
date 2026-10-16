@@ -1,0 +1,186 @@
+{
+  "set": "ranger_grenade",
+  "asset": "explosion",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game explosion sprites in the rendering style of the reference images: flat cel colors, hard clean edges, bold chunky cartoon shapes that still read when shrunk to 100 pixels, no gradients, no airbrushed soft glow, no blur, no photographic fire. A thick dark outline only around the smoke, not around the fire. Palette from the inside out: pure white core, bright yellow, orange, red-orange, then dark charcoal smoke.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA sprite sheet of one cartoon grenade explosion animation in six frames, in two rows of three, each row left to right in time order, all centered on the same point and drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges. Each frame is one single connected shape: no detached sparks, fragments or debris.\nFrame 1: a small, very bright white and yellow starburst flash.\nFrame 2: a round fireball twice as big, white core, yellow and orange body with jagged edges.\nFrame 3: the largest frame, a big billowing fireball, orange and red-orange with a yellow core, ragged flame tongues.\nFrame 4: the fireball breaking up, red-orange flames mixed with dark charcoal smoke puffs.\nFrame 5: mostly round dark charcoal smoke puffs with a few small orange embers inside, a bit smaller.\nFrame 6: a few thin grey smoke puffs, the last frame before it disappears.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "blast",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_grenade/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.114,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14698-8bca-7843-8a4b-3279952fae33",
+  "created": "2026-10-16T21:23:24+00:00",
+  "sha256": "005fbc5ee92d3b39e306cc3ad467170098f508525f7e5b5380ca9550af01e8c2",
+  "post": {
+    "file": "backgrounds/ranger_grenade/post/explosion/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [
+      "salieron 7 piezas y se esperaban 6 (e1, e2, e3, e4, e5, e6): quedan numeradas"
+    ],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7632,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.995,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "pieza_1": [
+        339,
+        337,
+        622,
+        632
+      ],
+      "pieza_2": [
+        1049,
+        230,
+        1506,
+        699
+      ],
+      "pieza_3": [
+        1763,
+        108,
+        2426,
+        764
+      ],
+      "pieza_4": [
+        182,
+        860,
+        768,
+        1353
+      ],
+      "pieza_5": [
+        1049,
+        920,
+        1535,
+        1335
+      ],
+      "pieza_6": [
+        1936,
+        970,
+        2231,
+        1336
+      ],
+      "pieza_7": [
+        2199,
+        1103,
+        2306,
+        1254
+      ]
+    },
+    "trim": {
+      "pieza_1": [
+        0,
+        0,
+        283,
+        295
+      ],
+      "pieza_2": [
+        0,
+        0,
+        457,
+        469
+      ],
+      "pieza_3": [
+        0,
+        0,
+        663,
+        656
+      ],
+      "pieza_4": [
+        0,
+        0,
+        586,
+        493
+      ],
+      "pieza_5": [
+        0,
+        0,
+        486,
+        415
+      ],
+      "pieza_6": [
+        0,
+        0,
+        295,
+        366
+      ],
+      "pieza_7": [
+        0,
+        0,
+        107,
+        151
+      ]
+    },
+    "files": {
+      "pieza_1": {
+        "file": "pieza_1.png",
+        "w": 283,
+        "h": 295
+      },
+      "pieza_2": {
+        "file": "pieza_2.png",
+        "w": 457,
+        "h": 469
+      },
+      "pieza_3": {
+        "file": "pieza_3.png",
+        "w": 663,
+        "h": 656
+      },
+      "pieza_4": {
+        "file": "pieza_4.png",
+        "w": 586,
+        "h": 493
+      },
+      "pieza_5": {
+        "file": "pieza_5.png",
+        "w": 486,
+        "h": 415
+      },
+      "pieza_6": {
+        "file": "pieza_6.png",
+        "w": 295,
+        "h": 366
+      },
+      "pieza_7": {
+        "file": "pieza_7.png",
+        "w": 107,
+        "h": 151
+      }
+    }
+  }
+}

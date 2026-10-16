@@ -1,0 +1,184 @@
+{
+  "set": "ranger_industrial",
+  "asset": "walkway",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nA 2D platformer tileset sheet with four separate pieces of one industrial catwalk floor, all exactly the same height, in a single row, with wide empty space between them, not touching the image edges. Each piece is a thick cream-white steel deck plate on top with a narrow black steel rim below it that carries a row of tiny cyan and green indicator lights. Left to right:\n1. The left end of the catwalk: the plate and rim end in a blunt edge wrapped by a big red metal clamp.\n2. A straight middle segment, about four times wider than tall, that tiles seamlessly left to right, with one red metal clamp wrapping the plate in its center. Its left and right edges are plain plate and rim, identical to each other.\n3. A second middle segment with exactly the same size and the same plain left and right edges, but with a short yellow-and-black hazard stripe panel on the plate instead of the red clamp.\n4. The right end of the catwalk, the mirror image of the left end.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.1712,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a1461b-a993-78b2-b445-eb10854cb0bd",
+  "created": "2026-10-16T19:06:55+00:00",
+  "sha256": "511343bf3a3f00fee1da6e495f6131d656960b0c9e358735958687b0ec23624d",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/walkway/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.9054,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "height": {
+      "height": 162,
+      "scales": {
+        "cap_left": 0.9818,
+        "top_a": 1.0125,
+        "top_b": 1.0519,
+        "cap_right": 0.9818
+      }
+    },
+    "pieces": {
+      "cap_left": [
+        69,
+        651,
+        481,
+        816
+      ],
+      "top_a": [
+        566,
+        656,
+        1247,
+        816
+      ],
+      "top_b": [
+        1311,
+        662,
+        1991,
+        816
+      ],
+      "cap_right": [
+        2073,
+        651,
+        2488,
+        816
+      ]
+    },
+    "trim": {
+      "cap_left": [
+        0,
+        0,
+        405,
+        162
+      ],
+      "top_a": [
+        0,
+        0,
+        607,
+        162
+      ],
+      "top_b": [
+        0,
+        0,
+        715,
+        162
+      ],
+      "cap_right": [
+        0,
+        0,
+        407,
+        162
+      ]
+    },
+    "files": {
+      "cap_left": {
+        "file": "cap_left.png",
+        "w": 405,
+        "h": 162
+      },
+      "top_a": {
+        "file": "top_a.png",
+        "w": 607,
+        "h": 162
+      },
+      "top_b": {
+        "file": "top_b.png",
+        "w": 715,
+        "h": 162
+      },
+      "cap_right": {
+        "file": "cap_right.png",
+        "w": 407,
+        "h": 162
+      }
+    },
+    "seam": {
+      "top_a:x": {
+        "before": {
+          "axis": "x",
+          "score": 2.35,
+          "peak": 6.02,
+          "verdict": "warn"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 83,
+          "cut_error": 0.00012,
+          "cut_x": [
+            34,
+            55
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.17,
+          "peak": 0.43,
+          "verdict": "ok"
+        }
+      },
+      "top_b:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.73,
+          "peak": 2.07,
+          "verdict": "ok"
+        }
+      }
+    }
+  }
+}

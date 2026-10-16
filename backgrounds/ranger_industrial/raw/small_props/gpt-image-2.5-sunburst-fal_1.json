@@ -1,0 +1,255 @@
+{
+  "set": "ranger_industrial",
+  "asset": "small_props",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nA sheet of separate game props in two rows, same scale, side view, with wide empty space between them, not touching the image edges.\nTop row, standing on the same ground line, left to right:\n1. A small square grey steel supply crate with a big X brace on its side and a red lid band.\n2. A wide, low grey steel supply crate with two X braces on its side, about twice as wide as the small one and a bit lower.\n3. A small glowing cyan energy capsule standing upright: a glass cylinder full of cyan light with dark steel caps at both ends, about half as tall as the small crate.\nBottom row, left to right, all about the same height, twice as tall as the small crate:\n4. A thin vertical hazard post: a black steel pole wrapped in diagonal yellow-and-black hazard stripes, with a small yellow cap.\n5. A square armored wall panel of cream-white plates with a red stripe and bolts, that tiles seamlessly in both directions.\n6. A second square armored wall panel of the same size, red with a cream-white stripe and a small vertical cyan light, that also tiles seamlessly in both directions.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1714,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a1461d-495b-76a3-b386-4d1e6b267322",
+  "created": "2026-10-16T19:08:42+00:00",
+  "sha256": "a01f3cd4fc87d410877d1625d587bf5f7189c31cc2d3f2993508d37321e119c0",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/small_props/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7124,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 0.992,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "crate_x_s": [
+        365,
+        240,
+        773,
+        645
+      ],
+      "crate_x_l": [
+        950,
+        303,
+        1774,
+        645
+      ],
+      "cell": [
+        1965,
+        302,
+        2156,
+        645
+      ],
+      "hazard_post": [
+        503,
+        778,
+        637,
+        1264
+      ],
+      "wall_a": [
+        866,
+        794,
+        1380,
+        1264
+      ],
+      "wall_b": [
+        1551,
+        794,
+        2065,
+        1264
+      ]
+    },
+    "trim": {
+      "crate_x_s": [
+        0,
+        0,
+        408,
+        405
+      ],
+      "crate_x_l": [
+        0,
+        0,
+        824,
+        342
+      ],
+      "cell": [
+        0,
+        0,
+        191,
+        343
+      ],
+      "hazard_post": [
+        0,
+        0,
+        134,
+        486
+      ],
+      "wall_a": [
+        0,
+        0,
+        452,
+        414
+      ],
+      "wall_b": [
+        0,
+        0,
+        514,
+        414
+      ]
+    },
+    "files": {
+      "crate_x_s": {
+        "file": "crate_x_s.png",
+        "w": 408,
+        "h": 405
+      },
+      "crate_x_l": {
+        "file": "crate_x_l.png",
+        "w": 824,
+        "h": 342
+      },
+      "cell": {
+        "file": "cell.png",
+        "w": 191,
+        "h": 343
+      },
+      "hazard_post": {
+        "file": "hazard_post.png",
+        "w": 134,
+        "h": 486
+      },
+      "wall_a": {
+        "file": "wall_a.png",
+        "w": 452,
+        "h": 414
+      },
+      "wall_b": {
+        "file": "wall_b.png",
+        "w": 514,
+        "h": 414
+      }
+    },
+    "seam": {
+      "wall_a:x": {
+        "before": {
+          "axis": "x",
+          "score": 5.72,
+          "peak": 8.18,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 62,
+          "cut_error": 0.0635,
+          "cut_x": [
+            12,
+            41
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 1.55,
+          "peak": 7.3,
+          "verdict": "ok"
+        }
+      },
+      "wall_a:y": {
+        "before": {
+          "axis": "y",
+          "score": 9.44,
+          "peak": 10.22,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 56,
+          "cut_error": 0.05374,
+          "cut_x": [
+            12,
+            40
+          ]
+        },
+        "after": {
+          "axis": "y",
+          "score": 0.95,
+          "peak": 4.27,
+          "verdict": "ok"
+        }
+      },
+      "wall_b:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.87,
+          "peak": 2.13,
+          "verdict": "ok"
+        }
+      },
+      "wall_b:y": {
+        "before": {
+          "axis": "y",
+          "score": 9.79,
+          "peak": 11.75,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 56,
+          "cut_error": 0.0344,
+          "cut_x": [
+            2,
+            40
+          ]
+        },
+        "after": {
+          "axis": "y",
+          "score": 0.85,
+          "peak": 4.68,
+          "verdict": "ok"
+        }
+      }
+    }
+  }
+}

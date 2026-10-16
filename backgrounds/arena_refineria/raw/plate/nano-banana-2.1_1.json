@@ -1,0 +1,66 @@
+{
+  "set": "arena_refineria",
+  "asset": "plate",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nEdit the reference image. Remove the four armored player characters, the colored round number markers floating above them (the circles with 1, 2, 3 and 4 and their small triangles), the cyan laser shots and muzzle flashes, and the whole HUD at the top of the image (the four health panels with numbers). Fill every removed area with what would be behind it, continuing the surrounding sky, clouds, background refinery, scaffolding, machinery and pipes seamlessly.\nKeep everything else exactly as it is: the same composition and framing, the same platforms, center pillar, crates, side walls, floor and pipes at exactly the same positions and sizes, the same colors, outlines and line art. Do not move, add, resize or redraw anything else.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/refs/refineria.webp",
+      "sha256": "828de0bea6e8f0993477e724816d0694a84d730b126c1342f20ec27723089cd2"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/refs/refineria.webp",
+      "sha256": "828de0bea6e8f0993477e724816d0694a84d730b126c1342f20ec27723089cd2"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14673-1908-70a0-a624-50ae6be69570",
+  "created": "2026-10-16T20:42:15+00:00",
+  "sha256": "bcbd800d6eda28ba299683f20d15ddfaf37c225ab8fa7d37b3ed5cc579e6eeef",
+  "post": {
+    "file": "backgrounds/arena_refineria/post/plate/nano-banana-2.1_1.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

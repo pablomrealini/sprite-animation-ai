@@ -1,0 +1,66 @@
+{
+  "set": "arena_refineria",
+  "asset": "plate_bare",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nEdit the reference image. Remove two kinds of things:\n1. Every crate and box: the gray metal crates with X braces and the crates with red X braces that stand on the floor and on the lower walkways, six crate groups in total.\n2. The wide platform with yellow-and-black hazard stripes and red end caps that is attached to the middle of the center pillar. The pillar shaft continues straight through where the platform was, with the same dark frame and glowing cyan light strips above and below; keep the pillar's top cap and its base exactly as they are.\nFill each removed area with what is behind it, continuing the surrounding scaffolding, X-braced towers, dark columns, machinery, pipes, walkway surfaces and background refinery seamlessly, so that no trace is left.\nKeep everything else exactly as it is: the same composition and framing, the same walkways, center pillar, side walls, floor and pipes at exactly the same positions and sizes, the same colors, outlines and line art. Do not move, add, resize or redraw anything else.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/arena_refineria/refs/nano-banana-2.1_1_26ed7764_FFFFFF.png",
+      "sha256": "0b29294f95447795fad44c6a0c33caf0491d9b529ee4777d776f1073631bc3f4"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/arena_refineria/post/plate/nano-banana-2.1_1.png",
+      "sha256": "26ed776466d8f932ed3553b9514bf4177b12ac2bbf7d9d73893b8f36f5aa1b35"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a1468d-1f81-7af1-8ec4-8e83978b1b57",
+  "created": "2026-10-16T21:10:45+00:00",
+  "sha256": "efe1de0e1e8ea2946c87862d8ae815f0c470618a95b38d9af32affbd79825415",
+  "post": {
+    "file": "backgrounds/arena_refineria/post/plate_bare/nano-banana-2.1_2.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "set": "ranger_industrial",
+  "asset": "platforms",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference images: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi industrial refinery complex in bright daylight. Palette: charcoal and black steel frames, cream-white armored plates, bright red pipes and red metal clamps, small cyan light strips and glowing cyan windows, yellow-and-black hazard stripes used sparingly, a saturated blue sky with flat white clouds.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nThree separate platforms in one row, same scale, orthographic side view, with wide empty space between them, not touching the image edges, all centered on the same horizontal line. Each one has the same cream-white steel deck plate on top with red metal clamps at both ends and a narrow black rim with tiny cyan lights.\n1. A small hovering platform, about three times wider than tall: below the deck, a dark steel underside that narrows down to a blunt point, with a small cyan thruster glow at the bottom.\n2. The same hovering platform, one and a half times longer.\n3. A wall-mounted ledge, as long as the second platform: the right end of the deck is cut straight to attach to a wall, with a vertical black steel wall plate there, and two diagonal black steel brackets that go from under the deck down and to the right to that wall plate.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_industrial/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_industrial/style_frame.png",
+      "sha256": "19fd092aeb41034b54aac408f13f728969d29da20a3dc12c586f9ee5bab74d07"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1711,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a1461c-5308-73f3-bcfe-0372fa2c21f6",
+  "created": "2026-10-16T19:07:39+00:00",
+  "sha256": "dfcba0b4278320afb0e820f9753fe882ed3595da5a3618530764115ed2d170bb",
+  "post": {
+    "file": "backgrounds/ranger_industrial/post/platforms/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8874,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 0.995,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "float_s": [
+        83,
+        593,
+        621,
+        865
+      ],
+      "float_m": [
+        792,
+        593,
+        1527,
+        871
+      ],
+      "ledge": [
+        1670,
+        526,
+        2481,
+        1003
+      ]
+    },
+    "trim": {
+      "float_s": [
+        0,
+        0,
+        538,
+        272
+      ],
+      "float_m": [
+        0,
+        0,
+        735,
+        278
+      ],
+      "ledge": [
+        0,
+        0,
+        811,
+        477
+      ]
+    },
+    "files": {
+      "float_s": {
+        "file": "float_s.png",
+        "w": 538,
+        "h": 272
+      },
+      "float_m": {
+        "file": "float_m.png",
+        "w": 735,
+        "h": 278
+      },
+      "ledge": {
+        "file": "ledge.png",
+        "w": 811,
+        "h": 477
+      }
+    }
+  }
+}
