@@ -221,7 +221,10 @@ const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).re
 const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
 const shotFrame = (n, t, per) => { const s = SHOT(n); return t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]; };
 const HANG_HAND = anim("hang").f[0];                 // mano del colgado relativa al pivot
-const HANG_WALL = 30, HANG_GRIP = 6;                 // del pivot a la cara de la pared, y de la punta de la mano a los dedos
+// colgado: la mano del clip viene de agarrar una barra, y donde estaba la barra le queda un hueco (x +29..+38,
+// y -143..-131 del pivot). Se dibuja DETRÁS del bloque: la pared a +28 y el tope del bloque a -144 tapan el hueco
+// y la muñeca, y quedan a la vista sólo los dedos, que asoman sobre el canto
+const HANG_WALL = 28, HANG_GRIP = 8;                 // del pivot a la cara de la pared, y de la punta de la mano al canto
 // correr disparando con cuerpo partido: piernas del run debajo de la cintura y torso del disparo arriba, con el rebote
 // de cada frame del run (medido en la punta del casco). La costura va a 46 px de los pies y el torso la tapa 6 px
 const RS_CUT = 46, RS_OVER = 6;
@@ -426,11 +429,22 @@ function findLedge() {
 }
 
 /* ---------- efectos ---------- */
-const bullets = [], fx = [];
+const bullets = [], fx = [], impacts = [];
 let flash = null, hits = 0, shake = 0, camX = 0;
+// polvo: bolitas que salen hacia los costados por el piso, se frenan y se desvanecen. Escala con el personaje
+function dust(x, y, n, speed, size, up = 0.25) {
+  const k = S.char;
+  for (let i = 0; i < n; i++) {
+    const side = i % 2 ? 1 : -1, v = speed * k * (0.35 + Math.random() * 0.65);
+    fx.push({ x: x + side * Math.random() * 10 * k, y: y - 2, vx: side * v, vy: -speed * k * up * Math.random(), life: 0.45, t: 0.45 + Math.random() * 0.15,
+              color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: size * k * (0.7 + Math.random() * 0.7), g: 120, drag: 4, round: true, grow: 1.6 });
+  }
+}
+function impact(x, y, dir, big) { impacts.push({ x, y, dir, t: 0.09, life: 0.09, big }); }
 function fire(frame, footY, power) {
   const mx = P.x + P.facing * frame[6] * S.char, my = footY + frame[7] * S.char;
-  bullets.push({ x: mx, y: my, vx: 1350 * P.facing, life: 0.75, power, len: power > 1 ? 46 : 32 });
+  const len = power > 1 ? 46 : 32;   // la estela arranca en la boca y no se dibuja por detrás de ella (x0)
+  bullets.push({ x: mx + P.facing * len, x0: mx, y: my, vx: 1350 * P.facing, life: 0.75, power, len });
   flash = { x: mx, y: my, t: 0.06, dir: P.facing, big: power > 1, seed: Math.random() * 1000 };
   if (!reduceMotion) shake = Math.max(shake, power > 1 ? 0.07 : 0.04);
   if (power > 1) rumble(70, 0.4, 0.25);
@@ -507,8 +521,11 @@ function update(dt) {
     P.onGround = false; P.landT = 0; P.aim = "none"; P.crouch = "none";
     if (S.jumpMode === "root") P.jump = { mode: "root", t: 0, baseY: P.y };
     else { P.jump = { mode: "phys" }; P.vy = -FEEL.v0; }
+    dust(P.x, P.y, 12, 170, 13, 0.6);   // despegue
   } else if (jumpPressed && !P.onGround && P.canDouble && FLIP.length && (!P.jump || P.jump.mode === "phys")) {
     P.canDouble = false; P.bufferT = 0; P.jump = { mode: "phys" }; P.vy = -FEEL.v0 * DOUBLE_V; P.flipT = 1e-4;
+    for (let k = 0; k < 12; k++) { const a = Math.PI * (0.15 + 0.7 * k / 11), v = 220 * S.char;   // anillo de aire bajo los pies
+      fx.push({ x: P.x, y: P.y, vx: Math.cos(a) * v * (k % 2 ? 1 : -1), vy: Math.sin(a) * v * 0.35, life: 0.3, t: 0.3, color: "#e9f6ff", size: 11 * S.char, g: 0, drag: 5, round: true, grow: 1.5 }); }
   }
   jumpPressed = false; downPressed = false;
 
@@ -540,7 +557,7 @@ function update(dt) {
       }
       else {
         const top = landingTop(P.x, P.y, ny);
-        if (top !== null) { P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.landT = 0.2; burst(P.x, P.y, "#7f86a8", 6, 120, 0.3, 4); }
+        if (top !== null) { const hard = P.vy > 900; P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.landT = 0.2; dust(P.x, P.y, hard ? 22 : 14, hard ? 260 : 190, hard ? 17 : 14); shake = Math.max(shake, hard ? 0.08 : 0.04); }
         else P.y = ny;
       }
       // ¿llega la mano a una cornisa?
@@ -623,16 +640,17 @@ function finishUpdate(dt) {
       B.x += B.vx * dt / steps;
       for (const T of targets) if (!T.dead && B.x > T.x && B.x < T.x + T.w && B.y > T.y && B.y < T.y + T.h) {
         T.hp -= B.power; T.hit = 0.08; hits++; dead = true;
-        burst(B.x, B.y, "#9ff5fa", 6, 260, 0.3, 3);
-        if (T.hp <= 0) { T.dead = 3; burst(T.x + T.w / 2, T.y + T.h / 2, T.kind === "can" ? "#e8392e" : "#c79a5a", 16, 380, 0.7, 6); }
+        burst(B.x, B.y, "#9ff5fa", B.power > 1 ? 16 : 11, 320, 0.38, B.power > 1 ? 8 : 6); impact(B.x, B.y, Math.sign(B.vx), B.power > 1);
+        if (T.hp <= 0) { T.dead = 3; burst(T.x + T.w / 2, T.y + T.h / 2, T.kind === "can" ? "#e8392e" : "#c79a5a", 30, 460, 0.8, 10); burst(T.x + T.w / 2, T.y + T.h / 2, "#ffffff", 10, 300, 0.35, 6); }
         break;
       }
-      if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; burst(B.x, B.y, "#9ff5fa", 5, 180, 0.25, 3); break; }
+      if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; burst(B.x, B.y, "#9ff5fa", 9, 220, 0.3, 5); impact(B.x, B.y, Math.sign(B.vx), false); break; }
     }
     if (dead || B.x < camX - 100 || B.x > camX + VW() + 100) bullets.splice(b, 1);
   }
   for (const T of targets) { if (T.hit > 0) T.hit -= dt; if (T.dead > 0) { T.dead -= dt; if (T.dead <= 0) { T.dead = 0; T.hp = T.max; } } }
-  for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; E.x += E.vx * dt; E.y += E.vy * dt; if (E.t <= 0) fx.splice(i, 1); }
+  for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; if (E.drag) { const d = Math.exp(-E.drag * dt); E.vx *= d; E.vy *= d; } E.x += E.vx * dt; E.y += E.vy * dt; if (E.t <= 0) fx.splice(i, 1); }
+  for (let i = impacts.length - 1; i >= 0; i--) { impacts[i].t -= dt; if (impacts[i].t <= 0) impacts.splice(i, 1); }
   if (flash) { flash.t -= dt; if (flash.t <= 0) flash = null; }
   if (P.kickT > 0) P.kickT -= dt;
   if (shake > 0) shake -= dt;
@@ -777,9 +795,10 @@ function drawSprite() {
 function drawFlash(Fl) {
   const r = rng(Math.floor(Fl.seed)), s = Fl.big ? 1.4 : 1;
   ctx.save(); ctx.translate(Fl.x - camX, Fl.y); ctx.scale(Fl.dir, 1); ctx.globalCompositeOperation = "lighter";
-  const glow = ctx.createRadialGradient(6, 0, 1, 6, 0, 26 * s);
-  glow.addColorStop(0, "rgba(200,255,255,0.95)"); glow.addColorStop(1, "rgba(89,227,236,0)");
-  ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(6, 0, 26 * s, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.rect(-1, -80, 200, 160); ctx.clip();   // nada por detrás de la boca: el destello sale del arma
+  const R = 26 * s, glow = ctx.createRadialGradient(2, 0, 1, R * 0.45, 0, R);
+  glow.addColorStop(0, "rgba(220,255,255,1)"); glow.addColorStop(1, "rgba(89,227,236,0)");
+  ctx.fillStyle = glow; ctx.beginPath(); ctx.ellipse(R * 0.45, 0, R, R * 0.75, 0, 0, Math.PI * 2); ctx.fill();
   ctx.strokeStyle = "rgba(220,255,255,0.9)"; ctx.lineWidth = 2;
   for (let k = 0; k < 5; k++) { const a = (r() - 0.5) * 1.6, l = (8 + r() * 12) * s; ctx.beginPath(); ctx.moveTo(4, 0); ctx.lineTo(4 + Math.cos(a) * l, Math.sin(a) * l); ctx.stroke(); }
   ctx.restore();
@@ -792,15 +811,17 @@ function render() {
   ctx.save(); ctx.translate(0, GROUND * (1 - S.zoom)); ctx.scale(S.zoom, S.zoom);
   if (bgState === "ok") drawGround();
   for (const p of props) drawProp(p);
+  const behind = ready && P.state === "hang";   // colgado: la mano va por detrás del bloque
+  if (behind) drawSprite();
   for (const s of solids) if (!s.ground) drawSolid(s);
   for (const T of targets) drawTarget(T);
   if (P.state !== "hang" && P.state !== "climb") {
     const shY = supportAt(P.x, P.y) ? P.y : (landingTop(P.x, P.y, GROUND + 1) ?? GROUND), hgt = Math.max(0, shY - P.y), w = 30 * S.char * Math.max(0.4, 1 - hgt / 220);
     ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(P.x - camX, shY + FOOT_SINK - 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
   }
-  if (ready) drawSprite();
+  if (ready && !behind) drawSprite();
   for (const B of bullets) {
-    const x = B.x - camX, t = Math.sign(B.vx) * B.len;
+    const dir = Math.sign(B.vx), x = B.x - camX, tail = (dir > 0 ? Math.max(B.x - B.len, B.x0) : Math.min(B.x + B.len, B.x0)) - camX, t = x - tail;
     ctx.save(); ctx.globalCompositeOperation = "lighter";
     ctx.strokeStyle = "rgba(89,227,236,0.55)"; ctx.lineWidth = B.power > 1 ? 10 : 7; ctx.lineCap = "round";
     ctx.beginPath(); ctx.moveTo(x, B.y); ctx.lineTo(x - t, B.y); ctx.stroke();
@@ -808,7 +829,17 @@ function render() {
     ctx.restore();
   }
   if (flash) drawFlash(flash);
-  for (const E of fx) { ctx.globalAlpha = Math.max(0, E.t / E.life); ctx.fillStyle = E.color; ctx.fillRect(E.x - camX - E.size / 2, E.y - E.size / 2, E.size, E.size); }
+  for (const I of impacts) {   // destello del impacto: un círculo que se abre y se apaga
+    const k = 1 - I.t / I.life, r = (I.big ? 26 : 18) * (0.5 + k);
+    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - k;
+    const g = ctx.createRadialGradient(I.x - camX, I.y, 1, I.x - camX, I.y, r); g.addColorStop(0, "rgba(240,255,255,1)"); g.addColorStop(1, "rgba(89,227,236,0)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(I.x - camX, I.y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }
+  for (const E of fx) {
+    const a = Math.max(0, E.t / E.life); ctx.globalAlpha = E.round ? a * 0.85 : a; ctx.fillStyle = E.color;
+    if (E.round) { const sz = E.size * (1 + (E.grow - 1) * (1 - a)); ctx.beginPath(); ctx.arc(E.x - camX, E.y, sz / 2, 0, Math.PI * 2); ctx.fill(); }
+    else ctx.fillRect(E.x - camX - E.size / 2, E.y - E.size / 2, E.size, E.size);
+  }
   ctx.globalAlpha = 1;
   if (S.debug && ready) {
     const x = P.x - camX, d = P.draw, f = anim(d.name).f[d.i];
