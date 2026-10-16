@@ -1,0 +1,2128 @@
+{
+  "character": "ranger",
+  "created": "2026-10-16T02:57:24+00:00",
+  "tool": "spritepipe 0.1",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "config": "# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).\n# Los comandos van desde la raíz del repo.\n#\n# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).\n#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,\n#    poses/ranger_jump_magenta_16x9.png.\n# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)\n#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno\n#    se retocó en Davinci, reemplazarlo.\n#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)\n#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos\n# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver \"Limpieza previa\" en\n#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,\n#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en\n#    work/00_clean/ y se reusan mientras no cambie nada.\n#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).\n# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml\n#\n# Los clips vienen \"on twos\" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.\n# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin\n# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = \"bt601\".\n# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios\n# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.\n\n[character]\nname = \"ranger\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"run\"\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo\nhole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo\n\n[output]\nextra_scales = [0.5]\n\n# --- clips de Davinci ----------------------------------------------------------------------------\n# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.\n\n[[clip]]\nname = \"run\"              # r01\nfile = \"clips/raw/r01.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run2.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot\"            # r04: disparo con una mano\nfile = \"clips/raw/r04.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot2h\"          # r02: disparo a dos manos\nfile = \"clips/raw/r02.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 604.6    # el personaje viene ~27% más grande: 474 / 0,784 (la escala con que se validó; medido, ~606)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot2h.txt\"\n\n[[clip]]\nname = \"crouch_shoot\"     # r06: agachado disparando\nfile = \"clips/raw/r06.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/crouch_shoot.txt\"\n\n[[clip]]\nname = \"jump\"             # r08: saltos\nfile = \"clips/raw/r08.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"jump_shoot\"       # r05: salto disparando, con fondo en degradé\nfile = \"clips/raw/r05.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"hang\"             # r07: salta, agarra la barra y cuelga\nfile = \"clips/raw/r07.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }   # la barra de la que se cuelga\nbody_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande\nmodel = \"seedance-2.0\"\nprompt = \"prompts/hang.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n# --- quieto y correr ---------------------------------------------------------------------------\n[[animation]]\nname = \"idle\"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad\nclip = \"shoot\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"            # los frames 2 y 3 son iguales: con \"sharpest\" se queda con uno solo\n\n[[animation]]\nname = \"run\"\nclip = \"run\"\nkind = \"cycle\"\nskip_seconds = 0.6        # los primeros 12 frames está parado\nloop_seconds = [0.4, 1.1]\n\n# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [14, 20]\n\n[[animation]]\nname = \"shoot\"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga\nclip = \"shoot\"\nkind = \"cycle\"\nloop_start = 38\nloop_length = 8\n\n[[animation]]\nname = \"shoot_out\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [84, 92]\n\n# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nkind = \"cycle\"\nloop_start = 36\nloop_length = 10\n\n[[animation]]\nname = \"shoot2h_out\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]            # el mismo tramo que shoot2h_in, al revés\nreverse = true\n\n# --- agachado: baja, dispara en loop, se para ---------------------------------------------------\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [10, 16]\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch_shoot\"\nkind = \"cycle\"\nloop_start = 58\nloop_length = 10\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [85, 92]\npick = \"first\"            # con \"sharpest\" el 90 le gana al 89 por poco y la salida pierde un frame\n\n# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------\n[[animation]]\nname = \"jump\"\nclip = \"jump\"\nkind = \"oneshot\"\ntrim = [10, 29]\n\n[[animation]]\nname = \"jump_shoot\"\nclip = \"jump_shoot\"\nkind = \"oneshot\"\ntrim = [10, 35]\n\n# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [12, 32]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.5, 2.0]\n\n# --- trepar a la cornisa (todavía sin clip) -------------------------------------------------------\n# La pose arranca colgado y con el personaje más chico, así que su alto (521 px) no es el cuerpo parado.\n# poses/ranger_hang_concept.png es el frame 94 del hang limpio de los scripts sueltos (r07 a ×0,975, el\n# tamaño con que sale hang), donde el ranger mide 473 px parado y 556 colgado: parado mediría\n# 521 × 473 / 556 ≈ 443 px de la pose. Con eso el clip sale a la escala del run.\n# [[animation]]\n# name = \"climb\"\n# clip = \"clips/climb.mp4\"\n# kind = \"oneshot\"\n# loop = false\n# model = \"seedance-2.0\"\n# prompt = \"prompts/climb.txt\"\n# pose = \"../../poses/ranger_climb_magenta_16x9.png\"\n# pose_body_height_px = 443\n",
+  "align": {
+    "canvas": {
+      "w": 632,
+      "h": 699
+    },
+    "pivot_px": {
+      "x": 316,
+      "y": 624
+    },
+    "scale": 0.27321237993596587,
+    "pixel_factor": null,
+    "reference_height_px": 468.5
+  },
+  "variants": {
+    "1x": {
+      "w": 173,
+      "h": 191,
+      "scale": 0.27321237993596587
+    },
+    "0.5x": {
+      "w": 86,
+      "h": 95,
+      "scale": 0.13660618996798293
+    }
+  },
+  "cleanup_frames_overridden": 0,
+  "animations": {
+    "idle": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+      "clip_sha256": "0a53846e0b047ca1f1bf587a2766680a2fd75d6f2a25652e35c3b5a4526d1a0b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
+        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#C42D7D",
+        "muzzle_x": 917,
+        "cut_left_x": null,
+        "removed_px": 436029
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stands in place facing right, feet planted in a firm stance. He raises the blaster with his arm fully extended, perfectly horizontal at shoulder height, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back and jolts his body, then the arm snaps back to horizontal. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 16.03)"
+          },
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.39): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#C42D7D",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 469.3,
+          "char_height_pct": 65.2,
+          "pose_mad_global": 1.7,
+          "pose_mad_region": 16.03,
+          "drift_pct": 1.2,
+          "drift_px_per_s": [
+            1.44,
+            -0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.12,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 0.39,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 0,
+        "length": 4,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          0,
+          2,
+          3
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C42D7D",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose",
+        "body_px": 474.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 471.0,
+        "pose_size": [
+          1010,
+          1557
+        ],
+        "pose_px": 1039.0,
+        "standing_pose_px": 1039.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "run",
+          "shoot_in",
+          "shoot",
+          "shoot_out",
+          "jump",
+          "jump_shoot"
+        ],
+        "measured_body_px": 471.0,
+        "final_body_px": 129.5027
+      }
+    },
+    "run": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r01.mp4",
+      "clip_sha256": "a585ccc0c79c7af112250af69105a8912b611b23891a66b54ab6c07025ecee07",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "run",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/run-02687295.mp4",
+        "key": "02687295c1a20a3c57a73ded33d0177d4cc5806cd77e5dafd769bb375ac0afd0",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r01.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#CC3077",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 8159
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character runs in place like on a treadmill, facing right, no forward travel. Fast, energetic arcade run: big strides, knees lift high, the whole body bounces on every step, the torso leans forward, the free arm pumps, the blaster stays in his hand pointing forward. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 17.96)"
+          },
+          {
+            "level": "warn",
+            "msg": "fondo poco plano (desvío 8.43): el key va a necesitar más tolerancia"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#CC3076",
+          "key_strength": 0.337,
+          "key_method": "chroma",
+          "char_height_px": 405.3,
+          "char_height_pct": 56.3,
+          "pose_mad_global": 1.75,
+          "pose_mad_region": 17.96,
+          "drift_pct": 0.5,
+          "drift_px_per_s": [
+            -0.52,
+            0.04
+          ],
+          "zoom_pct": 0.9,
+          "frames_touching_edge": 0,
+          "bg_std": 8.43,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 5.7,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 54,
+        "length": 12,
+        "score": 0.185,
+        "seam": 1.2,
+        "motion": 6.47,
+        "seconds": 0.5,
+        "candidates": [
+          {
+            "start": 54,
+            "length": 12,
+            "score": 0.185
+          },
+          {
+            "start": 31,
+            "length": 14,
+            "score": 0.243
+          },
+          {
+            "start": 24,
+            "length": 14,
+            "score": 0.244
+          },
+          {
+            "start": 79,
+            "length": 12,
+            "score": 0.252
+          },
+          {
+            "start": 23,
+            "length": 16,
+            "score": 0.255
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          -0.0054,
+          0.0313
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          54,
+          56,
+          58,
+          60,
+          62,
+          64
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#CC3076",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose",
+        "body_px": 474.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 474.0,
+        "pose_size": [
+          1010,
+          1557
+        ],
+        "pose_px": 1039.0,
+        "standing_pose_px": 1039.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot_out",
+          "jump",
+          "jump_shoot"
+        ],
+        "reference_body_px": 474.0,
+        "final_body_px": 129.5027
+      }
+    },
+    "shoot_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+      "clip_sha256": "0a53846e0b047ca1f1bf587a2766680a2fd75d6f2a25652e35c3b5a4526d1a0b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
+        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#C42D7D",
+        "muzzle_x": 917,
+        "cut_left_x": null,
+        "removed_px": 436029
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stands in place facing right, feet planted in a firm stance. He raises the blaster with his arm fully extended, perfectly horizontal at shoulder height, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back and jolts his body, then the arm snaps back to horizontal. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 16.03)"
+          },
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.39): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#C42D7D",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 469.3,
+          "char_height_pct": 65.2,
+          "pose_mad_global": 1.7,
+          "pose_mad_region": 16.03,
+          "drift_pct": 1.2,
+          "drift_px_per_s": [
+            1.44,
+            -0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.12,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 0.39,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 14,
+        "length": 6,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          14,
+          16,
+          18,
+          19
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C42D7D",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 474.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 471.0,
+        "pose_size": [
+          1010,
+          1557
+        ],
+        "pose_px": 1039.0,
+        "standing_pose_px": 1039.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "run",
+          "shoot",
+          "shoot_out",
+          "jump",
+          "jump_shoot"
+        ],
+        "measured_body_px": 471.0,
+        "final_body_px": 129.5027
+      }
+    },
+    "shoot": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+      "clip_sha256": "0a53846e0b047ca1f1bf587a2766680a2fd75d6f2a25652e35c3b5a4526d1a0b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
+        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#C42D7D",
+        "muzzle_x": 917,
+        "cut_left_x": null,
+        "removed_px": 436029
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stands in place facing right, feet planted in a firm stance. He raises the blaster with his arm fully extended, perfectly horizontal at shoulder height, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back and jolts his body, then the arm snaps back to horizontal. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 16.03)"
+          },
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.39): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#C42D7D",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 469.3,
+          "char_height_pct": 65.2,
+          "pose_mad_global": 1.7,
+          "pose_mad_region": 16.03,
+          "drift_pct": 1.2,
+          "drift_px_per_s": [
+            1.44,
+            -0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.12,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 0.39,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 38,
+        "length": 8,
+        "manual": true,
+        "camera_drift_px_per_native_frame": [
+          -0.0005,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          38,
+          40,
+          42,
+          44
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C42D7D",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose",
+        "body_px": 474.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 471.0,
+        "pose_size": [
+          1010,
+          1557
+        ],
+        "pose_px": 1039.0,
+        "standing_pose_px": 1039.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "run",
+          "shoot_in",
+          "shoot_out",
+          "jump",
+          "jump_shoot"
+        ],
+        "measured_body_px": 471.0,
+        "final_body_px": 129.5027
+      }
+    },
+    "shoot_out": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+      "clip_sha256": "0a53846e0b047ca1f1bf587a2766680a2fd75d6f2a25652e35c3b5a4526d1a0b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
+        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#C42D7D",
+        "muzzle_x": 917,
+        "cut_left_x": null,
+        "removed_px": 436029
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stands in place facing right, feet planted in a firm stance. He raises the blaster with his arm fully extended, perfectly horizontal at shoulder height, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back and jolts his body, then the arm snaps back to horizontal. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 16.03)"
+          },
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.39): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#C42D7D",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 469.3,
+          "char_height_pct": 65.2,
+          "pose_mad_global": 1.7,
+          "pose_mad_region": 16.03,
+          "drift_pct": 1.2,
+          "drift_px_per_s": [
+            1.44,
+            -0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.12,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 0.39,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 84,
+        "length": 8,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          84,
+          86,
+          89,
+          90,
+          91
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C42D7D",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 474.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 471.0,
+        "pose_size": [
+          1010,
+          1557
+        ],
+        "pose_px": 1039.0,
+        "standing_pose_px": 1039.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "run",
+          "shoot_in",
+          "shoot",
+          "jump",
+          "jump_shoot"
+        ],
+        "measured_body_px": 471.0,
+        "final_body_px": 129.5027
+      }
+    },
+    "shoot2h_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
+      "clip_sha256": "96005fb3003a647b465742a7e153ea111dc8c751e798a121321fa65121bdcd19",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "shoot2h",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-7744c663.mp4",
+        "key": "7744c663811ac14d5fbf95203ae77bf6c30575656b139e1bfbfb3112f825ba0b",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#AA3073",
+        "muzzle_x": 785,
+        "cut_left_x": null,
+        "removed_px": 860248
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stands in place facing right, feet planted in a firm stance. He brings his free hand to the blaster and holds it with both hands, the support hand cupped under the gun hand, both arms fully extended forward, the blaster perfectly horizontal at shoulder height, pointing straight right. He fires in a fast steady rhythm: each shot kicks both arms back and slightly up together, the shoulders absorb it, then the arms snap back to horizontal. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#AB3073",
+          "key_strength": 0.263,
+          "key_method": "chroma",
+          "char_height_px": 592.0,
+          "char_height_pct": 82.2,
+          "drift_pct": 1.6,
+          "drift_px_per_s": [
+            2.35,
+            -0.0
+          ],
+          "zoom_pct": 1.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.21,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 1.12,
+          "static_tail_frames": 2
+        }
+      },
+      "selection": {
+        "start": 6,
+        "length": 7,
+        "static_tail_trimmed": 1
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          6,
+          8,
+          10,
+          12
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#AB3073",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 604.6,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 604.0,
+        "scale": 0.784,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.78438,
+          0.78333
+        ]
+      }
+    },
+    "shoot2h": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
+      "clip_sha256": "96005fb3003a647b465742a7e153ea111dc8c751e798a121321fa65121bdcd19",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "shoot2h",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-7744c663.mp4",
+        "key": "7744c663811ac14d5fbf95203ae77bf6c30575656b139e1bfbfb3112f825ba0b",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#AA3073",
+        "muzzle_x": 785,
+        "cut_left_x": null,
+        "removed_px": 860248
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stands in place facing right, feet planted in a firm stance. He brings his free hand to the blaster and holds it with both hands, the support hand cupped under the gun hand, both arms fully extended forward, the blaster perfectly horizontal at shoulder height, pointing straight right. He fires in a fast steady rhythm: each shot kicks both arms back and slightly up together, the shoulders absorb it, then the arms snap back to horizontal. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#AB3073",
+          "key_strength": 0.263,
+          "key_method": "chroma",
+          "char_height_px": 592.0,
+          "char_height_pct": 82.2,
+          "drift_pct": 1.6,
+          "drift_px_per_s": [
+            2.35,
+            -0.0
+          ],
+          "zoom_pct": 1.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.21,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 1.12,
+          "static_tail_frames": 2
+        }
+      },
+      "selection": {
+        "start": 36,
+        "length": 10,
+        "manual": true,
+        "camera_drift_px_per_native_frame": [
+          0.0975,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          36,
+          38,
+          40,
+          42,
+          44
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#AB3073",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 604.6,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 604.0,
+        "scale": 0.784,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.78438,
+          0.78333
+        ]
+      }
+    },
+    "shoot2h_out": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
+      "clip_sha256": "96005fb3003a647b465742a7e153ea111dc8c751e798a121321fa65121bdcd19",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "shoot2h",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-7744c663.mp4",
+        "key": "7744c663811ac14d5fbf95203ae77bf6c30575656b139e1bfbfb3112f825ba0b",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#AA3073",
+        "muzzle_x": 785,
+        "cut_left_x": null,
+        "removed_px": 860248
+      },
+      "reverse": true,
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stands in place facing right, feet planted in a firm stance. He brings his free hand to the blaster and holds it with both hands, the support hand cupped under the gun hand, both arms fully extended forward, the blaster perfectly horizontal at shoulder height, pointing straight right. He fires in a fast steady rhythm: each shot kicks both arms back and slightly up together, the shoulders absorb it, then the arms snap back to horizontal. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#AB3073",
+          "key_strength": 0.263,
+          "key_method": "chroma",
+          "char_height_px": 592.0,
+          "char_height_pct": 82.2,
+          "drift_pct": 1.6,
+          "drift_px_per_s": [
+            2.35,
+            -0.0
+          ],
+          "zoom_pct": 1.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.21,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 1.12,
+          "static_tail_frames": 2
+        }
+      },
+      "selection": {
+        "start": 6,
+        "length": 8,
+        "static_tail_trimmed": 0,
+        "reverse": true
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          12,
+          10,
+          8,
+          6
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#AB3073",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 604.6,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 604.0,
+        "scale": 0.784,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.78438,
+          0.78333
+        ]
+      }
+    },
+    "crouch_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
+      "clip_sha256": "b6614622bac511d1e7779585b9f2b1a0f2a1783cb4188c1a40b47f3360209758",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "crouch_shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-8251a508.mp4",
+        "key": "8251a50872dcc111014194715aa2862421b96d0bb2196ffb63827b2e533bb610",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#CD4387",
+        "muzzle_x": 911,
+        "cut_left_x": null,
+        "removed_px": 991331
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stays in place facing right. He drops instantly into a low crouch: knees deeply bent, feet planted, body compact, about two thirds of his standing height. Staying crouched, he holds the blaster with his arm fully extended, perfectly horizontal, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back, then the arm snaps back to horizontal. He stays low the whole time. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "fail",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "fondo poco plano (desvío 14.55): el key va a necesitar más tolerancia"
+          },
+          {
+            "level": "fail",
+            "msg": "posible corte de escena en los frames [12, 87]"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#CD4387",
+          "key_strength": 0.275,
+          "key_method": "chroma",
+          "char_height_px": 453.3,
+          "char_height_pct": 63.0,
+          "drift_pct": 2.5,
+          "drift_px_per_s": [
+            -1.59,
+            -2.41
+          ],
+          "zoom_pct": 4.5,
+          "frames_touching_edge": 0,
+          "bg_std": 14.55,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [
+            12,
+            87
+          ],
+          "motion": 2.23,
+          "static_tail_frames": 3
+        }
+      },
+      "selection": {
+        "start": 10,
+        "length": 6,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          10,
+          12,
+          14,
+          15
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#CD4387",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 600.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 594.0,
+        "scale": 0.79,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.78984,
+          0.79028
+        ]
+      }
+    },
+    "crouch_shoot": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
+      "clip_sha256": "b6614622bac511d1e7779585b9f2b1a0f2a1783cb4188c1a40b47f3360209758",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "crouch_shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-8251a508.mp4",
+        "key": "8251a50872dcc111014194715aa2862421b96d0bb2196ffb63827b2e533bb610",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#CD4387",
+        "muzzle_x": 911,
+        "cut_left_x": null,
+        "removed_px": 991331
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stays in place facing right. He drops instantly into a low crouch: knees deeply bent, feet planted, body compact, about two thirds of his standing height. Staying crouched, he holds the blaster with his arm fully extended, perfectly horizontal, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back, then the arm snaps back to horizontal. He stays low the whole time. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "fail",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "fondo poco plano (desvío 14.55): el key va a necesitar más tolerancia"
+          },
+          {
+            "level": "fail",
+            "msg": "posible corte de escena en los frames [12, 87]"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#CD4387",
+          "key_strength": 0.275,
+          "key_method": "chroma",
+          "char_height_px": 453.3,
+          "char_height_pct": 63.0,
+          "drift_pct": 2.5,
+          "drift_px_per_s": [
+            -1.59,
+            -2.41
+          ],
+          "zoom_pct": 4.5,
+          "frames_touching_edge": 0,
+          "bg_std": 14.55,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [
+            12,
+            87
+          ],
+          "motion": 2.23,
+          "static_tail_frames": 3
+        }
+      },
+      "selection": {
+        "start": 58,
+        "length": 10,
+        "manual": true,
+        "camera_drift_px_per_native_frame": [
+          0.1493,
+          0.1909
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          58,
+          60,
+          62,
+          64,
+          66
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#CD4387",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 600.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 594.0,
+        "scale": 0.79,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.78984,
+          0.79028
+        ]
+      }
+    },
+    "crouch_out": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
+      "clip_sha256": "b6614622bac511d1e7779585b9f2b1a0f2a1783cb4188c1a40b47f3360209758",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "crouch_shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-8251a508.mp4",
+        "key": "8251a50872dcc111014194715aa2862421b96d0bb2196ffb63827b2e533bb610",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#CD4387",
+        "muzzle_x": 911,
+        "cut_left_x": null,
+        "removed_px": 991331
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character stays in place facing right. He drops instantly into a low crouch: knees deeply bent, feet planted, body compact, about two thirds of his standing height. Staying crouched, he holds the blaster with his arm fully extended, perfectly horizontal, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back, then the arm snaps back to horizontal. He stays low the whole time. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "fail",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "fondo poco plano (desvío 14.55): el key va a necesitar más tolerancia"
+          },
+          {
+            "level": "fail",
+            "msg": "posible corte de escena en los frames [12, 87]"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#CD4387",
+          "key_strength": 0.275,
+          "key_method": "chroma",
+          "char_height_px": 453.3,
+          "char_height_pct": 63.0,
+          "drift_pct": 2.5,
+          "drift_px_per_s": [
+            -1.59,
+            -2.41
+          ],
+          "zoom_pct": 4.5,
+          "frames_touching_edge": 0,
+          "bg_std": 14.55,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [
+            12,
+            87
+          ],
+          "motion": 2.23,
+          "static_tail_frames": 3
+        }
+      },
+      "selection": {
+        "start": 85,
+        "length": 6,
+        "static_tail_trimmed": 1
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          85,
+          87,
+          89,
+          90
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#CD4387",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 600.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 594.0,
+        "scale": 0.79,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.78984,
+          0.79028
+        ]
+      }
+    },
+    "jump": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r08.mp4",
+      "clip_sha256": "950a182b235d4e697cdea004a9b38e9d07f633a56adcdb4e2f395a63566f7da5",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "jump",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/jump-e0b77eb8.mp4",
+        "key": "e0b77eb8f12d035bc3935a61956d2a9b11876c17fc0c4e1b3d33f063e5b46172",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r08.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#E853AC",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 4934
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character does three fast jumps in a row, straight up in place, facing right, no forward travel. Arcade timing, very snappy: he leaves the ground instantly with an explosive push off, the body stretches on the way up, knees tuck at the top for a split second, he drops fast and lands with a strong squash, knees bent and body compressed, springs back to standing and immediately jumps again. The blaster stays in his hand pointing right. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "fail",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 16.45)"
+          },
+          {
+            "level": "fail",
+            "msg": "posible corte de escena en los frames [14, 24, 29, 45, 55, 59, 67, 71, 81]"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#E853AC",
+          "key_strength": 0.349,
+          "key_method": "chroma",
+          "char_height_px": 469.3,
+          "char_height_pct": 65.2,
+          "pose_mad_global": 1.76,
+          "pose_mad_region": 16.45,
+          "drift_pct": 1.2,
+          "drift_px_per_s": [
+            -0.21,
+            1.38
+          ],
+          "zoom_pct": 0.3,
+          "frames_touching_edge": 0,
+          "bg_std": 0.21,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [
+            14,
+            24,
+            29,
+            45,
+            55,
+            59,
+            67,
+            71,
+            81
+          ],
+          "motion": 6.5,
+          "static_tail_frames": 10
+        }
+      },
+      "selection": {
+        "start": 10,
+        "length": 19,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          10,
+          12,
+          14,
+          17,
+          19,
+          21,
+          22,
+          24,
+          27,
+          28
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#E853AC",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 474.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 472.0,
+        "pose_size": [
+          1010,
+          1557
+        ],
+        "pose_px": 1039.0,
+        "standing_pose_px": 1039.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "run",
+          "shoot_in",
+          "shoot",
+          "shoot_out",
+          "jump_shoot"
+        ],
+        "measured_body_px": 472.0,
+        "final_body_px": 129.5027
+      }
+    },
+    "jump_shoot": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r05.mp4",
+      "clip_sha256": "d510a2ecb7c5c89bf730d5de3cb21c9d8ac49380d4c64f4694568f3e16f1d8a1",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "jump_shoot",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/jump_shoot-b75f193f.mp4",
+        "key": "b75f193feb3ee01f5733ca67ec540f4f407a7e14bd7ec995418c4bb29105262d",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r05.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": true,
+          "prop_rows": false
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#EE649E",
+        "muzzle_x": 853,
+        "cut_left_x": 481,
+        "removed_px": 462240
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character jumps straight up in place, facing right, no forward travel. At the top of the jump he snaps the blaster arm out, perfectly horizontal, pointing straight right, fires two quick shots with a small recoil, then drops fast and lands with a squash. Do it three times in a row. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 21.53)"
+          },
+          {
+            "level": "warn",
+            "msg": "fondo poco plano (desvío 14.51): el key va a necesitar más tolerancia"
+          },
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.69): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#EE649F",
+          "key_strength": 0.31,
+          "key_method": "chroma",
+          "char_height_px": 410.7,
+          "char_height_pct": 57.0,
+          "pose_mad_global": 1.97,
+          "pose_mad_region": 21.53,
+          "drift_pct": 3.2,
+          "drift_px_per_s": [
+            -0.21,
+            3.31
+          ],
+          "zoom_pct": 0.6,
+          "frames_touching_edge": 0,
+          "bg_std": 14.51,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 0.69,
+          "static_tail_frames": 2
+        }
+      },
+      "selection": {
+        "start": 10,
+        "length": 25,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          10,
+          13,
+          15,
+          17,
+          19,
+          20,
+          23,
+          24,
+          26,
+          28,
+          30,
+          33,
+          34
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#EE649F",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 474.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 472.0,
+        "pose_size": [
+          1010,
+          1557
+        ],
+        "pose_px": 1039.0,
+        "standing_pose_px": 1039.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "run",
+          "shoot_in",
+          "shoot",
+          "shoot_out",
+          "jump"
+        ],
+        "measured_body_px": 472.0,
+        "final_body_px": 129.5027
+      }
+    },
+    "hang_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r07.mp4",
+      "clip_sha256": "8e13e8aff66111bd8b28dc3a2335933d8e4c27e3457a2402e01d247ce3121537",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "hang",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/hang-d6716486.mp4",
+        "key": "d6716486dc1c22b04e5abd6589bcb68f0e5095b7a5c795f300285decb4b9251c",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r07.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": true
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#B52D7B",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 2140188
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character jumps straight up in place, facing right, and grabs the edge of an invisible ledge above his head with his free hand, then hangs from that one arm: legs dangle, the body swings slightly back and forth and settles, the blaster in his other hand pointing down. Nothing is drawn where he grabs: no ledge, no platform, no object. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "fail",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el personaje toca el borde del cuadro en 2 frames (arma o capa cortada)"
+          },
+          {
+            "level": "fail",
+            "msg": "posible corte de escena en los frames [24]"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#B52C7C",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 565.3,
+          "char_height_pct": 78.5,
+          "pose_mad_global": 1.35,
+          "pose_mad_region": 11.85,
+          "drift_pct": 7.0,
+          "drift_px_per_s": [
+            -6.82,
+            7.09
+          ],
+          "zoom_pct": 18.4,
+          "frames_touching_edge": 2,
+          "bg_std": 0.12,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [
+            24
+          ],
+          "motion": 1.67,
+          "static_tail_frames": 3
+        }
+      },
+      "selection": {
+        "start": 12,
+        "length": 20,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          12,
+          14,
+          16,
+          19,
+          20,
+          23,
+          25,
+          27,
+          29,
+          31
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#B52C7C",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 486.2,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 486.0,
+        "scale": 0.9749,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.975,
+          0.975
+        ]
+      }
+    },
+    "hang": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r07.mp4",
+      "clip_sha256": "8e13e8aff66111bd8b28dc3a2335933d8e4c27e3457a2402e01d247ce3121537",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "hang",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/hang-d6716486.mp4",
+        "key": "d6716486dc1c22b04e5abd6589bcb68f0e5095b7a5c795f300285decb4b9251c",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r07.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": true
+        },
+        "color_matrix": "bt601",
+        "frames": 97,
+        "bg": "#B52D7B",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 2140188
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character jumps straight up in place, facing right, and grabs the edge of an invisible ledge above his head with his free hand, then hangs from that one arm: legs dangle, the body swings slightly back and forth and settles, the blaster in his other hand pointing down. Nothing is drawn where he grabs: no ledge, no platform, no object. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/ranger_concept.png",
+      "pose_sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75",
+      "qa": {
+        "verdict": "fail",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "deriva/paneo o el personaje se traslada: 7.0% del alto (la alineación saca la deriva lineal)"
+          },
+          {
+            "level": "fail",
+            "msg": "zoom o cambio de escala: 18.4% del alto"
+          },
+          {
+            "level": "warn",
+            "msg": "el personaje toca el borde del cuadro en 2 frames (arma o capa cortada)"
+          },
+          {
+            "level": "fail",
+            "msg": "posible corte de escena en los frames [24]"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#B52C7C",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 565.3,
+          "char_height_pct": 78.5,
+          "pose_mad_global": 1.35,
+          "pose_mad_region": 11.85,
+          "drift_pct": 7.0,
+          "drift_px_per_s": [
+            -6.82,
+            7.09
+          ],
+          "zoom_pct": 18.4,
+          "frames_touching_edge": 2,
+          "bg_std": 0.12,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [
+            24
+          ],
+          "motion": 1.67,
+          "static_tail_frames": 3
+        }
+      },
+      "selection": {
+        "start": 38,
+        "length": 18,
+        "score": 1.082,
+        "seam": 3.52,
+        "motion": 3.25,
+        "seconds": 0.75,
+        "candidates": [
+          {
+            "start": 38,
+            "length": 18,
+            "score": 1.082
+          },
+          {
+            "start": 36,
+            "length": 18,
+            "score": 1.28
+          },
+          {
+            "start": 37,
+            "length": 18,
+            "score": 1.324
+          },
+          {
+            "start": 37,
+            "length": 34,
+            "score": 1.357
+          },
+          {
+            "start": 39,
+            "length": 18,
+            "score": 1.383
+          }
+        ],
+        "quality": "costura visible",
+        "camera_drift_px_per_native_frame": [
+          -0.3255,
+          -0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#B52C7C",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 486.2,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 486.0,
+        "scale": 0.9749,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          0.975,
+          0.975
+        ]
+      }
+    }
+  },
+  "human_cleanup": "registrar en pilot/cleanup_log.csv quién limpió qué y cuánto tardó"
+}

@@ -1,0 +1,174 @@
+{
+  "note": "Boca del cañón por frame de shoot, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+  "animation": "shoot",
+  "variants": {
+    "1x": {
+      "cell": {
+        "w": 175,
+        "h": 194
+      },
+      "pivot_px": {
+        "x": 87.5,
+        "y": 188.02
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "shoot/0000",
+          "native_frame": 54,
+          "x": 164.95,
+          "y": 133.41,
+          "dx": 77.45,
+          "dy": -54.61
+        },
+        {
+          "frame": 1,
+          "name": "shoot/0001",
+          "native_frame": 56,
+          "x": 165.49,
+          "y": 133.41,
+          "dx": 77.99,
+          "dy": -54.61
+        },
+        {
+          "frame": 2,
+          "name": "shoot/0002",
+          "native_frame": 58,
+          "x": 164.4,
+          "y": 133.41,
+          "dx": 76.9,
+          "dy": -54.61
+        },
+        {
+          "frame": 3,
+          "name": "shoot/0003",
+          "native_frame": 60,
+          "x": 163.86,
+          "y": 133.41,
+          "dx": 76.36,
+          "dy": -54.61
+        },
+        {
+          "frame": 4,
+          "name": "shoot/0004",
+          "native_frame": 62,
+          "x": 164.95,
+          "y": 133.41,
+          "dx": 77.45,
+          "dy": -54.61
+        },
+        {
+          "frame": 5,
+          "name": "shoot/0005",
+          "native_frame": 64,
+          "x": 165.49,
+          "y": 133.41,
+          "dx": 77.99,
+          "dy": -54.61
+        },
+        {
+          "frame": 6,
+          "name": "shoot/0006",
+          "native_frame": 66,
+          "x": 164.4,
+          "y": 133.41,
+          "dx": 76.9,
+          "dy": -54.61
+        },
+        {
+          "frame": 7,
+          "name": "shoot/0007",
+          "native_frame": 68,
+          "x": 163.86,
+          "y": 133.41,
+          "dx": 76.36,
+          "dy": -54.61
+        }
+      ]
+    },
+    "0.5x": {
+      "cell": {
+        "w": 88,
+        "h": 97
+      },
+      "pivot_px": {
+        "x": 44.0,
+        "y": 94.01
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "shoot/0000",
+          "native_frame": 54,
+          "x": 82.94,
+          "y": 66.7,
+          "dx": 38.94,
+          "dy": -27.31
+        },
+        {
+          "frame": 1,
+          "name": "shoot/0001",
+          "native_frame": 56,
+          "x": 83.22,
+          "y": 66.7,
+          "dx": 39.22,
+          "dy": -27.31
+        },
+        {
+          "frame": 2,
+          "name": "shoot/0002",
+          "native_frame": 58,
+          "x": 82.67,
+          "y": 66.7,
+          "dx": 38.67,
+          "dy": -27.31
+        },
+        {
+          "frame": 3,
+          "name": "shoot/0003",
+          "native_frame": 60,
+          "x": 82.4,
+          "y": 66.7,
+          "dx": 38.4,
+          "dy": -27.31
+        },
+        {
+          "frame": 4,
+          "name": "shoot/0004",
+          "native_frame": 62,
+          "x": 82.94,
+          "y": 66.7,
+          "dx": 38.94,
+          "dy": -27.31
+        },
+        {
+          "frame": 5,
+          "name": "shoot/0005",
+          "native_frame": 64,
+          "x": 83.22,
+          "y": 66.7,
+          "dx": 39.22,
+          "dy": -27.31
+        },
+        {
+          "frame": 6,
+          "name": "shoot/0006",
+          "native_frame": 66,
+          "x": 82.67,
+          "y": 66.7,
+          "dx": 38.67,
+          "dy": -27.31
+        },
+        {
+          "frame": 7,
+          "name": "shoot/0007",
+          "native_frame": 68,
+          "x": 82.4,
+          "y": 66.7,
+          "dx": 38.4,
+          "dy": -27.31
+        }
+      ]
+    }
+  }
+}

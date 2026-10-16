@@ -1,0 +1,77 @@
+# Comando: primer personaje real del piloto. Los comandos van desde la raíz del repo.
+# 1. Concept en ChatGPT, con transparencia: poses/comando_concept.webp.
+# 2. Pose para el modelo, 16:9 sobre magenta y sin sombra de piso:
+#      uv run --project pipeline spritepipe pad-pose poses/comando_concept.webp poses/comando_master_magenta_16x9.png
+#    Con --feet 0.92 sale poses/comando_jump_magenta_16x9.png, con aire arriba para saltos; jump_v2
+#    igual arrancó desde el master (el QA da MAD 21 contra el master y 106 contra esa pose).
+# 3. Seedance 2.0 (Veo bloqueaba el arma), image-to-video desde la pose con prompts/<anim>.txt.
+#    Los prompts que se habían preparado para Veo quedaron en prompts/veo/.
+# 4. Clips en clips/: idle.mp4, shoot.mp4 (trae fogonazo), run_v2.mp4 y jump_v2.mp4.
+#    run.mp4 y jump.mp4 son las primeras tomas, descartadas. shoot_noflash.mp4 es el derivado que
+#    se armó a mano antes de remove_flash: el pipeline ya no lo usa.
+# 5. uv run --project pipeline spritepipe run characters/comando/character.toml
+
+[character]
+name = "comando"
+style = "hd"
+game_fps = 12
+target_height = 128
+scale_reference = "idle"
+
+[key]
+color = "auto"            # se mide por frame: los clips magenta traen ~#F828F4, el run vino blanco
+hole_max_frac = 0.0005    # sólo pesa en el run (fondo blanco, modo connected): con 0.01 queda blanco
+                          # atrapado entre las colas de la bandana; con esto se van y los ojos quedan
+
+[output]
+extra_scales = [0.5]
+
+[[animation]]
+name = "idle"
+clip = "clips/idle.mp4"
+kind = "cycle"
+loop_seconds = [1.0, 4.0]
+skip_seconds = 0.25
+model = "seedance-2.0"
+prompt = "prompts/idle.txt"
+pose = "../../poses/comando_master_magenta_16x9.png"
+
+[[animation]]
+name = "shoot"
+clip = "clips/shoot.mp4"  # con fogonazo: remove_flash lo borra antes del key
+kind = "cycle"            # la ráfaga en loop
+loop_seconds = [0.5, 1.5]
+skip_seconds = 0.25
+loop_start = 54           # el loop que se revisó. El retroceso es parejo y los mejores candidatos
+loop_length = 16          # empatan (0,55-0,57): un nivel de color de diferencia ya los reordena
+model = "seedance-2.0"
+prompt = "prompts/shoot.txt"
+pose = "../../poses/comando_master_magenta_16x9.png"
+
+# Geometría del arma medida a ojo sobre el clip de 864×496. Con `remove_flash = true` en lugar de
+# la tabla se mide sola en el frame 0: las franjas cambian 1-5 px y la boca sale igual en los 97 frames.
+[animation.remove_flash]
+band_y = [235, 275]
+search_x = [500, 620]
+flash_y = [195, 320]
+halo_x0 = 538
+
+[[animation]]
+name = "run"
+clip = "clips/run_v2.mp4" # desde una pose con la zancada hecha en ChatGPT, que no está en el repo;
+kind = "cycle"            # vino con fondo blanco #FAFAFA porque esa imagen tenía transparencia
+loop_seconds = [1.0, 1.5]
+skip_seconds = 0.5
+model = "seedance-2.0"
+prompt = "prompts/run.txt"
+
+[[animation]]
+name = "jump"
+clip = "clips/jump_v2.mp4" # tres saltos seguidos; se usa el tercero, el más nítido
+kind = "oneshot"
+loop = false
+pick = "sharpest"
+trim = [58, 84]           # la subida queda dentro del sprite (~60 px): no sumarle otra en la física
+model = "seedance-2.0"
+prompt = "prompts/jump.txt"
+pose = "../../poses/comando_master_magenta_16x9.png"

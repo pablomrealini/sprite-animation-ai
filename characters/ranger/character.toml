@@ -1,0 +1,226 @@
+# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).
+# Los comandos van desde la raíz del repo.
+#
+# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).
+#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,
+#    poses/ranger_jump_magenta_16x9.png.
+# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)
+#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno
+#    se retocó en Davinci, reemplazarlo.
+#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)
+#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos
+# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver "Limpieza previa" en
+#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,
+#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en
+#    work/00_clean/ y se reusan mientras no cambie nada.
+#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).
+# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml
+#
+# Los clips vienen "on twos" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.
+# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin
+# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = "bt601".
+# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios
+# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.
+
+[character]
+name = "ranger"
+style = "hd"
+game_fps = 12
+target_height = 128
+scale_reference = "run"
+
+[key]
+color = "auto"
+method = "distance"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo
+hole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo
+
+[output]
+extra_scales = [0.5]
+
+# --- clips de Davinci ----------------------------------------------------------------------------
+# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.
+
+[[clip]]
+name = "run"              # r01
+file = "clips/raw/r01.mp4"
+color_matrix = "bt601"
+clean = true
+model = "seedance-2.0"
+prompt = "prompts/run2.txt"
+pose = "../../poses/ranger_concept.png"
+
+[[clip]]
+name = "shoot"            # r04: disparo con una mano
+file = "clips/raw/r04.mp4"
+color_matrix = "bt601"
+clean = { cut_muzzle = true }
+model = "seedance-2.0"
+prompt = "prompts/shoot.txt"
+pose = "../../poses/ranger_concept.png"
+
+[[clip]]
+name = "shoot2h"          # r02: disparo a dos manos
+file = "clips/raw/r02.mp4"
+color_matrix = "bt601"
+clean = { cut_muzzle = true }
+body_height_px = 604.6    # el personaje viene ~27% más grande: 474 / 0,784 (la escala con que se validó; medido, ~606)
+model = "seedance-2.0"
+prompt = "prompts/shoot2h.txt"
+
+[[clip]]
+name = "crouch_shoot"     # r06: agachado disparando
+file = "clips/raw/r06.mp4"
+color_matrix = "bt601"
+clean = { cut_muzzle = true }
+body_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)
+model = "seedance-2.0"
+prompt = "prompts/crouch_shoot.txt"
+
+[[clip]]
+name = "jump"             # r08: saltos
+file = "clips/raw/r08.mp4"
+color_matrix = "bt601"
+clean = true
+model = "seedance-2.0"
+prompt = "prompts/jump.txt"
+pose = "../../poses/ranger_concept.png"
+
+[[clip]]
+name = "jump_shoot"       # r05: salto disparando, con fondo en degradé
+file = "clips/raw/r05.mp4"
+color_matrix = "bt601"
+clean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás
+model = "seedance-2.0"
+prompt = "prompts/jump_shoot.txt"
+pose = "../../poses/ranger_concept.png"
+
+[[clip]]
+name = "hang"             # r07: salta, agarra la barra y cuelga
+file = "clips/raw/r07.mp4"
+color_matrix = "bt601"
+clean = { prop_rows = true }   # la barra de la que se cuelga
+body_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande
+model = "seedance-2.0"
+prompt = "prompts/hang.txt"
+pose = "../../poses/ranger_concept.png"
+
+# --- quieto y correr ---------------------------------------------------------------------------
+[[animation]]
+name = "idle"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad
+clip = "shoot"
+kind = "oneshot"
+loop = true
+trim = [0, 4]
+trim_static_tail = false
+pick = "first"            # los frames 2 y 3 son iguales: con "sharpest" se queda con uno solo
+
+[[animation]]
+name = "run"
+clip = "run"
+kind = "cycle"
+skip_seconds = 0.6        # los primeros 12 frames está parado
+loop_seconds = [0.4, 1.1]
+
+# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------
+[[animation]]
+name = "shoot_in"
+clip = "shoot"
+kind = "oneshot"
+trim = [14, 20]
+
+[[animation]]
+name = "shoot"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga
+clip = "shoot"
+kind = "cycle"
+loop_start = 38
+loop_length = 8
+
+[[animation]]
+name = "shoot_out"
+clip = "shoot"
+kind = "oneshot"
+trim = [84, 92]
+
+# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------
+[[animation]]
+name = "shoot2h_in"
+clip = "shoot2h"
+kind = "oneshot"
+trim = [6, 14]
+
+[[animation]]
+name = "shoot2h"
+clip = "shoot2h"
+kind = "cycle"
+loop_start = 36
+loop_length = 10
+
+[[animation]]
+name = "shoot2h_out"
+clip = "shoot2h"
+kind = "oneshot"
+trim = [6, 14]            # el mismo tramo que shoot2h_in, al revés
+reverse = true
+
+# --- agachado: baja, dispara en loop, se para ---------------------------------------------------
+[[animation]]
+name = "crouch_in"
+clip = "crouch_shoot"
+kind = "oneshot"
+trim = [10, 16]
+
+[[animation]]
+name = "crouch_shoot"
+clip = "crouch_shoot"
+kind = "cycle"
+loop_start = 58
+loop_length = 10
+
+[[animation]]
+name = "crouch_out"
+clip = "crouch_shoot"
+kind = "oneshot"
+trim = [85, 92]
+pick = "first"            # con "sharpest" el 90 le gana al 89 por poco y la salida pierde un frame
+
+# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------
+[[animation]]
+name = "jump"
+clip = "jump"
+kind = "oneshot"
+trim = [10, 29]
+
+[[animation]]
+name = "jump_shoot"
+clip = "jump_shoot"
+kind = "oneshot"
+trim = [10, 35]
+
+# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------
+[[animation]]
+name = "hang_in"
+clip = "hang"
+kind = "oneshot"
+trim = [12, 32]
+
+[[animation]]
+name = "hang"
+clip = "hang"
+kind = "cycle"
+skip_seconds = 1.4
+loop_seconds = [0.5, 2.0]
+
+# --- trepar a la cornisa (todavía sin clip) -------------------------------------------------------
+# La pose arranca colgado y con el personaje más chico, así que su alto (521 px) no es el cuerpo parado.
+# poses/ranger_hang_concept.png es el frame 94 del hang limpio de los scripts sueltos (r07 a ×0,975, el
+# tamaño con que sale hang), donde el ranger mide 473 px parado y 556 colgado: parado mediría
+# 521 × 473 / 556 ≈ 443 px de la pose. Con eso el clip sale a la escala del run.
+# [[animation]]
+# name = "climb"
+# clip = "clips/climb.mp4"
+# kind = "oneshot"
+# loop = false
+# model = "seedance-2.0"
+# prompt = "prompts/climb.txt"
+# pose = "../../poses/ranger_climb_magenta_16x9.png"
+# pose_body_height_px = 443

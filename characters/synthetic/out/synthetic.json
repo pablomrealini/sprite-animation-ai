@@ -1,0 +1,727 @@
+{
+  "character": "synthetic",
+  "style": "hd",
+  "fps": 12,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.98599
+  },
+  "variants": {
+    "1x": {
+      "canvas": {
+        "w": 144,
+        "h": 168
+      },
+      "pivot_px": {
+        "x": 72.0,
+        "y": 165.65
+      },
+      "atlas": [
+        {
+          "image": "synthetic_1x-0.png",
+          "data": "synthetic_1x-0.json",
+          "w": 835,
+          "h": 770
+        }
+      ],
+      "animations": {
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0023",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/idle.png"
+        },
+        "walk": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "walk/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0011",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/walk.png"
+        },
+        "attack": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "attack/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0003",
+              "duration": 166.7
+            },
+            {
+              "page": 0,
+              "name": "attack/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0027",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/attack.png"
+        }
+      }
+    },
+    "0.5x": {
+      "canvas": {
+        "w": 72,
+        "h": 84
+      },
+      "pivot_px": {
+        "x": 36.0,
+        "y": 82.82
+      },
+      "atlas": [
+        {
+          "image": "synthetic_0.5x-0.png",
+          "data": "synthetic_0.5x-0.json",
+          "w": 408,
+          "h": 407
+        }
+      ],
+      "animations": {
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0023",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/idle.png"
+        },
+        "walk": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "walk/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0011",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/walk.png"
+        },
+        "attack": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "attack/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0003",
+              "duration": 166.7
+            },
+            {
+              "page": 0,
+              "name": "attack/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "attack/0027",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/attack.png"
+        }
+      }
+    }
+  }
+}

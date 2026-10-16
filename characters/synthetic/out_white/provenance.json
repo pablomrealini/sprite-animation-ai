@@ -1,0 +1,168 @@
+{
+  "character": "synthetic_white",
+  "created": "2026-10-15T20:49:39+00:00",
+  "tool": "spritepipe 0.1",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "config": "# Walk sobre fondo blanco: prueba del key por distancia\n[character]\nname = \"synthetic_white\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\n\n[output]\nwork_dir = \"work_white\"\nout_dir = \"out_white\"\n\n[[animation]]\nname = \"walk\"\nclip = \"clips/walk_white.mp4\"\nkind = \"cycle\"\n",
+  "align": {
+    "canvas": {
+      "w": 290,
+      "h": 561
+    },
+    "pivot_px": {
+      "x": 145,
+      "y": 553
+    },
+    "scale": 0.23902894491129786,
+    "pixel_factor": null,
+    "reference_height_px": 535.5
+  },
+  "variants": {
+    "1x": {
+      "w": 69,
+      "h": 134,
+      "scale": 0.23902894491129786
+    }
+  },
+  "cleanup_frames_overridden": 0,
+  "animations": {
+    "walk": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/synthetic/clips/walk_white.mp4",
+      "clip_sha256": "9972046d32a5c7de95bb3a527cbaccd49cdd3199272740cf19f0bf35ad7758bd",
+      "video": {
+        "width": 720,
+        "height": 1280,
+        "fps": 24.0,
+        "nb_frames": 96,
+        "duration": 4.0,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "model": null,
+      "prompt": null,
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el fondo #F5F3EF no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano"
+          }
+        ],
+        "metrics": {
+          "frames": 96,
+          "fps": 24.0,
+          "seconds": 4.0,
+          "bg_color": "#F5F3EF",
+          "key_strength": 0.016,
+          "key_method": "distance",
+          "char_height_px": 537.0,
+          "char_height_pct": 42.0,
+          "drift_pct": 2.2,
+          "drift_px_per_s": [
+            2.83,
+            1.03
+          ],
+          "zoom_pct": 0.1,
+          "frames_touching_edge": 0,
+          "bg_std": 2.95,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 31.67,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 36,
+        "length": 24,
+        "score": 0.09,
+        "seam": 0.49,
+        "motion": 5.51,
+        "seconds": 1.0,
+        "candidates": [
+          {
+            "start": 36,
+            "length": 24,
+            "score": 0.09
+          },
+          {
+            "start": 37,
+            "length": 24,
+            "score": 0.099
+          },
+          {
+            "start": 38,
+            "length": 24,
+            "score": 0.113
+          },
+          {
+            "start": 48,
+            "length": 24,
+            "score": 0.114
+          },
+          {
+            "start": 49,
+            "length": 24,
+            "score": 0.115
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          0.1202,
+          0.0455
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#F5F3EF",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true
+    }
+  },
+  "human_cleanup": "registrar en pilot/cleanup_log.csv quién limpió qué y cuánto tardó"
+}

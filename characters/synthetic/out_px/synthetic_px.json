@@ -1,0 +1,264 @@
+{
+  "character": "synthetic_px",
+  "style": "pixel",
+  "fps": 8,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.98485
+  },
+  "variants": {
+    "1x": {
+      "canvas": {
+        "w": 58,
+        "h": 66
+      },
+      "pivot_px": {
+        "x": 29.0,
+        "y": 65.0
+      },
+      "atlas": [
+        {
+          "image": "synthetic_px_1x-0.png",
+          "data": "synthetic_px_1x-0.json",
+          "w": 290,
+          "h": 254
+        }
+      ],
+      "animations": {
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0003",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0004",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0005",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0006",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0007",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0008",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0009",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0010",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0011",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0012",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0013",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0014",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "idle/0015",
+              "duration": 125.0
+            }
+          ],
+          "sheet": "sheets/1x/idle.png"
+        },
+        "walk": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "walk/0000",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "walk/0001",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "walk/0002",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "walk/0003",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "walk/0004",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "walk/0005",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "walk/0006",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "walk/0007",
+              "duration": 125.0
+            }
+          ],
+          "sheet": "sheets/1x/walk.png"
+        },
+        "attack": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "attack/0000",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0001",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0002",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0003",
+              "duration": 250.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0004",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0005",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0006",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0007",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0008",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0009",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0010",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0011",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0012",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0013",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0014",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0015",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0016",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0017",
+              "duration": 125.0
+            },
+            {
+              "page": 0,
+              "name": "attack/0018",
+              "duration": 125.0
+            }
+          ],
+          "sheet": "sheets/1x/attack.png"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "cell": {
+    "w": 86,
+    "h": 95
+  },
+  "cols": 4,
+  "rows": 1,
+  "count": 4,
+  "oversize": false,
+  "fps": 12,
+  "loop": false,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.8927
+  },
+  "durations_ms": [
+    83.3,
+    83.3,
+    83.3,
+    83.3
+  ]
+}

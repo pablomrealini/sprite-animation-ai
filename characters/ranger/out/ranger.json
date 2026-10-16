@@ -1,0 +1,1131 @@
+{
+  "character": "ranger",
+  "style": "hd",
+  "fps": 12,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.8927
+  },
+  "variants": {
+    "1x": {
+      "canvas": {
+        "w": 173,
+        "h": 191
+      },
+      "pivot_px": {
+        "x": 86.5,
+        "y": 170.51
+      },
+      "atlas": [
+        {
+          "image": "ranger_1x-0.png",
+          "data": "ranger_1x-0.json",
+          "w": 1216,
+          "h": 1216
+        }
+      ],
+      "animations": {
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/idle.png"
+        },
+        "run": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "run/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0005",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/run.png"
+        },
+        "shoot_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot_in.png"
+        },
+        "shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot.png"
+        },
+        "shoot_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot_out.png"
+        },
+        "shoot2h_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot2h_in.png"
+        },
+        "shoot2h": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot2h.png"
+        },
+        "shoot2h_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_out/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot2h_out.png"
+        },
+        "crouch_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/crouch_in.png"
+        },
+        "crouch_shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/crouch_shoot.png"
+        },
+        "crouch_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/crouch_out.png"
+        },
+        "jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/jump.png"
+        },
+        "jump_shoot": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "jump_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0012",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/jump_shoot.png"
+        },
+        "hang_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/hang_in.png"
+        },
+        "hang": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/hang.png"
+        }
+      }
+    },
+    "0.5x": {
+      "canvas": {
+        "w": 86,
+        "h": 95
+      },
+      "pivot_px": {
+        "x": 43.0,
+        "y": 84.81
+      },
+      "atlas": [
+        {
+          "image": "ranger_0.5x-0.png",
+          "data": "ranger_0.5x-0.json",
+          "w": 632,
+          "h": 636
+        }
+      ],
+      "animations": {
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/idle.png"
+        },
+        "run": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "run/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0005",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/run.png"
+        },
+        "shoot_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot_in.png"
+        },
+        "shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot.png"
+        },
+        "shoot_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_out/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot_out.png"
+        },
+        "shoot2h_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot2h_in.png"
+        },
+        "shoot2h": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot2h.png"
+        },
+        "shoot2h_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_out/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot2h_out.png"
+        },
+        "crouch_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/crouch_in.png"
+        },
+        "crouch_shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/crouch_shoot.png"
+        },
+        "crouch_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/crouch_out.png"
+        },
+        "jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/jump.png"
+        },
+        "jump_shoot": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "jump_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0012",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/jump_shoot.png"
+        },
+        "hang_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/hang_in.png"
+        },
+        "hang": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/hang.png"
+        }
+      }
+    }
+  }
+}

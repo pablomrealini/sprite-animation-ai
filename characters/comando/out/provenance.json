@@ -1,0 +1,636 @@
+{
+  "character": "comando",
+  "created": "2026-10-16T02:37:23+00:00",
+  "tool": "spritepipe 0.1",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "config": "# Comando: primer personaje real del piloto. Los comandos van desde la raíz del repo.\n# 1. Concept en ChatGPT, con transparencia: poses/comando_concept.webp.\n# 2. Pose para el modelo, 16:9 sobre magenta y sin sombra de piso:\n#      uv run --project pipeline spritepipe pad-pose poses/comando_concept.webp poses/comando_master_magenta_16x9.png\n#    Con --feet 0.92 sale poses/comando_jump_magenta_16x9.png, con aire arriba para saltos; jump_v2\n#    igual arrancó desde el master (el QA da MAD 21 contra el master y 106 contra esa pose).\n# 3. Seedance 2.0 (Veo bloqueaba el arma), image-to-video desde la pose con prompts/<anim>.txt.\n#    Los prompts que se habían preparado para Veo quedaron en prompts/veo/.\n# 4. Clips en clips/: idle.mp4, shoot.mp4 (trae fogonazo), run_v2.mp4 y jump_v2.mp4.\n#    run.mp4 y jump.mp4 son las primeras tomas, descartadas. shoot_noflash.mp4 es el derivado que\n#    se armó a mano antes de remove_flash: el pipeline ya no lo usa.\n# 5. uv run --project pipeline spritepipe run characters/comando/character.toml\n\n[character]\nname = \"comando\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"idle\"\n\n[key]\ncolor = \"auto\"            # se mide por frame: los clips magenta traen ~#F828F4, el run vino blanco\nhole_max_frac = 0.0005    # sólo pesa en el run (fondo blanco, modo connected): con 0.01 queda blanco\n                          # atrapado entre las colas de la bandana; con esto se van y los ojos quedan\n\n[output]\nextra_scales = [0.5]\n\n[[animation]]\nname = \"idle\"\nclip = \"clips/idle.mp4\"\nkind = \"cycle\"\nloop_seconds = [1.0, 4.0]\nskip_seconds = 0.25\nmodel = \"seedance-2.0\"\nprompt = \"prompts/idle.txt\"\npose = \"../../poses/comando_master_magenta_16x9.png\"\n\n[[animation]]\nname = \"shoot\"\nclip = \"clips/shoot.mp4\"  # con fogonazo: remove_flash lo borra antes del key\nkind = \"cycle\"            # la ráfaga en loop\nloop_seconds = [0.5, 1.5]\nskip_seconds = 0.25\nloop_start = 54           # el loop que se revisó. El retroceso es parejo y los mejores candidatos\nloop_length = 16          # empatan (0,55-0,57): un nivel de color de diferencia ya los reordena\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/comando_master_magenta_16x9.png\"\n\n# Geometría del arma medida a ojo sobre el clip de 864×496. Con `remove_flash = true` en lugar de\n# la tabla se mide sola en el frame 0: las franjas cambian 1-5 px y la boca sale igual en los 97 frames.\n[animation.remove_flash]\nband_y = [235, 275]\nsearch_x = [500, 620]\nflash_y = [195, 320]\nhalo_x0 = 538\n\n[[animation]]\nname = \"run\"\nclip = \"clips/run_v2.mp4\" # desde una pose con la zancada hecha en ChatGPT, que no está en el repo;\nkind = \"cycle\"            # vino con fondo blanco #FAFAFA porque esa imagen tenía transparencia\nloop_seconds = [1.0, 1.5]\nskip_seconds = 0.5\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run.txt\"\n\n[[animation]]\nname = \"jump\"\nclip = \"clips/jump_v2.mp4\" # tres saltos seguidos; se usa el tercero, el más nítido\nkind = \"oneshot\"\nloop = false\npick = \"sharpest\"\ntrim = [58, 84]           # la subida queda dentro del sprite (~60 px): no sumarle otra en la física\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/comando_master_magenta_16x9.png\"\n",
+  "align": {
+    "canvas": {
+      "w": 322,
+      "h": 357
+    },
+    "pivot_px": {
+      "x": 161,
+      "y": 346
+    },
+    "scale": 0.5446808510638298,
+    "pixel_factor": null,
+    "reference_height_px": 235.0
+  },
+  "variants": {
+    "1x": {
+      "w": 175,
+      "h": 194,
+      "scale": 0.5446808510638298
+    },
+    "0.5x": {
+      "w": 88,
+      "h": 97,
+      "scale": 0.2723404255319149
+    }
+  },
+  "cleanup_frames_overridden": 0,
+  "animations": {
+    "idle": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/comando/clips/idle.mp4",
+      "clip_sha256": "02e3629e2517e2ddb1699af2dc69c1e7e804fbadf0ab6372f24883d1841d960d",
+      "video": {
+        "width": 864,
+        "height": 496,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.096,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation for a platformer game. Static locked camera, fixed framing, no zoom. Use the input image as the exact first frame. The character stands in place facing right and breathes slowly: chest and shoulders rise and fall gently, the red headband tails sway, one blink. Feet stay planted. Flat 2D cartoon style exactly like the input image. Solid flat magenta background, unchanged. No sound.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/comando_master_magenta_16x9.png",
+      "pose_sha256": "d92182714522a879d493aa094f53e153de36e95d91dd4c8aacce5ef14ff6c5ee",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#F828F4",
+          "key_strength": 0.8,
+          "key_method": "chroma",
+          "char_height_px": 234.0,
+          "char_height_pct": 47.2,
+          "pose_mad_global": 18.92,
+          "pose_mad_region": 12.97,
+          "drift_pct": 0.0,
+          "drift_px_per_s": [
+            -0.0,
+            -0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 1.98,
+          "bg_drift": 4.0,
+          "scene_cuts_at": [],
+          "motion": 1.53,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 30,
+        "length": 38,
+        "score": 1.443,
+        "seam": 1.0,
+        "motion": 0.69,
+        "seconds": 1.583,
+        "candidates": [
+          {
+            "start": 23,
+            "length": 40,
+            "score": 1.367
+          },
+          {
+            "start": 41,
+            "length": 40,
+            "score": 1.377
+          },
+          {
+            "start": 22,
+            "length": 40,
+            "score": 1.38
+          },
+          {
+            "start": 21,
+            "length": 40,
+            "score": 1.381
+          },
+          {
+            "start": 30,
+            "length": 38,
+            "score": 1.443
+          }
+        ],
+        "quality": "costura visible",
+        "camera_drift_px_per_native_frame": [
+          0.0014,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#F828F4",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose",
+        "body_px": 236.0,
+        "video": [
+          864,
+          496
+        ],
+        "frame0_px": 236.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "shoot",
+          "jump"
+        ],
+        "reference_body_px": 236.0,
+        "final_body_px": 128.5447
+      }
+    },
+    "shoot": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/comando/clips/shoot.mp4",
+      "clip_sha256": "81d0780db3da9b7d78279369c2769bb868ccb17d8742b3f965e2ae3d22a43c0e",
+      "video": {
+        "width": 864,
+        "height": 496,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.096,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "model": "seedance-2.0",
+      "prompt": "Static locked camera, fixed framing, no zoom, no camera movement for the whole clip. Use the input image as the exact first frame. The character stays in the same place and size, facing right, feet planted, body braced. Only the character moves: the machine gun shakes with rapid recoil, pushing back slightly against his hands in a steady rhythm, the vibration runs through his arms and shoulders, jaw clenched, bandana tails flutter. The background stays empty, solid flat magenta, the whole time. Flat 2D cartoon style exactly like the input image. No sound.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/comando_master_magenta_16x9.png",
+      "pose_sha256": "d92182714522a879d493aa094f53e153de36e95d91dd4c8aacce5ef14ff6c5ee",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 16.51)"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#FB28F8",
+          "key_strength": 0.816,
+          "key_method": "chroma",
+          "char_height_px": 234.0,
+          "char_height_pct": 47.2,
+          "pose_mad_global": 17.47,
+          "pose_mad_region": 16.51,
+          "drift_pct": 0.1,
+          "drift_px_per_s": [
+            -0.07,
+            -0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 2.83,
+          "bg_drift": 3.0,
+          "scene_cuts_at": [],
+          "motion": 6.46,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 54,
+        "length": 16,
+        "manual": true,
+        "camera_drift_px_per_native_frame": [
+          -0.0003,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#FB28F7",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "remove_flash": {
+        "geometry": {
+          "band_y": [
+            235,
+            275
+          ],
+          "search_x": [
+            500,
+            620
+          ],
+          "flash_y": [
+            195,
+            320
+          ],
+          "halo_x0": 538
+        },
+        "measured": [],
+        "missed_frames": [],
+        "muzzle_x": [
+          551,
+          557
+        ],
+        "muzzle_y": [
+          255.0,
+          255.5
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 236.0,
+        "video": [
+          864,
+          496
+        ],
+        "frame0_px": 233.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "jump"
+        ],
+        "measured_body_px": 233.0,
+        "final_body_px": 128.5447
+      }
+    },
+    "run": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/comando/clips/run_v2.mp4",
+      "clip_sha256": "415ed8bd02ba6650bcf283de00faac27b6bf5714e27c524677f33737d63ba5e8",
+      "video": {
+        "width": 864,
+        "height": 496,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.096,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "model": "seedance-2.0",
+      "prompt": "Using the attached image as the exact reference: same character, same style, same 3/4 view facing right, same size. Change only the legs into a running stride: front leg stepping forward with the heel touching the ground, back leg pushed back with only the toe touching the ground, both legs clearly separated, both boots pointing to the right. Upper body leans slightly forward, still holding the gun at hip level. Transparent background.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el fondo #FAFAFA no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#FAFAFA",
+          "key_strength": 0.0,
+          "key_method": "distance",
+          "char_height_px": 234.0,
+          "char_height_pct": 47.2,
+          "drift_pct": 0.5,
+          "drift_px_per_s": [
+            -0.0,
+            0.27
+          ],
+          "zoom_pct": 0.1,
+          "frames_touching_edge": 0,
+          "bg_std": 0.49,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 28.48,
+          "static_tail_frames": 15
+        }
+      },
+      "selection": {
+        "start": 32,
+        "length": 30,
+        "score": 0.457,
+        "seam": 2.98,
+        "motion": 6.51,
+        "seconds": 1.25,
+        "candidates": [
+          {
+            "start": 32,
+            "length": 30,
+            "score": 0.457
+          },
+          {
+            "start": 41,
+            "length": 30,
+            "score": 0.471
+          },
+          {
+            "start": 33,
+            "length": 30,
+            "score": 0.484
+          },
+          {
+            "start": 38,
+            "length": 30,
+            "score": 0.488
+          },
+          {
+            "start": 40,
+            "length": 30,
+            "score": 0.493
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          -0.0067,
+          0.0218
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#FCFAFA",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": null,
+        "body_px": null,
+        "video": [
+          864,
+          496
+        ],
+        "frame0_px": 233.0,
+        "scale": 1.0
+      }
+    },
+    "jump": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/comando/clips/jump_v2.mp4",
+      "clip_sha256": "d9596fe126c3525b7dd974b8c8d8291653f3bac3a690d272ff8de933ad5966cb",
+      "video": {
+        "width": 864,
+        "height": 496,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.096,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "model": "seedance-2.0",
+      "prompt": "2D cartoon video game sprite animation. Static locked camera, fixed framing, no zoom. Use the input image as the exact first frame. The character does three quick jumps in a row, straight up in place, facing right, no forward travel. Each jump is fast and snappy: a short crouch, explosive push off, knees tucked holding the gun, a short fall, a heavy landing squash, then immediately the next jump. Flat 2D style exactly like the input image. Solid flat magenta background, unchanged.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/poses/comando_master_magenta_16x9.png",
+      "pose_sha256": "d92182714522a879d493aa094f53e153de36e95d91dd4c8aacce5ef14ff6c5ee",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el frame 0 se aparta de la pose (MAD 21.03)"
+          }
+        ],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#F826F6",
+          "key_strength": 0.816,
+          "key_method": "chroma",
+          "char_height_px": 234.0,
+          "char_height_pct": 47.2,
+          "pose_mad_global": 18.81,
+          "pose_mad_region": 21.03,
+          "drift_pct": 1.1,
+          "drift_px_per_s": [
+            -0.05,
+            -0.66
+          ],
+          "zoom_pct": 0.6,
+          "frames_touching_edge": 0,
+          "bg_std": 1.83,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 7.07,
+          "static_tail_frames": 2
+        }
+      },
+      "selection": {
+        "start": 58,
+        "length": 25,
+        "static_tail_trimmed": 1
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          59,
+          61,
+          63,
+          65,
+          67,
+          69,
+          71,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#F826F6",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 236.0,
+        "video": [
+          864,
+          496
+        ],
+        "frame0_px": 234.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle",
+          "shoot"
+        ],
+        "measured_body_px": 234.0,
+        "final_body_px": 128.5447
+      }
+    }
+  },
+  "human_cleanup": "registrar en pilot/cleanup_log.csv quién limpió qué y cuánto tardó"
+}

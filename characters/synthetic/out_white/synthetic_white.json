@@ -1,0 +1,97 @@
+{
+  "character": "synthetic_white",
+  "style": "hd",
+  "fps": 12,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.98574
+  },
+  "variants": {
+    "1x": {
+      "canvas": {
+        "w": 69,
+        "h": 134
+      },
+      "pivot_px": {
+        "x": 34.5,
+        "y": 132.09
+      },
+      "atlas": [
+        {
+          "image": "synthetic_white_1x-0.png",
+          "data": "synthetic_white_1x-0.json",
+          "w": 335,
+          "h": 274
+        }
+      ],
+      "animations": {
+        "walk": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "walk/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "walk/0011",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/walk.png"
+        }
+      }
+    }
+  }
+}

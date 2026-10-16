@@ -1,0 +1,457 @@
+{
+  "character": "synthetic",
+  "created": "2026-10-15T20:53:55+00:00",
+  "tool": "spritepipe 0.1",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "config": "# Personaje sintético, estilo HD (tipo Kingdom Rush)\n[character]\nname = \"synthetic\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128       # alto del cuerpo en idle, en px finales\nscale_reference = \"idle\"\n\n[key]\ncolor = \"auto\"\ntolerance = [0.12, 0.80]\n\n[output]\nextra_scales = [0.5]\n\n[[animation]]\nname = \"idle\"\nclip = \"clips/idle.mp4\"\nkind = \"cycle\"\nloop_seconds = [1.0, 2.5]\nmodel = \"sintético\"\n\n[[animation]]\nname = \"walk\"\nclip = \"clips/walk.mp4\"\nkind = \"cycle\"\npose = \"poses/walk.png\"\nmodel = \"sintético\"\n\n[[animation]]\nname = \"attack\"\nclip = \"clips/attack.mp4\"\nkind = \"oneshot\"\npose = \"poses/attack.png\"\nmodel = \"sintético\"\nholds = { 3 = 2.0 }   # el impacto dura el doble\n",
+  "align": {
+    "canvas": {
+      "w": 612,
+      "h": 714
+    },
+    "pivot_px": {
+      "x": 306,
+      "y": 704
+    },
+    "scale": 0.23551057957681693,
+    "pixel_factor": null,
+    "reference_height_px": 543.5
+  },
+  "variants": {
+    "1x": {
+      "w": 144,
+      "h": 168,
+      "scale": 0.23551057957681693
+    },
+    "0.5x": {
+      "w": 72,
+      "h": 84,
+      "scale": 0.11775528978840846
+    }
+  },
+  "cleanup_frames_overridden": 0,
+  "animations": {
+    "idle": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/synthetic/clips/idle.mp4",
+      "clip_sha256": "7acc35dbe2f3c7dc1da0f4a5e96d8a940636ea4f3dae8f682e7400293dee808b",
+      "video": {
+        "width": 720,
+        "height": 1280,
+        "fps": 24.0,
+        "nb_frames": 96,
+        "duration": 4.0,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "model": "sintético",
+      "prompt": null,
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 96,
+          "fps": 24.0,
+          "seconds": 4.0,
+          "bg_color": "#10E712",
+          "key_strength": 0.835,
+          "key_method": "chroma",
+          "char_height_px": 543.0,
+          "char_height_pct": 42.4,
+          "drift_pct": 0.0,
+          "drift_px_per_s": [
+            0.01,
+            -0.02
+          ],
+          "zoom_pct": 0.5,
+          "frames_touching_edge": 0,
+          "bg_std": 2.99,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 1.2,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 22,
+        "length": 48,
+        "score": 0.376,
+        "seam": 0.21,
+        "motion": 0.55,
+        "seconds": 2.0,
+        "candidates": [
+          {
+            "start": 22,
+            "length": 48,
+            "score": 0.376
+          },
+          {
+            "start": 23,
+            "length": 48,
+            "score": 0.379
+          },
+          {
+            "start": 21,
+            "length": 48,
+            "score": 0.383
+          },
+          {
+            "start": 24,
+            "length": 48,
+            "score": 0.386
+          },
+          {
+            "start": 29,
+            "length": 48,
+            "score": 0.388
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          0.0001,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#10E712",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true
+    },
+    "walk": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/synthetic/clips/walk.mp4",
+      "clip_sha256": "bf2c1200548cff3641c66cdd1040ad040028ff5c7ab5211f0f27e447f901b98f",
+      "video": {
+        "width": 720,
+        "height": 1280,
+        "fps": 24.0,
+        "nb_frames": 96,
+        "duration": 4.0,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "model": "sintético",
+      "prompt": null,
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/synthetic/poses/walk.png",
+      "pose_sha256": "fa1e814665325639a76f6651e649412ef4ebf86184a9662c549146670ed4db47",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 96,
+          "fps": 24.0,
+          "seconds": 4.0,
+          "bg_color": "#10E712",
+          "key_strength": 0.835,
+          "key_method": "chroma",
+          "char_height_px": 537.0,
+          "char_height_pct": 42.0,
+          "pose_mad_global": 18.0,
+          "pose_mad_region": 1.31,
+          "drift_pct": 2.3,
+          "drift_px_per_s": [
+            2.85,
+            1.12
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 3.01,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 18.09,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 36,
+        "length": 24,
+        "score": 0.081,
+        "seam": 0.42,
+        "motion": 5.22,
+        "seconds": 1.0,
+        "candidates": [
+          {
+            "start": 36,
+            "length": 24,
+            "score": 0.081
+          },
+          {
+            "start": 24,
+            "length": 24,
+            "score": 0.081
+          },
+          {
+            "start": 49,
+            "length": 24,
+            "score": 0.082
+          },
+          {
+            "start": 25,
+            "length": 24,
+            "score": 0.086
+          },
+          {
+            "start": 37,
+            "length": 24,
+            "score": 0.087
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          0.1214,
+          0.0455
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#10E712",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true
+    },
+    "attack": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/synthetic/clips/attack.mp4",
+      "clip_sha256": "502ac2f55d7c48448c3903e35a308c96ae1a3f660863995ccf95122dc18bfa7d",
+      "video": {
+        "width": 720,
+        "height": 1280,
+        "fps": 24.0,
+        "nb_frames": 72,
+        "duration": 3.0,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "model": "sintético",
+      "prompt": null,
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/synthetic/poses/attack.png",
+      "pose_sha256": "8cfc2e2bbdc50846a635e9753aa261dd6854884ad29c54dca3b755118894d979",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 72,
+          "fps": 24.0,
+          "seconds": 3.0,
+          "bg_color": "#10E712",
+          "key_strength": 0.835,
+          "key_method": "chroma",
+          "char_height_px": 543.0,
+          "char_height_pct": 42.4,
+          "pose_mad_global": 2.5,
+          "pose_mad_region": 1.23,
+          "drift_pct": 2.7,
+          "drift_px_per_s": [
+            3.94,
+            3.02
+          ],
+          "zoom_pct": 10.0,
+          "frames_touching_edge": 0,
+          "bg_std": 3.02,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 15.08,
+          "static_tail_frames": 17
+        }
+      },
+      "selection": {
+        "start": 0,
+        "length": 55,
+        "static_tail_trimmed": 17
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          0,
+          3,
+          4,
+          7,
+          9,
+          11,
+          13,
+          14,
+          16,
+          19,
+          21,
+          23,
+          25,
+          27,
+          29,
+          31,
+          33,
+          35,
+          36,
+          39,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          53,
+          54
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          166.7,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#10E712",
+        "method": [
+          [
+            "chroma",
+            "global"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false
+    }
+  },
+  "human_cleanup": "registrar en pilot/cleanup_log.csv quién limpió qué y cuánto tardó"
+}

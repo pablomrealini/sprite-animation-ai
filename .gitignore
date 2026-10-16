@@ -1,0 +1,16 @@
+pipeline/.venv/
+__pycache__/
+characters/*/work*/
+.pytest_cache/
+# referencias de terceros (sprite rips): solo para analizar, nunca al repo
+research_notes/*/refs/
+.DS_Store
+# config personal de Claude Code (permisos de esta máquina)
+.claude/settings.local.json
+.claude/worktrees/
+# clips derivados, que el pipeline ya no usa: los limpios de los scripts sueltos del ranger (ahora la
+# limpieza la hace spritepipe desde clips/raw/) y el shoot sin fogonazo del comando (ahora remove_flash).
+# Los originales de los modelos sí van.
+characters/ranger/clips/*.mp4
+!characters/ranger/clips/run.mp4
+characters/comando/clips/shoot_noflash.mp4

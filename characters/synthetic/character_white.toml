@@ -1,0 +1,15 @@
+# Walk sobre fondo blanco: prueba del key por distancia
+[character]
+name = "synthetic_white"
+style = "hd"
+game_fps = 12
+target_height = 128
+
+[output]
+work_dir = "work_white"
+out_dir = "out_white"
+
+[[animation]]
+name = "walk"
+clip = "clips/walk_white.mp4"
+kind = "cycle"

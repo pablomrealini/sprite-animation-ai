@@ -1,0 +1,36 @@
+# Personaje sintético, estilo HD (tipo Kingdom Rush)
+[character]
+name = "synthetic"
+style = "hd"
+game_fps = 12
+target_height = 128       # alto del cuerpo en idle, en px finales
+scale_reference = "idle"
+
+[key]
+color = "auto"
+tolerance = [0.12, 0.80]
+
+[output]
+extra_scales = [0.5]
+
+[[animation]]
+name = "idle"
+clip = "clips/idle.mp4"
+kind = "cycle"
+loop_seconds = [1.0, 2.5]
+model = "sintético"
+
+[[animation]]
+name = "walk"
+clip = "clips/walk.mp4"
+kind = "cycle"
+pose = "poses/walk.png"
+model = "sintético"
+
+[[animation]]
+name = "attack"
+clip = "clips/attack.mp4"
+kind = "oneshot"
+pose = "poses/attack.png"
+model = "sintético"
+holds = { 3 = 2.0 }   # el impacto dura el doble

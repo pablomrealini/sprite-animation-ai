@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ranger</title>
+<style>
+:root { --bg:#f4f4f2; --panel:#fff; --ink:#1c1c1c; --muted:#6b6b6b; --line:#dcdcd8; --accent:#d1495b; }
+@media (prefers-color-scheme: dark) { :root { --bg:#151515; --panel:#1f1f1f; --ink:#ececec; --muted:#9a9a9a; --line:#333; --accent:#ff6b7d; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.4 system-ui, -apple-system, sans-serif; }
+header { position:sticky; top:0; z-index:2; background:var(--panel); border-bottom:1px solid var(--line);
+  padding:10px 16px; display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; }
+h1 { font-size:16px; margin:0 12px 0 0; }
+label { color:var(--muted); display:inline-flex; gap:6px; align-items:center; }
+select, button { font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:3px 8px; }
+button { cursor:pointer; }
+main { padding:16px; display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px; }
+.card h2 { font-size:14px; margin:0 0 6px; display:flex; justify-content:space-between; }
+.card h2 span { color:var(--muted); font-weight:400; }
+.stage { overflow:auto; border-radius:6px; }
+canvas { display:block; margin:auto; image-rendering:pixelated; }
+.meta { color:var(--muted); font-size:12px; margin-top:6px; font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ranger</h1>
+  <label>Escala <select id="variant"></select></label>
+  <label>Zoom <select id="zoom"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>6</option></select></label>
+  <label>Fondo <select id="bgsel"><option value="checker">damero</option><option value="#202020">oscuro</option><option value="#e8e8e8">claro</option><option value="#6a8f3c">pasto</option></select></label>
+  <label><input type="checkbox" id="pivot" checked> pivot y piso</label>
+  <label><input type="checkbox" id="flip"> flipX</label>
+  <label><input type="checkbox" id="onion"> onion skin</label>
+  <button id="play">Pausa</button>
+  <button id="step">Paso</button>
+</header>
+<main id="grid"></main>
+<script>
+const DATA = {"style": "hd", "variants": {"1x": {"canvas": {"w": 173, "h": 191}, "pivot": {"x": 86.5, "y": 170.51}, "pages": ["ranger_1x-0.png"], "animations": {"idle": {"loop": true, "frames": [{"page": 0, "x": 487, "y": 3, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}, {"page": 0, "x": 385, "y": 1050, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}, {"page": 0, "x": 368, "y": 743, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}]}, "run": {"loop": true, "frames": [{"page": 0, "x": 849, "y": 269, "w": 104, "h": 126, "ox": 40, "oy": 41, "duration": 83.3}, {"page": 0, "x": 428, "y": 582, "w": 81, "h": 130, "ox": 51, "oy": 45, "duration": 83.3}, {"page": 0, "x": 425, "y": 877, "w": 90, "h": 130, "ox": 42, "oy": 45, "duration": 83.3}, {"page": 0, "x": 893, "y": 136, "w": 109, "h": 126, "ox": 33, "oy": 41, "duration": 83.3}, {"page": 0, "x": 757, "y": 3, "w": 110, "h": 129, "ox": 32, "oy": 41, "duration": 83.3}, {"page": 0, "x": 458, "y": 716, "w": 79, "h": 130, "ox": 46, "oy": 45, "duration": 83.3}]}, "shoot_in": {"loop": false, "frames": [{"page": 0, "x": 513, "y": 582, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}, {"page": 0, "x": 520, "y": 424, "w": 95, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}, {"page": 0, "x": 565, "y": 984, "w": 113, "h": 129, "ox": 50, "oy": 42, "duration": 83.3}, {"page": 0, "x": 634, "y": 850, "w": 114, "h": 129, "ox": 50, "oy": 42, "duration": 83.3}]}, "shoot": {"loop": true, "frames": [{"page": 0, "x": 656, "y": 692, "w": 115, "h": 129, "ox": 45, "oy": 42, "duration": 83.3}, {"page": 0, "x": 693, "y": 549, "w": 116, "h": 129, "ox": 44, "oy": 42, "duration": 83.3}, {"page": 0, "x": 709, "y": 405, "w": 113, "h": 129, "ox": 43, "oy": 42, "duration": 83.3}, {"page": 0, "x": 732, "y": 271, "w": 113, "h": 129, "ox": 44, "oy": 42, "duration": 83.3}]}, "shoot_out": {"loop": false, "frames": [{"page": 0, "x": 523, "y": 281, "w": 115, "h": 130, "ox": 45, "oy": 41, "duration": 83.3}, {"page": 0, "x": 572, "y": 137, "w": 109, "h": 130, "ox": 45, "oy": 41, "duration": 83.3}, {"page": 0, "x": 577, "y": 3, "w": 86, "h": 130, "ox": 46, "oy": 41, "duration": 83.3}, {"page": 0, "x": 667, "y": 3, "w": 86, "h": 130, "ox": 46, "oy": 41, "duration": 83.3}, {"page": 0, "x": 475, "y": 1011, "w": 86, "h": 130, "ox": 46, "oy": 41, "duration": 83.3}]}, "shoot2h_in": {"loop": false, "frames": [{"page": 0, "x": 519, "y": 850, "w": 111, "h": 130, "ox": 36, "oy": 41, "duration": 83.3}, {"page": 0, "x": 775, "y": 136, "w": 114, "h": 129, "ox": 36, "oy": 42, "duration": 83.3}, {"page": 0, "x": 871, "y": 3, "w": 120, "h": 129, "ox": 37, "oy": 42, "duration": 83.3}, {"page": 0, "x": 290, "y": 611, "w": 134, "h": 128, "ox": 37, "oy": 43, "duration": 83.3}]}, "shoot2h": {"loop": true, "frames": [{"page": 0, "x": 246, "y": 1059, "w": 135, "h": 129, "ox": 33, "oy": 43, "duration": 83.3}, {"page": 0, "x": 106, "y": 1084, "w": 136, "h": 129, "ox": 33, "oy": 43, "duration": 83.3}, {"page": 0, "x": 995, "y": 3, "w": 129, "h": 129, "ox": 33, "oy": 43, "duration": 83.3}, {"page": 0, "x": 388, "y": 291, "w": 131, "h": 129, "ox": 33, "oy": 43, "duration": 83.3}, {"page": 0, "x": 382, "y": 449, "w": 134, "h": 129, "ox": 33, "oy": 43, "duration": 83.3}]}, "shoot2h_out": {"loop": false, "frames": [{"page": 0, "x": 286, "y": 918, "w": 135, "h": 128, "ox": 32, "oy": 43, "duration": 83.3}, {"page": 0, "x": 682, "y": 983, "w": 121, "h": 129, "ox": 32, "oy": 42, "duration": 83.3}, {"page": 0, "x": 752, "y": 825, "w": 114, "h": 129, "ox": 32, "oy": 42, "duration": 83.3}, {"page": 0, "x": 541, "y": 716, "w": 111, "h": 130, "ox": 32, "oy": 41, "duration": 83.3}]}, "crouch_in": {"loop": false, "frames": [{"page": 0, "x": 484, "y": 146, "w": 84, "h": 131, "ox": 52, "oy": 40, "duration": 83.3}, {"page": 0, "x": 1000, "y": 513, "w": 116, "h": 116, "ox": 31, "oy": 55, "duration": 83.3}, {"page": 0, "x": 986, "y": 633, "w": 116, "h": 114, "ox": 31, "oy": 57, "duration": 83.3}, {"page": 0, "x": 807, "y": 958, "w": 116, "h": 113, "ox": 31, "oy": 58, "duration": 83.3}]}, "crouch_shoot": {"loop": true, "frames": [{"page": 0, "x": 807, "y": 1075, "w": 115, "h": 114, "ox": 38, "oy": 58, "duration": 83.3}, {"page": 0, "x": 926, "y": 1075, "w": 115, "h": 114, "ox": 38, "oy": 58, "duration": 83.3}, {"page": 0, "x": 870, "y": 799, "w": 112, "h": 114, "ox": 38, "oy": 58, "duration": 83.3}, {"page": 0, "x": 1045, "y": 869, "w": 113, "h": 113, "ox": 38, "oy": 58, "duration": 83.3}, {"page": 0, "x": 927, "y": 917, "w": 114, "h": 113, "ox": 38, "oy": 58, "duration": 83.3}]}, "crouch_out": {"loop": false, "frames": [{"page": 0, "x": 986, "y": 751, "w": 114, "h": 114, "ox": 37, "oy": 58, "duration": 83.3}, {"page": 0, "x": 1006, "y": 136, "w": 98, "h": 124, "ox": 47, "oy": 48, "duration": 83.3}, {"page": 0, "x": 1128, "y": 3, "w": 85, "h": 129, "ox": 57, "oy": 42, "duration": 83.3}, {"page": 0, "x": 775, "y": 682, "w": 85, "h": 129, "ox": 57, "oy": 42, "duration": 83.3}]}, "jump": {"loop": false, "frames": [{"page": 0, "x": 603, "y": 558, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}, {"page": 0, "x": 864, "y": 670, "w": 82, "h": 125, "ox": 55, "oy": 46, "duration": 83.3}, {"page": 0, "x": 98, "y": 799, "w": 86, "h": 140, "ox": 51, "oy": 6, "duration": 83.3}, {"page": 0, "x": 106, "y": 943, "w": 86, "h": 137, "ox": 51, "oy": 4, "duration": 83.3}, {"page": 0, "x": 188, "y": 777, "w": 86, "h": 137, "ox": 51, "oy": 3, "duration": 83.3}, {"page": 0, "x": 196, "y": 918, "w": 86, "h": 137, "ox": 51, "oy": 3, "duration": 83.3}, {"page": 0, "x": 278, "y": 777, "w": 86, "h": 137, "ox": 51, "oy": 7, "duration": 83.3}, {"page": 0, "x": 826, "y": 404, "w": 84, "h": 127, "ox": 53, "oy": 44, "duration": 83.3}, {"page": 0, "x": 900, "y": 535, "w": 82, "h": 125, "ox": 55, "oy": 46, "duration": 83.3}, {"page": 0, "x": 914, "y": 399, "w": 82, "h": 125, "ox": 55, "oy": 46, "duration": 83.3}]}, "jump_shoot": {"loop": false, "frames": [{"page": 0, "x": 619, "y": 415, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}, {"page": 0, "x": 957, "y": 266, "w": 84, "h": 125, "ox": 51, "oy": 46, "duration": 83.3}, {"page": 0, "x": 187, "y": 320, "w": 93, "h": 144, "ox": 49, "oy": 26, "duration": 83.3}, {"page": 0, "x": 277, "y": 161, "w": 99, "h": 141, "ox": 48, "oy": 15, "duration": 83.3}, {"page": 0, "x": 280, "y": 3, "w": 99, "h": 141, "ox": 48, "oy": 15, "duration": 83.3}, {"page": 0, "x": 3, "y": 960, "w": 99, "h": 141, "ox": 48, "oy": 15, "duration": 83.3}, {"page": 0, "x": 276, "y": 468, "w": 102, "h": 139, "ox": 45, "oy": 15, "duration": 83.3}, {"page": 0, "x": 284, "y": 306, "w": 100, "h": 139, "ox": 45, "oy": 15, "duration": 83.3}, {"page": 0, "x": 380, "y": 148, "w": 100, "h": 139, "ox": 45, "oy": 15, "duration": 83.3}, {"page": 0, "x": 383, "y": 3, "w": 100, "h": 139, "ox": 46, "oy": 15, "duration": 83.3}, {"page": 0, "x": 187, "y": 633, "w": 99, "h": 140, "ox": 46, "oy": 18, "duration": 83.3}, {"page": 0, "x": 642, "y": 271, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}, {"page": 0, "x": 685, "y": 137, "w": 86, "h": 130, "ox": 51, "oy": 41, "duration": 83.3}]}, "hang_in": {"loop": false, "frames": [{"page": 0, "x": 813, "y": 538, "w": 83, "h": 128, "ox": 51, "oy": 43, "duration": 83.3}, {"page": 0, "x": 1108, "y": 136, "w": 76, "h": 124, "ox": 52, "oy": 47, "duration": 83.3}, {"page": 0, "x": 1045, "y": 264, "w": 74, "h": 121, "ox": 50, "oy": 50, "duration": 83.3}, {"page": 0, "x": 1123, "y": 264, "w": 74, "h": 121, "ox": 49, "oy": 50, "duration": 83.3}, {"page": 0, "x": 1045, "y": 389, "w": 73, "h": 120, "ox": 49, "oy": 51, "duration": 83.3}, {"page": 0, "x": 179, "y": 482, "w": 93, "h": 147, "ox": 52, "oy": 42, "duration": 83.3}, {"page": 0, "x": 3, "y": 3, "w": 86, "h": 157, "ox": 41, "oy": 5, "duration": 83.3}, {"page": 0, "x": 3, "y": 484, "w": 84, "h": 155, "ox": 41, "oy": 2, "duration": 83.3}, {"page": 0, "x": 3, "y": 164, "w": 85, "h": 156, "ox": 41, "oy": 5, "duration": 83.3}, {"page": 0, "x": 93, "y": 643, "w": 90, "h": 152, "ox": 39, "oy": 20, "duration": 83.3}]}, "hang": {"loop": true, "frames": [{"page": 0, "x": 3, "y": 643, "w": 86, "h": 155, "ox": 45, "oy": 18, "duration": 83.3}, {"page": 0, "x": 3, "y": 324, "w": 85, "h": 156, "ox": 47, "oy": 18, "duration": 83.3}, {"page": 0, "x": 91, "y": 484, "w": 84, "h": 155, "ox": 48, "oy": 18, "duration": 83.3}, {"page": 0, "x": 92, "y": 164, "w": 85, "h": 155, "ox": 47, "oy": 18, "duration": 83.3}, {"page": 0, "x": 93, "y": 3, "w": 87, "h": 155, "ox": 45, "oy": 18, "duration": 83.3}, {"page": 0, "x": 92, "y": 323, "w": 91, "h": 155, "ox": 41, "oy": 18, "duration": 83.3}, {"page": 0, "x": 181, "y": 162, "w": 92, "h": 154, "ox": 40, "oy": 18, "duration": 83.3}, {"page": 0, "x": 184, "y": 3, "w": 92, "h": 154, "ox": 41, "oy": 18, "duration": 83.3}, {"page": 0, "x": 3, "y": 802, "w": 91, "h": 154, "ox": 42, "oy": 18, "duration": 83.3}]}}}, "0.5x": {"canvas": {"w": 86, "h": 95}, "pivot": {"x": 43.0, "y": 84.81}, "pages": ["ranger_0.5x-0.png"], "animations": {"idle": {"loop": true, "frames": [{"page": 0, "x": 219, "y": 443, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 225, "y": 373, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 246, "y": 295, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}]}, "run": {"loop": true, "frames": [{"page": 0, "x": 484, "y": 72, "w": 52, "h": 63, "ox": 20, "oy": 20, "duration": 83.3}, {"page": 0, "x": 273, "y": 220, "w": 41, "h": 65, "ox": 25, "oy": 22, "duration": 83.3}, {"page": 0, "x": 266, "y": 442, "w": 45, "h": 65, "ox": 21, "oy": 22, "duration": 83.3}, {"page": 0, "x": 318, "y": 210, "w": 55, "h": 64, "ox": 16, "oy": 20, "duration": 83.3}, {"page": 0, "x": 272, "y": 364, "w": 55, "h": 65, "ox": 16, "oy": 20, "duration": 83.3}, {"page": 0, "x": 293, "y": 289, "w": 39, "h": 65, "ox": 23, "oy": 22, "duration": 83.3}]}, "shoot_in": {"loop": false, "frames": [{"page": 0, "x": 288, "y": 511, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 315, "y": 433, "w": 48, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 331, "y": 358, "w": 56, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 335, "y": 502, "w": 57, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}]}, "shoot": {"loop": true, "frames": [{"page": 0, "x": 367, "y": 427, "w": 58, "h": 65, "ox": 22, "oy": 20, "duration": 83.3}, {"page": 0, "x": 321, "y": 141, "w": 58, "h": 64, "ox": 22, "oy": 21, "duration": 83.3}, {"page": 0, "x": 359, "y": 72, "w": 57, "h": 64, "ox": 21, "oy": 21, "duration": 83.3}, {"page": 0, "x": 336, "y": 278, "w": 56, "h": 64, "ox": 22, "oy": 21, "duration": 83.3}]}, "shoot_out": {"loop": false, "frames": [{"page": 0, "x": 396, "y": 496, "w": 58, "h": 65, "ox": 22, "oy": 20, "duration": 83.3}, {"page": 0, "x": 396, "y": 565, "w": 55, "h": 65, "ox": 22, "oy": 20, "duration": 83.3}, {"page": 0, "x": 455, "y": 565, "w": 43, "h": 65, "ox": 23, "oy": 20, "duration": 83.3}, {"page": 0, "x": 206, "y": 3, "w": 43, "h": 65, "ox": 23, "oy": 20, "duration": 83.3}, {"page": 0, "x": 206, "y": 72, "w": 43, "h": 65, "ox": 23, "oy": 20, "duration": 83.3}]}, "shoot2h_in": {"loop": false, "frames": [{"page": 0, "x": 502, "y": 3, "w": 55, "h": 65, "ox": 18, "oy": 20, "duration": 83.3}, {"page": 0, "x": 377, "y": 209, "w": 57, "h": 64, "ox": 18, "oy": 21, "duration": 83.3}, {"page": 0, "x": 383, "y": 140, "w": 60, "h": 64, "ox": 18, "oy": 21, "duration": 83.3}, {"page": 0, "x": 202, "y": 227, "w": 67, "h": 64, "ox": 18, "oy": 21, "duration": 83.3}]}, "shoot2h": {"loop": true, "frames": [{"page": 0, "x": 147, "y": 467, "w": 68, "h": 65, "ox": 16, "oy": 21, "duration": 83.3}, {"page": 0, "x": 153, "y": 374, "w": 68, "h": 65, "ox": 16, "oy": 21, "duration": 83.3}, {"page": 0, "x": 429, "y": 3, "w": 65, "h": 65, "ox": 16, "oy": 21, "duration": 83.3}, {"page": 0, "x": 218, "y": 536, "w": 66, "h": 65, "ox": 16, "oy": 21, "duration": 83.3}, {"page": 0, "x": 203, "y": 151, "w": 67, "h": 65, "ox": 16, "oy": 21, "duration": 83.3}]}, "shoot2h_out": {"loop": false, "frames": [{"page": 0, "x": 147, "y": 536, "w": 67, "h": 64, "ox": 16, "oy": 21, "duration": 83.3}, {"page": 0, "x": 420, "y": 72, "w": 60, "h": 64, "ox": 16, "oy": 21, "duration": 83.3}, {"page": 0, "x": 391, "y": 346, "w": 57, "h": 64, "ox": 16, "oy": 21, "duration": 83.3}, {"page": 0, "x": 253, "y": 72, "w": 55, "h": 65, "ox": 16, "oy": 20, "duration": 83.3}]}, "crouch_in": {"loop": false, "frames": [{"page": 0, "x": 253, "y": 3, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 571, "y": 203, "w": 58, "h": 58, "ox": 15, "oy": 27, "duration": 83.3}, {"page": 0, "x": 3, "y": 576, "w": 58, "h": 57, "ox": 15, "oy": 28, "duration": 83.3}, {"page": 0, "x": 571, "y": 265, "w": 58, "h": 56, "ox": 15, "oy": 29, "duration": 83.3}]}, "crouch_shoot": {"loop": true, "frames": [{"page": 0, "x": 474, "y": 409, "w": 57, "h": 57, "ox": 19, "oy": 29, "duration": 83.3}, {"page": 0, "x": 561, "y": 3, "w": 58, "h": 57, "ox": 18, "oy": 29, "duration": 83.3}, {"page": 0, "x": 498, "y": 341, "w": 57, "h": 57, "ox": 18, "oy": 29, "duration": 83.3}, {"page": 0, "x": 559, "y": 325, "w": 57, "h": 57, "ox": 18, "oy": 28, "duration": 83.3}, {"page": 0, "x": 458, "y": 480, "w": 58, "h": 57, "ox": 18, "oy": 28, "duration": 83.3}]}, "crouch_out": {"loop": false, "frames": [{"page": 0, "x": 559, "y": 386, "w": 57, "h": 57, "ox": 18, "oy": 29, "duration": 83.3}, {"page": 0, "x": 335, "y": 571, "w": 49, "h": 62, "ox": 23, "oy": 24, "duration": 83.3}, {"page": 0, "x": 396, "y": 277, "w": 43, "h": 64, "ox": 28, "oy": 21, "duration": 83.3}, {"page": 0, "x": 438, "y": 208, "w": 43, "h": 64, "ox": 28, "oy": 21, "duration": 83.3}]}, "jump": {"loop": false, "frames": [{"page": 0, "x": 300, "y": 3, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 493, "y": 139, "w": 41, "h": 62, "ox": 27, "oy": 23, "duration": 83.3}, {"page": 0, "x": 101, "y": 153, "w": 43, "h": 70, "ox": 25, "oy": 3, "duration": 83.3}, {"page": 0, "x": 199, "y": 301, "w": 43, "h": 68, "ox": 25, "oy": 2, "duration": 83.3}, {"page": 0, "x": 152, "y": 301, "w": 43, "h": 69, "ox": 25, "oy": 1, "duration": 83.3}, {"page": 0, "x": 100, "y": 467, "w": 43, "h": 69, "ox": 25, "oy": 1, "duration": 83.3}, {"page": 0, "x": 100, "y": 540, "w": 43, "h": 69, "ox": 25, "oy": 3, "duration": 83.3}, {"page": 0, "x": 443, "y": 276, "w": 42, "h": 63, "ox": 26, "oy": 22, "duration": 83.3}, {"page": 0, "x": 485, "y": 208, "w": 41, "h": 63, "ox": 27, "oy": 22, "duration": 83.3}, {"page": 0, "x": 429, "y": 414, "w": 41, "h": 62, "ox": 27, "oy": 23, "duration": 83.3}]}, "jump_shoot": {"loop": false, "frames": [{"page": 0, "x": 274, "y": 141, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 452, "y": 343, "w": 42, "h": 62, "ox": 25, "oy": 23, "duration": 83.3}, {"page": 0, "x": 97, "y": 242, "w": 47, "h": 72, "ox": 24, "oy": 13, "duration": 83.3}, {"page": 0, "x": 99, "y": 318, "w": 49, "h": 71, "ox": 24, "oy": 7, "duration": 83.3}, {"page": 0, "x": 99, "y": 3, "w": 49, "h": 71, "ox": 24, "oy": 7, "duration": 83.3}, {"page": 0, "x": 99, "y": 78, "w": 49, "h": 71, "ox": 24, "oy": 7, "duration": 83.3}, {"page": 0, "x": 148, "y": 153, "w": 51, "h": 70, "ox": 22, "oy": 7, "duration": 83.3}, {"page": 0, "x": 148, "y": 227, "w": 50, "h": 70, "ox": 22, "oy": 7, "duration": 83.3}, {"page": 0, "x": 152, "y": 3, "w": 50, "h": 70, "ox": 22, "oy": 7, "duration": 83.3}, {"page": 0, "x": 152, "y": 77, "w": 50, "h": 70, "ox": 23, "oy": 7, "duration": 83.3}, {"page": 0, "x": 100, "y": 393, "w": 49, "h": 70, "ox": 23, "oy": 9, "duration": 83.3}, {"page": 0, "x": 312, "y": 72, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 347, "y": 3, "w": 43, "h": 65, "ox": 25, "oy": 20, "duration": 83.3}]}, "hang_in": {"loop": false, "frames": [{"page": 0, "x": 447, "y": 140, "w": 42, "h": 64, "ox": 25, "oy": 21, "duration": 83.3}, {"page": 0, "x": 489, "y": 275, "w": 38, "h": 62, "ox": 26, "oy": 23, "duration": 83.3}, {"page": 0, "x": 530, "y": 205, "w": 37, "h": 60, "ox": 25, "oy": 25, "duration": 83.3}, {"page": 0, "x": 538, "y": 139, "w": 37, "h": 60, "ox": 24, "oy": 25, "duration": 83.3}, {"page": 0, "x": 540, "y": 72, "w": 37, "h": 60, "ox": 24, "oy": 25, "duration": 83.3}, {"page": 0, "x": 50, "y": 164, "w": 47, "h": 74, "ox": 25, "oy": 20, "duration": 83.3}, {"page": 0, "x": 3, "y": 3, "w": 43, "h": 79, "ox": 20, "oy": 2, "duration": 83.3}, {"page": 0, "x": 3, "y": 333, "w": 42, "h": 77, "ox": 20, "oy": 1, "duration": 83.3}, {"page": 0, "x": 3, "y": 86, "w": 43, "h": 79, "ox": 20, "oy": 2, "duration": 83.3}, {"page": 0, "x": 50, "y": 84, "w": 45, "h": 76, "ox": 19, "oy": 10, "duration": 83.3}]}, "hang": {"loop": true, "frames": [{"page": 0, "x": 3, "y": 414, "w": 43, "h": 77, "ox": 22, "oy": 9, "duration": 83.3}, {"page": 0, "x": 3, "y": 169, "w": 43, "h": 78, "ox": 23, "oy": 9, "duration": 83.3}, {"page": 0, "x": 3, "y": 251, "w": 42, "h": 78, "ox": 24, "oy": 9, "duration": 83.3}, {"page": 0, "x": 3, "y": 495, "w": 43, "h": 77, "ox": 23, "oy": 9, "duration": 83.3}, {"page": 0, "x": 49, "y": 251, "w": 44, "h": 77, "ox": 22, "oy": 9, "duration": 83.3}, {"page": 0, "x": 49, "y": 332, "w": 46, "h": 77, "ox": 20, "oy": 9, "duration": 83.3}, {"page": 0, "x": 50, "y": 413, "w": 46, "h": 77, "ox": 20, "oy": 9, "duration": 83.3}, {"page": 0, "x": 50, "y": 494, "w": 46, "h": 77, "ox": 20, "oy": 9, "duration": 83.3}, {"page": 0, "x": 50, "y": 3, "w": 45, "h": 77, "ox": 21, "oy": 9, "duration": 83.3}]}}}}};
+const $ = id => document.getElementById(id);
+let playing = true, cards = [], images = [];
+const variantSel = $('variant');
+Object.keys(DATA.variants).forEach(v => variantSel.add(new Option(v, v)));
+
+function checker(ctx, w, h, s) {
+  for (let y = 0; y < h; y += s) for (let x = 0; x < w; x += s) {
+    ctx.fillStyle = ((x / s + y / s) & 1) ? '#c9c9c9' : '#f0f0f0'; ctx.fillRect(x, y, s, s);
+  }
+}
+
+function build() {
+  const V = DATA.variants[variantSel.value];
+  images = V.pages.map(src => { const im = new Image(); im.src = src; return im; });
+  const grid = $('grid'); grid.innerHTML = ''; cards = [];
+  for (const [name, anim] of Object.entries(V.animations)) {
+    const card = document.createElement('div'); card.className = 'card';
+    const total = anim.frames.reduce((a, f) => a + f.duration, 0);
+    card.innerHTML = `<h2>${name}<span>${anim.frames.length} frames · ${anim.loop ? 'loop' : 'una pasada'}</span></h2>
+      <div class="stage"><canvas></canvas></div><div class="meta"></div>`;
+    grid.appendChild(card);
+    cards.push({ anim, name, canvas: card.querySelector('canvas'), meta: card.querySelector('.meta'),
+                 i: 0, t: 0, total, V });
+  }
+}
+
+function draw(c) {
+  const z = +$('zoom').value, V = c.V, cw = V.canvas.w, ch = V.canvas.h;
+  const cv = c.canvas; if (cv.width !== cw * z) { cv.width = cw * z; cv.height = ch * z; }
+  const ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = DATA.style !== 'pixel';
+  const bg = $('bgsel').value;
+  if (bg === 'checker') checker(ctx, cv.width, cv.height, 8 * z); else { ctx.fillStyle = bg; ctx.fillRect(0, 0, cv.width, cv.height); }
+  const flip = $('flip').checked;
+  const paint = (f, alpha) => {
+    ctx.save(); ctx.globalAlpha = alpha;
+    if (flip) { ctx.translate(cv.width, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(images[f.page], f.x, f.y, f.w, f.h, f.ox * z, f.oy * z, f.w * z, f.h * z);
+    ctx.restore();
+  };
+  if ($('onion').checked && c.anim.frames.length > 1) {
+    const prev = c.anim.frames[(c.i - 1 + c.anim.frames.length) % c.anim.frames.length];
+    paint(prev, 0.3);
+  }
+  paint(c.anim.frames[c.i], 1);
+  if ($('pivot').checked) {
+    const px = V.pivot.x * z, py = V.pivot.y * z;
+    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--accent');
+    ctx.lineWidth = 1; ctx.beginPath();
+    ctx.moveTo(0, py + 0.5); ctx.lineTo(cv.width, py + 0.5);
+    ctx.moveTo(px + 0.5, py - 6 * z); ctx.lineTo(px + 0.5, py + 3 * z); ctx.stroke();
+  }
+  const f = c.anim.frames[c.i];
+  c.meta.textContent = `frame ${c.i + 1}/${c.anim.frames.length} · ${f.duration} ms · ciclo ${Math.round(c.total)} ms · celda ${cw}×${ch}`;
+}
+
+let last = performance.now();
+function tick(now) {
+  const dt = now - last; last = now;
+  for (const c of cards) {
+    if (playing && c.hold > 0) {  // una pasada: se queda en el último frame y repite para revisar
+      c.hold -= dt; if (c.hold <= 0) { c.i = 0; c.t = 0; }
+    } else if (playing) {
+      c.t += dt;
+      while (c.t >= c.anim.frames[c.i].duration) {
+        c.t -= c.anim.frames[c.i].duration;
+        if (c.i < c.anim.frames.length - 1) c.i++;
+        else if (c.anim.loop) c.i = 0;
+        else { c.hold = 700; c.t = 0; break; }
+      }
+    }
+    draw(c);
+  }
+  requestAnimationFrame(tick);
+}
+variantSel.onchange = build;
+$('play').onclick = () => { playing = !playing; $('play').textContent = playing ? 'Pausa' : 'Play'; };
+$('step').onclick = () => { playing = false; $('play').textContent = 'Play';
+  cards.forEach(c => { c.i = (c.i + 1) % c.anim.frames.length; c.t = 0; }); };
+build(); requestAnimationFrame(tick);
+</script>
+</body>
+</html>

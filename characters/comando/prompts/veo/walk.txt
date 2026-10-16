@@ -1,0 +1,5 @@
+Locked-off tripod camera, fixed frame, no zoom, no pan, single continuous shot, no cuts.
+Use the input image as the exact first frame. 2D game sprite of the same character in three-quarter view facing right the whole time, same size, centered.
+The character walks IN PLACE (treadmill walk, no forward travel), holding the machine gun at hip level: contact, passing, opposite contact, passing; one full stride every second, heavy grounded steps, slight body bob, the headband tails trail and sway.
+Keep the flat 2D cartoon style: same thick dark outlines, same flat colors, no new shading, no lighting changes, no motion blur.
+Background stays solid flat #FF00FF magenta, unchanged, no ground shadow. No sound, no music, no dialogue.

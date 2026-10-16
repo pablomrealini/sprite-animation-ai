@@ -1,0 +1,91 @@
+# Copiá este archivo a characters/<personaje>/character.toml y ajustalo.
+# Las rutas son relativas a la carpeta del archivo.
+
+[character]
+name = "soldado"
+style = "hd"              # "hd" (ilustrado) | "pixel"
+game_fps = 12             # 12 para HD on twos, 8 para pixel art. Tiene que dividir al fps del clip (24).
+target_height = 128       # alto del cuerpo, en px finales, medido en la animación de referencia
+scale_reference = "idle"  # animación que define la escala; los demás clips se llevan a su tamaño en px
+# body_height_px = 540    # override: alto del cuerpo en px del video de la referencia, si el idle levanta un arma
+margin_px = 8             # aire alrededor de la unión de bboxes, en px del video
+sharpen = 0.0             # unsharp sobre RGB después de reducir (HD); 0.2-0.4 si queda blando
+# Sólo pixel art:
+# pixel_factor = 8        # factor entero de reducción; si falta, sale de alto de referencia / target_height
+# palette_colors = 24     # paleta k-means común a todas las animaciones
+# palette = "palette.png" # o una paleta hecha a mano (todos los colores únicos del PNG)
+
+[key]
+color = "auto"            # "auto" mide el fondo real por frame; o fijalo: "#00FF00"
+mode = "auto"             # "auto": global con verde/magenta, connected con fondos blancos o grises
+tolerance = [0.12, 0.80]  # rampa de alfa: debajo de 0.12 es fondo, arriba de 0.80 es personaje
+despill = 1.0             # sólo verde/magenta, en una banda alrededor del borde
+despill_band_px = 3
+min_island_px = 64        # motas más chicas que esto se borran
+hole_max_frac = 0.01      # en modo connected, huecos interiores menores a 1% del personaje se conservan
+
+[output]
+extra_scales = [0.5]      # variantes además de 1x (HD); en pixel art se ignora
+# work_dir = "work"
+# out_dir = "out"
+
+[atlas]
+max_size = 2048           # 2048 para mobile/WebGL de gama baja, 4096 en PC
+padding = 2
+border_padding = 2
+extrude = 1
+power_of_two = false      # sólo si usan mipmaps o PVRTC
+
+# Opcional: un [[clip]] por video del que salen varias animaciones. Las animaciones lo nombran en `clip`
+# y heredan todo esto (ver "Limpieza previa" en pipeline/README.md).
+# [[clip]]
+# name = "shoot"
+# file = "clips/raw/shoot.mp4"
+# color_matrix = "bt601"  # video sin tag codificado en BT.601 (Davinci); sin esto se supone BT.709
+# clean = { cut_muzzle = true }  # limpieza previa: true, o cut_muzzle / cut_left / prop_rows
+# body_height_px = 606    # si el personaje viene en otra escala
+# model = "seedance-2.0"
+# prompt = "prompts/shoot.txt"
+# pose = "poses/shoot.png"
+
+# Una sección por animación, en el orden en que querés verlas.
+[[animation]]
+name = "idle"
+clip = "clips/idle.mp4"
+kind = "cycle"            # "cycle": se busca el loop dentro del clip | "oneshot": ataque, golpe, muerte
+loop_seconds = [1.0, 2.5] # rango de largo del loop a buscar
+model = "veo-3.1-fast-generate-preview"
+prompt = "prompts/idle.txt"
+pose = "poses/idle.png"   # la imagen que se le pasó al modelo como primer frame (QA)
+
+[[animation]]
+name = "walk"
+clip = "clips/walk.mp4"
+kind = "cycle"
+loop_seconds = [0.5, 2.0]
+skip_seconds = 0.25       # ignorar el arranque, donde el modelo "se acomoda"
+# loop_start = 36         # override manual, en frames nativos
+# loop_length = 24        # múltiplo de K (24 fps -> 12 fps: K = 2)
+model = "veo-3.1-fast-generate-preview"
+prompt = "prompts/walk.txt"
+pose = "poses/walk.png"
+# Escala del clip (ver "Escala por clip" en pipeline/README.md). Con `pose` alcanza si la pose es de cuerpo
+# parado y el frame 0 la respeta. Si no:
+# body_height_px = 238    # alto del cuerpo parado en px del video de este clip
+# pose_body_height_px = 437  # o, si la pose no es de cuerpo parado, su alto parado en px de la pose
+# scale_pose = "poses/parado_chico.png"  # o una pose parada armada a la misma escala que `pose`
+
+[[animation]]
+name = "attack"
+clip = "clips/attack.mp4"
+kind = "oneshot"
+loop = false
+pick = "sharpest"         # el frame más nítido de cada grupo de K (el video borronea los golpes)
+# trim = [0, 60]          # frames nativos [inicio, fin)
+holds = { 4 = 2.0 }       # el frame 4 de salida (impacto) dura el doble
+# remove_flash = true     # disparos: borra el fogonazo y exporta la boca del cañón (ver pipeline/README.md)
+# clean = true            # limpieza previa del clip: fondo plano, sin sombra, rayos ni humo (ver pipeline/README.md)
+# reverse = true          # el tramo elegido al revés (trim en frames del clip original)
+model = "veo-3.1-fast-generate-preview"
+prompt = "prompts/attack.txt"
+pose = "poses/attack.png"

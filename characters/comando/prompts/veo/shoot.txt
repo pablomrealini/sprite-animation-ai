@@ -1,0 +1,6 @@
+Locked camera, fixed frame, single continuous shot, no cuts, no zoom.
+Use the input image as the exact first frame. Same character stays in place in three-quarter view facing right.
+He braces his legs, fires a short burst from the machine gun: the gun kicks back three times with recoil through the arms and shoulders, then he recovers to the starting stance and holds it.
+No muzzle flash, no bullets, no smoke, no particles, no camera shake, no background change.
+Keep the flat 2D cartoon style: same thick dark outlines, same flat colors, no new shading.
+Background stays solid flat #FF00FF magenta. No sound.

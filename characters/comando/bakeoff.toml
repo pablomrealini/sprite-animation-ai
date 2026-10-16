@@ -1,0 +1,48 @@
+# Bake-off del comando (paso 0 del reporte): la misma pose y el mismo prompt en cada modelo, con el QA
+# de spritepipe. Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/comando/bakeoff.toml --dry-run
+# Sin FAL_KEY ni GEMINI_API_KEY en el entorno es siempre un dry-run (ver pipeline/README.md).
+#
+# Dos preguntas: qué modelo da el mejor clip para sprites y quién bloquea al comando con el arma.
+# Davinci devolvía "blocked by provider" con Veo: veo-3.1-fast-gemini manda personGeneration =
+# "allow_adult" directo a Google y veo-3.1-fast-fal pasa por fal, que no expone ese parámetro.
+# Si los dos bloquean, es el filtro de Google; si sólo bloqueaba Davinci, era la plataforma.
+# Ojo: veo-3.1-fast-generate-preview se apaga en la Gemini API el 2026-10-22. Google recomienda
+# gemini-omni-1.1-flash, que va por la Interactions API con la misma GEMINI_API_KEY.
+
+[bakeoff]
+models = [
+  "seedance-2.0",         # lo que se usa hoy en Davinci: la referencia
+  "seedance-2.5",
+  "kling-3.0-pro",
+  "minimax-h3",
+  "wan-2.2",
+  "veo-3.1-fast-fal",
+  "veo-3.1-fast-gemini",
+  "gemini-omni-1.1-flash",  # el reemplazo de Veo en la Gemini API; ~US$0,51 por clip de 5 s
+]
+clips_per_model = 2       # por modelo y por animación
+duration = 5              # s; cada modelo usa la duración permitida más corta que alcance (Veo: 6, Omni: 5)
+aspect_ratio = "16:9"
+resolution = "720p"       # MiniMax H3 pide 768P
+audio = false             # donde se puede apagar; en Veo y Omni por la Gemini API va siempre
+max_usd = 30              # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+game_fps = 12             # para la búsqueda de loop del QA
+out_dir = "clips/bakeoff"
+# seed = 1                # el clip n usa seed + n - 1, donde el modelo lo acepta
+# negative_prompt = "camera movement, zoom, motion blur, 3d shading"  # Kling ya trae uno por defecto
+
+[[animation]]
+name = "idle"
+pose = "../../poses/comando_master_magenta_16x9.png"
+prompt = "prompts/idle.txt"
+kind = "cycle"
+# last_frame = true       # la misma pose como último frame (en Omni, la segunda imagen): loop cerrado,
+#                         # pero tiende a dar clips casi quietos
+
+[[animation]]
+name = "shoot"            # la ráfaga: el clip que más probablemente bloquea la moderación
+pose = "../../poses/comando_master_magenta_16x9.png"
+prompt = "prompts/shoot.txt"
+kind = "cycle"

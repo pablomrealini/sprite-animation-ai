@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>comando</title>
+<style>
+:root { --bg:#f4f4f2; --panel:#fff; --ink:#1c1c1c; --muted:#6b6b6b; --line:#dcdcd8; --accent:#d1495b; }
+@media (prefers-color-scheme: dark) { :root { --bg:#151515; --panel:#1f1f1f; --ink:#ececec; --muted:#9a9a9a; --line:#333; --accent:#ff6b7d; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.4 system-ui, -apple-system, sans-serif; }
+header { position:sticky; top:0; z-index:2; background:var(--panel); border-bottom:1px solid var(--line);
+  padding:10px 16px; display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; }
+h1 { font-size:16px; margin:0 12px 0 0; }
+label { color:var(--muted); display:inline-flex; gap:6px; align-items:center; }
+select, button { font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:3px 8px; }
+button { cursor:pointer; }
+main { padding:16px; display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px; }
+.card h2 { font-size:14px; margin:0 0 6px; display:flex; justify-content:space-between; }
+.card h2 span { color:var(--muted); font-weight:400; }
+.stage { overflow:auto; border-radius:6px; }
+canvas { display:block; margin:auto; image-rendering:pixelated; }
+.meta { color:var(--muted); font-size:12px; margin-top:6px; font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>comando</h1>
+  <label>Escala <select id="variant"></select></label>
+  <label>Zoom <select id="zoom"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>6</option></select></label>
+  <label>Fondo <select id="bgsel"><option value="checker">damero</option><option value="#202020">oscuro</option><option value="#e8e8e8">claro</option><option value="#6a8f3c">pasto</option></select></label>
+  <label><input type="checkbox" id="pivot" checked> pivot y piso</label>
+  <label><input type="checkbox" id="flip"> flipX</label>
+  <label><input type="checkbox" id="onion"> onion skin</label>
+  <button id="play">Pausa</button>
+  <button id="step">Paso</button>
+</header>
+<main id="grid"></main>
+<script>
+const DATA = {"style": "hd", "variants": {"1x": {"canvas": {"w": 175, "h": 194}, "pivot": {"x": 87.5, "y": 188.02}, "pages": ["comando_1x-0.png"], "animations": {"idle": {"loop": true, "frames": [{"page": 0, "x": 151, "y": 3, "w": 143, "h": 131, "ox": 26, "oy": 58, "duration": 83.3}, {"page": 0, "x": 3, "y": 129, "w": 143, "h": 131, "ox": 26, "oy": 58, "duration": 83.3}, {"page": 0, "x": 592, "y": 137, "w": 142, "h": 131, "ox": 27, "oy": 58, "duration": 83.3}, {"page": 0, "x": 445, "y": 262, "w": 142, "h": 130, "ox": 27, "oy": 59, "duration": 83.3}, {"page": 0, "x": 3, "y": 678, "w": 141, "h": 130, "ox": 28, "oy": 59, "duration": 83.3}, {"page": 0, "x": 883, "y": 526, "w": 141, "h": 130, "ox": 28, "oy": 59, "duration": 83.3}, {"page": 0, "x": 297, "y": 272, "w": 142, "h": 130, "ox": 27, "oy": 59, "duration": 83.3}, {"page": 0, "x": 150, "y": 279, "w": 142, "h": 130, "ox": 27, "oy": 59, "duration": 83.3}, {"page": 0, "x": 298, "y": 3, "w": 143, "h": 130, "ox": 26, "oy": 59, "duration": 83.3}, {"page": 0, "x": 445, "y": 3, "w": 143, "h": 130, "ox": 26, "oy": 59, "duration": 83.3}, {"page": 0, "x": 592, "y": 3, "w": 143, "h": 130, "ox": 26, "oy": 59, "duration": 83.3}, {"page": 0, "x": 3, "y": 410, "w": 142, "h": 130, "ox": 27, "oy": 59, "duration": 83.3}, {"page": 0, "x": 738, "y": 138, "w": 142, "h": 130, "ox": 27, "oy": 59, "duration": 83.3}, {"page": 0, "x": 735, "y": 533, "w": 141, "h": 130, "ox": 28, "oy": 59, "duration": 83.3}, {"page": 0, "x": 588, "y": 549, "w": 141, "h": 130, "ox": 28, "oy": 59, "duration": 83.3}, {"page": 0, "x": 884, "y": 138, "w": 142, "h": 130, "ox": 27, "oy": 59, "duration": 83.3}, {"page": 0, "x": 591, "y": 272, "w": 142, "h": 131, "ox": 27, "oy": 58, "duration": 83.3}, {"page": 0, "x": 739, "y": 3, "w": 143, "h": 131, "ox": 26, "oy": 58, "duration": 83.3}, {"page": 0, "x": 886, "y": 3, "w": 143, "h": 131, "ox": 26, "oy": 58, "duration": 83.3}]}, "shoot": {"loop": true, "frames": [{"page": 0, "x": 293, "y": 819, "w": 138, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 880, "y": 660, "w": 139, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 147, "y": 820, "w": 138, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 573, "y": 939, "w": 137, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 147, "y": 954, "w": 138, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 733, "y": 667, "w": 139, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 289, "y": 953, "w": 138, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 876, "y": 794, "w": 137, "h": 130, "ox": 28, "oy": 60, "duration": 83.3}]}, "run": {"loop": true, "frames": [{"page": 0, "x": 443, "y": 396, "w": 142, "h": 128, "ox": 29, "oy": 59, "duration": 83.3}, {"page": 0, "x": 298, "y": 137, "w": 143, "h": 131, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 586, "y": 683, "w": 139, "h": 129, "ox": 28, "oy": 61, "duration": 83.3}, {"page": 0, "x": 729, "y": 801, "w": 137, "h": 130, "ox": 29, "oy": 60, "duration": 83.3}, {"page": 0, "x": 714, "y": 935, "w": 137, "h": 129, "ox": 29, "oy": 58, "duration": 83.3}, {"page": 0, "x": 3, "y": 812, "w": 140, "h": 131, "ox": 28, "oy": 60, "duration": 83.3}, {"page": 0, "x": 296, "y": 406, "w": 142, "h": 129, "ox": 28, "oy": 61, "duration": 83.3}, {"page": 0, "x": 149, "y": 413, "w": 142, "h": 130, "ox": 29, "oy": 60, "duration": 83.3}, {"page": 0, "x": 3, "y": 544, "w": 142, "h": 130, "ox": 29, "oy": 59, "duration": 83.3}, {"page": 0, "x": 737, "y": 272, "w": 142, "h": 129, "ox": 28, "oy": 61, "duration": 83.3}, {"page": 0, "x": 431, "y": 953, "w": 138, "h": 130, "ox": 29, "oy": 60, "duration": 83.3}, {"page": 0, "x": 855, "y": 935, "w": 136, "h": 127, "ox": 30, "oy": 59, "duration": 83.3}, {"page": 0, "x": 440, "y": 803, "w": 139, "h": 132, "ox": 28, "oy": 59, "duration": 83.3}, {"page": 0, "x": 3, "y": 947, "w": 140, "h": 130, "ox": 28, "oy": 61, "duration": 83.3}, {"page": 0, "x": 441, "y": 669, "w": 141, "h": 130, "ox": 29, "oy": 60, "duration": 83.3}]}, "jump": {"loop": false, "frames": [{"page": 0, "x": 883, "y": 272, "w": 142, "h": 122, "ox": 27, "oy": 67, "duration": 83.3}, {"page": 0, "x": 883, "y": 398, "w": 142, "h": 124, "ox": 27, "oy": 65, "duration": 83.3}, {"page": 0, "x": 737, "y": 405, "w": 142, "h": 124, "ox": 27, "oy": 65, "duration": 83.3}, {"page": 0, "x": 589, "y": 407, "w": 142, "h": 138, "ox": 27, "oy": 9, "duration": 83.3}, {"page": 0, "x": 442, "y": 528, "w": 142, "h": 137, "ox": 27, "oy": 6, "duration": 83.3}, {"page": 0, "x": 295, "y": 539, "w": 142, "h": 136, "ox": 27, "oy": 3, "duration": 83.3}, {"page": 0, "x": 295, "y": 679, "w": 141, "h": 136, "ox": 27, "oy": 3, "duration": 83.3}, {"page": 0, "x": 149, "y": 547, "w": 142, "h": 135, "ox": 27, "oy": 7, "duration": 83.3}, {"page": 0, "x": 150, "y": 138, "w": 143, "h": 137, "ox": 26, "oy": 9, "duration": 83.3}, {"page": 0, "x": 3, "y": 264, "w": 143, "h": 142, "ox": 26, "oy": 22, "duration": 83.3}, {"page": 0, "x": 3, "y": 3, "w": 144, "h": 122, "ox": 26, "oy": 68, "duration": 83.3}, {"page": 0, "x": 445, "y": 137, "w": 143, "h": 121, "ox": 26, "oy": 68, "duration": 83.3}, {"page": 0, "x": 148, "y": 686, "w": 141, "h": 130, "ox": 27, "oy": 59, "duration": 83.3}]}}}, "0.5x": {"canvas": {"w": 88, "h": 97}, "pivot": {"x": 44.0, "y": 94.01}, "pages": ["comando_0.5x-0.png"], "animations": {"idle": {"loop": true, "frames": [{"page": 0, "x": 3, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 3, "y": 73, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 3, "y": 143, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 3, "y": 213, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 383, "y": 146, "w": 71, "h": 66, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 535, "y": 138, "w": 71, "h": 66, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 3, "y": 283, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 3, "y": 353, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 3, "y": 423, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 3, "y": 493, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 79, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 155, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 231, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 458, "y": 208, "w": 71, "h": 66, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 383, "y": 216, "w": 71, "h": 66, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 307, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 383, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 459, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}, {"page": 0, "x": 535, "y": 3, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}]}, "shoot": {"loop": true, "frames": [{"page": 0, "x": 458, "y": 278, "w": 70, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 532, "y": 278, "w": 70, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 306, "y": 286, "w": 70, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 378, "y": 355, "w": 69, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 230, "y": 288, "w": 70, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 155, "y": 291, "w": 70, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 380, "y": 286, "w": 70, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 155, "y": 431, "w": 69, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}]}, "run": {"loop": true, "frames": [{"page": 0, "x": 79, "y": 73, "w": 72, "h": 65, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 79, "y": 142, "w": 72, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 454, "y": 347, "w": 70, "h": 64, "ox": 14, "oy": 31, "duration": 83.3}, {"page": 0, "x": 155, "y": 500, "w": 69, "h": 65, "ox": 15, "oy": 30, "duration": 83.3}, {"page": 0, "x": 528, "y": 347, "w": 70, "h": 64, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 304, "y": 355, "w": 70, "h": 66, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 307, "y": 217, "w": 71, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 231, "y": 219, "w": 71, "h": 65, "ox": 15, "oy": 30, "duration": 83.3}, {"page": 0, "x": 79, "y": 211, "w": 72, "h": 66, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 155, "y": 222, "w": 71, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 229, "y": 357, "w": 70, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 228, "y": 431, "w": 69, "h": 64, "ox": 15, "oy": 29, "duration": 83.3}, {"page": 0, "x": 155, "y": 360, "w": 70, "h": 67, "ox": 14, "oy": 29, "duration": 83.3}, {"page": 0, "x": 533, "y": 208, "w": 71, "h": 66, "ox": 14, "oy": 30, "duration": 83.3}, {"page": 0, "x": 79, "y": 281, "w": 72, "h": 65, "ox": 14, "oy": 30, "duration": 83.3}]}, "jump": {"loop": false, "frames": [{"page": 0, "x": 79, "y": 350, "w": 72, "h": 62, "ox": 13, "oy": 33, "duration": 83.3}, {"page": 0, "x": 79, "y": 416, "w": 72, "h": 63, "ox": 13, "oy": 32, "duration": 83.3}, {"page": 0, "x": 79, "y": 483, "w": 72, "h": 63, "ox": 13, "oy": 32, "duration": 83.3}, {"page": 0, "x": 155, "y": 73, "w": 72, "h": 70, "ox": 13, "oy": 4, "duration": 83.3}, {"page": 0, "x": 231, "y": 73, "w": 72, "h": 69, "ox": 13, "oy": 3, "duration": 83.3}, {"page": 0, "x": 307, "y": 73, "w": 72, "h": 68, "ox": 13, "oy": 1, "duration": 83.3}, {"page": 0, "x": 383, "y": 73, "w": 72, "h": 69, "ox": 13, "oy": 1, "duration": 83.3}, {"page": 0, "x": 307, "y": 145, "w": 72, "h": 68, "ox": 13, "oy": 3, "duration": 83.3}, {"page": 0, "x": 231, "y": 146, "w": 72, "h": 69, "ox": 13, "oy": 4, "duration": 83.3}, {"page": 0, "x": 155, "y": 147, "w": 72, "h": 71, "ox": 13, "oy": 11, "duration": 83.3}, {"page": 0, "x": 459, "y": 73, "w": 72, "h": 61, "ox": 13, "oy": 34, "duration": 83.3}, {"page": 0, "x": 535, "y": 73, "w": 72, "h": 61, "ox": 13, "oy": 34, "duration": 83.3}, {"page": 0, "x": 459, "y": 138, "w": 72, "h": 66, "ox": 13, "oy": 29, "duration": 83.3}]}}}}};
+const $ = id => document.getElementById(id);
+let playing = true, cards = [], images = [];
+const variantSel = $('variant');
+Object.keys(DATA.variants).forEach(v => variantSel.add(new Option(v, v)));
+
+function checker(ctx, w, h, s) {
+  for (let y = 0; y < h; y += s) for (let x = 0; x < w; x += s) {
+    ctx.fillStyle = ((x / s + y / s) & 1) ? '#c9c9c9' : '#f0f0f0'; ctx.fillRect(x, y, s, s);
+  }
+}
+
+function build() {
+  const V = DATA.variants[variantSel.value];
+  images = V.pages.map(src => { const im = new Image(); im.src = src; return im; });
+  const grid = $('grid'); grid.innerHTML = ''; cards = [];
+  for (const [name, anim] of Object.entries(V.animations)) {
+    const card = document.createElement('div'); card.className = 'card';
+    const total = anim.frames.reduce((a, f) => a + f.duration, 0);
+    card.innerHTML = `<h2>${name}<span>${anim.frames.length} frames · ${anim.loop ? 'loop' : 'una pasada'}</span></h2>
+      <div class="stage"><canvas></canvas></div><div class="meta"></div>`;
+    grid.appendChild(card);
+    cards.push({ anim, name, canvas: card.querySelector('canvas'), meta: card.querySelector('.meta'),
+                 i: 0, t: 0, total, V });
+  }
+}
+
+function draw(c) {
+  const z = +$('zoom').value, V = c.V, cw = V.canvas.w, ch = V.canvas.h;
+  const cv = c.canvas; if (cv.width !== cw * z) { cv.width = cw * z; cv.height = ch * z; }
+  const ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = DATA.style !== 'pixel';
+  const bg = $('bgsel').value;
+  if (bg === 'checker') checker(ctx, cv.width, cv.height, 8 * z); else { ctx.fillStyle = bg; ctx.fillRect(0, 0, cv.width, cv.height); }
+  const flip = $('flip').checked;
+  const paint = (f, alpha) => {
+    ctx.save(); ctx.globalAlpha = alpha;
+    if (flip) { ctx.translate(cv.width, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(images[f.page], f.x, f.y, f.w, f.h, f.ox * z, f.oy * z, f.w * z, f.h * z);
+    ctx.restore();
+  };
+  if ($('onion').checked && c.anim.frames.length > 1) {
+    const prev = c.anim.frames[(c.i - 1 + c.anim.frames.length) % c.anim.frames.length];
+    paint(prev, 0.3);
+  }
+  paint(c.anim.frames[c.i], 1);
+  if ($('pivot').checked) {
+    const px = V.pivot.x * z, py = V.pivot.y * z;
+    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--accent');
+    ctx.lineWidth = 1; ctx.beginPath();
+    ctx.moveTo(0, py + 0.5); ctx.lineTo(cv.width, py + 0.5);
+    ctx.moveTo(px + 0.5, py - 6 * z); ctx.lineTo(px + 0.5, py + 3 * z); ctx.stroke();
+  }
+  const f = c.anim.frames[c.i];
+  c.meta.textContent = `frame ${c.i + 1}/${c.anim.frames.length} · ${f.duration} ms · ciclo ${Math.round(c.total)} ms · celda ${cw}×${ch}`;
+}
+
+let last = performance.now();
+function tick(now) {
+  const dt = now - last; last = now;
+  for (const c of cards) {
+    if (playing && c.hold > 0) {  // una pasada: se queda en el último frame y repite para revisar
+      c.hold -= dt; if (c.hold <= 0) { c.i = 0; c.t = 0; }
+    } else if (playing) {
+      c.t += dt;
+      while (c.t >= c.anim.frames[c.i].duration) {
+        c.t -= c.anim.frames[c.i].duration;
+        if (c.i < c.anim.frames.length - 1) c.i++;
+        else if (c.anim.loop) c.i = 0;
+        else { c.hold = 700; c.t = 0; break; }
+      }
+    }
+    draw(c);
+  }
+  requestAnimationFrame(tick);
+}
+variantSel.onchange = build;
+$('play').onclick = () => { playing = !playing; $('play').textContent = playing ? 'Pausa' : 'Play'; };
+$('step').onclick = () => { playing = false; $('play').textContent = 'Play';
+  cards.forEach(c => { c.i = (c.i + 1) % c.anim.frames.length; c.t = 0; }); };
+build(); requestAnimationFrame(tick);
+</script>
+</body>
+</html>

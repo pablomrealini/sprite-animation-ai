@@ -1,0 +1,654 @@
+{
+  "character": "comando",
+  "style": "hd",
+  "fps": 12,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.96919
+  },
+  "variants": {
+    "1x": {
+      "canvas": {
+        "w": 175,
+        "h": 194
+      },
+      "pivot_px": {
+        "x": 87.5,
+        "y": 188.02
+      },
+      "atlas": [
+        {
+          "image": "comando_1x-0.png",
+          "data": "comando_1x-0.json",
+          "w": 1032,
+          "h": 1087
+        }
+      ],
+      "animations": {
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0018",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/idle.png"
+        },
+        "shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0007",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot.png"
+        },
+        "run": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "run/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0014",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/run.png"
+        },
+        "jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0012",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/jump.png"
+        }
+      }
+    },
+    "0.5x": {
+      "canvas": {
+        "w": 88,
+        "h": 97
+      },
+      "pivot_px": {
+        "x": 44.0,
+        "y": 94.01
+      },
+      "atlas": [
+        {
+          "image": "comando_0.5x-0.png",
+          "data": "comando_0.5x-0.json",
+          "w": 610,
+          "h": 568
+        }
+      ],
+      "animations": {
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0018",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/idle.png"
+        },
+        "shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0007",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot.png"
+        },
+        "run": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "run/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run/0014",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/run.png"
+        },
+        "jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0012",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/jump.png"
+        }
+      }
+    }
+  },
+  "fx": {
+    "shoot": {
+      "muzzle": "fx/shoot_muzzle.json"
+    }
+  }
+}

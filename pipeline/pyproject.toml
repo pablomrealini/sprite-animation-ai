@@ -1,0 +1,22 @@
+[project]
+name = "spritepipe"
+version = "0.1.0"
+description = "Pipeline determinístico: clip de video (Veo/Kling) -> sprite sheets listos para el engine"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.0",
+    "pillow>=11.0",
+    "opencv-python-headless>=4.10",
+]
+
+[project.scripts]
+spritepipe = "spritepipe.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

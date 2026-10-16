@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>synthetic</title>
+<style>
+:root { --bg:#f4f4f2; --panel:#fff; --ink:#1c1c1c; --muted:#6b6b6b; --line:#dcdcd8; --accent:#d1495b; }
+@media (prefers-color-scheme: dark) { :root { --bg:#151515; --panel:#1f1f1f; --ink:#ececec; --muted:#9a9a9a; --line:#333; --accent:#ff6b7d; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.4 system-ui, -apple-system, sans-serif; }
+header { position:sticky; top:0; z-index:2; background:var(--panel); border-bottom:1px solid var(--line);
+  padding:10px 16px; display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; }
+h1 { font-size:16px; margin:0 12px 0 0; }
+label { color:var(--muted); display:inline-flex; gap:6px; align-items:center; }
+select, button { font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:3px 8px; }
+button { cursor:pointer; }
+main { padding:16px; display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px; }
+.card h2 { font-size:14px; margin:0 0 6px; display:flex; justify-content:space-between; }
+.card h2 span { color:var(--muted); font-weight:400; }
+.stage { overflow:auto; border-radius:6px; }
+canvas { display:block; margin:auto; image-rendering:pixelated; }
+.meta { color:var(--muted); font-size:12px; margin-top:6px; font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>synthetic</h1>
+  <label>Escala <select id="variant"></select></label>
+  <label>Zoom <select id="zoom"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>6</option></select></label>
+  <label>Fondo <select id="bgsel"><option value="checker">damero</option><option value="#202020">oscuro</option><option value="#e8e8e8">claro</option><option value="#6a8f3c">pasto</option></select></label>
+  <label><input type="checkbox" id="pivot" checked> pivot y piso</label>
+  <label><input type="checkbox" id="flip"> flipX</label>
+  <label><input type="checkbox" id="onion"> onion skin</label>
+  <button id="play">Pausa</button>
+  <button id="step">Paso</button>
+</header>
+<main id="grid"></main>
+<script>
+const DATA = {"style": "hd", "variants": {"1x": {"canvas": {"w": 144, "h": 168}, "pivot": {"x": 72.0, "y": 165.65}, "pages": ["synthetic_1x-0.png"], "animations": {"idle": {"loop": true, "frames": [{"page": 0, "x": 3, "y": 637, "w": 38, "h": 130, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 171, "y": 422, "w": 38, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 196, "y": 271, "w": 38, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 203, "y": 137, "w": 38, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 227, "y": 3, "w": 38, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 171, "y": 555, "w": 38, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 213, "y": 404, "w": 38, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 585, "y": 136, "w": 38, "h": 128, "ox": 54, "oy": 38, "duration": 83.3}, {"page": 0, "x": 604, "y": 3, "w": 38, "h": 128, "ox": 54, "oy": 38, "duration": 83.3}, {"page": 0, "x": 238, "y": 270, "w": 38, "h": 129, "ox": 54, "oy": 38, "duration": 83.3}, {"page": 0, "x": 245, "y": 136, "w": 38, "h": 129, "ox": 54, "oy": 38, "duration": 83.3}, {"page": 0, "x": 269, "y": 3, "w": 38, "h": 129, "ox": 54, "oy": 38, "duration": 83.3}, {"page": 0, "x": 45, "y": 502, "w": 38, "h": 130, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 45, "y": 636, "w": 38, "h": 130, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 70, "y": 335, "w": 38, "h": 130, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 87, "y": 469, "w": 38, "h": 130, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 112, "y": 335, "w": 38, "h": 130, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 3, "y": 502, "w": 38, "h": 131, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 87, "y": 603, "w": 38, "h": 130, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 118, "y": 154, "w": 38, "h": 130, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 143, "y": 3, "w": 38, "h": 130, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 129, "y": 469, "w": 38, "h": 130, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 129, "y": 603, "w": 38, "h": 130, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 154, "y": 288, "w": 38, "h": 130, "ox": 54, "oy": 36, "duration": 83.3}]}, "walk": {"loop": true, "frames": [{"page": 0, "x": 160, "y": 137, "w": 39, "h": 130, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 213, "y": 537, "w": 43, "h": 129, "ox": 51, "oy": 38, "duration": 83.3}, {"page": 0, "x": 646, "y": 3, "w": 57, "h": 127, "ox": 44, "oy": 40, "duration": 83.3}, {"page": 0, "x": 707, "y": 3, "w": 63, "h": 126, "ox": 41, "oy": 41, "duration": 83.3}, {"page": 0, "x": 699, "y": 134, "w": 58, "h": 127, "ox": 44, "oy": 40, "duration": 83.3}, {"page": 0, "x": 255, "y": 403, "w": 43, "h": 129, "ox": 51, "oy": 38, "duration": 83.3}, {"page": 0, "x": 185, "y": 3, "w": 38, "h": 130, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 565, "y": 535, "w": 44, "h": 128, "ox": 51, "oy": 38, "duration": 83.3}, {"page": 0, "x": 774, "y": 3, "w": 58, "h": 126, "ox": 44, "oy": 40, "duration": 83.3}, {"page": 0, "x": 761, "y": 263, "w": 64, "h": 125, "ox": 41, "oy": 41, "duration": 83.3}, {"page": 0, "x": 761, "y": 133, "w": 58, "h": 126, "ox": 44, "oy": 40, "duration": 83.3}, {"page": 0, "x": 603, "y": 402, "w": 44, "h": 128, "ox": 51, "oy": 38, "duration": 83.3}]}, "attack": {"loop": false, "frames": [{"page": 0, "x": 280, "y": 269, "w": 50, "h": 129, "ox": 45, "oy": 37, "duration": 83.3}, {"page": 0, "x": 287, "y": 136, "w": 64, "h": 129, "ox": 31, "oy": 37, "duration": 83.3}, {"page": 0, "x": 311, "y": 3, "w": 73, "h": 129, "ox": 22, "oy": 36, "duration": 83.3}, {"page": 0, "x": 260, "y": 536, "w": 94, "h": 129, "ox": 1, "oy": 36, "duration": 166.7}, {"page": 0, "x": 625, "y": 268, "w": 91, "h": 128, "ox": 4, "oy": 36, "duration": 83.3}, {"page": 0, "x": 66, "y": 3, "w": 73, "h": 147, "ox": 22, "oy": 17, "duration": 83.3}, {"page": 0, "x": 3, "y": 337, "w": 63, "h": 161, "ox": 32, "oy": 3, "duration": 83.3}, {"page": 0, "x": 3, "y": 3, "w": 59, "h": 163, "ox": 36, "oy": 1, "duration": 83.3}, {"page": 0, "x": 63, "y": 170, "w": 51, "h": 161, "ox": 44, "oy": 3, "duration": 83.3}, {"page": 0, "x": 3, "y": 170, "w": 56, "h": 163, "ox": 39, "oy": 1, "duration": 83.3}, {"page": 0, "x": 302, "y": 402, "w": 88, "h": 129, "ox": 7, "oy": 35, "duration": 83.3}, {"page": 0, "x": 627, "y": 135, "w": 68, "h": 128, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 334, "y": 269, "w": 85, "h": 129, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 355, "y": 136, "w": 85, "h": 129, "ox": 54, "oy": 36, "duration": 83.3}, {"page": 0, "x": 388, "y": 3, "w": 86, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 358, "y": 535, "w": 86, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 394, "y": 402, "w": 86, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 423, "y": 269, "w": 83, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 444, "y": 136, "w": 81, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 478, "y": 3, "w": 71, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 448, "y": 535, "w": 66, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 484, "y": 402, "w": 62, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 510, "y": 269, "w": 57, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 529, "y": 136, "w": 52, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 553, "y": 3, "w": 47, "h": 129, "ox": 54, "oy": 37, "duration": 83.3}, {"page": 0, "x": 518, "y": 535, "w": 43, "h": 129, "ox": 53, "oy": 37, "duration": 83.3}, {"page": 0, "x": 550, "y": 402, "w": 49, "h": 129, "ox": 46, "oy": 37, "duration": 83.3}, {"page": 0, "x": 571, "y": 269, "w": 50, "h": 129, "ox": 45, "oy": 37, "duration": 83.3}]}}}, "0.5x": {"canvas": {"w": 72, "h": 84}, "pivot": {"x": 36.0, "y": 82.82}, "pages": ["synthetic_0.5x-0.png"], "animations": {"idle": {"loop": true, "frames": [{"page": 0, "x": 49, "y": 244, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 62, "y": 174, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 66, "y": 81, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 78, "y": 3, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 49, "y": 313, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 72, "y": 243, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 308, "y": 3, "w": 19, "h": 64, "ox": 27, "oy": 19, "duration": 83.3}, {"page": 0, "x": 331, "y": 3, "w": 19, "h": 64, "ox": 27, "oy": 19, "duration": 83.3}, {"page": 0, "x": 354, "y": 3, "w": 19, "h": 64, "ox": 27, "oy": 19, "duration": 83.3}, {"page": 0, "x": 377, "y": 3, "w": 19, "h": 64, "ox": 27, "oy": 19, "duration": 83.3}, {"page": 0, "x": 85, "y": 150, "w": 19, "h": 65, "ox": 27, "oy": 19, "duration": 83.3}, {"page": 0, "x": 89, "y": 72, "w": 19, "h": 65, "ox": 27, "oy": 19, "duration": 83.3}, {"page": 0, "x": 3, "y": 260, "w": 19, "h": 66, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 3, "y": 330, "w": 19, "h": 66, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 26, "y": 260, "w": 19, "h": 66, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 26, "y": 330, "w": 19, "h": 66, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 39, "y": 174, "w": 19, "h": 66, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 101, "y": 3, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 72, "y": 312, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 95, "y": 219, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 108, "y": 141, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 112, "y": 72, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 124, "y": 3, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 95, "y": 288, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}]}, "walk": {"loop": true, "frames": [{"page": 0, "x": 118, "y": 210, "w": 20, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 131, "y": 141, "w": 22, "h": 65, "ox": 25, "oy": 19, "duration": 83.3}, {"page": 0, "x": 340, "y": 207, "w": 29, "h": 63, "ox": 22, "oy": 20, "duration": 83.3}, {"page": 0, "x": 373, "y": 207, "w": 32, "h": 63, "ox": 20, "oy": 20, "duration": 83.3}, {"page": 0, "x": 315, "y": 274, "w": 29, "h": 63, "ox": 22, "oy": 20, "duration": 83.3}, {"page": 0, "x": 265, "y": 279, "w": 22, "h": 64, "ox": 25, "oy": 19, "duration": 83.3}, {"page": 0, "x": 135, "y": 72, "w": 19, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 288, "y": 210, "w": 23, "h": 64, "ox": 25, "oy": 19, "duration": 83.3}, {"page": 0, "x": 291, "y": 341, "w": 29, "h": 63, "ox": 22, "oy": 20, "duration": 83.3}, {"page": 0, "x": 324, "y": 341, "w": 33, "h": 63, "ox": 20, "oy": 20, "duration": 83.3}, {"page": 0, "x": 348, "y": 274, "w": 29, "h": 63, "ox": 22, "oy": 20, "duration": 83.3}, {"page": 0, "x": 313, "y": 141, "w": 23, "h": 64, "ox": 25, "oy": 19, "duration": 83.3}]}, "attack": {"loop": false, "frames": [{"page": 0, "x": 147, "y": 3, "w": 26, "h": 65, "ox": 22, "oy": 18, "duration": 83.3}, {"page": 0, "x": 118, "y": 279, "w": 33, "h": 65, "ox": 15, "oy": 18, "duration": 83.3}, {"page": 0, "x": 142, "y": 210, "w": 37, "h": 65, "ox": 11, "oy": 18, "duration": 83.3}, {"page": 0, "x": 157, "y": 141, "w": 48, "h": 65, "ox": 0, "oy": 18, "duration": 166.7}, {"page": 0, "x": 321, "y": 71, "w": 46, "h": 64, "ox": 2, "oy": 18, "duration": 83.3}, {"page": 0, "x": 37, "y": 3, "w": 37, "h": 74, "ox": 11, "oy": 8, "duration": 83.3}, {"page": 0, "x": 3, "y": 175, "w": 32, "h": 81, "ox": 16, "oy": 1, "duration": 83.3}, {"page": 0, "x": 3, "y": 3, "w": 30, "h": 82, "ox": 18, "oy": 0, "duration": 83.3}, {"page": 0, "x": 36, "y": 89, "w": 26, "h": 81, "ox": 22, "oy": 1, "duration": 83.3}, {"page": 0, "x": 3, "y": 89, "w": 29, "h": 82, "ox": 19, "oy": 0, "duration": 83.3}, {"page": 0, "x": 340, "y": 139, "w": 45, "h": 64, "ox": 3, "oy": 18, "duration": 83.3}, {"page": 0, "x": 371, "y": 71, "w": 34, "h": 64, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 158, "y": 72, "w": 42, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 177, "y": 3, "w": 43, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 204, "y": 72, "w": 43, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 224, "y": 3, "w": 43, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 155, "y": 279, "w": 43, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 183, "y": 210, "w": 42, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 209, "y": 141, "w": 41, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 251, "y": 72, "w": 36, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 271, "y": 3, "w": 33, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 202, "y": 279, "w": 31, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 229, "y": 210, "w": 29, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 254, "y": 141, "w": 26, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 237, "y": 279, "w": 24, "h": 65, "ox": 27, "oy": 18, "duration": 83.3}, {"page": 0, "x": 262, "y": 210, "w": 22, "h": 65, "ox": 26, "oy": 18, "duration": 83.3}, {"page": 0, "x": 284, "y": 141, "w": 25, "h": 65, "ox": 23, "oy": 18, "duration": 83.3}, {"page": 0, "x": 291, "y": 72, "w": 26, "h": 65, "ox": 22, "oy": 18, "duration": 83.3}]}}}}};
+const $ = id => document.getElementById(id);
+let playing = true, cards = [], images = [];
+const variantSel = $('variant');
+Object.keys(DATA.variants).forEach(v => variantSel.add(new Option(v, v)));
+
+function checker(ctx, w, h, s) {
+  for (let y = 0; y < h; y += s) for (let x = 0; x < w; x += s) {
+    ctx.fillStyle = ((x / s + y / s) & 1) ? '#c9c9c9' : '#f0f0f0'; ctx.fillRect(x, y, s, s);
+  }
+}
+
+function build() {
+  const V = DATA.variants[variantSel.value];
+  images = V.pages.map(src => { const im = new Image(); im.src = src; return im; });
+  const grid = $('grid'); grid.innerHTML = ''; cards = [];
+  for (const [name, anim] of Object.entries(V.animations)) {
+    const card = document.createElement('div'); card.className = 'card';
+    const total = anim.frames.reduce((a, f) => a + f.duration, 0);
+    card.innerHTML = `<h2>${name}<span>${anim.frames.length} frames · ${anim.loop ? 'loop' : 'una pasada'}</span></h2>
+      <div class="stage"><canvas></canvas></div><div class="meta"></div>`;
+    grid.appendChild(card);
+    cards.push({ anim, name, canvas: card.querySelector('canvas'), meta: card.querySelector('.meta'),
+                 i: 0, t: 0, total, V });
+  }
+}
+
+function draw(c) {
+  const z = +$('zoom').value, V = c.V, cw = V.canvas.w, ch = V.canvas.h;
+  const cv = c.canvas; if (cv.width !== cw * z) { cv.width = cw * z; cv.height = ch * z; }
+  const ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = DATA.style !== 'pixel';
+  const bg = $('bgsel').value;
+  if (bg === 'checker') checker(ctx, cv.width, cv.height, 8 * z); else { ctx.fillStyle = bg; ctx.fillRect(0, 0, cv.width, cv.height); }
+  const flip = $('flip').checked;
+  const paint = (f, alpha) => {
+    ctx.save(); ctx.globalAlpha = alpha;
+    if (flip) { ctx.translate(cv.width, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(images[f.page], f.x, f.y, f.w, f.h, f.ox * z, f.oy * z, f.w * z, f.h * z);
+    ctx.restore();
+  };
+  if ($('onion').checked && c.anim.frames.length > 1) {
+    const prev = c.anim.frames[(c.i - 1 + c.anim.frames.length) % c.anim.frames.length];
+    paint(prev, 0.3);
+  }
+  paint(c.anim.frames[c.i], 1);
+  if ($('pivot').checked) {
+    const px = V.pivot.x * z, py = V.pivot.y * z;
+    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--accent');
+    ctx.lineWidth = 1; ctx.beginPath();
+    ctx.moveTo(0, py + 0.5); ctx.lineTo(cv.width, py + 0.5);
+    ctx.moveTo(px + 0.5, py - 6 * z); ctx.lineTo(px + 0.5, py + 3 * z); ctx.stroke();
+  }
+  const f = c.anim.frames[c.i];
+  c.meta.textContent = `frame ${c.i + 1}/${c.anim.frames.length} · ${f.duration} ms · ciclo ${Math.round(c.total)} ms · celda ${cw}×${ch}`;
+}
+
+let last = performance.now();
+function tick(now) {
+  const dt = now - last; last = now;
+  for (const c of cards) {
+    if (playing && c.hold > 0) {  // una pasada: se queda en el último frame y repite para revisar
+      c.hold -= dt; if (c.hold <= 0) { c.i = 0; c.t = 0; }
+    } else if (playing) {
+      c.t += dt;
+      while (c.t >= c.anim.frames[c.i].duration) {
+        c.t -= c.anim.frames[c.i].duration;
+        if (c.i < c.anim.frames.length - 1) c.i++;
+        else if (c.anim.loop) c.i = 0;
+        else { c.hold = 700; c.t = 0; break; }
+      }
+    }
+    draw(c);
+  }
+  requestAnimationFrame(tick);
+}
+variantSel.onchange = build;
+$('play').onclick = () => { playing = !playing; $('play').textContent = playing ? 'Pausa' : 'Play'; };
+$('step').onclick = () => { playing = false; $('play').textContent = 'Play';
+  cards.forEach(c => { c.i = (c.i + 1) % c.anim.frames.length; c.t = 0; }); };
+build(); requestAnimationFrame(tick);
+</script>
+</body>
+</html>

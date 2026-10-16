@@ -1,0 +1,5 @@
+Use the input image as the exact first frame and the last frame. Single continuous shot, no scene cuts, locked-off tripod camera, fixed frame, no zoom, no pan.
+Same character, same position, same size, same facing (three-quarter view facing right), feet planted the whole time.
+Subtle combat idle: slow heavy breathing, chest and shoulders rise and fall, the machine gun bobs slightly with the breath, the red headband tails sway gently, one blink.
+Keep the flat 2D cartoon style unchanged: same thick dark outlines, same flat colors, no new shading, no lighting changes, no motion blur.
+Background stays solid flat #FF00FF magenta, unchanged, no floor, no shadow. No sound, no music, no dialogue.
