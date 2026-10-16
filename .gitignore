@@ -14,3 +14,6 @@ research_notes/*/refs/
 characters/ranger/clips/*.mp4
 !characters/ranger/clips/run.mp4
 characters/comando/clips/shoot_noflash.mp4
+
+# juegos de prueba armados (se regeneran con prototypes/build.py)
+prototypes/*/dist/

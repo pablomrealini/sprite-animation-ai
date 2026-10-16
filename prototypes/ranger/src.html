@@ -1,0 +1,654 @@
+<title>Polígono del Ranger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Barlow:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: consola de entrenamiento. Escenario 16:9 arriba; abajo controles | ajustes y lectura, en una columna en el teléfono. */
+:root {
+  --bg: #121522;        /* azul noche de la base */
+  --panel: #1b2032;
+  --line: #2f3750;
+  --fg: #eef0f6;        /* blanco del casco */
+  --muted: #9aa3bd;
+  --red: #e8392e;       /* rojo de la armadura */
+  --cyan: #59e3ec;      /* punta de la pistola, solo para estados */
+  --font-display: "Chakra Petch", "Arial Narrow", Arial, sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); }
+body { font: 15px/1.5 var(--font-body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+h1 { font: 700 clamp(26px, 4vw, 38px)/1.05 var(--font-display); margin: 0; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance; }
+h1 span { color: var(--red); }
+.eyebrow { font: 600 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.stage { position: relative; border: 2px solid var(--line); border-radius: 6px; overflow: hidden; background: #241a46; aspect-ratio: 16 / 9; max-width: 100%; }
+.stage canvas { display: block; width: 100%; height: 100%; outline: none; cursor: crosshair; touch-action: none; }
+.stage canvas:focus-visible { box-shadow: inset 0 0 0 3px var(--red); }
+.overlay[hidden] { display: none; }
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(10, 12, 24, 0.35); }
+.overlay button { font: 700 clamp(18px, 3vw, 24px)/1 var(--font-display); text-transform: uppercase; color: #fff; background: var(--red); border: 3px solid #0d0f18; border-radius: 6px; padding: 14px 26px; cursor: pointer; box-shadow: 0 4px 0 #0d0f18; }
+.overlay button:focus-visible { outline: 3px solid var(--fg); outline-offset: 3px; }
+.overlay p { margin: 10px 0 0; font: 600 14px var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 2px #000; text-align: center; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.box h2 { margin: 0; font: 700 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); }
+.keys { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 14px; margin: 0; }
+.keys dt { display: flex; gap: 4px; flex-wrap: wrap; align-items: flex-start; }
+.keys dd { margin: 0; }
+kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 4px; padding: 4px 6px; min-width: 24px; text-align: center; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.row > .lbl { font: 600 13px var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 96px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.seg button { font: 600 14px var(--font-display); color: var(--muted); background: transparent; border: 0; padding: 6px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--red); color: #fff; }
+.seg button:focus-visible, input:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
+.mono { font: 500 13px/1.4 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--fg); }
+.readout { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; overflow-x: auto; white-space: nowrap; }
+.note { margin: 0; color: var(--muted); font-size: 14px; max-width: 65ch; }
+.note b { color: var(--fg); font-weight: 600; }
+.touch { display: none; gap: 10px; justify-content: space-between; flex-wrap: wrap; }
+.touch .grp { display: flex; gap: 8px; }
+.touch button { font: 700 15px var(--font-display); color: var(--fg); background: var(--panel); border: 2px solid var(--line); border-radius: 8px; min-width: 56px; height: 54px; padding: 0 10px; touch-action: none; user-select: none; -webkit-user-select: none; }
+.touch button.fire { background: var(--red); border-color: #0d0f18; }
+@media (pointer: coarse) { .touch { display: flex; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Polígono del <span>Ranger</span></h1>
+    <div class="eyebrow">Prueba de sprites · 15 animaciones · 12 fps · 128 px</div>
+  </header>
+
+  <div class="stage">
+    <canvas id="game" tabindex="0" aria-label="Juego de prueba: el ranger corre, salta, se cuelga de las cornisas y dispara"></canvas>
+    <div class="overlay" id="overlay">
+      <div>
+        <button id="startBtn" type="button">Clic para jugar</button>
+        <p id="loadMsg">Cargando sprites…</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="touch" aria-label="Controles táctiles">
+    <div class="grp"><button id="tLeft" type="button" aria-label="Izquierda">◀</button><button id="tRight" type="button" aria-label="Derecha">▶</button><button id="tDown" type="button" aria-label="Agacharse">▼</button></div>
+    <div class="grp"><button id="tJump" type="button">Saltar</button><button id="tFire" class="fire" type="button">Fuego</button><button id="tFire2" class="fire" type="button">2 manos</button></div>
+  </div>
+
+  <div class="cols">
+    <section class="box" aria-labelledby="hControls">
+      <h2 id="hControls">Controles</h2>
+      <dl class="keys">
+        <dt><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd></dt><dd>Correr</dd>
+        <dt><kbd>W</kbd><kbd>↑</kbd><kbd>Espacio</kbd></dt><dd>Saltar. Colgado de una cornisa: subir</dd>
+        <dt><kbd>S</kbd><kbd>↓</kbd></dt><dd>Agacharse. Colgado: soltarse</dd>
+        <dt><kbd>Clic</kbd><kbd>J</kbd></dt><dd>Disparar con una mano. Con el mouse, apunta al lado del cursor</dd>
+        <dt><kbd>Clic der.</kbd><kbd>K</kbd></dt><dd>Disparar con las dos manos: más lento y pega doble</dd>
+        <dt><kbd>G</kbd></dt><dd>Mostrar u ocultar colisión, pivot, boca del arma y mano</dd>
+      </dl>
+      <p class="note">Las cornisas se agarran solas: saltá contra el borde de un bloque y el ranger se cuelga si la mano llega. Los blancos aguantan cuatro impactos (dos con el disparo a dos manos) y vuelven a los tres segundos.</p>
+    </section>
+
+    <section class="box" aria-labelledby="hSettings">
+      <h2 id="hSettings">Ajustes de prueba</h2>
+      <div class="row">
+        <span class="lbl" id="lblFeel">Feel</span>
+        <div class="seg" role="group" aria-labelledby="lblFeel">
+          <button type="button" id="fRep" aria-pressed="true">Reporte</button>
+          <button type="button" id="fAnt" aria-pressed="false">Anterior</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblJump">Salto</span>
+        <div class="seg" role="group" aria-labelledby="lblJump">
+          <button type="button" id="jPhys" aria-pressed="true">Físico</button>
+          <button type="button" id="jRoot" aria-pressed="false">Como está</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblTime">Tiempo</span>
+        <div class="seg" role="group" aria-labelledby="lblTime">
+          <button type="button" id="t1" aria-pressed="true">1×</button>
+          <button type="button" id="t05" aria-pressed="false">0,5×</button>
+          <button type="button" id="t025" aria-pressed="false">0,25×</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="lbl" for="runSpeed">Carrera</label>
+        <input type="range" id="runSpeed" min="140" max="400" step="10" value="300">
+        <span class="mono" id="runVal">300 px/s</span>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblDbg">Guías</span>
+        <div class="seg" role="group" aria-labelledby="lblDbg">
+          <button type="button" id="dOff" aria-pressed="true">Ocultas</button>
+          <button type="button" id="dOn" aria-pressed="false">Visibles</button>
+        </div>
+      </div>
+      <div class="readout mono" id="readout" aria-live="off">quieto · idle 1/3</div>
+      <p class="note"><b>Feel "reporte":</b> 300 px/s, salto de 192 px (1,5 alturas) que sube en 0,36 s y cae en 0,28, coyote y buffer de 0,1 s, corrección de esquina, 12 disparos/s y retroceso de 2,5 px por código. "Anterior" es como estaba, para comparar.</p>
+      <p class="note"><b>Provisorio:</b> el idle es un cuadro quieto, la subida a la cornisa es un salto de posición con la animación de pararse (falta el clip de trepar) y al correr dispara desde la mano que balancea, porque no hay run disparando. Los rayos, chispas y el fogonazo son efectos de código.</p>
+    </section>
+  </div>
+</div>
+
+<script>
+"use strict";
+const SPR = __SPRITE_DATA__;
+const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
+const VIEW_W = 960, VIEW_H = 540, GROUND = 474, WORLD_W = 3900;
+const HALF_W = 20, BODY_H = 112;
+// feel: "reporte" sale de reports/Movimiento y disparo en run-and-guns.md (salto de 1,5 alturas, 2,34 alturas/s);
+// "anterior" es como estaba el prototipo
+const FEELS = {
+  reporte:  { run: 300, accel: 4500, decel: 6000, air: 3000, v0: 1067, gUp: 2963, gDown: 4898, cut: 480, term: 1400, coyote: 0.10, buffer: 0.10, corner: 12, rate1: 1 / 12, rate2: 1 / 7, kick: 2.5 },
+  anterior: { run: 260, accel: 3000, decel: 3000, air: 1800, v0: 660, gUp: 1950, gDown: 1950, cut: 280, term: 1e9, coyote: 0, buffer: 0, corner: 0, rate1: 0.16, rate2: 0.2, kick: 0 },
+};
+let FEEL = FEELS.reporte;
+const HAND_REACH = 151;     // altura de la mano sobre los pies en el colgado (medida en el sprite)
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cv = document.getElementById("game"), ctx = cv.getContext("2d");
+const atlas = new Image();
+let ready = false;
+
+const anim = n => SPR.anims[n];
+const F = (n, i) => anim(n).f[Math.max(0, Math.min(anim(n).f.length - 1, i))];
+// fases del salto, sacadas de la subida que trae cada frame
+function phases(name) {
+  const f = anim(name).f, air = f.map((x, i) => [i, x[8]]).filter(([, l]) => l > 5).map(([i]) => i);
+  const apex = air.reduce((b, i) => (f[i][8] > f[b][8] ? i : b), air[0]);
+  return { prep: Math.max(0, air[0] - 1), rise: air.filter(i => i < apex), apex, fall: air.filter(i => i > apex), land: f.map((_, i) => i).filter(i => i > air[air.length - 1]) };
+}
+const JP = phases("jump");
+const JS = anim("jump_shoot").f;
+const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
+const HANG_HAND = anim("hang").f[0];                 // mano del colgado relativa al pivot
+const GRAB_FRAMES = [6, 7, 8, 9];                    // de hang_in: el momento en que agarra
+
+/* ---------- ajustes ---------- */
+const S = { jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte" };
+function seg(ids, onPick) {
+  ids.forEach(([id, val]) => document.getElementById(id).addEventListener("click", () => {
+    ids.forEach(([o]) => document.getElementById(o).setAttribute("aria-pressed", String(o === id)));
+    onPick(val); cv.focus();
+  }));
+}
+seg([["jPhys", "phys"], ["jRoot", "root"]], v => { S.jumpMode = v; });
+seg([["t1", 1], ["t05", 0.5], ["t025", 0.25]], v => { S.slow = v; });
+seg([["dOff", false], ["dOn", true]], v => { S.debug = v; });
+const runSpeedEl = document.getElementById("runSpeed");
+runSpeedEl.addEventListener("input", () => { S.runSpeed = +runSpeedEl.value; document.getElementById("runVal").textContent = S.runSpeed + " px/s"; });
+seg([["fRep", "reporte"], ["fAnt", "anterior"]], v => { S.feel = v; FEEL = FEELS[v]; S.runSpeed = FEEL.run; runSpeedEl.value = FEEL.run; document.getElementById("runVal").textContent = FEEL.run + " px/s"; });
+function setDebug(v) { S.debug = v; document.getElementById("dOff").setAttribute("aria-pressed", String(!v)); document.getElementById("dOn").setAttribute("aria-pressed", String(v)); }
+
+/* ---------- mundo ---------- */
+const solids = [{ x: -600, y: GROUND, w: WORLD_W + 1200, h: 300, ground: true }];
+const block = (x, h, w) => solids.push({ x, y: GROUND - h, w, h, kind: "block" });
+const slab = (x, top, w) => solids.push({ x, y: GROUND - top, w, h: 26, kind: "slab" });
+block(860, 84, 220);          // se sube de un salto
+block(1240, 196, 200);        // hay que colgarse
+slab(1560, 300, 240);         // desde el bloque alto
+block(1960, 150, 150);
+block(2110, 230, 170);        // escalera de bloques
+slab(2420, 330, 200);
+block(2800, 250, 260);        // colgarse desde el piso
+block(3300, 120, 160);
+block(3460, 330, 140);        // alto: desde el bloque de al lado hay que colgarse
+const targets = [];
+function board(x, y) { targets.push({ kind: "board", x: x - 24, y: y - 92, w: 48, h: 92, hp: 4, max: 4, hit: 0, dead: 0 }); }
+function can(x, y) { targets.push({ kind: "can", x: x - 10, y: y - 26, w: 20, h: 26, hp: 1, max: 1, hit: 0, dead: 0 }); }
+board(640, GROUND); can(930, GROUND - 84); can(1010, GROUND - 84); board(1340, GROUND - 196);
+board(1690, GROUND - 300); can(2030, GROUND - 150); can(2190, GROUND - 230); can(2240, GROUND - 230);
+board(2520, GROUND - 330); board(2620, GROUND); board(2930, GROUND - 250); can(3380, GROUND - 120); board(3700, GROUND); board(3530, GROUND - 330);
+
+/* ---------- personaje ---------- */
+const P = { x: 300, y: GROUND, vx: 0, vy: 0, onGround: true, facing: 1, state: "ground",
+            aim: "none", aimAnim: null, aimT: 0, idleAimT: 0, shotT: 1, crouch: "none", crouchT: 0,
+            jump: null, landT: 0, hang: null, climb: null, grabCD: 0, fireCD: 0, t: 0, coyoteT: 0, bufferT: 0, kickT: 0,
+            draw: { name: "idle", i: 0, x: 300, y: GROUND } };
+
+/* ---------- entrada ---------- */
+const keys = new Set();
+let mouseL = false, mouseR = false, mouseX = VIEW_W / 2, usedMouse = false, active = false, jumpPressed = false, downPressed = false;
+const GAME_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space", "KeyA", "KeyD", "KeyW", "KeyS", "KeyJ", "KeyK", "KeyG"];
+window.addEventListener("keydown", e => {
+  if (!active) return;
+  if (GAME_KEYS.includes(e.code)) e.preventDefault();
+  if (e.repeat) return;
+  if (e.code === "KeyG") setDebug(!S.debug);
+  if (e.code === "Space" || e.code === "KeyW" || e.code === "ArrowUp") jumpPressed = true;
+  if (e.code === "KeyS" || e.code === "ArrowDown") downPressed = true;
+  keys.add(e.code);
+});
+window.addEventListener("keyup", e => keys.delete(e.code));
+window.addEventListener("blur", () => { keys.clear(); mouseL = mouseR = false; });
+const toView = e => { const r = cv.getBoundingClientRect(); return (e.clientX - r.left) / r.width * VIEW_W; };
+cv.addEventListener("pointerdown", e => {
+  if (!active || e.pointerType !== "mouse") return;
+  usedMouse = true; mouseX = toView(e);
+  if (e.button === 2) mouseR = true; else mouseL = true;
+  cv.focus();
+});
+cv.addEventListener("pointermove", e => { if (e.pointerType === "mouse") mouseX = toView(e); });
+window.addEventListener("pointerup", e => { if (e.button === 2) mouseR = false; else mouseL = false; });
+cv.addEventListener("contextmenu", e => e.preventDefault());
+const touchHeld = new Set();
+const overlay = document.getElementById("overlay");
+[["tLeft", "ArrowLeft"], ["tRight", "ArrowRight"], ["tDown", "ArrowDown"], ["tJump", "Space"], ["tFire", "KeyJ"], ["tFire2", "KeyK"]].forEach(([id, code]) => {
+  const b = document.getElementById(id);
+  b.addEventListener("pointerdown", e => { e.preventDefault(); active = true; overlay.hidden = true; touchHeld.add(code);
+    if (code === "Space") jumpPressed = true; if (code === "ArrowDown") downPressed = true; });
+  const up = () => touchHeld.delete(code);
+  b.addEventListener("pointerup", up); b.addEventListener("pointercancel", up); b.addEventListener("pointerleave", up);
+});
+const held = c => keys.has(c) || touchHeld.has(c);
+document.getElementById("startBtn").addEventListener("click", () => { active = true; overlay.hidden = true; cv.focus(); });
+cv.addEventListener("focus", () => { if (ready) { active = true; overlay.hidden = true; } });
+
+/* ---------- colisiones ---------- */
+const overlapX = (s, x) => x + HALF_W > s.x && x - HALF_W < s.x + s.w;
+function supportAt(x, y) { for (const s of solids) if (overlapX(s, x) && Math.abs(s.y - y) < 1.5) return s; return null; }
+function moveX(dx, footY) {
+  let nx = P.x + dx;
+  for (const s of solids) {
+    if (s.ground) continue;
+    if (footY > s.y + 1 && footY - BODY_H < s.y + s.h && nx + HALF_W > s.x && nx - HALF_W < s.x + s.w)
+      nx = dx > 0 ? s.x - HALF_W : s.x + s.w + HALF_W;
+  }
+  P.x = Math.max(40, Math.min(WORLD_W - 40, nx));
+}
+function landingTop(x, y0, y1) {
+  let best = null;
+  for (const s of solids) if (overlapX(s, x) && y0 <= s.y + 0.5 && y1 >= s.y && (best === null || s.y < best)) best = s.y;
+  return best;
+}
+function ceilingBottom(x, top0, top1) {
+  for (const s of solids) if (!s.ground && overlapX(s, x) && top0 >= s.y + s.h - 0.5 && top1 < s.y + s.h) return s.y + s.h;
+  return null;
+}
+// corrección de esquina: si la cabeza roza el canto de un bloque por pocos px, lo esquiva en vez de frenar
+function cornerNudge(x, headY) {
+  if (!FEEL.corner) return null;
+  for (const s of solids) {
+    if (s.ground || !(headY < s.y + s.h && headY > s.y - 1) || !overlapX(s, x)) continue;
+    const l = x + HALF_W - s.x, r = s.x + s.w - (x - HALF_W);
+    if (l <= FEEL.corner) return -(l + 0.5);
+    if (r <= FEEL.corner) return r + 0.5;
+    return null;
+  }
+  return null;
+}
+// cornisa agarrable: esquina superior de un bloque, con lugar arriba para subir
+function findLedge() {
+  if (P.grabCD > 0 || P.vy < -220) return null;
+  const hx = P.x + P.facing * HANG_HAND[9], hy = P.y + HANG_HAND[10];
+  for (const s of solids) {
+    if (s.ground) continue;
+    const cx = P.facing > 0 ? s.x : s.x + s.w;
+    if (Math.abs(hx - cx) > 22 || hy < s.y - 20 || hy > s.y + 26) continue;
+    if (P.facing > 0 ? P.x > s.x + 4 : P.x < s.x + s.w - 4) continue;     // tiene que estar afuera del bloque
+    const blocked = solids.some(o => o !== s && !o.ground && o.x < cx + 40 && o.x + o.w > cx - 40 && o.y < s.y && o.y + o.h > s.y - BODY_H);
+    if (!blocked) return { s, cx, top: s.y };
+  }
+  return null;
+}
+
+/* ---------- efectos ---------- */
+const bullets = [], fx = [];
+let flash = null, hits = 0, shake = 0, camX = 0;
+function fire(frame, footY, power) {
+  const mx = P.x + P.facing * frame[6], my = footY + frame[7];
+  bullets.push({ x: mx, y: my, vx: 1350 * P.facing, life: 0.75, power, len: power > 1 ? 46 : 32 });
+  flash = { x: mx, y: my, t: 0.06, dir: P.facing, big: power > 1, seed: Math.random() * 1000 };
+  if (!reduceMotion) shake = Math.max(shake, power > 1 ? 0.07 : 0.04);
+}
+function burst(x, y, color, n, speed, life, size) {
+  for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = speed * (0.4 + Math.random() * 0.6);
+    fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - speed * 0.3, life, t: life, color, size: size * (0.6 + Math.random() * 0.6), g: 900 }); }
+}
+
+/* ---------- actualización ---------- */
+function setDraw(name, i, x, y) { P.draw.name = name; P.draw.i = i; P.draw.x = x; P.draw.y = y; }
+function update(dt) {
+  const left = held("ArrowLeft") || held("KeyA"), right = held("ArrowRight") || held("KeyD");
+  const down = held("ArrowDown") || held("KeyS");
+  const jumpHeld = held("Space") || held("KeyW") || held("ArrowUp");
+  const fire1 = active && (mouseL || held("KeyJ")), fire2 = active && (mouseR || held("KeyK"));
+  const firing = fire1 || fire2;
+  const dir = (right ? 1 : 0) - (left ? 1 : 0);
+  P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt;
+  P.coyoteT = P.onGround ? 0 : P.coyoteT + dt;
+
+  // ---- colgado de una cornisa ----
+  if (P.state === "hang") {
+    const H = P.hang; H.t += dt;
+    const grabbing = H.t < GRAB_FRAMES.length * 0.05;
+    const name = grabbing ? "hang_in" : "hang";
+    const i = grabbing ? GRAB_FRAMES[Math.floor(H.t / 0.05)] : Math.floor((H.t - 0.2) * 12) % anim("hang").f.length;
+    // la pose viene de colgarse de una barra: se corre la mano 10 px sobre la cornisa para que el cuerpo
+    // quede contra la pared, hasta tener un colgado de cornisa de verdad
+    P.x = H.cx - P.facing * (HANG_HAND[9] - 10); P.y = H.top - HANG_HAND[10] + 2;
+    setDraw(name, i, P.x, P.y);
+    if (jumpPressed && !grabbing) { P.state = "climb"; P.climb = { t: 0, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34, y: H.top } }; }
+    else if (downPressed) { P.state = "air"; P.onGround = false; P.vy = 60; P.grabCD = 0.35; P.x -= P.facing * 6; }
+    jumpPressed = downPressed = false;
+    return finishUpdate(dt, false);
+  }
+  // ---- subida provisoria: sube en bloque y se para con la animación de salir del agachado ----
+  if (P.state === "climb") {
+    const C = P.climb; C.t += dt;
+    if (C.t < 0.14) { const k = C.t / 0.14; setDraw("hang", 0, C.from.x + (C.to.x - C.from.x) * k * 0.4, C.from.y + (C.to.y - C.from.y) * k); }
+    else {
+      P.x = C.to.x; P.y = C.to.y; const i = Math.floor((C.t - 0.14) / 0.055);
+      setDraw("crouch_out", i, P.x, P.y);
+      if (i >= anim("crouch_out").f.length) { P.state = "ground"; P.onGround = true; P.vx = 0; P.aim = "none"; }
+    }
+    jumpPressed = downPressed = false;
+    return finishUpdate(dt, false);
+  }
+
+  // facing: mira al cursor mientras dispara con el mouse; si no, hacia donde corre
+  if (firing && (mouseL || mouseR) && usedMouse) { const px = P.x - camX; if (Math.abs(mouseX - px) > 8) P.facing = mouseX < px ? -1 : 1; }
+  else if (dir !== 0 && P.crouch === "none") P.facing = dir;
+
+  // agacharse (solo en el piso, sin moverse)
+  const wantCrouch = down && P.onGround && !P.jump;
+  if (wantCrouch && P.crouch === "none") { P.crouch = "in"; P.crouchT = 0; P.aim = "none"; }
+  if (!wantCrouch && (P.crouch === "in" || P.crouch === "hold")) { P.crouch = "out"; P.crouchT = 0; }
+  const crouching = P.crouch !== "none";
+
+  const airborne = !P.onGround || P.jump;
+  const target = crouching ? 0 : dir * S.runSpeed;
+  const speeding = target !== 0 && Math.sign(target) === Math.sign(P.vx || target) && Math.abs(target) > Math.abs(P.vx);
+  const accel = airborne ? FEEL.air : (speeding ? FEEL.accel : FEEL.decel);
+  P.vx += Math.sign(target - P.vx) * Math.min(Math.abs(target - P.vx), accel * dt);
+
+  // salto
+  if (jumpPressed) P.bufferT = Math.max(FEEL.buffer, 1e-4);     // buffer: el salto apretado justo antes de tocar el piso cuenta
+  if (P.bufferT > 0 && (P.onGround || P.coyoteT < FEEL.coyote) && !P.jump && P.crouch !== "in" && P.crouch !== "hold") {
+    P.bufferT = 0; P.coyoteT = 99;
+    P.onGround = false; P.landT = 0; P.aim = "none"; P.crouch = "none";
+    if (S.jumpMode === "root") P.jump = { mode: "root", t: 0, baseY: P.y };
+    else { P.jump = { mode: "phys" }; P.vy = -FEEL.v0; }
+  }
+  jumpPressed = false; downPressed = false;
+
+  let name = null, idx = 0, drawY = P.y;
+  if (P.jump && P.jump.mode === "root") {
+    const J = P.jump, a = anim("jump"); J.t += dt;
+    const fpos = J.t * 1000 / a.ms, i = Math.floor(fpos);
+    moveX(P.vx * dt, P.y);
+    if (i >= a.f.length) { P.jump = null; P.y = J.baseY; P.onGround = !!supportAt(P.x, P.y); if (!P.onGround) P.vy = 0; }
+    else {
+      const l0 = a.f[i][8], l1 = a.f[Math.min(i + 1, a.f.length - 1)][8], l = Math.max(0, l0 + (l1 - l0) * (fpos - i));
+      const ny = J.baseY - l, top = ny > P.y ? landingTop(P.x, P.y, ny) : null;
+      P.y = top !== null ? top : ny;
+      if (top !== null && top < J.baseY - 1) { P.jump = null; P.onGround = true; P.landT = 0.2; }
+      name = firing ? "jump_shoot" : "jump"; idx = firing ? AIR_SHOT : i; drawY = P.jump ? J.baseY : P.y;
+      if (firing) drawY = P.y + JS[AIR_SHOT][8];
+    }
+  }
+  if (!P.jump || P.jump.mode === "phys") {
+    if (!P.onGround) {
+      if (P.jump && !jumpHeld && P.vy < -FEEL.cut) P.vy = -FEEL.cut;          // salto variable
+      P.vy = Math.min(FEEL.term, P.vy + (P.vy < 0 ? FEEL.gUp : FEEL.gDown) * dt);   // cae más rápido de lo que sube
+      const ny = P.y + P.vy * dt;
+      moveX(P.vx * dt, P.y);
+      if (P.vy < 0) {
+        const cb = ceilingBottom(P.x, P.y - BODY_H, ny - BODY_H);
+        if (cb !== null) { const nudge = cornerNudge(P.x, ny - BODY_H); if (nudge !== null) { P.x += nudge; P.y = ny; } else { P.vy = 0; P.y = cb + BODY_H; } }
+        else P.y = ny;
+      }
+      else {
+        const top = landingTop(P.x, P.y, ny);
+        if (top !== null) { P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.landT = 0.2; burst(P.x, P.y, "#7f86a8", 6, 120, 0.3, 4); }
+        else P.y = ny;
+      }
+      // ¿llega la mano a una cornisa?
+      if (!P.onGround) { const L = findLedge(); if (L) { P.state = "hang"; P.hang = { t: 0, cx: L.cx, top: L.top }; P.jump = null; P.vx = P.vy = 0; return finishUpdate(dt, false); } }
+    } else {
+      moveX(P.vx * dt, P.y);
+      if (!supportAt(P.x, P.y)) { P.onGround = false; P.vy = 0; }
+    }
+  }
+
+  const moving = Math.abs(P.vx) > 20;
+  if (!name) {
+    if (!P.onGround || P.jump) {
+      // en el aire con física: la fase sale de la velocidad; disparando, el frame con el brazo extendido
+      if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
+      else { name = "jump"; idx = P.vy < -240 ? JP.rise[0] : P.vy < -60 ? (JP.rise[1] ?? JP.apex) : P.vy < 160 ? JP.apex : (JP.fall[0] ?? JP.apex); }
+      drawY = P.y + anim(name).f[idx][8];
+    } else if (crouching) {
+      P.crouchT += dt;
+      if (P.crouch === "in") { idx = Math.floor(P.crouchT / 0.04); name = "crouch_in"; if (idx >= anim("crouch_in").f.length) { P.crouch = "hold"; P.crouchT = 0; } }
+      if (P.crouch === "hold") { name = "crouch_shoot"; idx = P.shotT < 0.15 ? Math.min(4, Math.floor(P.shotT / 0.03)) : 0; }
+      if (P.crouch === "out") { name = "crouch_out"; idx = Math.floor(P.crouchT / 0.045); if (idx >= anim("crouch_out").f.length) { P.crouch = "none"; name = null; } }
+      if (name) idx = Math.min(idx, anim(name).f.length - 1);
+    }
+    if (!name) {
+      if (P.landT > 0 && !moving) { P.landT -= dt; name = "jump"; idx = JP.land[Math.min(JP.land.length - 1, Math.floor((0.2 - P.landT) / 0.07))] ?? 0; }
+      else if (moving) { P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = "run"; idx = Math.floor(P.t * 12) % anim("run").f.length; }   // el ciclo acompaña la velocidad
+      else {
+        // apuntar: entra, dispara (un ciclo de retroceso por disparo), y si deja de disparar baja el arma
+        const want = fire2 ? "two" : fire1 ? "one" : null;
+        const base = P.aim === "two" ? "shoot2h" : "shoot";
+        if (want && P.aim === "none") { P.aim = want; P.aimAnim = "in"; P.aimT = 0; }
+        else if (want && P.aim !== want && P.aimAnim !== "in") { P.aim = want; P.aimAnim = "in"; P.aimT = 0; }
+        P.aimT += dt;
+        if (P.aim !== "none") {
+          const b = P.aim === "two" ? "shoot2h" : "shoot";
+          if (want) P.idleAimT = 0; else P.idleAimT += dt;
+          if (P.aimAnim === "in") { name = b + "_in"; idx = Math.floor(P.aimT / 0.04); if (idx >= anim(name).f.length) { P.aimAnim = "loop"; P.aimT = 0; } }
+          if (P.aimAnim === "loop") {
+            name = b; const n = anim(b).f.length, per = Math.max(0.1, P.aim === "two" ? FEEL.rate2 : FEEL.rate1);
+            idx = P.shotT < per ? Math.min(n - 1, Math.floor(P.shotT / (per / n))) : 0;
+            if (!want && P.idleAimT > 0.45) { P.aimAnim = "out"; P.aimT = 0; }
+          }
+          if (P.aimAnim === "out") { name = b + "_out"; idx = Math.floor(P.aimT / 0.045); if (idx >= anim(name).f.length) { P.aim = "none"; name = null; } }
+          if (name) idx = Math.min(idx, anim(name).f.length - 1);
+        }
+        if (!name) { name = "idle"; idx = 0; }
+      }
+      drawY = P.y;
+    }
+  }
+  setDraw(name, idx, P.x, drawY);
+
+  // disparo: sale de la boca del frame que se está mostrando
+  const aimedReady = !(P.aimAnim === "in" && P.aim !== "none" && !moving && P.onGround && !crouching);
+  if (firing && P.fireCD <= 0 && aimedReady && P.crouch !== "in" && P.crouch !== "out") {
+    const two = fire2 && !moving && P.onGround && !crouching;
+    const fr = anim(P.draw.name).f[P.draw.i];
+    fire(fr, P.draw.y, two ? 2 : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1; P.kickT = 0.06;
+  }
+  finishUpdate(dt, true);
+}
+
+function finishUpdate(dt) {
+  for (let b = bullets.length - 1; b >= 0; b--) {
+    const B = bullets[b]; B.life -= dt;
+    const steps = Math.ceil(Math.abs(B.vx * dt) / 8); let dead = B.life <= 0;
+    for (let s = 0; s < steps && !dead; s++) {
+      B.x += B.vx * dt / steps;
+      for (const T of targets) if (!T.dead && B.x > T.x && B.x < T.x + T.w && B.y > T.y && B.y < T.y + T.h) {
+        T.hp -= B.power; T.hit = 0.08; hits++; dead = true;
+        burst(B.x, B.y, "#9ff5fa", 6, 260, 0.3, 3);
+        if (T.hp <= 0) { T.dead = 3; burst(T.x + T.w / 2, T.y + T.h / 2, T.kind === "can" ? "#e8392e" : "#c79a5a", 16, 380, 0.7, 6); }
+        break;
+      }
+      if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; burst(B.x, B.y, "#9ff5fa", 5, 180, 0.25, 3); break; }
+    }
+    if (dead || B.x < camX - 100 || B.x > camX + VIEW_W + 100) bullets.splice(b, 1);
+  }
+  for (const T of targets) { if (T.hit > 0) T.hit -= dt; if (T.dead > 0) { T.dead -= dt; if (T.dead <= 0) { T.dead = 0; T.hp = T.max; } } }
+  for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; E.x += E.vx * dt; E.y += E.vy * dt; if (E.t <= 0) fx.splice(i, 1); }
+  if (flash) { flash.t -= dt; if (flash.t <= 0) flash = null; }
+  if (P.kickT > 0) P.kickT -= dt;
+  if (shake > 0) shake -= dt;
+  const want = P.x - VIEW_W * 0.42 + P.facing * 70;
+  camX += (want - camX) * Math.min(1, dt * 5);
+  camX = Math.max(0, Math.min(WORLD_W - VIEW_W, camX));
+}
+
+/* ---------- fondo: base de entrenamiento de noche ---------- */
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+function makeLayer(w, draw) { const c = document.createElement("canvas"); c.width = w; c.height = VIEW_H; draw(c.getContext("2d"), w); return c; }
+const OUT = "#0d0f18";
+const layerSky = makeLayer(VIEW_W, (g, w) => {
+  const gr = g.createLinearGradient(0, 0, 0, GROUND);
+  gr.addColorStop(0, "#151236"); gr.addColorStop(0.6, "#3d2563"); gr.addColorStop(1, "#b5577e");
+  g.fillStyle = gr; g.fillRect(0, 0, w, VIEW_H);
+  const r = rng(3); g.fillStyle = "#ffffff";
+  for (let i = 0; i < 90; i++) { g.globalAlpha = 0.3 + r() * 0.7; g.fillRect(r() * w, r() * 300, r() > 0.9 ? 2 : 1, r() > 0.9 ? 2 : 1); }
+  g.globalAlpha = 1;
+});
+const layerPlanet = makeLayer(700, g => {
+  g.fillStyle = "#e7a35e"; g.strokeStyle = OUT; g.lineWidth = 4;
+  g.beginPath(); g.arc(520, 150, 70, 0, Math.PI * 2); g.fill(); g.stroke();
+  g.fillStyle = "rgba(255,255,255,0.18)"; g.beginPath(); g.arc(495, 125, 32, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = "#f3d7a5"; g.lineWidth = 6; g.beginPath(); g.ellipse(520, 150, 118, 22, -0.25, 0, Math.PI * 2); g.stroke();
+});
+const layerCity = makeLayer(1800, (g, w) => {
+  const r = rng(11); g.lineWidth = 3; g.strokeStyle = OUT;
+  let x = 0;
+  while (x < w) {
+    const bw = 50 + r() * 90, bh = 60 + r() * 150;
+    g.fillStyle = "#2a1f4a"; g.fillRect(x, GROUND - 40 - bh, bw, bh + 60); g.strokeRect(x, GROUND - 40 - bh, bw, bh + 60);
+    g.fillStyle = "rgba(255,190,120,0.55)";
+    for (let wy = GROUND - 30 - bh; wy < GROUND - 50; wy += 14) for (let wx = x + 8; wx < x + bw - 10; wx += 14) if (r() > 0.6) g.fillRect(wx, wy, 5, 6);
+    if (r() > 0.6) { g.strokeStyle = "#2a1f4a"; g.beginPath(); g.moveTo(x + bw / 2, GROUND - 40 - bh); g.lineTo(x + bw / 2, GROUND - 80 - bh); g.stroke(); g.strokeStyle = OUT;
+      g.fillStyle = "#e8392e"; g.fillRect(x + bw / 2 - 2, GROUND - 84 - bh, 4, 4); }
+    x += bw + 6 + r() * 30;
+  }
+});
+function drawLayer(c, par, y) { const off = -((camX * par) % c.width); for (let x = off; x < VIEW_W; x += c.width) ctx.drawImage(c, x, y); }
+function drawGround() {
+  ctx.fillStyle = "#3b4058"; ctx.fillRect(0, GROUND, VIEW_W, VIEW_H - GROUND);
+  ctx.fillStyle = "#2b2f43";
+  for (let wx = Math.floor(camX / 80) * 80; wx < camX + VIEW_W + 80; wx += 80) ctx.fillRect(wx - camX, GROUND + 14, 2, VIEW_H);
+  ctx.fillStyle = "#59e3ec"; ctx.fillRect(0, GROUND + 6, VIEW_W, 3);
+  ctx.strokeStyle = OUT; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(VIEW_W, GROUND); ctx.stroke();
+}
+function drawSolid(s) {
+  const x = Math.round(s.x - camX), y = s.y;
+  if (x > VIEW_W + 10 || x + s.w < -10) return;
+  ctx.fillStyle = s.kind === "slab" ? "#6a7390" : "#565f7c"; ctx.fillRect(x, y, s.w, s.h);
+  ctx.fillStyle = "#8b95b5"; ctx.fillRect(x, y, s.w, 6);
+  // franjas de peligro en el canto: marcan la cornisa agarrable
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y + 6, s.w, 8); ctx.clip();
+  ctx.fillStyle = "#f2c230"; ctx.fillRect(x, y + 6, s.w, 8); ctx.fillStyle = "#15171f";
+  for (let k = -10; k < s.w + 10; k += 16) { ctx.beginPath(); ctx.moveTo(x + k, y + 14); ctx.lineTo(x + k + 8, y + 6); ctx.lineTo(x + k + 14, y + 6); ctx.lineTo(x + k + 6, y + 14); ctx.fill(); }
+  ctx.restore();
+  if (s.kind === "slab") { ctx.fillStyle = "rgba(89,227,236,0.6)"; ctx.fillRect(x + 12, y + s.h - 4, s.w - 24, 3); }
+  else { ctx.fillStyle = "#4a5270"; for (let ry = y + 30; ry < y + s.h - 8; ry += 34) ctx.fillRect(x + 8, ry, s.w - 16, 2); }
+  ctx.strokeStyle = OUT; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, y + 1.5, s.w - 3, s.h - 3);
+}
+function drawTarget(T) {
+  if (T.dead) return;
+  const x = Math.round(T.x - camX), cx = x + T.w / 2, hit = T.hit > 0;
+  ctx.lineWidth = 3; ctx.strokeStyle = OUT;
+  if (T.kind === "board") {
+    ctx.fillStyle = "#3b3f55"; ctx.fillRect(cx - 4, T.y + 40, 8, T.h - 40); ctx.strokeRect(cx - 4, T.y + 40, 8, T.h - 40);
+    for (const [col, rad] of [["#eef0f6", 22], ["#e8392e", 16], ["#eef0f6", 10], ["#e8392e", 5]]) { ctx.fillStyle = hit ? "#9ff5fa" : col; ctx.beginPath(); ctx.arc(cx, T.y + 24, rad, 0, Math.PI * 2); ctx.fill(); }
+    ctx.beginPath(); ctx.arc(cx, T.y + 24, 22, 0, Math.PI * 2); ctx.stroke();
+    if (T.hp < T.max) { ctx.fillStyle = "#59e3ec"; ctx.fillRect(cx - 22, T.y + 52, 44 * (T.max - T.hp) / T.max, 4); }
+  } else {
+    ctx.fillStyle = hit ? "#9ff5fa" : "#c9ced8"; ctx.fillRect(x, T.y, T.w, T.h);
+    ctx.fillStyle = hit ? "#9ff5fa" : "#e8392e"; ctx.fillRect(x, T.y + 8, T.w, 9);
+    ctx.strokeRect(x + 1.5, T.y + 1.5, T.w - 3, T.h - 3);
+  }
+}
+function drawSprite() {
+  const d = P.draw, f = anim(d.name).f[d.i];
+  if (!f) return;
+  const kick = P.kickT > 0 ? -P.facing * FEEL.kick * (P.kickT / 0.06) : 0;   // retroceso por código: 2-3 px hacia atrás
+  ctx.save(); ctx.translate(Math.round(d.x - camX + kick), Math.round(d.y));
+  if (P.facing < 0) ctx.scale(-1, 1);
+  ctx.drawImage(atlas, f[0], f[1], f[2], f[3], -PIV_X + f[4], -PIV_Y + f[5], f[2], f[3]);
+  ctx.restore();
+}
+function drawFlash(Fl) {
+  const r = rng(Math.floor(Fl.seed)), s = Fl.big ? 1.4 : 1;
+  ctx.save(); ctx.translate(Fl.x - camX, Fl.y); ctx.scale(Fl.dir, 1); ctx.globalCompositeOperation = "lighter";
+  const glow = ctx.createRadialGradient(6, 0, 1, 6, 0, 26 * s);
+  glow.addColorStop(0, "rgba(200,255,255,0.95)"); glow.addColorStop(1, "rgba(89,227,236,0)");
+  ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(6, 0, 26 * s, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = "rgba(220,255,255,0.9)"; ctx.lineWidth = 2;
+  for (let k = 0; k < 5; k++) { const a = (r() - 0.5) * 1.6, l = (8 + r() * 12) * s; ctx.beginPath(); ctx.moveTo(4, 0); ctx.lineTo(4 + Math.cos(a) * l, Math.sin(a) * l); ctx.stroke(); }
+  ctx.restore();
+}
+function render() {
+  const sx = shake > 0 ? (Math.random() - 0.5) * 3 : 0, sy = shake > 0 ? (Math.random() - 0.5) * 3 : 0;
+  ctx.save(); ctx.translate(sx, sy);
+  ctx.drawImage(layerSky, 0, 0); drawLayer(layerPlanet, 0.06, 0); drawLayer(layerCity, 0.3, 0); drawGround();
+  for (const s of solids) if (!s.ground) drawSolid(s);
+  for (const T of targets) drawTarget(T);
+  if (P.state !== "hang" && P.state !== "climb") {
+    const shY = supportAt(P.x, P.y) ? P.y : (landingTop(P.x, P.y, GROUND + 1) ?? GROUND), hgt = Math.max(0, shY - P.y), w = 30 * Math.max(0.4, 1 - hgt / 220);
+    ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(P.x - camX, shY + 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  if (ready) drawSprite();
+  for (const B of bullets) {
+    const x = B.x - camX, t = Math.sign(B.vx) * B.len;
+    ctx.save(); ctx.globalCompositeOperation = "lighter";
+    ctx.strokeStyle = "rgba(89,227,236,0.55)"; ctx.lineWidth = B.power > 1 ? 10 : 7; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(x, B.y); ctx.lineTo(x - t, B.y); ctx.stroke();
+    ctx.strokeStyle = "#f2ffff"; ctx.lineWidth = B.power > 1 ? 4 : 3; ctx.beginPath(); ctx.moveTo(x, B.y); ctx.lineTo(x - t * 0.8, B.y); ctx.stroke();
+    ctx.restore();
+  }
+  if (flash) drawFlash(flash);
+  for (const E of fx) { ctx.globalAlpha = Math.max(0, E.t / E.life); ctx.fillStyle = E.color; ctx.fillRect(E.x - camX - E.size / 2, E.y - E.size / 2, E.size, E.size); }
+  ctx.globalAlpha = 1;
+  if (S.debug && ready) {
+    const x = P.x - camX, d = P.draw, f = anim(d.name).f[d.i];
+    ctx.strokeStyle = "#ff5ad1"; ctx.lineWidth = 1.5; ctx.strokeRect(x - HALF_W, P.y - BODY_H, HALF_W * 2, BODY_H);
+    ctx.beginPath(); ctx.moveTo(d.x - camX - 10, d.y); ctx.lineTo(d.x - camX + 10, d.y); ctx.moveTo(d.x - camX, d.y - 10); ctx.lineTo(d.x - camX, d.y + 4); ctx.stroke();
+    ctx.fillStyle = "#ffef5a"; ctx.beginPath(); ctx.arc(d.x - camX + P.facing * f[6], d.y + f[7], 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#59e3ec"; ctx.beginPath(); ctx.arc(x + P.facing * HANG_HAND[9], P.y + HANG_HAND[10], 3.5, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+  ctx.fillStyle = "rgba(18,21,34,0.78)"; ctx.fillRect(VIEW_W - 168, 14, 154, 34);
+  ctx.fillStyle = "#e8392e"; ctx.font = "700 15px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.fillText("IMPACTOS", VIEW_W - 156, 37);
+  ctx.fillStyle = "#eef0f6"; ctx.font = "500 16px 'JetBrains Mono', Menlo, monospace"; ctx.textAlign = "right"; ctx.fillText(String(hits), VIEW_W - 26, 37);
+}
+
+/* ---------- loop ---------- */
+function resize() {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+  ctx.setTransform(cv.width / VIEW_W, 0, 0, cv.height / VIEW_H, 0, 0); ctx.imageSmoothingEnabled = true;
+}
+window.addEventListener("resize", resize);
+const readout = document.getElementById("readout");
+const STATE_ES = { ground: "en el piso", air: "en el aire", hang: "colgado", climb: "subiendo" };
+let last = performance.now(), readT = 0;
+function tick(now) {
+  const dt = Math.min(1 / 30, (now - last) / 1000) * S.slow; last = now;
+  if (ready && dt > 0) { if (P.state === "ground" || P.state === "air") P.state = P.onGround ? "ground" : "air"; update(dt); }
+  render();
+  readT -= dt;
+  if (ready && readT <= 0) {
+    readT = 0.1;
+    const d = P.draw;
+    readout.textContent = `${STATE_ES[P.state]} · ${d.name} ${d.i + 1}/${anim(d.name).f.length} · salto ${S.jumpMode === "phys" ? "físico" : "como está"} · x ${Math.round(P.x)}`;
+  }
+  requestAnimationFrame(tick);
+}
+function start(saved) {
+  if (saved && typeof saved.x === "number") { P.x = saved.x; hits = saved.hits || 0; camX = Math.max(0, P.x - VIEW_W * 0.42); }
+  resize(); requestAnimationFrame(tick);
+}
+window.claude?.hot?.snapshot?.(() => ({ x: P.x, hits }));
+atlas.onload = () => { ready = true; document.getElementById("loadMsg").textContent = "Teclado y mouse"; };
+atlas.onerror = () => { document.getElementById("loadMsg").textContent = "No se pudo cargar el atlas de sprites (ranger_1x-0.png)."; };
+atlas.src = "ranger_1x-0.png";
+(document.fonts ? document.fonts.ready : Promise.resolve()).finally(() => {
+  window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+});
+</script>

@@ -1,0 +1,530 @@
+<title>Polígono del Comando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: banco de pruebas de campaña. Escenario 16:9 arriba, debajo dos columnas (controles | ajustes y lectura) que se apilan en el teléfono. */
+:root {
+  --bg: #1a1f15;        /* oliva casi negro, el verde del pantalón llevado a fondo */
+  --panel: #232a1c;
+  --line: #3a4530;
+  --fg: #ece3cf;        /* pergamino */
+  --muted: #a7a48d;
+  --brass: #d9a441;     /* latón de las balas */
+  --red: #c8402f;       /* bandana */
+  --font-display: "Black Ops One", "Impact", "Arial Black", sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --font-label: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); }
+body { font: 15px/1.5 var(--font-body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+h1 { font: 400 clamp(26px, 4vw, 38px)/1.1 var(--font-display); margin: 0; letter-spacing: 0.02em; text-wrap: balance; }
+h1 span { color: var(--brass); }
+.eyebrow { font: 600 13px/1.2 var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.stage { position: relative; border: 2px solid var(--line); border-radius: 6px; overflow: hidden; background: #8fbfcf; aspect-ratio: 16 / 9; max-width: 100%; }
+.stage canvas { display: block; width: 100%; height: 100%; outline: none; cursor: crosshair; touch-action: none; }
+.stage canvas:focus-visible { box-shadow: inset 0 0 0 3px var(--brass); }
+.overlay[hidden] { display: none; }
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20, 24, 16, 0.35); }
+.overlay button { font: 400 clamp(18px, 3vw, 24px)/1 var(--font-display); color: #1a1f15; background: var(--brass); border: 3px solid #2b1a10; border-radius: 6px; padding: 14px 26px; cursor: pointer; box-shadow: 0 4px 0 #2b1a10; }
+.overlay button:focus-visible { outline: 3px solid var(--fg); outline-offset: 3px; }
+.overlay p { margin: 10px 0 0; font: 600 14px var(--font-label); letter-spacing: 0.08em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 2px #000; text-align: center; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.box h2 { margin: 0; font: 600 13px/1.2 var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass); }
+.keys { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 14px; margin: 0; }
+.keys dt { display: flex; gap: 4px; flex-wrap: wrap; align-items: flex-start; }
+.keys dd { margin: 0; color: var(--fg); }
+kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 4px; padding: 4px 6px; min-width: 24px; text-align: center; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.row > .lbl { font: 600 13px var(--font-label); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 96px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.seg button { font: 600 14px var(--font-label); letter-spacing: 0.04em; color: var(--muted); background: transparent; border: 0; padding: 6px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--brass); color: #1a1f15; }
+.seg button:focus-visible, input:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+input[type="range"] { accent-color: var(--brass); width: 160px; max-width: 100%; }
+.mono { font: 500 13px/1.4 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--fg); }
+.readout { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; overflow-x: auto; white-space: nowrap; }
+.note { margin: 0; color: var(--muted); font-size: 14px; max-width: 65ch; }
+.note b { color: var(--fg); font-weight: 600; }
+.touch { display: none; gap: 10px; justify-content: space-between; }
+.touch .grp { display: flex; gap: 10px; }
+.touch button { font: 400 16px var(--font-display); color: var(--fg); background: var(--panel); border: 2px solid var(--line); border-radius: 8px; width: 64px; height: 56px; touch-action: none; user-select: none; -webkit-user-select: none; }
+.touch button.fire { background: var(--red); border-color: #2b1a10; width: 88px; }
+@media (pointer: coarse) { .touch { display: flex; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Polígono del <span>Comando</span></h1>
+    <div class="eyebrow">Prueba de sprites · 12 fps · 128 px · Seedance 2.0 + spritepipe</div>
+  </header>
+
+  <div class="stage" id="stageBox">
+    <canvas id="game" tabindex="0" aria-label="Juego de prueba: el comando corre, salta y dispara"></canvas>
+    <div class="overlay" id="overlay">
+      <div>
+        <button id="startBtn" type="button">Clic para jugar</button>
+        <p id="loadMsg">Cargando sprites…</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="touch" id="touch" aria-label="Controles táctiles">
+    <div class="grp"><button id="tLeft" type="button" aria-label="Izquierda">◀</button><button id="tRight" type="button" aria-label="Derecha">▶</button></div>
+    <div class="grp"><button id="tJump" type="button">Saltar</button><button id="tFire" class="fire" type="button">Fuego</button></div>
+  </div>
+
+  <div class="cols">
+    <section class="box" aria-labelledby="hControls">
+      <h2 id="hControls">Controles</h2>
+      <dl class="keys">
+        <dt><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd></dt><dd>Correr</dd>
+        <dt><kbd>W</kbd><kbd>↑</kbd><kbd>Espacio</kbd></dt><dd>Saltar (en modo físico, soltá antes para un salto corto)</dd>
+        <dt><kbd>Clic</kbd><kbd>J</kbd></dt><dd>Disparar mientras lo mantenés. Con el mouse, mira hacia el lado del cursor</dd>
+        <dt><kbd>G</kbd></dt><dd>Mostrar u ocultar pivot, colisión y boca del cañón</dd>
+      </dl>
+      <p class="note">Las cajas de munición son de <b>7,62 × 51</b>, la de la M60. Los blancos de madera aguantan seis impactos y vuelven a los tres segundos.</p>
+    </section>
+
+    <section class="box" aria-labelledby="hSettings">
+      <h2 id="hSettings">Ajustes de prueba</h2>
+      <div class="row">
+        <span class="lbl" id="lblJump">Salto</span>
+        <div class="seg" role="group" aria-labelledby="lblJump">
+          <button type="button" id="jRoot" aria-pressed="true">Como está</button>
+          <button type="button" id="jPhys" aria-pressed="false">Físico</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblTime">Tiempo</span>
+        <div class="seg" role="group" aria-labelledby="lblTime">
+          <button type="button" id="t1" aria-pressed="true">1×</button>
+          <button type="button" id="t05" aria-pressed="false">0,5×</button>
+          <button type="button" id="t025" aria-pressed="false">0,25×</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="lbl" for="runSpeed">Carrera</label>
+        <input type="range" id="runSpeed" min="120" max="380" step="10" value="230">
+        <span class="mono" id="runVal">230 px/s</span>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblDbg">Guías</span>
+        <div class="seg" role="group" aria-labelledby="lblDbg">
+          <button type="button" id="dOff" aria-pressed="true">Ocultas</button>
+          <button type="button" id="dOn" aria-pressed="false">Visibles</button>
+        </div>
+      </div>
+      <div class="readout mono" id="readout" aria-live="off">idle · frame 1/19</div>
+      <p class="note"><b>Como está</b> usa la subida que trae el sprite como root motion: unos 49 px. <b>Físico</b> saca esa subida, deja cada fase en el lugar y la altura la pone la gravedad. El fogonazo y las vainas son efectos de código provisorios.</p>
+    </section>
+  </div>
+</div>
+
+<script>
+"use strict";
+const SPR = __SPRITE_DATA__;
+const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
+const VIEW_W = 960, VIEW_H = 540, GROUND = 462, WORLD_W = 3400;
+const GRAV = 1900, JUMP_V = 640, JUMP_CUT = 260;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const cv = document.getElementById("game"), ctx = cv.getContext("2d");
+const atlas = new Image();
+let ready = false;
+
+/* ---------- ajustes ---------- */
+const S = { jumpMode: "root", slow: 1, runSpeed: 230, debug: false };
+function seg(ids, onPick) {
+  ids.forEach(([id, val]) => document.getElementById(id).addEventListener("click", () => {
+    ids.forEach(([o]) => document.getElementById(o).setAttribute("aria-pressed", String(o === id)));
+    onPick(val); cv.focus();
+  }));
+}
+seg([["jRoot", "root"], ["jPhys", "phys"]], v => { S.jumpMode = v; });
+seg([["t1", 1], ["t05", 0.5], ["t025", 0.25]], v => { S.slow = v; });
+seg([["dOff", false], ["dOn", true]], v => { S.debug = v; });
+const runSpeedEl = document.getElementById("runSpeed");
+runSpeedEl.addEventListener("input", () => { S.runSpeed = +runSpeedEl.value; document.getElementById("runVal").textContent = S.runSpeed + " px/s"; });
+function setDebug(v) { S.debug = v; document.getElementById("dOff").setAttribute("aria-pressed", String(!v)); document.getElementById("dOn").setAttribute("aria-pressed", String(v)); }
+
+/* ---------- mundo ---------- */
+const solids = [{ x: -600, y: GROUND, w: WORLD_W + 1200, h: 300, ground: true }];
+function crates(x, n) { for (let i = 0; i < n; i++) solids.push({ x, y: GROUND - 40 * (i + 1), w: 54, h: 40, crate: true, label: (x + i) % 3 }); }
+crates(640, 1); crates(694, 1); crates(1040, 2); crates(1560, 1); crates(1614, 2); crates(1668, 3); crates(2280, 1); crates(2620, 2); crates(2674, 1);
+const targets = [];
+function board(x, y) { targets.push({ kind: "board", x: x - 24, y: y - 92, w: 48, h: 92, hp: 6, max: 6, hit: 0, dead: 0 }); }
+function can(x, y) { targets.push({ kind: "can", x: x - 9, y: y - 24, w: 18, h: 24, hp: 2, max: 2, hit: 0, dead: 0 }); }
+board(900, GROUND); board(1320, GROUND); board(1900, GROUND); board(2460, GROUND); board(3050, GROUND);
+can(667, GROUND - 40); can(721, GROUND - 40); can(1067, GROUND - 80); can(1695, GROUND - 120); can(2307, GROUND - 40); can(2647, GROUND - 80);
+
+/* ---------- personaje ---------- */
+const P = { x: 320, y: GROUND, vx: 0, vy: 0, onGround: true, facing: 1, anim: "idle", t: 0, frame: 0,
+            jump: null, landT: 0, fireCD: 0, drawY: GROUND };
+const anim = n => SPR.anims[n];
+const frameAt = (n, t) => { const a = anim(n), i = Math.floor(t * 1000 / a.ms); return a.loop ? i % a.f.length : Math.min(i, a.f.length - 1); };
+const lift = i => anim("jump").f[i][8];
+
+/* ---------- entrada ---------- */
+const keys = new Set();
+let mouseDown = false, mouseX = VIEW_W / 2, usedMouse = false, active = false;
+const GAME_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space", "KeyA", "KeyD", "KeyW", "KeyJ", "KeyG"];
+window.addEventListener("keydown", e => {
+  if (!active) return;
+  if (GAME_KEYS.includes(e.code)) e.preventDefault();
+  if (e.code === "KeyG" && !e.repeat) setDebug(!S.debug);
+  if (!e.repeat && (e.code === "Space" || e.code === "KeyW" || e.code === "ArrowUp")) jumpPressed = true;
+  keys.add(e.code);
+});
+window.addEventListener("keyup", e => { keys.delete(e.code); });
+window.addEventListener("blur", () => { keys.clear(); mouseDown = false; });
+function toView(e) { const r = cv.getBoundingClientRect(); return (e.clientX - r.left) / r.width * VIEW_W; }
+cv.addEventListener("pointerdown", e => { if (!active) return; if (e.pointerType === "mouse") { mouseDown = true; usedMouse = true; mouseX = toView(e); } cv.focus(); });
+cv.addEventListener("pointermove", e => { if (e.pointerType === "mouse") mouseX = toView(e); });
+window.addEventListener("pointerup", () => { mouseDown = false; });
+cv.addEventListener("contextmenu", e => e.preventDefault());
+let jumpPressed = false;
+const touchHeld = new Set();
+[["tLeft", "ArrowLeft"], ["tRight", "ArrowRight"], ["tJump", "Space"], ["tFire", "KeyJ"]].forEach(([id, code]) => {
+  const b = document.getElementById(id);
+  b.addEventListener("pointerdown", e => { e.preventDefault(); active = true; overlay.hidden = true; touchHeld.add(code); if (code === "Space") jumpPressed = true; });
+  const up = () => touchHeld.delete(code);
+  b.addEventListener("pointerup", up); b.addEventListener("pointercancel", up); b.addEventListener("pointerleave", up);
+});
+const held = c => keys.has(c) || touchHeld.has(c);
+
+const overlay = document.getElementById("overlay");
+document.getElementById("startBtn").addEventListener("click", () => { active = true; overlay.hidden = true; cv.focus(); });
+cv.addEventListener("focus", () => { if (ready) { active = true; overlay.hidden = true; } });
+
+/* ---------- colisiones ---------- */
+const HALF_W = 22, BODY_H = 108;
+function overlapX(s, x) { return x + HALF_W > s.x && x - HALF_W < s.x + s.w; }
+function supportAt(x, y) { for (const s of solids) if (overlapX(s, x) && Math.abs(s.y - y) < 1.5) return s; return null; }
+function moveX(dx, footY) {
+  let nx = P.x + dx;
+  for (const s of solids) {
+    if (s.ground) continue;
+    const top = footY - BODY_H, bot = footY;
+    if (bot > s.y + 1 && top < s.y + s.h && nx + HALF_W > s.x && nx - HALF_W < s.x + s.w) {
+      nx = dx > 0 ? s.x - HALF_W : s.x + s.w + HALF_W;
+    }
+  }
+  P.x = Math.max(40, Math.min(WORLD_W - 40, nx));
+}
+function landingTop(x, y0, y1) {
+  let best = null;
+  for (const s of solids) if (overlapX(s, x) && y0 <= s.y + 0.5 && y1 >= s.y) if (best === null || s.y < best) best = s.y;
+  return best;
+}
+
+/* ---------- efectos ---------- */
+const bullets = [], fx = [], casings = [];
+let flash = null, hits = 0, shake = 0, camX = 0;
+function muzzleOf(fr, fy) { return { x: P.x + P.facing * fr[6], y: fy + fr[7] }; }
+function fire(fr, footDrawY) {
+  const m = muzzleOf(fr, footDrawY);
+  const ang = (Math.random() - 0.5) * 0.045;
+  bullets.push({ x: m.x, y: m.y, vx: Math.cos(ang) * 1500 * P.facing, vy: Math.sin(ang) * 1500, life: 0.7 });
+  flash = { x: m.x, y: m.y, t: 0.05, seed: Math.random() * 1000, dir: P.facing };
+  casings.push({ x: m.x - P.facing * 46, y: m.y - 2, vx: -P.facing * (60 + Math.random() * 80), vy: -(170 + Math.random() * 110), r: Math.random() * 6, vr: (Math.random() - 0.5) * 30, life: 1.3, bounced: 0 });
+  if (!reduceMotion) shake = Math.max(shake, 0.06);
+}
+function burst(x, y, color, n, speed, life, size) {
+  for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = speed * (0.4 + Math.random() * 0.6);
+    fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - speed * 0.3, life, t: life, color, size: size * (0.6 + Math.random() * 0.6), g: 900 }); }
+}
+
+/* ---------- actualización ---------- */
+function update(dt) {
+  const left = held("ArrowLeft") || held("KeyA"), right = held("ArrowRight") || held("KeyD");
+  const jumpHeld = held("Space") || held("KeyW") || held("ArrowUp");
+  const firing = active && (mouseDown || held("KeyJ"));
+  const dir = (right ? 1 : 0) - (left ? 1 : 0);
+
+  // facing: mira al cursor mientras dispara con el mouse; si no, hacia donde corre
+  if (firing && mouseDown && usedMouse) { const px = P.x - camX; if (Math.abs(mouseX - px) > 8) P.facing = mouseX < px ? -1 : 1; }
+  else if (dir !== 0) P.facing = dir;
+
+  const airborne = !P.onGround || P.jump;
+  const accel = airborne ? 1700 : 2600;
+  const target = dir * S.runSpeed;
+  P.vx += Math.sign(target - P.vx) * Math.min(Math.abs(target - P.vx), accel * dt);
+
+  // arrancar salto
+  if (jumpPressed && P.onGround && !P.jump) {
+    P.onGround = false; P.landT = 0;
+    if (S.jumpMode === "root") P.jump = { mode: "root", t: 0, baseY: P.y };
+    else { P.jump = { mode: "phys" }; P.vy = -JUMP_V; }
+  }
+  jumpPressed = false;
+
+  let frameName, frameIdx, drawY;
+  if (P.jump && P.jump.mode === "root") {
+    // root motion: el sprite ya trae la subida; la colisión la sigue frame a frame
+    const J = P.jump, a = anim("jump");
+    J.t += dt;
+    const fpos = J.t * 1000 / a.ms, i = Math.floor(fpos);
+    moveX(P.vx * dt, P.y);
+    if (i >= a.f.length) { P.jump = null; P.y = J.baseY; }
+    else {
+      const k = fpos - i, l = lift(i) + (lift(Math.min(i + 1, a.f.length - 1)) - lift(i)) * k;
+      const ny = J.baseY - Math.max(0, l);
+      const top = ny > P.y ? landingTop(P.x, P.y, ny) : null;   // bajando: ¿cae sobre una caja?
+      P.y = top !== null ? top : ny;
+      if (top !== null && top < J.baseY - 1) { P.jump = null; P.landT = 0.25; }
+      frameName = "jump"; frameIdx = i; drawY = P.jump ? J.baseY : P.y;
+    }
+    if (!P.jump) { const s = supportAt(P.x, P.y); P.onGround = !!s; if (!s) P.vy = 0; else P.landT = Math.max(P.landT, 0.0); }
+  }
+  if (!P.jump || P.jump.mode === "phys") {
+    if (!P.onGround) {
+      if (P.jump && !jumpHeld && P.vy < -JUMP_CUT) P.vy = -JUMP_CUT;   // salto variable
+      P.vy += GRAV * dt;
+      const ny = P.y + P.vy * dt;
+      moveX(P.vx * dt, P.y);
+      const top = P.vy > 0 ? landingTop(P.x, P.y, ny) : null;
+      if (top !== null) { P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.landT = 0.25; burst(P.x, P.y, "#c9a77a", 6, 120, 0.35, 4); }
+      else P.y = ny;
+    } else {
+      moveX(P.vx * dt, P.y);
+      if (!supportAt(P.x, P.y)) { P.onGround = false; P.vy = 0; }
+    }
+  }
+
+  // elegir animación
+  const moving = Math.abs(P.vx) > 20;
+  if (frameName !== "jump") {
+    if (!P.onGround || P.jump) {
+      // en el aire con física: la fase sale de la velocidad, y el sprite baja lo que trae de subida
+      frameName = "jump";
+      frameIdx = P.vy < -260 ? 3 : P.vy < -60 ? 4 : P.vy < 140 ? 5 : P.vy < 420 ? 7 : 8;
+      drawY = P.y + lift(frameIdx);
+      P.t = 0;
+    } else if (P.landT > 0 && !moving) {
+      P.landT -= dt;
+      frameName = "jump"; frameIdx = 10 + Math.min(2, Math.floor((0.25 - P.landT) / 0.0833)); drawY = P.y;
+    } else {
+      P.landT = 0;
+      const want = moving ? "run" : firing ? "shoot" : "idle";
+      if (want !== P.anim) { P.anim = want; P.t = 0; }
+      P.t += dt;
+      frameName = want; frameIdx = frameAt(want, P.t); drawY = P.y;
+    }
+  }
+  P.frame = frameIdx; P.drawName = frameName; P.drawY = drawY;
+
+  // disparo
+  P.fireCD -= dt;
+  if (firing && P.fireCD <= 0) { fire(anim(frameName).f[frameIdx], drawY); P.fireCD = 1 / 11; }
+
+  // balas
+  for (let b = bullets.length - 1; b >= 0; b--) {
+    const B = bullets[b]; B.life -= dt;
+    const steps = Math.ceil(Math.abs(B.vx * dt) / 8); let dead = B.life <= 0;
+    for (let s = 0; s < steps && !dead; s++) {
+      B.x += B.vx * dt / steps; B.y += B.vy * dt / steps;
+      for (const T of targets) if (!T.dead && B.x > T.x && B.x < T.x + T.w && B.y > T.y && B.y < T.y + T.h) {
+        T.hp--; T.hit = 0.08; hits++; dead = true;
+        burst(B.x, B.y, T.kind === "can" ? "#d8d8d0" : "#e0b26a", 5, 260, 0.35, 3);
+        if (T.hp <= 0) { T.dead = 3; burst(T.x + T.w / 2, T.y + T.h / 2, T.kind === "can" ? "#b8402f" : "#a8743a", 16, 380, 0.7, 6); }
+        break;
+      }
+      if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) {
+        dead = true; burst(B.x, S2.ground ? S2.y : B.y, S2.ground ? "#c9a77a" : "#e0b26a", 4, 160, 0.3, 3); break;
+      }
+    }
+    if (dead || B.x < camX - 100 || B.x > camX + VIEW_W + 100) bullets.splice(b, 1);
+  }
+  for (const T of targets) { if (T.hit > 0) T.hit -= dt; if (T.dead > 0) { T.dead -= dt; if (T.dead <= 0) { T.dead = 0; T.hp = T.max; } } }
+  for (let i = fx.length - 1; i >= 0; i--) { const F = fx[i]; F.t -= dt; F.vy += F.g * dt; F.x += F.vx * dt; F.y += F.vy * dt; if (F.t <= 0) fx.splice(i, 1); }
+  for (let i = casings.length - 1; i >= 0; i--) {
+    const C = casings[i]; C.life -= dt; C.vy += 1500 * dt; C.x += C.vx * dt; C.y += C.vy * dt; C.r += C.vr * dt;
+    const top = landingTop(C.x, C.y - C.vy * dt, C.y);
+    if (top !== null && C.vy > 0) { C.y = top; C.vy *= -0.35; C.vx *= 0.5; C.vr *= 0.5; C.bounced++; }
+    if (C.life <= 0) casings.splice(i, 1);
+  }
+  if (flash) { flash.t -= dt; if (flash.t <= 0) flash = null; }
+  if (shake > 0) shake -= dt;
+
+  // cámara
+  const want = P.x - VIEW_W * 0.42 + P.facing * 70;
+  camX += (want - camX) * Math.min(1, dt * 5);
+  camX = Math.max(0, Math.min(WORLD_W - VIEW_W, camX));
+}
+
+/* ---------- fondo pintado ---------- */
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+function makeLayer(w, draw) { const c = document.createElement("canvas"); c.width = w; c.height = VIEW_H; draw(c.getContext("2d"), w); return c; }
+const OUT = "#2b1a10";
+const layerFar = makeLayer(1800, (g, w) => {
+  const r = rng(7);
+  g.fillStyle = "#7fa79c"; g.strokeStyle = "#4f6f68"; g.lineWidth = 3; g.lineJoin = "round";
+  g.beginPath(); g.moveTo(0, VIEW_H);
+  let x = 0; while (x <= w) { g.lineTo(x, 250 + r() * 90); x += 90 + r() * 120; }
+  g.lineTo(w, 300); g.lineTo(w, VIEW_H); g.closePath(); g.fill(); g.stroke();
+});
+const layerMid = makeLayer(2000, (g, w) => {
+  const r = rng(21);
+  g.lineJoin = "round"; g.lineWidth = 4; g.strokeStyle = OUT;
+  g.fillStyle = "#4e7b3a"; g.beginPath(); g.moveTo(0, VIEW_H);
+  for (let x = 0; x <= w; x += 40) g.lineTo(x, 372 + Math.sin(x / 210) * 22 + Math.sin(x / 67) * 6);
+  g.lineTo(w, VIEW_H); g.closePath(); g.fill(); g.stroke();
+  for (let i = 0; i < 26; i++) {           // árboles de copa redonda, contorno grueso
+    const x = r() * w, base = 380 + Math.sin(x / 210) * 22, h = 70 + r() * 70, rad = 26 + r() * 22;
+    g.fillStyle = "#5b3b22"; g.fillRect(x - 5, base - h, 10, h); g.strokeRect(x - 5, base - h, 10, h);
+    g.fillStyle = r() > 0.5 ? "#3f6e2e" : "#4a7d33";
+    g.beginPath();
+    for (const [ox, oy, rr] of [[0, 0, rad], [-rad * 0.8, rad * 0.35, rad * 0.7], [rad * 0.8, rad * 0.3, rad * 0.75]]) { g.moveTo(x + ox + rr, base - h + oy); g.arc(x + ox, base - h + oy, rr, 0, Math.PI * 2); }
+    g.lineWidth = 7; g.stroke(); g.fill(); g.lineWidth = 4;
+    g.fillStyle = "rgba(255,240,180,0.18)"; g.beginPath(); g.arc(x - rad * 0.3, base - h - rad * 0.35, rad * 0.45, 0, Math.PI * 2); g.fill();
+  }
+});
+function drawSky() {
+  const gr = ctx.createLinearGradient(0, 0, 0, GROUND);
+  gr.addColorStop(0, "#86bdd0"); gr.addColorStop(0.7, "#cfe2c9"); gr.addColorStop(1, "#f2dfae");
+  ctx.fillStyle = gr; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+}
+function drawLayer(c, par, y) { const off = -((camX * par) % c.width); for (let x = off; x < VIEW_W; x += c.width) ctx.drawImage(c, x, y); }
+function drawGround() {
+  const gx0 = -camX;
+  ctx.fillStyle = "#8a5a32"; ctx.fillRect(0, GROUND, VIEW_W, VIEW_H - GROUND);
+  const r = rng(99);
+  ctx.fillStyle = "#6f4627";
+  for (let i = 0; i < 160; i++) { const wx = r() * WORLD_W, wy = GROUND + 18 + r() * 60, sx = wx + gx0; if (sx > -20 && sx < VIEW_W + 20) { ctx.beginPath(); ctx.ellipse(sx, wy, 6 + r() * 8, 3 + r() * 3, 0, 0, Math.PI * 2); ctx.fill(); } }
+  ctx.fillStyle = "#6aa03a"; ctx.strokeStyle = OUT; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(-10, GROUND + 12);
+  const start = Math.floor(camX / 24) * 24;
+  for (let wx = start - 24; wx < camX + VIEW_W + 48; wx += 24) ctx.quadraticCurveTo(wx - camX + 12, GROUND + 18, wx - camX + 24, GROUND + 10);
+  ctx.lineTo(VIEW_W + 10, GROUND - 2); ctx.lineTo(-10, GROUND - 2); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(VIEW_W, GROUND); ctx.stroke();
+}
+function drawCrate(s) {
+  const x = Math.round(s.x - camX), y = s.y;
+  ctx.fillStyle = "#b07a3c"; ctx.fillRect(x, y, s.w, s.h);
+  ctx.strokeStyle = "#7a4f22"; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x + 4, y + s.h / 2); ctx.lineTo(x + s.w - 4, y + s.h / 2); ctx.stroke();
+  ctx.strokeStyle = OUT; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, y + 1.5, s.w - 3, s.h - 3);
+  ctx.fillStyle = "#3b2a14"; ctx.font = "600 11px 'Barlow Condensed', Arial Narrow, sans-serif"; ctx.textAlign = "center";
+  ctx.fillText(s.label ? "7,62 × 51" : "M60 · 100", x + s.w / 2, y + s.h / 2 - 5);
+}
+function drawTarget(T) {
+  if (T.dead) return;
+  const x = Math.round(T.x - camX), cx = x + T.w / 2;
+  const flashW = T.hit > 0;
+  ctx.lineWidth = 3; ctx.strokeStyle = OUT;
+  if (T.kind === "board") {
+    ctx.fillStyle = "#6b4526"; ctx.fillRect(cx - 4, T.y + 40, 8, T.h - 40); ctx.strokeRect(cx - 4, T.y + 40, 8, T.h - 40);
+    const rings = [["#f1e6cc", 22], ["#c8402f", 16], ["#f1e6cc", 10], ["#c8402f", 5]];
+    for (const [col, rad] of rings) { ctx.fillStyle = flashW ? "#fff" : col; ctx.beginPath(); ctx.arc(cx, T.y + 24, rad, 0, Math.PI * 2); ctx.fill(); }
+    ctx.beginPath(); ctx.arc(cx, T.y + 24, 22, 0, Math.PI * 2); ctx.stroke();
+    if (T.hp < T.max) { ctx.fillStyle = "rgba(43,26,16,0.55)"; ctx.fillRect(cx - 22, T.y + 52, 44 * (T.max - T.hp) / T.max, 4); }
+  } else {
+    ctx.fillStyle = flashW ? "#fff" : "#c8cbc4"; ctx.fillRect(x, T.y, T.w, T.h);
+    ctx.fillStyle = flashW ? "#fff" : "#b8402f"; ctx.fillRect(x, T.y + 7, T.w, 10);
+    ctx.strokeRect(x + 1.5, T.y + 1.5, T.w - 3, T.h - 3);
+  }
+}
+function drawSprite(name, i, footY) {
+  const f = anim(name).f[i];
+  const x = Math.round(P.x - camX), y = Math.round(footY);
+  ctx.save(); ctx.translate(x, y);
+  if (P.facing < 0) ctx.scale(-1, 1);
+  ctx.drawImage(atlas, f[0], f[1], f[2], f[3], -PIV_X + f[4], -PIV_Y + f[5], f[2], f[3]);
+  ctx.restore();
+}
+function drawFlash(F) {
+  const r = rng(Math.floor(F.seed)), x = F.x - camX, y = F.y;
+  ctx.save(); ctx.translate(x, y); ctx.scale(F.dir, 1); ctx.globalCompositeOperation = "lighter";
+  const glow = ctx.createRadialGradient(12, 0, 2, 12, 0, 42);
+  glow.addColorStop(0, "rgba(255,240,180,0.9)"); glow.addColorStop(1, "rgba(255,160,40,0)");
+  ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(12, 0, 42, 0, Math.PI * 2); ctx.fill();
+  const pts = 7 + Math.floor(r() * 3);
+  for (const [col, sc] of [["#ff9a2a", 1], ["#ffd84a", 0.7], ["#fffbe8", 0.38]]) {
+    ctx.fillStyle = col; ctx.beginPath();
+    for (let k = 0; k < pts * 2; k++) {
+      const a = (k / (pts * 2)) * Math.PI * 2 - Math.PI / 2, out = k % 2 === 0;
+      const along = Math.cos(a + Math.PI / 2);                   // más largo hacia adelante
+      const len = (out ? 16 + r() * 14 + Math.max(0, along) * (34 + r() * 18) : 7 + r() * 4) * sc;
+      ctx.lineTo(4 + Math.cos(a + Math.PI / 2) * len, Math.sin(a + Math.PI / 2) * len * 0.62);
+    }
+    ctx.closePath(); ctx.fill();
+  }
+  ctx.restore();
+}
+function render() {
+  const sx = shake > 0 ? (Math.random() - 0.5) * 3 : 0, sy = shake > 0 ? (Math.random() - 0.5) * 3 : 0;
+  ctx.save(); ctx.translate(sx, sy);
+  drawSky(); drawLayer(layerFar, 0.18, -20); drawLayer(layerMid, 0.45, 0); drawGround();
+  for (const s of solids) if (s.crate && s.x + s.w > camX - 10 && s.x < camX + VIEW_W + 10) drawCrate(s);
+  for (const T of targets) drawTarget(T);
+  for (const C of casings) {
+    ctx.save(); ctx.translate(C.x - camX, C.y); ctx.rotate(C.r); ctx.fillStyle = "#d9a441"; ctx.strokeStyle = "#5a3d12"; ctx.lineWidth = 1;
+    ctx.fillRect(-4, -1.5, 8, 3); ctx.strokeRect(-4, -1.5, 8, 3); ctx.restore();
+  }
+  // sombra blob en runtime, como pide el pipeline
+  const shY = (supportAt(P.x, P.y) ? P.y : (landingTop(P.x, P.y, GROUND + 1) ?? GROUND));
+  const hgt = Math.max(0, shY - P.y), shW = 34 * Math.max(0.4, 1 - hgt / 200);
+  ctx.fillStyle = "rgba(43,26,16,0.28)"; ctx.beginPath(); ctx.ellipse(P.x - camX, shY + 1, shW, 6 * shW / 34, 0, 0, Math.PI * 2); ctx.fill();
+  if (ready) drawSprite(P.drawName || "idle", P.frame || 0, P.drawY ?? P.y);
+  for (const B of bullets) {
+    ctx.strokeStyle = "rgba(255,230,140,0.95)"; ctx.lineWidth = 2.5; ctx.beginPath();
+    ctx.moveTo(B.x - camX, B.y); ctx.lineTo(B.x - camX - Math.sign(B.vx) * 26, B.y - B.vy / B.vx * 26 * Math.sign(B.vx)); ctx.stroke();
+  }
+  if (flash) drawFlash(flash);
+  for (const F of fx) { ctx.globalAlpha = Math.max(0, F.t / F.life); ctx.fillStyle = F.color; ctx.fillRect(F.x - camX - F.size / 2, F.y - F.size / 2, F.size, F.size); }
+  ctx.globalAlpha = 1;
+  if (S.debug) {
+    const x = P.x - camX;
+    ctx.strokeStyle = "#ff5ad1"; ctx.lineWidth = 1.5; ctx.strokeRect(x - HALF_W, P.y - BODY_H, HALF_W * 2, BODY_H);
+    ctx.beginPath(); ctx.moveTo(x - 10, P.drawY); ctx.lineTo(x + 10, P.drawY); ctx.moveTo(x, P.drawY - 10); ctx.lineTo(x, P.drawY + 4); ctx.stroke();
+    if (ready) { const m = muzzleOf(anim(P.drawName || "idle").f[P.frame || 0], P.drawY); ctx.fillStyle = "#ffef5a"; ctx.beginPath(); ctx.arc(m.x - camX, m.y, 3.5, 0, Math.PI * 2); ctx.fill(); }
+  }
+  ctx.restore();
+  // contador
+  ctx.fillStyle = "rgba(26,31,21,0.72)"; ctx.fillRect(VIEW_W - 168, 14, 154, 34);
+  ctx.fillStyle = "#d9a441"; ctx.font = "600 15px 'Barlow Condensed', Arial Narrow, sans-serif"; ctx.textAlign = "left";
+  ctx.fillText("IMPACTOS", VIEW_W - 156, 37);
+  ctx.fillStyle = "#ece3cf"; ctx.font = "500 16px 'JetBrains Mono', Menlo, monospace"; ctx.textAlign = "right"; ctx.fillText(String(hits), VIEW_W - 26, 37);
+}
+
+/* ---------- loop ---------- */
+function resize() {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+  ctx.setTransform(cv.width / VIEW_W, 0, 0, cv.height / VIEW_H, 0, 0); ctx.imageSmoothingEnabled = true;
+}
+window.addEventListener("resize", resize);
+const readout = document.getElementById("readout");
+let last = performance.now(), readT = 0;
+function tick(now) {
+  const dt = Math.min(1 / 30, (now - last) / 1000) * S.slow; last = now;
+  if (ready && dt > 0) update(dt);
+  render();
+  readT -= dt;
+  if (ready && readT <= 0) {
+    readT = 0.1;
+    const a = anim(P.drawName || "idle");
+    readout.textContent = `${P.drawName || "idle"} · frame ${(P.frame || 0) + 1}/${a.f.length} · ${S.jumpMode === "root" ? "salto como está" : "salto físico"} · x ${Math.round(P.x)} · vy ${Math.round(P.vy)}`;
+  }
+  requestAnimationFrame(tick);
+}
+function start(saved) {
+  if (saved && typeof saved.x === "number") { P.x = saved.x; hits = saved.hits || 0; camX = Math.max(0, P.x - VIEW_W * 0.42); }
+  resize(); requestAnimationFrame(tick);
+}
+window.claude?.hot?.snapshot?.(() => ({ x: P.x, hits }));
+atlas.onload = () => { ready = true; document.getElementById("loadMsg").textContent = "Teclado y mouse"; };
+atlas.onerror = () => { document.getElementById("loadMsg").textContent = "No se pudo cargar el atlas de sprites (comando_1x-0.png)."; };
+atlas.src = "comando_1x-0.png";
+(document.fonts ? document.fonts.ready : Promise.resolve()).finally(() => {
+  window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+});
+</script>
