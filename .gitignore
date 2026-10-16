@@ -17,6 +17,7 @@ characters/comando/clips/shoot_noflash.mp4
 
 # juegos de prueba armados (se regeneran con prototypes/build.py)
 prototypes/*/dist/
+prototypes/arena/editor/dist/
 
 # clips que bajó spritepipe bakeoff: los elegidos se copian a clips/raw/ (queda el bakeoff.md/.json)
 characters/*/clips/gen*/*.mp4

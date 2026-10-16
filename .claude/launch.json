@@ -4,38 +4,108 @@
     {
       "name": "sprite-previews",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "--bind", "127.0.0.1", "--directory", "characters"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8765",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "characters"
+      ],
       "port": 8765
     },
     {
       "name": "ranger-proto",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8766", "--bind", "127.0.0.1", "--directory", "prototypes/ranger/dist"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8766",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "prototypes/ranger/dist"
+      ],
       "port": 8766
     },
     {
       "name": "ranger-props",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8767", "--bind", "127.0.0.1"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8767",
+        "--bind",
+        "127.0.0.1"
+      ],
       "port": 8767
     },
     {
       "name": "ranger-ledge",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8768", "--bind", "127.0.0.1", "--directory", "prototypes/ranger/dist"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8768",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "prototypes/ranger/dist"
+      ],
       "port": 8768
     },
     {
       "name": "ranger-salto",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8770", "--bind", "127.0.0.1", "--directory", "prototypes/ranger/dist"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8770",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "prototypes/ranger/dist"
+      ],
       "port": 8770
     },
     {
       "name": "fx-lab",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8769", "--bind", "127.0.0.1", "--directory", "prototypes/fx_lab/dist"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8769",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "prototypes/fx_lab/dist"
+      ],
       "port": 8769
+    },
+    {
+      "name": "arena",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8771",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "prototypes/arena/dist"
+      ],
+      "port": 8771
+    },
+    {
+      "name": "arena-editor",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "prototypes/arena/editor/serve.py",
+        "--port",
+        "8772"
+      ],
+      "port": 8772
     }
   ]
 }

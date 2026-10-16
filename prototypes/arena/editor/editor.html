@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editor de arenas</title>
+<style>
+:root {
+  --bg: #0d1118; --panel: #151b26; --panel2: #1b2331; --line: #283246; --text: #dde5f0; --dim: #8c98ad;
+  --acc: #3fd6e8; --ok: #4ade80; --bad: #ff5a5a; --warn: #ffd23f;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+body { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+header { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; padding: 7px 10px; background: var(--panel); border-bottom: 1px solid var(--line); }
+header .grp { display: flex; gap: 4px; align-items: center; }
+header .lbl { color: var(--dim); font-size: 12px; margin-right: 2px; }
+button, select, input, textarea { font: inherit; color: var(--text); }
+button { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; cursor: pointer; white-space: nowrap; }
+button:hover { border-color: #3c4a66; background: #222c3d; }
+button.on { background: #17404a; border-color: var(--acc); color: #e9fbff; }
+button.primary { background: #0f5563; border-color: var(--acc); }
+button:disabled { opacity: .45; cursor: default; }
+select, input[type=number], input[type=text], textarea { background: #0f141d; border: 1px solid var(--line); border-radius: 5px; padding: 3px 6px; }
+input[type=number] { width: 74px; }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 330px; min-height: 0; }
+#stage { position: relative; min-width: 0; min-height: 0; overflow: hidden; background: #0a0d13; }
+#playLayer { position: absolute; inset: 0; background: #0a0d13; }
+#playLayer iframe { width: 100%; height: 100%; border: 0; display: block; }
+#cv { display: block; width: 100%; height: 100%; cursor: default; touch-action: none; }
+#status { position: absolute; left: 8px; bottom: 6px; padding: 3px 8px; border-radius: 5px; background: rgba(8, 11, 17, .78); color: var(--dim); font-size: 12px; pointer-events: none; font-variant-numeric: tabular-nums; }
+#toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: 70vw; padding: 8px 14px; border-radius: 8px; background: #1f2a3c; border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.4); opacity: 0; transition: opacity .2s; pointer-events: none; white-space: pre-wrap; }
+#toast.show { opacity: 1; }
+aside { overflow: auto; border-left: 1px solid var(--line); background: var(--panel); }
+aside section { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+aside h3 { margin: 0 0 8px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); font-weight: 600; }
+aside h4 { margin: 10px 0 6px; font-size: 12px; color: var(--dim); font-weight: 600; }
+.pal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.pal .it { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 5px 3px 4px; border: 1px solid var(--line); border-radius: 6px; background: #10161f; cursor: grab; font-size: 10.5px; color: var(--dim); text-align: center; overflow: hidden; }
+.pal .it:hover { border-color: var(--acc); color: var(--text); }
+.pal .it img { width: 100%; height: 46px; object-fit: contain; pointer-events: none; }
+.pal .it span { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+.f { display: inline-flex; align-items: center; gap: 5px; margin: 3px 10px 3px 0; color: var(--dim); }
+.f span { min-width: 14px; }
+.kv { color: var(--dim); }
+.kv b { color: var(--text); font-weight: 600; }
+.note { color: var(--dim); font-size: 12px; margin: 6px 0; }
+.reach { display: flex; flex-direction: column; gap: 2px; }
+.reach div { display: flex; gap: 6px; align-items: baseline; padding: 3px 6px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+.reach div:hover { background: var(--panel2); }
+.reach i { width: 8px; height: 8px; border-radius: 50%; flex: none; transform: translateY(-1px); }
+.reach .ok i { background: var(--ok); } .reach .bad i { background: var(--bad); } .reach .bad { color: #ffc2c2; }
+.reach small { color: var(--dim); margin-left: auto; white-space: nowrap; }
+.keys { color: var(--dim); font-size: 12px; columns: 2; column-gap: 14px; }
+.keys div { break-inside: avoid; margin: 2px 0; }
+kbd { background: #0f141d; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; font: 11px ui-monospace, Menlo, monospace; color: var(--text); }
+textarea { width: 100%; min-height: 70px; resize: vertical; }
+input[type=text] { width: 100%; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; max-width: min(460px, 90vw); box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+dialog::backdrop { background: rgba(4,6,10,.6); }
+dialog p { margin: 0 0 10px; line-height: 1.45; }
+dialog input { width: 100%; margin-bottom: 4px; }
+.sl { display: grid; grid-template-columns: 74px 1fr 34px; gap: 8px; align-items: center; margin: 2px 0; color: var(--dim); }
+.sl input[type=range] { width: 100%; accent-color: var(--acc); }
+.sl .val { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); }
+input[type=color] { width: 38px; height: 24px; padding: 0 2px; background: #0f141d; border: 1px solid var(--line); border-radius: 5px; }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; grid-template-rows: 1fr 42vh; } aside { border-left: 0; border-top: 1px solid var(--line); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="grp"><span class="lbl">Arena</span><select id="arenaSel"></select></div>
+  <div class="grp">
+    <button id="bImport" title="Abrir un JSON de arena (también se puede soltar el archivo sobre el lienzo)">Importar</button>
+    <button id="bExport" title="Bajar el JSON">Exportar</button>
+    <button id="bCopy" title="Copiar el JSON al portapapeles">Copiar</button>
+    <button id="bSave" title="Escribir prototypes/arena/arenas/&lt;nombre&gt;.json, la arena abierta (⌘S)">Guardar</button>
+    <button id="bSaveAs" title="Guardarla con otro nombre: una arena nueva">Guardar como…</button>
+    <button id="bPlay" class="primary" title="Jugarla acá mismo, sin guardar (P). Esc en el juego vuelve a editar. ⇧ + clic: en otra pestaña">▶ Probar</button>
+    <input id="file" type="file" accept=".json,application/json" hidden>
+  </div>
+  <div class="grp"><button id="bUndo" title="Deshacer (⌘Z)">↶</button><button id="bRedo" title="Rehacer (⇧⌘Z)">↷</button></div>
+  <div class="grp"><span class="lbl">Grilla</span><span id="gridSeg"></span></div>
+  <div class="grp"><span class="lbl">Ver</span><span id="showSeg"></span><button id="bAnim" title="Mover las plataformas por su recorrido">▶ Animar</button></div>
+  <div class="grp"><button id="bZoomOut">−</button><button id="bFit" title="Ajustar (0)">Ajustar</button><button id="bZoomIn">+</button></div>
+</header>
+<main>
+  <div id="stage"><canvas id="cv"></canvas><div id="status"></div>
+    <div id="playLayer" hidden><iframe id="playFrame" title="La arena en el juego"></iframe></div></div>
+  <aside>
+    <section id="secSel"></section>
+    <section id="secColor"></section>
+    <section id="secReach"></section>
+    <section id="secPal"></section>
+    <section>
+      <h3>Atajos</h3>
+      <div class="keys">
+        <div><kbd>⌫</kbd> borrar</div>
+        <div><kbd>⌘D</kbd> duplicar</div>
+        <div><kbd>F</kbd> espejar</div>
+        <div><kbd>M</kbd> copia simétrica</div>
+        <div><kbd>L</kbd> patas hasta abajo</div>
+        <div><kbd>←→↑↓</kbd> 1 px (<kbd>⇧</kbd> grilla)</div>
+        <div><kbd>⌘Z</kbd> deshacer</div>
+        <div><kbd>G</kbd> grilla</div>
+        <div><kbd>0</kbd> ajustar</div>
+        <div><kbd>P</kbd> probar (<kbd>Esc</kbd> vuelve)</div>
+        <div><kbd>espacio</kbd>+arrastrar: mover la vista</div>
+        <div><kbd>⌘</kbd>+rueda o pellizco: zoom</div>
+      </div>
+    </section>
+  </aside>
+</main>
+<div id="toast"></div>
+<dialog id="dlg"><form method="dialog"><p id="dlgMsg"></p><input id="dlgIn" type="text" autocomplete="off"><div class="row"><button id="dlgOk" value="ok" class="primary">Aceptar</button><button id="dlgNo" value="cancel">Cancelar</button></div></form></dialog>
+<script>
+__COLOR_JS__
+</script>
+<script>
+"use strict";
+// datos que pone build.py: las piezas del kit (las mismas medidas que en el juego), un ranger parado y las arenas de
+// cuando se armó (respaldo para abrir la página sin servidor; con serve.py se leen de disco cada vez)
+const KIT = __KIT_DATA__, RANGER = __RANGER_DATA__, BUILT = __ARENA_DATA__, LUT_RAW = __LUT_DATA__;
+const AW = 1920, AH = 1080;
+const BRIDGE_H = 26, BODY_H = 112 * 0.8, WALL_GAP = 30;   // como en src.html: lo que se atraviesa, el cuerpo, las paredes
+// el alcance: la física del ranger (FEEL de src.html) y lo medido en el juego (alturas). Se pueden cambiar en el panel
+const PHYS = { run: 300, v0: 1067, gUp: 2963, gDown: 4898, dbl: 0.9, term: 1400, h1: 192, h2: 333, hang: 325, halfW: 16 };
+const ARENA_DIR = "../../arenas/", GAME = "../../dist/index.html?arena=editor";
+const SERVED = location.protocol.startsWith("http");
+const COL = { ok: "#4ade80", bad: "#ff5a5a", warn: "#ffd23f", acc: "#3fd6e8", front: "#ffb648" };
+const $ = id => document.getElementById(id);
+const cv = $("cv"), g = cv.getContext("2d");
+
+/* ---------- estado ---------- */
+let ARENAS = {}, key = "", A = null;
+let sel = null;            // {t: "obj" | "spawn" | "solid" | "front" | "pt", i, j}
+let dirty = false, saved = "";   // saved: la arena como está en disco (o como se abrió)
+const hist = { undo: [], redo: [] };
+const view = { k: 0.5, x: 0, y: 0 };
+let grid = 16, anim = false, animT = 0, spaceDown = false, mouse = null;
+const show = { col: true, reach: true, spawns: true, paths: true };
+
+/* ---------- imágenes ---------- */
+const IMG = new Map();
+function img(url) {
+  let e = IMG.get(url);
+  if (!e) {
+    e = { im: new Image(), ok: false, bad: false, alpha: null, tint: new Map() };
+    e.im.onload = () => { e.ok = true; e.alpha = alphaOf(e.im); draw(); };
+    e.im.onerror = () => { e.bad = true; draw(); };
+    e.im.src = url; IMG.set(url, e);
+  }
+  return e;
+}
+// el alfa de cada imagen, para elegir con el mouse lo que está pintado y no la caja (las patas de una pasarela tapan la de abajo)
+function alphaOf(im) {
+  try {
+    const c = document.createElement("canvas"); c.width = im.naturalWidth; c.height = im.naturalHeight;
+    const t = c.getContext("2d", { willReadFrequently: true }); t.drawImage(im, 0, 0);
+    const d = t.getImageData(0, 0, c.width, c.height).data, a = new Uint8Array(c.width * c.height);
+    for (let i = 0; i < a.length; i++) a[i] = d[i * 4 + 3];
+    return { w: c.width, h: c.height, a };
+  } catch (err) { return null; }   // abierta desde el disco: se elige por la caja
+}
+function tinted(e, color) {   // los objetos de atrás: oscurecidos, sobre la imagen ya graduada
+  if (!e.tint.has(color)) {
+    const src = graded(e, "plataformas"), c = document.createElement("canvas");
+    c.width = src.naturalWidth || src.width; c.height = src.naturalHeight || src.height;
+    const t = c.getContext("2d"); t.drawImage(src, 0, 0); t.globalCompositeOperation = "source-atop"; t.fillStyle = color; t.fillRect(0, 0, c.width, c.height);
+    e.tint.set(color, c);
+  }
+  return e.tint.get(color);
+}
+
+/* ---------- color: el bloque "color" de la arena ---------- */
+// la paleta (un LUT 3D que sale de prototypes/arena/paleta.py: la referencia de la Refinería → la versión de Pablo) con
+// su fuerza, y saturación, contraste, brillo y bruma, por grupo: "fondo" (la lámina) y "plataformas" (piezas pintadas y
+// objetos del kit, más los recortes de plate.solid, como en el juego). Sin bloque "color", nada se gradúa
+// la cuenta es la del juego: gradePixels, decodeLut, hazeOf, NEUTRAL e isNeutral vienen de prototypes/arena/color.js,
+// que build.py mete en línea más arriba
+const LUT = typeof decodeLut === "function" ? decodeLut(LUT_RAW) : null;
+const gradeOK = typeof gradePixels === "function";
+const rgbHex = c => "#" + c.map(x => Math.round(x).toString(16).padStart(2, "0")).join("");
+const hazeAuto = new Map();
+// el color de la bruma: el del JSON o, si no hay, el del juego: hazeOf, el promedio de la franja de arriba de la lámina
+function hazeRGB() {
+  const hx = A && A.color && A.color.bruma_color;
+  if (hx && /^#[0-9a-f]{6}$/i.test(hx)) { const v = parseInt(hx.slice(1), 16); return [v >> 16, (v >> 8) & 255, v & 255]; }
+  const e = A && A.plate && A.plate.src ? img(ARENA_DIR + A.plate.src) : null;
+  const none = typeof HAZE_DEFAULT !== "undefined" ? HAZE_DEFAULT : [143, 179, 224];   // sin lámina, el del juego
+  if (!e || !e.ok || typeof hazeOf !== "function") return none;
+  if (!hazeAuto.has(e.im.src)) { try { hazeAuto.set(e.im.src, hazeOf(e.im)); } catch (err) { return none; } }
+  return hazeAuto.get(e.im.src);
+}
+// las imágenes graduadas, en caché; mientras se arrastra un control, en baja (y en alta un momento después)
+const GR = new Map();
+let colorKey = "", gradeLow = false, gradeTimer = 0, noColor = false;
+function graded(e, group) {
+  const c = A && A.color && A.color[group];
+  if (noColor || !gradeOK || !e.ok || !c || isNeutral(c)) return e.im;
+  const key = e.im.src + "|" + group + (gradeLow ? "|low" : "");
+  let out = GR.get(key); if (out) return out;
+  const s = gradeLow ? (group === "fondo" ? 0.34 : 0.5) : 1;
+  const w = Math.max(1, Math.round(e.im.naturalWidth * s)), h = Math.max(1, Math.round(e.im.naturalHeight * s));
+  out = document.createElement("canvas"); out.width = w; out.height = h;
+  const t = out.getContext("2d", { willReadFrequently: true }); t.drawImage(e.im, 0, 0, w, h);
+  try { const id = t.getImageData(0, 0, w, h); gradePixels(id.data, LUT, c, hazeRGB()); t.putImageData(id, 0, 0); } catch (err) { return e.im; }
+  GR.set(key, out); return out;
+}
+function regrade(live = false) {
+  GR.clear(); for (const e of IMG.values()) e.tint.clear();
+  colorKey = JSON.stringify((A && A.color) || null) + noColor;
+  gradeLow = live; clearTimeout(gradeTimer);
+  if (live) gradeTimer = setTimeout(() => regrade(false), 220);
+  draw();
+}
+
+
+/* ---------- piezas, objetos y sólidos (las mismas reglas que loadArena y loadObjects de src.html) ---------- */
+// pintadas: arena.pieces[nombre] = {src, w, h, solids: [...], front: [[x, y, w, h]]}, todo relativo a la esquina de la
+// pieza; el objeto que la pone tiene x, y = esa esquina. Del kit: x es el centro; y, lo que se pisa (plataformas) o la base
+function def(name) {
+  const p = A && A.pieces && A.pieces[name];
+  if (p) return { painted: true, w: p.w, h: p.h, url: ARENA_DIR + p.src, p };
+  const k = KIT.pieces[name]; if (!k) return null;
+  return { painted: false, plat: name.startsWith("platforms/"), w: k.w, h: k.h, top: k.top || 0, url: k.src };
+}
+const isPainted = o => !!def(o.piece)?.painted;
+const moving = o => !!(o.move && o.move.path && o.move.path.length > 1 && !isPainted(o));
+function objAt(o) { return moving(o) ? (anim ? pathPos(o, animT) : o.move.path[0]) : [o.x, o.y]; }
+// las patas de una pintada: legs = [y0, y1] de la pieza (la franja de filas entre la losa y los pies) y stretch del
+// objeto, los px que se alarga esa franja: la pieza mide h + stretch, lo de arriba de y0 queda igual y lo de abajo de y1
+// baja stretch (negativo la acorta, hasta LEGS_MIN). legsGap: cuántos px por encima de lo de abajo terminan las patas
+const LEGS_MIN = 8;
+const legsOf = d => (d && d.painted && Array.isArray(d.p.legs) && d.p.legs[1] - d.p.legs[0] >= LEGS_MIN ? d.p.legs : null);
+const clampStretch = (L, v) => Math.max(LEGS_MIN - (L[1] - L[0]), Math.round(v));
+function stretchOf(o, d = def(o.piece)) { const L = legsOf(d); return L ? clampStretch(L, o.stretch || 0) : 0; }
+function setStretch(o, v) { const L = legsOf(def(o.piece)); const s = L ? clampStretch(L, v) : 0; if (s) o.stretch = s; else delete o.stretch; }
+function objBox(o, at = objAt(o)) {
+  const d = def(o.piece); if (!d) return { x: at[0] - 32, y: at[1] - 64, w: 64, h: 64, missing: true };
+  const [x, y] = at;
+  if (d.painted) return { x, y, w: d.w, h: d.h + stretchOf(o, d) };
+  return { x: x - d.w / 2, y: d.plat ? y - d.top : y - d.h, w: d.w, h: d.h };
+}
+const flipLedge = l => (l === "left" ? "right" : l === "right" ? "left" : l);
+function baseSolid(s) {
+  if (s.kind === "bridge") return { ...s, h: BRIDGE_H, oneWay: true };
+  return { ...s, h: s.h ?? 60, ground: s.y >= 900, noLedge: s.noLedge ?? (s.kind === "box" || s.y >= 900) };
+}
+function objSolids(o, at = objAt(o)) {
+  const d = def(o.piece); if (!d) return [];
+  const [x, y] = at;
+  if (d.painted) return (d.p.solids || []).map(s => {
+    const w = baseSolid({ ...s, kind: s.kind || "bridge", x: x + (o.flip ? d.w - s.x - s.w : s.x), y: y + s.y });
+    w.ledge = o.ledge || (o.flip ? flipLedge(s.ledge || "both") : s.ledge || "both");
+    return w;
+  });
+  if (d.plat) return [{ kind: "platform", x: x - d.w / 2, y, w: d.w, h: BRIDGE_H, oneWay: true, noLedge: moving(o) || o.ledge === "none" }];
+  if (o.solid === false || o.layer === "back") return [];
+  return [{ kind: "box", x: x - d.w / 2 + 2, y: y - d.h + 3, w: d.w - 4, h: d.h - 3, noLedge: true }];
+}
+function frontRects(o) {   // los recortes de una pieza pintada que van delante del colgado, en px del juego
+  const d = def(o.piece); if (!d || !d.painted) return [];
+  return (d.p.front || []).map(([x, y, w, h]) => [o.x + (o.flip ? d.w - x - w : x), o.y + y, w, h]);
+}
+// dónde están las patas: las columnas con algo pintado en las últimas filas de la pieza, en px de la pieza (sin el alfa,
+// abierta desde el disco, toda la pieza)
+function feetCols(e, d) {
+  if (!e.alpha) return [[0, d.w]];
+  if (!e.feet) {
+    const { w, h, a } = e.alpha, q = w / d.w, out = [];
+    let start = -1;
+    for (let x = 0; x <= w; x++) {
+      let on = false;
+      for (let y = Math.max(0, h - 6); x < w && y < h && !on; y++) on = a[y * w + x] > 128;
+      if (on && start < 0) start = x; else if (!on && start >= 0) { out.push([start / q, x / q]); start = -1; }
+    }
+    e.feet = out.length ? out : [[0, d.w]];
+  }
+  return e.feet;
+}
+// "que llegue abajo": el stretch con el que las patas terminan legsGap px por encima de lo primero que tienen debajo
+// (lo más alto que pisa alguna pata, más abajo que el comienzo de la franja; lo que se mueve no cuenta). null: nada abajo
+function groundStretch(i, Wd = world()) {
+  const o = A.objects[i], d = def(o.piece), L = legsOf(d); if (!L) return null;
+  const feet = feetCols(img(d.url), d).map(([a, b]) => (o.flip ? [o.x + d.w - b, o.x + d.w - a] : [o.x + a, o.x + b]));
+  let on = null;
+  for (const s of Wd.solids) {
+    if (s.moving || (s.ref && s.ref.t === "obj" && s.ref.i === i) || s.y <= o.y + L[0]) continue;
+    if (feet.some(([x0, x1]) => s.x < x1 && s.x + s.w > x0) && (!on || s.y < on.y)) on = s;
+  }
+  return on && { s: clampStretch(L, on.y - (d.p.legsGap || 0) - o.y - d.h), on };
+}
+let legsFollow = true;   // al mover una pintada con patas, las patas siguen hasta lo de abajo (no es parte de la arena)
+// las que tienen las patas justo sobre algo, antes de mover: si se mueve lo de abajo, siguen llegando
+function standing() {
+  if (!legsFollow) return [];
+  const Wd = world();
+  return A.objects.map((o, i) => i).filter(i => { const r = groundStretch(i, Wd); return r && r.s === stretchOf(A.objects[i]); });
+}
+function followLegs(i, also = []) {
+  if (legsFollow) for (const j of new Set([i, ...also])) { const r = groundStretch(j); if (r) setStretch(A.objects[j], r.s); }
+}
+// el recorrido: ida y vuelta, con la pausa en las puntas (moveObjects de src.html)
+function pathLens(p) { const L = []; for (let i = 1; i < p.length; i++) L.push(Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1])); return L; }
+function along(p, L, s) {
+  for (let i = 0; i < L.length; i++) { if (s <= L[i] || i === L.length - 1) { const k = L[i] ? Math.min(1, s / L[i]) : 1; return [p[i][0] + (p[i + 1][0] - p[i][0]) * k, p[i][1] + (p[i + 1][1] - p[i][1]) * k]; } s -= L[i]; }
+  return p[p.length - 1];
+}
+function pathPos(o, t) {
+  const p = o.move.path, L = pathLens(p), tot = L.reduce((a, b) => a + b, 0), sp = o.move.speed || 120, w = o.move.wait ?? 0.5, T = tot / sp;
+  let u = t % (2 * T + 2 * w);
+  if (u < w) return p[0]; u -= w;
+  if (u < T) return along(p, L, u * sp); u -= T;
+  if (u < w) return p[p.length - 1]; u -= w;
+  return along(p, L, tot - u * sp);
+}
+function samplePath(p, step) {
+  const L = pathLens(p), tot = L.reduce((a, b) => a + b, 0), n = Math.max(1, Math.ceil(tot / step)), out = [];
+  for (let i = 0; i <= n; i++) out.push(along(p, L, tot * i / n));
+  return out;
+}
+// el mundo de ahora: los sólidos (como los arma loadArena) y las superficies para el alcance (las plataformas que se
+// mueven, una por cada tramo de su recorrido)
+function world() {
+  const solids = [], surfs = [];
+  A.solids.forEach((s, i) => solids.push({ ...baseSolid(s), own: "s" + i, ref: { t: "solid", i }, name: solidName(s, i) }));
+  A.objects.forEach((o, i) => objSolids(o).forEach((s, j, all) =>
+    solids.push({ ...s, own: moving(o) ? "o" + i : `o${i}.${j}`, ref: { t: "obj", i }, name: objName(o) + (all.length > 1 ? ` #${j + 1}` : ""), moving: moving(o) })));
+  for (const p of A.platforms || []) {   // las del formato viejo (Fundición): sólo para ver la colisión y el alcance
+    const K = KIT.pieces["platforms/" + p.piece]; if (!K) continue;
+    const x = p.piece === "ledge" ? (p.wall === "left" ? p.x : p.x - K.w) : p.cx - K.w / 2;
+    solids.push({ kind: "platform", x, y: p.y, w: K.w, h: BRIDGE_H, oneWay: true, own: "p" + solids.length, name: p.piece, legacy: true });
+  }
+  for (const s of solids) [s.hangL, s.hangR] = hangEdges(s, solids);
+  for (const s of solids) if (!s.moving) surfs.push(s);
+  A.objects.forEach((o, i) => {
+    if (!moving(o)) return;
+    const base = solids.find(s => s.own === "o" + i);
+    samplePath(o.move.path, 24).forEach((pt, k) => objSolids(o, pt).forEach(s => surfs.push({ ...s, own: "o" + i, ref: { t: "obj", i }, name: base?.name || objName(o), moving: true, sample: k, hangL: false, hangR: false })));
+  });
+  return { solids, surfs };
+}
+// de qué bordes se puede colgar (findLedge): el lado del JSON, lejos de las paredes y sin nada encima
+function hangEdges(s, solids) {
+  if (s.noLedge || s.moving) return [false, false];
+  const side = s.ledge || "both";
+  const free = cx => cx >= WALL_GAP && cx <= AW - WALL_GAP && !solids.some(o => o !== s && !o.ground && !o.moving && o.x < cx + 40 && o.x + o.w > cx - 40 && o.y < s.y && o.y + o.h > s.y - BODY_H);
+  return [(side === "both" || side === "left") && free(s.x), (side === "both" || side === "right") && free(s.x + s.w)];
+}
+function solidName(s, i) { return s.kind === "walk" && s.y >= 900 ? "Piso" : s.kind === "bridge" ? `Puente ${i + 1}` : s.kind === "box" ? `Caja ${i + 1}` : `Bloque ${i + 1}`; }
+function objName(o) { return o.piece.replace(/^(platforms|small_props|landmarks)\//, ""); }
+
+/* ---------- alcance ---------- */
+// para cada altura h (px por encima de los pies al saltar; negativa, por debajo), la distancia más larga a la que se cae
+// en esa altura corriendo a PHYS.run: salto simple y salto + doble (el doble apretado en el mejor momento). La forma sale
+// de la física del juego; la altura máxima, de lo medido (h1, h2)
+const ENV = { lo: -1200, hi: 420, X1: null, X2: null };
+function buildEnv() {
+  const n = ENV.hi - ENV.lo + 1, dt = 1 / 480;
+  const fly = (t2, out) => {
+    let x = 0, h = 0, vy = -PHYS.v0, t = 0, dbl = t2 >= 0, peak = 0;
+    while (t < 4 && h > ENV.lo) {
+      if (dbl && t >= t2) { vy = Math.min(vy, -PHYS.v0 * PHYS.dbl); dbl = false; }
+      vy = Math.min(PHYS.term, vy + (vy < 0 ? PHYS.gUp : PHYS.gDown) * dt);
+      const prev = h; h -= vy * dt; x += PHYS.run * dt; t += dt; peak = Math.max(peak, h);
+      if (vy > 0) for (let k = Math.ceil(h); k <= Math.floor(prev); k++) { const i = k - ENV.lo; if (i >= 0 && i < n && x > out[i]) out[i] = x; }
+    }
+    return peak;
+  };
+  const r1 = new Float32Array(n).fill(-1), r2 = new Float32Array(n).fill(-1);
+  const p1 = fly(-1, r1);
+  let p2 = 0; for (let t2 = 0; t2 < 1.2; t2 += 1 / 120) p2 = Math.max(p2, fly(t2, r2));
+  ENV.X1 = scaleEnv(r1, p1, PHYS.h1); ENV.X2 = scaleEnv(r2, p2, PHYS.h2);
+}
+function scaleEnv(raw, peak, cap) {   // la misma curva, achatada (o estirada) hasta la altura medida
+  const out = new Float32Array(raw.length).fill(-1), k = peak / cap;
+  for (let i = 0; i < raw.length; i++) { const h = i + ENV.lo; if (h > cap) continue; const j = Math.round(h > 0 ? h * k : h) - ENV.lo; if (j >= 0 && j < raw.length) out[i] = raw[j]; }
+  return out;
+}
+const envAt = (X, h) => { const i = Math.round(h) - ENV.lo; return i < 0 ? X[0] : i >= X.length ? -1 : X[i]; };
+// de una superficie a otra: cómo se llega (y cuánto "cuesta", para quedarse con la más fácil)
+function link(a, b) {
+  if (a.own === b.own) return a.sample != null && Math.abs(a.sample - b.sample) === 1 ? { c: 0.05, how: "viaja" } : null;
+  const hw = PHYS.halfW, span = s => [Math.max(hw, s.x - hw + 1), Math.min(AW - hw, s.x + s.w + hw - 1)];
+  const gap = (p, q) => Math.max(0, q[0] - p[1], p[0] - q[1]);
+  const sa = span(a), sb = span(b), d = gap(sa, sb), dy = a.y - b.y;
+  if (sa[0] > sa[1] || sb[0] > sb[1]) return null;
+  if (dy <= 0) {
+    if (dy < -4 && d === 0 && !a.oneWay && sb[0] >= sa[0] && sb[1] <= sa[1]) return null;   // abajo de un bloque, sin asomar
+    // caer cuesta más que saltar derecho: así la flecha muestra cómo se sube, si se puede
+    return d <= envAt(ENV.X1, dy) ? { c: dy < -4 ? 1.5 : 1, how: dy < -4 ? "cae" : "simple" } : null;
+  }
+  if (dy <= PHYS.h1 && d <= envAt(ENV.X1, dy)) return { c: 1, how: "simple" };
+  if (dy <= PHYS.hang) for (const [ok, cx, dir] of [[b.hangL, b.x, -1], [b.hangR, b.x + b.w, 1]]) {
+    if (!ok) continue;   // colgarse: la mano a ~22 px del borde, del lado de afuera
+    const grab = dir < 0 ? [cx - 45, cx] : [cx, cx + 45];
+    if (gap(sa, grab) <= envAt(ENV.X2, Math.min(dy, PHYS.h2))) return { c: 1.4, how: "colgado", cx };
+  }
+  if (dy <= PHYS.h2 && d <= envAt(ENV.X2, dy)) return { c: 1.8, how: "doble" };
+  return null;
+}
+// desde el piso (lo que está a 900 o más), el camino más fácil a cada superficie
+function reach(W) {
+  const S = W.surfs, n = S.length, cost = new Array(n).fill(Infinity), how = new Array(n).fill(null), from = new Array(n).fill(-1), done = new Array(n).fill(false);
+  let roots = S.map((s, i) => i).filter(i => S[i].ground);
+  if (!roots.length && n) roots = [S.reduce((b, s, i) => (s.y > S[b].y ? i : b), 0)];
+  for (const r of roots) { cost[r] = 0; how[r] = { how: "base" }; }
+  for (;;) {
+    let i = -1; for (let k = 0; k < n; k++) if (!done[k] && cost[k] < Infinity && (i < 0 || cost[k] < cost[i])) i = k;
+    if (i < 0) break; done[i] = true;
+    for (let j = 0; j < n; j++) { if (done[j]) continue; const e = link(S[i], S[j]); if (e && cost[i] + e.c < cost[j]) { cost[j] = cost[i] + e.c; how[j] = e; from[j] = i; } }
+  }
+  const byOwn = new Map();   // lo mejor de cada dueño (una plataforma que se mueve es varias superficies)
+  S.forEach((s, i) => { const b = byOwn.get(s.own); if (!b || cost[i] < b.cost) byOwn.set(s.own, { i, cost: cost[i], ok: cost[i] < Infinity, how: how[i], from: from[i] }); });
+  return { S, cost, how, from, byOwn };
+}
+
+/* ---------- grilla e imanes ---------- */
+const snapV = v => (grid ? Math.round(v / grid) * grid : Math.round(v));
+// x: el borde (o el centro) que quede más cerca de una línea de la grilla, y contra la pared si está a menos de 12 px
+function snapX(x, offs) {
+  let best = null;
+  for (const c of offs) { const t = snapV(x + c) - c; if (best === null || Math.abs(t - x) < Math.abs(best - x)) best = t; }
+  for (const c of offs) { if (Math.abs(x + c) < 12) return -c; if (Math.abs(x + c - AW) < 12) return AW - c; }
+  return best;
+}
+// un objeto: la línea de los pies (o la base) en la grilla, y un borde en la grilla
+function snapObj(o, at) {
+  const d = def(o.piece); if (!d) return [Math.round(at[0]), Math.round(at[1])];
+  if (d.painted) {
+    const s0 = (d.p.solids || [])[0], fy = s0 ? s0.y : 0;
+    const offs = [0, d.w]; if (s0) { const sx = o.flip ? d.w - s0.x - s0.w : s0.x; offs.push(sx, sx + s0.w); }
+    return [snapX(at[0], offs), snapV(at[1] + fy) - fy];
+  }
+  return [snapX(at[0], [-d.w / 2, 0, d.w / 2]), snapV(at[1])];
+}
+
+/* ---------- vista ---------- */
+let raf = 0;
+function draw() { if (!raf) raf = requestAnimationFrame(render); }
+let fitted = false;   // la primera vez que el lienzo tiene tamaño, la arena entera a la vista
+function resize() {
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+  if (!fitted && A && r.width > 40 && r.height > 40) fit(); else draw();
+}
+function fit() {
+  const r = cv.getBoundingClientRect(); if (r.width > 40 && r.height > 40) fitted = true;
+  const k = Math.min((r.width - 32) / AW, (r.height - 32) / AH);
+  view.k = Math.max(0.05, k); view.x = (r.width - AW * view.k) / 2; view.y = (r.height - AH * view.k) / 2; draw();
+}
+function zoomAt(f, sx, sy) {
+  const k = Math.min(4, Math.max(0.1, view.k * f)), wx = (sx - view.x) / view.k, wy = (sy - view.y) / view.k;
+  view.k = k; view.x = sx - wx * k; view.y = sy - wy * k; draw();
+}
+const toWorld = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left - view.x) / view.k, (e.clientY - r.top - view.y) / view.k, e.clientX - r.left, e.clientY - r.top]; };
+
+/* ---------- dibujo ---------- */
+let W = null, R = null;   // el mundo y el alcance del último cuadro
+function rgba(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
+function drawPiece(o, at, alpha = 1, tint = null) {
+  const d = def(o.piece), b = objBox(o, at);
+  if (!d) { g.strokeStyle = COL.bad; g.lineWidth = 2 / view.k; g.strokeRect(b.x, b.y, b.w, b.h); text(`¿${o.piece}?`, b.x + 4, b.y + 14, COL.bad); return; }
+  const e = img(d.url); if (!e.ok) return;
+  const base = tint ? tinted(e, tint) : graded(e, "plataformas"), s = stretchOf(o, d), src = s ? legged(base, d, legsOf(d), s) : base;
+  g.save(); g.globalAlpha = alpha;
+  if (o.flip) { g.translate(b.x + b.w, b.y); g.scale(-1, 1); g.drawImage(src, 0, 0, b.w, b.h); } else g.drawImage(src, b.x, b.y, b.w, b.h);
+  g.restore();
+}
+// la pieza con las patas alargadas, armada aparte en su tamaño natural: arriba igual, la franja estirada y los pies
+// corridos (dibujada de a pedazos sobre el lienzo, con el zoom quedarían costuras). Como bakePlate en el juego
+const LEGGED = new WeakMap();
+function legged(src, d, L, s) {
+  let m = LEGGED.get(src); if (!m) LEGGED.set(src, (m = new Map()));
+  const k = `${L[0]} ${L[1]} ${s}`;
+  if (!m.has(k)) {
+    const nw = src.naturalWidth || src.width, nh = src.naturalHeight || src.height, q = nh / d.h, y0 = L[0] * q, y1 = L[1] * q;
+    const c = document.createElement("canvas"); c.width = nw; c.height = Math.round((d.h + s) * q);
+    const t = c.getContext("2d"); t.imageSmoothingQuality = "high";
+    t.drawImage(src, 0, 0, nw, y0, 0, 0, nw, y0);
+    t.drawImage(src, 0, y0, nw, y1 - y0, 0, y0, nw, y1 - y0 + s * q);
+    t.drawImage(src, 0, y1, nw, nh - y1, 0, y1 + s * q, nw, nh - y1);
+    if (m.size >= 8) m.delete(m.keys().next().value);   // al arrastrar el tirador sale una por cuadro
+    m.set(k, c);
+  }
+  return m.get(k);
+}
+function text(s, x, y, color = "#fff", size = 11, align = "left") {
+  g.save(); g.font = `600 ${size / view.k}px -apple-system, system-ui, sans-serif`; g.textAlign = align; g.lineJoin = "round";
+  g.lineWidth = 3 / view.k; g.strokeStyle = "rgba(5,8,14,.85)"; g.strokeText(s, x, y); g.fillStyle = color; g.fillText(s, x, y); g.restore();
+}
+function line(x0, y0, x1, y1, color, px = 1.5, dash = null) {
+  g.save(); g.strokeStyle = color; g.lineWidth = px / view.k; if (dash) g.setLineDash(dash.map(v => v / view.k));
+  g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke(); g.restore();
+}
+function render() {
+  raf = 0;
+  const dpr = window.devicePixelRatio || 1;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = "#0a0d13"; g.fillRect(0, 0, cv.width, cv.height);
+  if (!A) return;
+  W = world(); R = reach(W);
+  g.setTransform(dpr * view.k, 0, 0, dpr * view.k, dpr * view.x, dpr * view.y);
+  g.imageSmoothingQuality = "high";
+  // la lámina (o, si la arena es del kit, un azul liso)
+  g.fillStyle = "#1c3a6e"; g.fillRect(0, 0, AW, AH);
+  if (JSON.stringify(A.color || null) + noColor !== colorKey && !gradeLow) regrade();   // deshacer, otra arena…
+  if (A.plate && A.plate.src) {
+    const e = img(ARENA_DIR + A.plate.src);
+    if (e.ok) {
+      const bg = graded(e, "fondo"), fg = graded(e, "plataformas");
+      g.drawImage(bg, 0, 0, AW, AH);
+      if (fg !== bg) {   // los recortes de plate.solid (lo que se pisa de la lámina) son de las plataformas, como en el juego
+        const kx = (fg.naturalWidth || fg.width) / AW, ky = (fg.naturalHeight || fg.height) / AH;
+        for (const [x, y, w, h] of A.plate.solid || []) g.drawImage(fg, x * kx, y * ky, w * kx, h * ky, x, y, w, h);
+      }
+    }
+  }
+  // el orden del juego: piezas pintadas (en el orden del JSON), objetos de atrás (oscurecidos) y los de adelante
+  const objs = A.objects.map((o, i) => [o, i]);
+  for (const [o] of objs) if (isPainted(o)) drawPiece(o, objAt(o));
+  for (const [o] of objs) if (!isPainted(o) && (o.layer === "back" || o.solid === false) && def(o.piece)) drawPiece(o, objAt(o), 1, "rgba(14,24,52,0.35)");
+  for (const [o] of objs) if (!isPainted(o) && !(o.layer === "back" || o.solid === false)) drawPiece(o, objAt(o));
+  for (const p of A.platforms || []) {
+    const K = KIT.pieces["platforms/" + p.piece]; if (!K) continue;
+    const x = p.piece === "ledge" ? (p.wall === "left" ? p.x : p.x - K.w) : p.cx - K.w / 2, e = img(K.src);
+    if (e.ok) { g.save(); if (p.wall === "left") { g.translate(x + K.w, 0); g.scale(-1, 1); g.drawImage(graded(e, "plataformas"), 0, p.y - K.top, K.w, K.h); } else g.drawImage(graded(e, "plataformas"), x, p.y - K.top, K.w, K.h); g.restore(); }
+  }
+  // fuera de la arena, a oscuras
+  g.fillStyle = "rgba(6,8,12,.72)";
+  g.fillRect(-4000, -4000, 8000 + AW, 4000); g.fillRect(-4000, AH, 8000 + AW, 4000); g.fillRect(-4000, 0, 4000, AH); g.fillRect(AW, 0, 4000, AH);
+  drawGrid();
+  if (show.paths) drawPaths();
+  if (show.col) drawCollision();
+  if (show.reach) drawReach();
+  if (show.spawns) drawSpawns();
+  drawSelection();
+  g.strokeStyle = "rgba(255,255,255,.35)"; g.lineWidth = 1 / view.k; g.strokeRect(0, 0, AW, AH);
+  status();
+  if (anim) { animT += 1 / 60; draw(); }
+}
+function drawGrid() {
+  if (!grid) return;
+  let step = grid; while (step * view.k < 7) step *= 2;
+  g.save(); g.lineWidth = 1 / view.k; g.beginPath();
+  for (let x = 0; x <= AW; x += step) { g.moveTo(x, 0); g.lineTo(x, AH); }
+  for (let y = 0; y <= AH; y += step) { g.moveTo(0, y); g.lineTo(AW, y); }
+  g.strokeStyle = "rgba(255,255,255,.07)"; g.stroke(); g.beginPath();
+  for (let x = 0; x <= AW; x += 128) { g.moveTo(x, 0); g.lineTo(x, AH); }
+  for (let y = 0; y <= AH; y += 128) { g.moveTo(0, y); g.lineTo(AW, y); }
+  g.strokeStyle = "rgba(255,255,255,.13)"; g.stroke(); g.restore();
+}
+function ownOk(own) { const b = R.byOwn.get(own); return !b || b.ok; }
+function drawCollision() {
+  for (const s of W.solids) {
+    if (s.moving) continue;
+    const c = show.reach ? (ownOk(s.own) ? COL.ok : COL.bad) : COL.acc, x0 = Math.max(-40, s.x), x1 = Math.min(AW + 40, s.x + s.w);
+    g.fillStyle = rgba(c, s.oneWay ? 0.2 : 0.1); g.fillRect(x0, s.y, x1 - x0, Math.min(s.h, AH + 40 - s.y));
+    line(x0, s.y, x1, s.y, c, 2.5);
+    if (!s.oneWay) { g.strokeStyle = rgba(c, 0.6); g.lineWidth = 1 / view.k; g.strokeRect(x0, s.y, x1 - x0, Math.min(s.h, AH + 40 - s.y)); }
+    for (const [ok, cx] of [[s.hangL, s.x], [s.hangR, s.x + s.w]]) if (ok) hangMark(cx, s.y);
+    text(String(Math.round(s.y)), Math.max(4, x0 + 4), s.y - 6, c, 10);
+  }
+  // lo que va delante del colgado: recortes de la lámina y de las piezas
+  g.save(); g.setLineDash([4 / view.k, 3 / view.k]); g.strokeStyle = rgba(COL.front, 0.75); g.lineWidth = 1 / view.k;
+  for (const [x, y, w, h] of (A.plate && A.plate.solid) || []) g.strokeRect(x, y, w, h);
+  for (const o of A.objects) for (const [x, y, w, h] of frontRects(o)) g.strokeRect(x, y, w, h);
+  g.restore();
+}
+function hangMark(cx, y) {   // un gancho: de acá se cuelga uno
+  g.save(); g.strokeStyle = COL.warn; g.fillStyle = COL.warn; g.lineWidth = 2.5 / view.k;
+  g.beginPath(); g.moveTo(cx, y); g.lineTo(cx, y + 16); g.stroke();
+  g.beginPath(); g.arc(cx, y, 4 / view.k, 0, Math.PI * 2); g.fill(); g.restore();
+}
+function drawReach() {
+  // las flechas: cómo se llega a cada superficie desde la anterior (s simple, d doble, c colgado)
+  const L = { simple: "S", doble: "D", colgado: "C" };
+  for (const [own, b] of R.byOwn) {
+    if (!b.ok || b.from < 0 || !L[b.how?.how]) continue;
+    const s = R.S[b.i], f = R.S[b.from];
+    const tx = b.how.cx ?? Math.max(s.x + 14, Math.min(s.x + s.w - 14, f.x + f.w / 2)), ty = s.y;
+    const fx = Math.max(f.x + 14, Math.min(f.x + f.w - 14, tx)), fy = f.y;
+    const c = b.how.how === "doble" ? "#a78bfa" : b.how.how === "colgado" ? COL.warn : COL.ok;
+    g.save(); g.strokeStyle = rgba(c, 0.85); g.lineWidth = 1.6 / view.k; g.setLineDash([6 / view.k, 4 / view.k]);
+    const mx = (fx + tx) / 2 + (tx === fx ? 24 : 0), my = Math.min(fy, ty) - 40;
+    g.beginPath(); g.moveTo(fx, fy); g.quadraticCurveTo(mx, my, tx, ty); g.stroke(); g.setLineDash([]);
+    const a = Math.atan2(ty - my, tx - mx), hl = 9 / view.k;
+    g.fillStyle = c; g.beginPath(); g.moveTo(tx, ty); g.lineTo(tx - hl * Math.cos(a - 0.4), ty - hl * Math.sin(a - 0.4)); g.lineTo(tx - hl * Math.cos(a + 0.4), ty - hl * Math.sin(a + 0.4)); g.fill(); g.restore();
+    text(`${L[b.how.how]} ${Math.round(f.y - s.y)}`, (fx + 2 * mx + tx) / 4, (fy + 2 * my + ty) / 4 - 4, c, 11, "center");
+  }
+  // las plataformas que se mueven: su recorrido, verde o rojo según se llegue
+  for (const [own, b] of R.byOwn) {
+    const s = R.S[b.i]; if (!s.moving) continue;
+    const o = A.objects[s.ref.i], p = o.move.path, c = b.ok ? COL.ok : COL.bad;
+    for (let i = 1; i < p.length; i++) line(p[i - 1][0], p[i - 1][1], p[i][0], p[i][1], rgba(c, 0.9), 3);
+  }
+  // lo que alcanza la selección: el salto simple y el doble, desde cada superficie de lo elegido
+  for (const s of selSurfaces()) envelope(s);
+}
+function selSurfaces() {
+  if (!sel || !W) return [];
+  if (sel.t === "obj" || sel.t === "pt") return W.solids.filter(s => s.ref && s.ref.t === "obj" && s.ref.i === sel.i);
+  if (sel.t === "solid") return W.solids.filter(s => s.ref && s.ref.t === "solid" && s.ref.i === sel.i);
+  return [];
+}
+function envelope(s) {
+  const hw = PHYS.halfW;
+  for (const [X, cap, a] of [[ENV.X2, PHYS.h2, 0.08], [ENV.X1, PHYS.h1, 0.14]]) {
+    g.save(); g.beginPath();
+    for (let h = 0; h <= cap; h += 3) g.lineTo(s.x + s.w + 2 * hw + Math.max(0, envAt(X, Math.min(h, cap))), s.y - h);
+    for (let h = cap; h >= 0; h -= 3) g.lineTo(s.x - 2 * hw - Math.max(0, envAt(X, Math.min(h, cap))), s.y - h);
+    g.closePath(); g.fillStyle = rgba(COL.acc, a); g.fill();
+    g.setLineDash([5 / view.k, 4 / view.k]); g.strokeStyle = rgba(COL.acc, 0.7); g.lineWidth = 1.2 / view.k; g.stroke(); g.restore();
+  }
+  // a qué distancia está lo de abajo y lo de arriba
+  const near = W.solids.filter(o => o.own !== s.own && !o.moving && o.x < s.x + s.w + 240 && o.x + o.w > s.x - 240);
+  const below = near.filter(o => o.y > s.y + 4).sort((a, b) => a.y - b.y)[0], above = near.filter(o => o.y < s.y - 4).sort((a, b) => b.y - a.y)[0];
+  for (const o of [below, above]) {
+    if (!o) continue;
+    const lo = Math.max(s.x, o.x), hi = Math.min(s.x + s.w, o.x + o.w), x = lo <= hi ? (lo + hi) / 2 : (o.x > s.x ? s.x + s.w - 10 : s.x + 10);
+    line(x, s.y, x, o.y, "#fff", 1.2, [3, 3]);
+    text(`↕ ${Math.round(Math.abs(o.y - s.y))}`, x + 6, (s.y + o.y) / 2 + 4, "#fff", 12);
+  }
+}
+function drawPaths() {
+  A.objects.forEach((o, i) => {
+    if (!moving(o)) return;
+    const p = o.move.path, on = sel && (sel.i === i) && (sel.t === "obj" || sel.t === "pt");
+    for (let j = 1; j < p.length; j++) line(p[j - 1][0], p[j - 1][1], p[j][0], p[j][1], rgba(COL.acc, on ? 0.95 : 0.6), on ? 2 : 1.5, [7, 5]);
+    for (let j = 1; j < p.length; j++) drawPiece(o, p[j], 0.32);
+    p.forEach(([x, y], j) => {
+      g.beginPath(); g.arc(x, y, (on ? 6 : 4.5) / view.k, 0, Math.PI * 2);
+      g.fillStyle = sel && sel.t === "pt" && sel.i === i && sel.j === j ? "#fff" : COL.acc; g.fill();
+      g.lineWidth = 1.5 / view.k; g.strokeStyle = "#06222a"; g.stroke();
+    });
+    text(`${o.move.speed || 120} px/s · ${String(o.move.wait ?? 0.5).replace(".", ",")} s`, p[0][0] + 10, p[0][1] + 20, COL.acc, 11);
+  });
+}
+function spawnSurface(x, y) { return W.solids.find(s => !s.moving && x + PHYS.halfW > s.x && x - PHYS.halfW < s.x + s.w && Math.abs(s.y - y) < 1.5); }
+function drawSpawns() {
+  const e = RANGER && img(RANGER.src);
+  (A.spawns || []).forEach(([x, y], i) => {
+    const s = spawnSurface(x, y), ok = s && ownOk(s.own), c = ok ? COL.ok : COL.bad;
+    if (e && e.ok) { g.save(); g.globalAlpha = 0.92; g.drawImage(e.im, x + RANGER.x, y + RANGER.y, RANGER.w, RANGER.h); g.restore(); }
+    g.strokeStyle = rgba(c, 0.9); g.lineWidth = 1.5 / view.k; g.strokeRect(x - 16, y - 104, 32, 104);
+    g.beginPath(); g.arc(x, y - 118, 10 / view.k, 0, Math.PI * 2); g.fillStyle = c; g.fill();
+    text(String(i + 1), x, y - 114, "#06110a", 11, "center");
+    if (!s) text("en el aire", x, y + 16, COL.bad, 11, "center");
+  });
+}
+function drawSelection() {
+  if (!sel) return;
+  g.save(); g.lineWidth = 1.5 / view.k; g.setLineDash([6 / view.k, 4 / view.k]); g.strokeStyle = "#fff";
+  const b = selBox(); if (b) g.strokeRect(b.x - 2, b.y - 2, b.w + 4, b.h + 4);
+  g.restore();
+  const L = sel.t === "obj" && legsOf(def(A.objects[sel.i].piece));
+  if (L && b) {   // la franja de las patas: lo que se estira
+    const s = stretchOf(A.objects[sel.i]), y0 = b.y + L[0], y1 = b.y + L[1] + s;
+    g.fillStyle = rgba(COL.acc, 0.08); g.fillRect(b.x, y0, b.w, y1 - y0);
+    line(b.x, y0, b.x + b.w, y0, rgba(COL.acc, 0.8), 1, [4, 4]); line(b.x, y1, b.x + b.w, y1, rgba(COL.acc, 0.8), 1, [4, 4]);
+    text(`patas ${s > 0 ? "+" : ""}${s}`, b.x + b.w / 2 + 10, b.y + b.h - 8, COL.acc, 11);
+  }
+  for (const h of handles()) { g.fillStyle = "#fff"; g.strokeStyle = "#0a0d13"; g.lineWidth = 1.5 / view.k; const r = 5 / view.k; g.fillRect(h.x - r, h.y - r, 2 * r, 2 * r); g.strokeRect(h.x - r, h.y - r, 2 * r, 2 * r); }
+}
+function selBox() {
+  if (!sel) return null;
+  if (sel.t === "obj") return objBox(A.objects[sel.i]);
+  if (sel.t === "spawn") { const [x, y] = A.spawns[sel.i]; return { x: x - 16, y: y - 104, w: 32, h: 104 }; }
+  if (sel.t === "solid") { const s = baseSolid(A.solids[sel.i]); return { x: s.x, y: s.y, w: s.w, h: Math.min(s.h, 200) }; }
+  if (sel.t === "front") { const [x, y, w, h] = A.plate.solid[sel.i]; return { x, y, w, h }; }
+  return null;
+}
+function handles() {   // para estirar: los sólidos de la base, los recortes de adelante y las patas de una pintada
+  if (!sel) return [];
+  if (sel.t === "obj" && legsOf(def(A.objects[sel.i].piece))) { const b = objBox(A.objects[sel.i]); return [{ x: b.x + b.w / 2, y: b.y + b.h, k: "legs" }]; }
+  if (sel.t === "solid") { const s = baseSolid(A.solids[sel.i]), hs = [{ x: s.x, y: s.y, k: "l" }, { x: s.x + s.w, y: s.y, k: "r" }]; if (!s.oneWay) hs.push({ x: s.x + s.w / 2, y: s.y + Math.min(s.h, 200), k: "b" }); return hs; }
+  if (sel.t === "front") { const [x, y, w, h] = A.plate.solid[sel.i]; return [{ x, y: y + h / 2, k: "l" }, { x: x + w, y: y + h / 2, k: "r" }, { x: x + w / 2, y, k: "t" }, { x: x + w / 2, y: y + h, k: "b" }]; }
+  return [];
+}
+function status() {
+  const m = mouse ? `x ${Math.round(mouse[0])} · y ${Math.round(mouse[1])}` : "";
+  $("status").textContent = [m, `zoom ${Math.round(view.k * 100)}%`, dirty ? "cambios sin guardar" : ""].filter(Boolean).join("   ·   ");
+}
+
+/* ---------- elegir con el mouse ---------- */
+function hitObj(o, wx, wy) {
+  const d = def(o.piece), b = objBox(o);
+  if (wx < b.x || wy < b.y || wx >= b.x + b.w || wy >= b.y + b.h) return false;
+  if (!d) return true;
+  const e = img(d.url); if (!e.alpha) return true;
+  let u = (wx - b.x) / b.w, v = wy - b.y; if (o.flip) u = 1 - u;
+  const L = legsOf(d), s = stretchOf(o, d);   // con las patas estiradas: la fila de la pieza que cae ahí
+  if (s && v >= L[0]) v = v < L[1] + s ? L[0] + (v - L[0]) * (L[1] - L[0]) / (L[1] - L[0] + s) : v - s;
+  const px = Math.min(e.alpha.w - 1, Math.floor(u * e.alpha.w)), py = Math.min(e.alpha.h - 1, Math.floor(v / d.h * e.alpha.h));
+  return e.alpha.a[py * e.alpha.w + px] > 40;
+}
+function hit(wx, wy) {
+  const tol = 8 / view.k;
+  for (const h of handles()) if (Math.abs(wx - h.x) < tol && Math.abs(wy - h.y) < tol) return { t: "handle", k: h.k };
+  if (show.paths) for (let i = A.objects.length - 1; i >= 0; i--) { const o = A.objects[i]; if (moving(o)) for (let j = o.move.path.length - 1; j >= 0; j--) { const [x, y] = o.move.path[j]; if (Math.hypot(wx - x, wy - y) < tol + 2 / view.k) return { t: "pt", i, j }; } }
+  if (show.spawns) for (let i = (A.spawns || []).length - 1; i >= 0; i--) { const [x, y] = A.spawns[i]; if (wx > x - 18 && wx < x + 18 && wy > y - 130 && wy < y + 4) return { t: "spawn", i }; }
+  const order = A.objects.map((o, i) => i).reverse();
+  const front = order.filter(i => !isPainted(A.objects[i]) && !(A.objects[i].layer === "back" || A.objects[i].solid === false));
+  const back = order.filter(i => !isPainted(A.objects[i]) && (A.objects[i].layer === "back" || A.objects[i].solid === false));
+  const painted = order.filter(i => isPainted(A.objects[i]));
+  for (const i of [...front, ...painted, ...back]) if (hitObj(A.objects[i], wx, wy)) return { t: "obj", i };
+  if (show.col) {
+    for (let i = A.solids.length - 1; i >= 0; i--) { const s = baseSolid(A.solids[i]); if (wx >= s.x && wx <= s.x + s.w && wy >= s.y - tol && wy <= s.y + Math.max(tol, Math.min(s.h, 40))) return { t: "solid", i }; }
+    const F = (A.plate && A.plate.solid) || [];
+    for (let i = F.length - 1; i >= 0; i--) { const [x, y, w, h] = F[i]; if (wx >= x && wx <= x + w && wy >= y && wy <= y + h) return { t: "front", i }; }
+  }
+  return null;
+}
+
+/* ---------- arrastrar ---------- */
+let drag = null;
+cv.addEventListener("pointerdown", e => {
+  cv.setPointerCapture(e.pointerId);
+  const [wx, wy, sx, sy] = toWorld(e);
+  if (e.button === 1 || e.button === 2 || spaceDown) { drag = { pan: true, sx, sy, vx: view.x, vy: view.y }; return; }
+  const h = hit(wx, wy);
+  if (!h) { sel = null; changedSel(); drag = { pan: true, sx, sy, vx: view.x, vy: view.y }; return; }
+  if (h.t !== "handle") { sel = h; changedSel(); }
+  drag = { h, wx, wy, before: JSON.stringify(A), orig: JSON.parse(JSON.stringify(target())), moved: false, standing: h.t === "obj" ? standing() : [] };
+});
+cv.addEventListener("pointermove", e => {
+  const [wx, wy, sx, sy] = toWorld(e); mouse = [wx, wy];
+  if (!drag) { const h = !spaceDown && hit(wx, wy); cv.style.cursor = spaceDown ? "grab" : h && h.k === "legs" ? "ns-resize" : h ? "move" : "default"; status(); return; }
+  if (drag.pan) { view.x = drag.vx + sx - drag.sx; view.y = drag.vy + sy - drag.sy; cv.style.cursor = "grabbing"; draw(); return; }
+  const dx = wx - drag.wx, dy = wy - drag.wy;
+  if (!drag.moved && Math.hypot(dx, dy) * view.k < 3) return;
+  drag.moved = true; applyDrag(dx, dy); draw();
+});
+cv.addEventListener("pointerup", () => {
+  if (drag && !drag.pan && drag.moved) { if (sel && sel.t === "spawn") settleSpawn(sel.i); if (sel && sel.t === "obj") settleObj(sel.i); commit(drag.before); }
+  drag = null; cv.style.cursor = "default";
+});
+cv.addEventListener("contextmenu", e => e.preventDefault());
+function target() {
+  if (!sel) return null;
+  if (sel.t === "obj" || sel.t === "pt") return A.objects[sel.i];
+  if (sel.t === "spawn") return A.spawns[sel.i];
+  if (sel.t === "solid") return A.solids[sel.i];
+  if (sel.t === "front") return A.plate.solid[sel.i];
+  return null;
+}
+function applyDrag(dx, dy) {
+  const o0 = drag.orig, h = drag.h;
+  if (h.t === "handle") return resizeDrag(h.k, o0, dx, dy);
+  if (sel.t === "obj") {
+    const o = A.objects[sel.i];
+    if (moving(o)) {   // las que se mueven: todo el recorrido junto
+      const [px, py] = o0.move.path[0], [nx, ny] = snapObj(o, [px + dx, py + dy]);
+      o.move.path = o0.move.path.map(([x, y]) => [x + nx - px, y + ny - py]); [o.x, o.y] = o.move.path[0];
+    } else { [o.x, o.y] = snapObj(o, [o0.x + dx, o0.y + dy]); followLegs(sel.i, drag.standing); }
+  } else if (sel.t === "pt") {
+    const o = A.objects[sel.i], [x0, y0] = o0.move.path[sel.j];
+    o.move.path[sel.j] = snapObj(o, [x0 + dx, y0 + dy]); if (sel.j === 0) [o.x, o.y] = o.move.path[0];
+  } else if (sel.t === "spawn") {
+    A.spawns[sel.i] = [snapV(o0[0] + dx), Math.round(o0[1] + dy)];
+  } else if (sel.t === "solid") {
+    const s = A.solids[sel.i]; s.x = snapX(o0.x + dx, [0, o0.w]); s.y = snapV(o0.y + dy);
+  } else if (sel.t === "front") {
+    const r = A.plate.solid[sel.i]; r[0] = snapX(o0[0] + dx, [0, o0[2]]); r[1] = snapV(o0[1] + dy);
+  }
+}
+function resizeDrag(k, o0, dx, dy) {
+  if (k === "legs") {   // el tirador de abajo de una pintada: las patas, con imán a lo de abajo (a 10 px de pantalla)
+    const r = groundStretch(sel.i), s = (o0.stretch || 0) + dy;
+    setStretch(A.objects[sel.i], r && Math.abs(s - r.s) * view.k < 10 ? r.s : s);
+  } else if (sel.t === "solid") {
+    const s = A.solids[sel.i];
+    if (k === "l") { const x = Math.min(snapV(o0.x + dx), o0.x + o0.w - 8); s.x = x; s.w = o0.x + o0.w - x; }
+    if (k === "r") s.w = Math.max(8, snapV(o0.x + o0.w + dx) - o0.x);
+    if (k === "b") s.h = Math.max(8, snapV(o0.y + (o0.h ?? 60) + dy) - o0.y);
+  } else if (sel.t === "front") {
+    const r = A.plate.solid[sel.i], [x, y, w, h] = o0;
+    if (k === "l") { const nx = Math.min(snapV(x + dx), x + w - 4); r[0] = nx; r[2] = x + w - nx; }
+    if (k === "r") r[2] = Math.max(4, snapV(x + w + dx) - x);
+    if (k === "t") { const ny = Math.min(snapV(y + dy), y + h - 4); r[1] = ny; r[3] = y + h - ny; }
+    if (k === "b") r[3] = Math.max(4, snapV(y + h + dy) - y);
+  }
+}
+// un spawn se apoya en lo que tenga abajo (o apenas arriba) al soltarlo
+function settleSpawn(i) {
+  const [x, y] = A.spawns[i], Wd = world();
+  const under = Wd.solids.filter(s => !s.moving && x + PHYS.halfW > s.x && x - PHYS.halfW < s.x + s.w && s.y >= y - 40).sort((a, b) => a.y - b.y)[0];
+  if (under) A.spawns[i] = [x, under.y];
+}
+// las cajas y cosas del kit también: la base sobre lo que tengan abajo
+function settleObj(i) {
+  const o = A.objects[i], d = def(o.piece); if (!d || d.painted || d.plat || moving(o)) return;
+  const under = world().solids.filter(s => !s.moving && s.own !== `o${i}.0` && o.x + d.w / 2 - 4 > s.x && o.x - d.w / 2 + 4 < s.x + s.w && s.y >= o.y - 40).sort((a, b) => a.y - b.y)[0];
+  if (under) o.y = under.y;
+}
+cv.addEventListener("wheel", e => {
+  e.preventDefault();
+  const [, , sx, sy] = toWorld(e);
+  if (e.ctrlKey || e.metaKey) zoomAt(Math.exp(-Math.max(-60, Math.min(60, e.deltaY)) * 0.01), sx, sy);
+  else { view.x -= e.deltaX; view.y -= e.deltaY; draw(); }
+}, { passive: false });
+cv.addEventListener("pointerleave", () => { mouse = null; status(); });
+
+/* ---------- cambios, deshacer ---------- */
+function commit(before) {
+  if (JSON.stringify(A) === before) return;
+  hist.undo.push(before); if (hist.undo.length > 300) hist.undo.shift(); hist.redo.length = 0;
+  dirty = JSON.stringify(A) !== saved; keepWip(); changed();
+}
+function edit(fn) { const before = JSON.stringify(A); fn(); commit(before); }
+function changed() { draw(); inspect(); colorPanel(); reachPanel(); topbar(); }
+function changedSel() { draw(); inspect(); }
+function undo() { if (!hist.undo.length) return; hist.redo.push(JSON.stringify(A)); A = JSON.parse(hist.undo.pop()); fixSel(); dirty = JSON.stringify(A) !== saved; keepWip(); changed(); }
+function redo() { if (!hist.redo.length) return; hist.undo.push(JSON.stringify(A)); A = JSON.parse(hist.redo.pop()); fixSel(); dirty = JSON.stringify(A) !== saved; keepWip(); changed(); }
+function fixSel() {
+  if (!sel) return;
+  const arr = { obj: A.objects, pt: A.objects, spawn: A.spawns, solid: A.solids, front: A.plate && A.plate.solid }[sel.t];
+  if (!arr || !arr[sel.i] || (sel.t === "pt" && !moving(arr[sel.i]))) sel = null;
+}
+
+/* ---------- acciones ---------- */
+function del() {
+  if (!sel) return;
+  edit(() => {
+    if (sel.t === "obj") A.objects.splice(sel.i, 1);
+    else if (sel.t === "pt") { const p = A.objects[sel.i].move.path; if (p.length > 2) p.splice(sel.j, 1); else delete A.objects[sel.i].move; }
+    else if (sel.t === "spawn") A.spawns.splice(sel.i, 1);
+    else if (sel.t === "solid") A.solids.splice(sel.i, 1);
+    else if (sel.t === "front") A.plate.solid.splice(sel.i, 1);
+    sel = null;
+  });
+}
+function dup() {
+  if (!sel) return;
+  const off = Math.max(grid, 8) * 2;
+  edit(() => {
+    if (sel.t === "obj" || sel.t === "pt") {
+      const o = JSON.parse(JSON.stringify(A.objects[sel.i])); o.x += off;
+      if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [x + off, y]);
+      A.objects.splice(sel.i + 1, 0, o); sel = { t: "obj", i: sel.i + 1 };
+    } else if (sel.t === "spawn") { const [x, y] = A.spawns[sel.i]; A.spawns.push([x + off * 2, y]); sel = { t: "spawn", i: A.spawns.length - 1 }; }
+    else if (sel.t === "solid") { const s = { ...A.solids[sel.i] }; s.y -= off * 4; A.solids.push(s); sel = { t: "solid", i: A.solids.length - 1 }; }
+    else if (sel.t === "front") { const r = [...A.plate.solid[sel.i]]; r[0] += off; A.plate.solid.push(r); sel = { t: "front", i: A.plate.solid.length - 1 }; }
+  });
+}
+function flip() {
+  if (!sel || (sel.t !== "obj" && sel.t !== "pt")) return;
+  edit(() => { const o = A.objects[sel.i]; o.flip = !o.flip; if (!o.flip) delete o.flip; if (o.ledge) o.ledge = flipLedge(o.ledge); });
+}
+// la copia del otro lado de la arena, espejada (las arenas son simétricas)
+function mirrorCopy() {
+  if (!sel) return;
+  edit(() => {
+    if (sel.t === "obj" || sel.t === "pt") {
+      const o = JSON.parse(JSON.stringify(A.objects[sel.i])), d = def(o.piece);
+      o.x = d && d.painted ? AW - o.x - d.w : AW - o.x; o.flip = !o.flip; if (!o.flip) delete o.flip; if (o.ledge) o.ledge = flipLedge(o.ledge);
+      if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [AW - x, y]);
+      A.objects.splice(sel.i + 1, 0, o); sel = { t: "obj", i: sel.i + 1 };
+    } else if (sel.t === "spawn") { const [x, y] = A.spawns[sel.i]; A.spawns.push([AW - x, y]); sel = { t: "spawn", i: A.spawns.length - 1 }; }
+    else if (sel.t === "solid") { const s = { ...A.solids[sel.i] }; s.x = AW - s.x - s.w; if (s.ledge) s.ledge = flipLedge(s.ledge); A.solids.push(s); sel = { t: "solid", i: A.solids.length - 1 }; }
+    else if (sel.t === "front") { const [x, y, w, h] = A.plate.solid[sel.i]; A.plate.solid.push([AW - x - w, y, w, h]); sel = { t: "front", i: A.plate.solid.length - 1 }; }
+  });
+}
+function nudge(dx, dy) {
+  if (!sel) return;
+  edit(() => {
+    if (sel.t === "obj") { const o = A.objects[sel.i]; if (moving(o)) { o.move.path = o.move.path.map(([x, y]) => [x + dx, y + dy]); [o.x, o.y] = o.move.path[0]; } else { const st = standing(); o.x += dx; o.y += dy; followLegs(sel.i, st); } }
+    else if (sel.t === "pt") { const o = A.objects[sel.i], p = o.move.path[sel.j]; p[0] += dx; p[1] += dy; if (sel.j === 0) [o.x, o.y] = p; }
+    else if (sel.t === "spawn") { A.spawns[sel.i][0] += dx; A.spawns[sel.i][1] += dy; }
+    else if (sel.t === "solid") { A.solids[sel.i].x += dx; A.solids[sel.i].y += dy; }
+    else if (sel.t === "front") { A.plate.solid[sel.i][0] += dx; A.plate.solid[sel.i][1] += dy; }
+  });
+}
+function reorder(dir) {   // las pintadas se dibujan en el orden del JSON: adelante es más tarde
+  if (!sel || sel.t !== "obj") return;
+  const j = sel.i + dir; if (j < 0 || j >= A.objects.length) return;
+  edit(() => { const [o] = A.objects.splice(sel.i, 1); A.objects.splice(j, 0, o); sel = { t: "obj", i: j }; });
+}
+function viewCenter() { const r = cv.getBoundingClientRect(); return [(r.width / 2 - view.x) / view.k, (r.height / 2 - view.y) / view.k]; }
+function addPiece(name, at = viewCenter()) {
+  const d = def(name); if (!d) return;
+  edit(() => {
+    const o = { piece: name };
+    if (name.startsWith("landmarks/")) { o.solid = false; o.layer = "back"; }
+    const pos = d.painted ? [at[0] - d.w / 2, at[1] - d.h / 2] : at;
+    [o.x, o.y] = snapObj(o, pos);
+    A.objects.push(o); sel = { t: "obj", i: A.objects.length - 1 }; settleObj(sel.i);
+  });
+}
+function addSpawn() { edit(() => { const [x, y] = viewCenter(); A.spawns = A.spawns || []; A.spawns.push([snapV(x), Math.round(y)]); sel = { t: "spawn", i: A.spawns.length - 1 }; settleSpawn(sel.i); }); }
+function addSolid() { edit(() => { const [x, y] = viewCenter(); A.solids.push({ kind: "bridge", x: snapV(x - 120), y: snapV(y), w: 240, ledge: "both" }); sel = { t: "solid", i: A.solids.length - 1 }; }); }
+function addFront() { edit(() => { const [x, y] = viewCenter(); A.plate = A.plate || { src: "", solid: [] }; A.plate.solid = A.plate.solid || []; A.plate.solid.push([snapV(x - 60), snapV(y - 20), 120, 40]); sel = { t: "front", i: A.plate.solid.length - 1 }; }); }
+function addPoint() {
+  if (!sel || (sel.t !== "obj" && sel.t !== "pt")) return;
+  edit(() => {
+    const o = A.objects[sel.i];
+    if (!moving(o)) { o.move = { path: [[o.x, o.y], [o.x, o.y - 192]], speed: o.move?.speed || 80, wait: o.move?.wait ?? 1 }; sel = { t: "pt", i: sel.i, j: 1 }; return; }
+    const p = o.move.path, [x, y] = p[p.length - 1]; p.push([x, y - 160]); sel = { t: "pt", i: sel.i, j: p.length - 1 };
+  });
+}
+function toGround() {   // las patas de la pintada elegida, hasta lo que tiene abajo
+  if (!sel || sel.t !== "obj" || !legsOf(def(A.objects[sel.i].piece))) return;
+  const r = groundStretch(sel.i); if (!r) return toast("No hay nada debajo de las patas");
+  edit(() => setStretch(A.objects[sel.i], r.s)); toast(`Patas hasta ${r.on.name} (y ${Math.round(r.on.y)}): estirar ${r.s}`);
+}
+
+/* ---------- teclado ---------- */
+window.addEventListener("keydown", e => {
+  const tag = (e.target.tagName || "").toLowerCase(); if (tag === "input" || tag === "textarea" || tag === "select" || $("dlg").open) return;
+  const mod = e.metaKey || e.ctrlKey, k = e.key;
+  if (playing) { if (k === "Escape" || k === "p" || k === "P") stopPlay(); return; }   // probando: el teclado es del juego
+  if (k === " ") { spaceDown = true; cv.style.cursor = "grab"; e.preventDefault(); return; }
+  if (mod && k.toLowerCase() === "z") { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
+  if (mod && k.toLowerCase() === "y") { e.preventDefault(); redo(); return; }
+  if (mod && k.toLowerCase() === "d") { e.preventDefault(); dup(); return; }
+  if (mod && k.toLowerCase() === "s") { e.preventDefault(); save(); return; }
+  if (mod) return;
+  if (k === "Delete" || k === "Backspace") { e.preventDefault(); del(); }
+  else if (k === "f" || k === "F") flip();
+  else if (k === "m" || k === "M") mirrorCopy();
+  else if (k === "l" || k === "L") toGround();
+  else if (k === "g" || k === "G") { grid = grid === 16 ? 8 : grid === 8 ? 0 : 16; topbar(); draw(); }
+  else if (k === "0") fit();
+  else if (k === "p" || k === "P") play();
+  else if (k === "Escape") { sel = null; changedSel(); }
+  else if (k.startsWith("Arrow")) { e.preventDefault(); const s = e.shiftKey ? Math.max(grid, 8) : 1; nudge(k === "ArrowLeft" ? -s : k === "ArrowRight" ? s : 0, k === "ArrowUp" ? -s : k === "ArrowDown" ? s : 0); }
+});
+window.addEventListener("keyup", e => { if (e.key === " ") { spaceDown = false; cv.style.cursor = "default"; } });
+
+/* ---------- panel: la selección ---------- */
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "class") e.className = v;
+    else if (k === "value") e.value = v;
+    else if (v !== undefined && v !== null && v !== false) e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c);
+  return e;
+}
+const r1 = v => Math.round(v * 10) / 10;
+function num(label, get, set, step = 1, title = "") {
+  const i = el("input", { type: "number", step, value: r1(get()), title });
+  i.addEventListener("change", () => { const v = parseFloat(i.value); if (Number.isFinite(v)) edit(() => set(v)); });
+  return el("label", { class: "f" }, el("span", {}, label), i);
+}
+function pick(label, options, get, set) {
+  const s = el("select", {}, options.map(([v, t]) => el("option", { value: v }, t))); s.value = get();
+  s.addEventListener("change", () => edit(() => set(s.value)));
+  return el("label", { class: "f" }, el("span", {}, label), s);
+}
+function check(label, get, set) {
+  const c = el("input", { type: "checkbox" }); c.checked = !!get();
+  c.addEventListener("change", () => edit(() => set(c.checked)));
+  return el("label", { class: "f" }, c, el("span", {}, label));
+}
+function btn(t, fn, title = "") { return el("button", { onclick: fn, title }, t); }
+const LEDGES = [["both", "los dos bordes"], ["left", "sólo el izquierdo"], ["right", "sólo el derecho"], ["none", "ninguno"]];
+function inspect() {
+  const box = $("secSel"); box.replaceChildren();
+  if (!A) return;
+  if (!sel) return arenaPanel(box);
+  const actions = el("div", { class: "row" }, btn("Duplicar", dup, "⌘D"), btn("Copia simétrica", mirrorCopy, "M: la misma del otro lado, espejada"), btn("Borrar", del, "⌫"));
+  if (sel.t === "obj" || sel.t === "pt") {
+    const o = A.objects[sel.i], d = def(o.piece);
+    box.append(el("h3", {}, d && d.painted ? "Pieza pintada" : "Objeto del kit"), el("div", { class: "kv" }, el("b", {}, o.piece), d ? ` · ${Math.round(d.w)} × ${Math.round(d.h)}` : " · no está en esta arena"));
+    if (moving(o)) box.append(el("div", { class: "note" }, "Se mueve: la posición es la del primer punto del recorrido."));
+    else box.append(el("div", { class: "row" }, num("x", () => o.x, v => { const st = standing(); o.x = v; followLegs(sel.i, st); }), num("y", () => o.y, v => { const st = standing(); o.y = v; followLegs(sel.i, st); })),
+      el("div", { class: "note" }, d && d.painted ? "x, y: la esquina de arriba a la izquierda de la pieza." : d && d.plat ? "x: el centro; y: lo que se pisa." : "x: el centro; y: la base."));
+    box.append(el("div", { class: "row" }, btn(o.flip ? "Espejada ✓" : "Espejar", flip, "F"), btn("Atrás", () => reorder(-1), "se dibuja antes"), btn("Adelante", () => reorder(1), "se dibuja después")), actions);
+    if (d && d.painted) {
+      box.append(pick("Colgarse de", [["", "lo de la pieza"], ...LEDGES], () => o.ledge || "", v => { if (v) o.ledge = v; else delete o.ledge; }));
+      box.append(el("h4", {}, "Colisión de la pieza (cambia en todas las copias)"));
+      (d.p.solids || []).forEach((s, j) => box.append(el("div", { class: "row" },
+        pick("", [["bridge", "puente"], ["walk", "bloque"]], () => s.kind || "bridge", v => (s.kind = v)),
+        num("x", () => s.x, v => (s.x = v)), num("pies", () => s.y, v => (s.y = v), 1, "la línea de los pies (el borde de atrás de la cara de arriba), desde arriba de la pieza"), num("ancho", () => s.w, v => (s.w = v)),
+        pick("cuelga", LEDGES, () => s.ledge || "both", v => (s.ledge = v)))));
+      const L = legsOf(d);
+      if (L) {
+        const r = groundStretch(sel.i);
+        box.append(el("h4", {}, "Patas"),
+          el("div", { class: "row" },
+            num("estirar", () => stretchOf(o, d), v => setStretch(o, v), 1, "px de más hacia abajo: la franja de las patas se alarga (negativo: se acorta). También con el tirador de abajo"),
+            btn("Que llegue abajo", toGround, r ? `L: hasta ${r.on.name} (y ${Math.round(r.on.y)}), estirar ${r.s}` : "no hay nada debajo de las patas")),
+          check("al moverla, las patas siguen hasta abajo", () => legsFollow, v => (legsFollow = v)),
+          el("div", { class: "row" }, el("span", { class: "kv" }, "franja"),
+            num("desde", () => L[0], v => (L[0] = Math.max(0, Math.min(Math.round(v), L[1] - LEGS_MIN))), 1, "la primera fila de la franja, desde arriba de la pieza: abajo de la losa"),
+            num("hasta", () => L[1], v => (L[1] = Math.min(d.h, Math.max(Math.round(v), L[0] + LEGS_MIN))), 1, "la fila donde empiezan los pies, que no se estiran"),
+            num("hueco", () => d.p.legsGap || 0, v => (d.p.legsGap = Math.round(v)), 1, "cuántos px por encima de la línea de los pies de lo de abajo terminan las patas")),
+          el("div", { class: "note" }, "Se estira la franja (en celeste): lo de arriba y los pies quedan igual. La franja y el hueco cambian en todas las copias."));
+      } else box.append(el("div", { class: "row" }, btn("+ Patas", () => edit(() => { d.p.legs = [Math.round(d.h * 0.45), Math.round(d.h * 0.85)]; d.p.legsGap = 0; }), "marcar la franja de las patas de esta pieza, para estirarlas")));
+    } else if (d && d.plat) {
+      box.append(pick("Colgarse", [["both", "de los bordes"], ["none", "no"]], () => (o.ledge === "none" ? "none" : "both"), v => { if (v === "none") o.ledge = "none"; else delete o.ledge; }));
+      box.append(el("h4", {}, "Recorrido"));
+      if (moving(o)) {
+        box.append(el("div", { class: "row" }, num("px/s", () => o.move.speed || 120, v => (o.move.speed = Math.max(10, v)), 5), num("pausa s", () => o.move.wait ?? 0.5, v => (o.move.wait = Math.max(0, v)), 0.1)));
+        o.move.path.forEach((p, j) => box.append(el("div", { class: "row" }, el("span", { class: "kv" }, `punto ${j + 1}`), num("x", () => p[0], v => { p[0] = v; if (j === 0) o.x = v; }), num("y", () => p[1], v => { p[1] = v; if (j === 0) o.y = v; }))));
+        box.append(el("div", { class: "row" }, btn("+ Punto", addPoint), btn("Quieta", () => edit(() => { delete o.move; sel = { t: "obj", i: sel.i }; }))));
+      } else box.append(el("div", { class: "row" }, btn("Que se mueva", addPoint, "agrega un recorrido de ida y vuelta")));
+    } else if (d) {
+      box.append(el("div", { class: "row" }, check("choca", () => o.solid !== false, v => { if (v) delete o.solid; else o.solid = false; }), check("atrás (oscura)", () => o.layer === "back", v => { if (v) o.layer = "back"; else delete o.layer; })));
+    }
+  } else if (sel.t === "spawn") {
+    const p = A.spawns[sel.i];
+    box.append(el("h3", {}, `Spawn ${sel.i + 1}`), el("div", { class: "row" }, num("x", () => p[0], v => (p[0] = v)), num("y", () => p[1], v => (p[1] = v))),
+      el("div", { class: "note" }, "Al soltarlo se apoya en lo que tiene abajo."), actions);
+  } else if (sel.t === "solid") {
+    const s = A.solids[sel.i];
+    box.append(el("h3", {}, "Sólido de la lámina"), el("div", { class: "row" },
+      pick("", [["bridge", "puente (se atraviesa)"], ["walk", "bloque"], ["box", "caja"]], () => s.kind, v => { s.kind = v; if (v !== "bridge" && s.h == null) s.h = 60; }),
+      num("x", () => s.x, v => (s.x = v)), num("y", () => s.y, v => (s.y = v), 1, "la línea de los pies"), num("ancho", () => s.w, v => (s.w = Math.max(4, v))),
+      s.kind !== "bridge" ? num("alto", () => s.h ?? 60, v => (s.h = Math.max(4, v))) : null,
+      pick("cuelga", LEDGES, () => s.ledge || "both", v => { if (v === "both") delete s.ledge; else s.ledge = v; })),
+      el("div", { class: "note" }, "Lo fijo de la lámina (piso, la columna). La y es la línea de los pies: el borde de atrás de la cara de arriba pintada."), actions);
+  } else if (sel.t === "front") {
+    const r = A.plate.solid[sel.i];
+    box.append(el("h3", {}, "Recorte delante del colgado"), el("div", { class: "row" }, num("x", () => r[0], v => (r[0] = v)), num("y", () => r[1], v => (r[1] = v)), num("ancho", () => r[2], v => (r[2] = v)), num("alto", () => r[3], v => (r[3] = v))),
+      el("div", { class: "note" }, "Ese pedazo de la lámina se dibuja delante del que está colgado (la mano queda detrás del canto)."), actions);
+  }
+}
+function arenaPanel(box) {
+  const used = name => A.objects.filter(o => o.piece === name).length;
+  box.append(el("h3", {}, "Arena"),
+    el("label", { class: "f", style: "display:flex" }, el("span", {}, "Nombre"), el("input", { type: "text", value: A.name || "", onchange: e => edit(() => (A.name = e.target.value)) })),
+    el("label", { class: "f", style: "display:flex" }, el("span", {}, "Lámina"), el("input", { type: "text", value: (A.plate && A.plate.src) || "", title: "la imagen de fondo, en prototypes/arena/arenas/", onchange: e => edit(() => { A.plate = A.plate || { solid: [] }; A.plate.src = e.target.value; }) })),
+    el("div", { class: "note" }, `${A.solids.length} sólidos fijos · ${A.objects.length} objetos · ${(A.spawns || []).length} spawns · ${((A.plate && A.plate.solid) || []).length} recortes delante del colgado`),
+    el("div", { class: "row" }, btn("+ Spawn", addSpawn), btn("+ Sólido", addSolid, "un puente para calcar algo fijo de la lámina"), btn("+ Recorte delante", addFront)));
+  const pcs = Object.keys(A.pieces || {});
+  if (pcs.length) box.append(el("div", { class: "note" }, "Piezas pintadas: " + pcs.map(p => `${p} (${used(p)})`).join(", ")));
+  box.append(el("h4", {}, "Nota"), el("textarea", { onchange: e => edit(() => (A.note = e.target.value)) }, A.note || ""));
+}
+
+/* ---------- panel: el color ---------- */
+const CTRL = [["paleta", "Paleta", 0, 1, 0.05], ["saturacion", "Saturación", 0, 2, 0.05], ["contraste", "Contraste", 0.5, 1.5, 0.05],
+              ["brillo", "Brillo", 0.5, 1.5, 0.05], ["bruma", "Bruma", 0, 1, 0.05]];
+const fmtNum = v => String(Math.round(v * 100) / 100).replace(".", ",");
+let colorBefore = null;   // la arena antes de arrastrar un control: un solo paso de deshacer por arrastre
+function colorPanel() {
+  const box = $("secColor"); box.replaceChildren();
+  if (!A) return;
+  const C = A.color;
+  const ensure = () => {
+    A.color = A.color || {};
+    for (const gname of ["fondo", "plataformas"]) A.color[gname] = { ...NEUTRAL, ...(A.color[gname] || {}) };
+    return A.color;
+  };
+  const live = fn => () => { if (colorBefore === null) colorBefore = JSON.stringify(A); fn(); regrade(true); };
+  const done = () => { const b = colorBefore; colorBefore = null; if (b !== null) commit(b); };
+  box.append(el("h3", {}, "Color"), el("div", { class: "row" },
+    btn("Paleta de Pablo", () => edit(() => { A.color = { fondo: { ...NEUTRAL, paleta: 1 }, plataformas: { ...NEUTRAL, paleta: 1 } }; }), "la paleta de refs/refineria_paleta_pablo.webp al 100%, lo demás neutro"),
+    btn("Sin color", () => edit(() => { delete A.color; }), "saca el bloque color: el juego no gradúa nada"),
+    el("button", { class: noColor ? "on" : "", title: "la arena sin graduar, para comparar (no cambia el JSON)", onclick: () => { noColor = !noColor; colorPanel(); regrade(); } }, noColor ? "Viendo sin color" : "Ver sin color")));
+  if (!gradeOK) box.append(el("div", { class: "note" }, "Falta prototypes/arena/color.js: armá el editor de nuevo (build.py) para ver el color."));
+  else if (!LUT) box.append(el("div", { class: "note" }, "Sin LUT (faltan refs/refineria.webp o refs/refineria_paleta_pablo.webp): la paleta no hace nada."));
+  if (!C) box.append(el("div", { class: "note" }, "Esta arena no tiene color: el juego la muestra como la lámina. Mover un control lo agrega."));
+  for (const [gname, title] of [["fondo", "Fondo: la lámina"], ["plataformas", "Plataformas: piezas pintadas y objetos del kit"]]) {
+    box.append(el("h4", {}, title));
+    for (const [k, label, lo, hi, step] of CTRL) {
+      const v = C && C[gname] ? C[gname][k] ?? NEUTRAL[k] : NEUTRAL[k], out = el("span", { class: "val" }, fmtNum(v));
+      const r = el("input", { type: "range", min: lo, max: hi, step, value: v, title: "doble clic: neutro" });
+      r.addEventListener("input", live(() => { ensure()[gname][k] = +r.value; out.textContent = fmtNum(+r.value); }));
+      r.addEventListener("change", done);
+      r.addEventListener("dblclick", () => edit(() => { ensure()[gname][k] = NEUTRAL[k]; }));
+      box.append(el("label", { class: "sl" }, el("span", {}, label), r, out));
+    }
+  }
+  const auto = !(C && C.bruma_color), pick = el("input", { type: "color", value: (C && C.bruma_color) || rgbHex(hazeRGB()), disabled: auto });
+  pick.addEventListener("input", live(() => { ensure().bruma_color = pick.value; }));
+  pick.addEventListener("change", done);
+  box.append(el("div", { class: "row" }, el("span", { class: "kv" }, "Color de la bruma"), pick,
+    check("el del cielo de la lámina", () => auto, v => { ensure(); if (v) delete A.color.bruma_color; else A.color.bruma_color = rgbHex(hazeRGB()); })));
+}
+
+/* ---------- panel: el alcance ---------- */
+function reachPanel() {
+  const box = $("secReach"); box.replaceChildren();
+  if (!A) return;
+  const Wd = world(), Rd = reach(Wd), rows = [];
+  for (const [own, b] of Rd.byOwn) {
+    const s = Rd.S[b.i], f = b.from >= 0 ? Rd.S[b.from] : null;
+    const how = !b.ok ? "no se alcanza" : b.how.how === "base" ? "base" : `${b.how.how}${f ? ` desde ${f.name}` : ""}`;
+    rows.push({ s, b, how, y: s.moving ? Math.min(...Rd.S.filter(x => x.own === own).map(x => x.y)) : s.y });
+  }
+  rows.sort((a, b) => b.y - a.y || a.s.x - b.s.x);
+  const bad = rows.filter(r => !r.b.ok).length, sp = (A.spawns || []).filter(([x, y]) => { const s = Wd.solids.find(q => !q.moving && x + 16 > q.x && x - 16 < q.x + q.w && Math.abs(q.y - y) < 1.5); return !s || !Rd.byOwn.get(s.own)?.ok; }).length;
+  box.append(el("h3", {}, "Alcance"), el("div", { class: "note" }, bad || sp ? `${bad} superficies sin llegar${sp ? `, ${sp} spawns mal parados` : ""}.` : "Se llega a todo desde el piso."));
+  box.append(el("div", { class: "reach" }, rows.map(r => el("div", { class: r.b.ok ? "ok" : "bad", onclick: () => { if (r.s.ref) { sel = { ...r.s.ref }; changedSel(); } } },
+    el("i"), el("span", {}, r.s.name), el("small", {}, `${Math.round(r.y)}${r.s.moving ? "↕" : ""} · ${r.how}`)))));
+  box.append(el("div", { class: "note" }, el("span", { class: "sw", style: `background:${COL.ok}` }), "S simple ", el("span", { class: "sw", style: "background:#a78bfa" }), "D doble ", el("span", { class: "sw", style: `background:${COL.warn}` }), "C colgado (gancho amarillo: de ahí se cuelga)"));
+  const ph = el("div", { class: "row" },
+    num("simple", () => PHYS.h1, v => { PHYS.h1 = v; buildEnv(); }, 1, "alto del salto simple"),
+    num("doble", () => PHYS.h2, v => { PHYS.h2 = v; buildEnv(); }, 1, "alto con el doble"),
+    num("colgado", () => PHYS.hang, v => { PHYS.hang = v; buildEnv(); }, 1, "el borde más alto del que se cuelga, sobre los pies"),
+    num("px/s", () => PHYS.run, v => { PHYS.run = v; buildEnv(); }, 10, "corriendo"));
+  // la física no es parte de la arena: no entra en deshacer
+  ph.querySelectorAll("input").forEach(i => i.addEventListener("change", () => { reachPanel(); draw(); }, true));
+  box.append(el("details", {}, el("summary", { class: "note", style: "cursor:pointer" }, `Física: simple ${PHYS.h1}, doble ${PHYS.h2}, colgado ${PHYS.hang}, ~${Math.round(envAt(ENV.X1, 0))} de distancia corriendo`), ph));
+}
+
+/* ---------- panel: piezas ---------- */
+function palette() {
+  const box = $("secPal"); box.replaceChildren();
+  if (!A) return;
+  const item = (name, src, label) => el("div", { class: "it", draggable: "true", title: `${name} (clic: al centro de la vista; o arrastrala al lienzo)`,
+    onclick: () => addPiece(name), ondragstart: e => e.dataTransfer.setData("text/x-piece", name) }, el("img", { src, alt: "" }), el("span", {}, label));
+  const painted = Object.entries(A.pieces || {});
+  box.append(el("h3", {}, "Piezas"));
+  if (painted.length) box.append(el("h4", {}, "Pintadas de esta arena"), el("div", { class: "pal" }, painted.map(([n, p]) => item(n, ARENA_DIR + p.src, n))));
+  const groups = [["Plataformas", "platforms/"], ["Cajas y cosas", "small_props/"], ["Grandes (decorado)", "landmarks/"]];
+  for (const [t, pre] of groups) {
+    const names = Object.keys(KIT.pieces).filter(n => n.startsWith(pre)); if (!names.length) continue;
+    box.append(el("h4", {}, t), el("div", { class: "pal" }, names.map(n => item(n, KIT.pieces[n].src, n.slice(pre.length)))));
+  }
+}
+cv.addEventListener("dragover", e => e.preventDefault());
+cv.addEventListener("drop", e => {
+  e.preventDefault();
+  const name = e.dataTransfer.getData("text/x-piece"), [wx, wy] = toWorld(e);
+  if (name) return addPiece(name, [wx, wy]);
+  const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) importFile(f);
+});
+
+/* ---------- barra de arriba ---------- */
+function seg(id, items, get, set) {
+  const box = $(id); box.replaceChildren();
+  for (const [v, t] of items) box.append(el("button", { class: get(v) ? "on" : "", onclick: () => { set(v); topbar(); draw(); } }, t));
+}
+function topbar() {
+  seg("gridSeg", [[0, "No"], [8, "8"], [16, "16"]], v => grid === v, v => (grid = v));
+  seg("showSeg", [["col", "Colisión"], ["reach", "Alcance"], ["spawns", "Spawns"], ["paths", "Recorridos"]], v => show[v], v => (show[v] = !show[v]));
+  $("bAnim").classList.toggle("on", anim); $("bAnim").textContent = anim ? "■ Animar" : "▶ Animar";
+  $("bPlay").textContent = playing ? "◀ Editar" : "▶ Probar"; $("bPlay").classList.toggle("on", !!playing);
+  $("bUndo").disabled = !hist.undo.length; $("bRedo").disabled = !hist.redo.length;
+  $("bSave").textContent = dirty ? "Guardar •" : "Guardar"; $("bSave").disabled = $("bSaveAs").disabled = !SERVED;
+  const s = $("arenaSel"); s.replaceChildren(...Object.entries(ARENAS).map(([k, a]) => el("option", { value: k }, `${a.name || k}  (${k})`)), el("option", { value: "+" }, "＋ Nueva…")); s.value = key;
+}
+$("arenaSel").addEventListener("change", async e => {
+  const v = e.target.value;
+  if (dirty && !(await ask("Hay cambios sin guardar en esta arena. ¿Cambiar igual y perderlos?", { ok: "Cambiar" }))) { e.target.value = key; return; }
+  if (v === "+") return newArena();
+  openArena(v, ARENAS[v]);
+});
+$("bUndo").onclick = undo; $("bRedo").onclick = redo;
+$("bFit").onclick = fit;
+$("bZoomIn").onclick = () => { const r = cv.getBoundingClientRect(); zoomAt(1.25, r.width / 2, r.height / 2); };
+$("bZoomOut").onclick = () => { const r = cv.getBoundingClientRect(); zoomAt(0.8, r.width / 2, r.height / 2); };
+$("bAnim").onclick = () => { anim = !anim; animT = 0; topbar(); draw(); };
+$("bImport").onclick = () => $("file").click();
+$("file").addEventListener("change", e => { const f = e.target.files[0]; if (f) importFile(f); e.target.value = ""; });
+$("bExport").onclick = () => {
+  const a = el("a", { href: URL.createObjectURL(new Blob([fmt(clean(A)) + "\n"], { type: "application/json" })), download: `${key.split("/").pop() || "arena"}.json` });
+  document.body.append(a); a.click(); a.remove(); toast(`Bajado ${a.download}`);
+};
+$("bCopy").onclick = async () => { try { await navigator.clipboard.writeText(fmt(clean(A)) + "\n"); toast("JSON copiado"); } catch (err) { toast("No se pudo copiar"); } };
+$("bSave").onclick = () => save();
+$("bSaveAs").onclick = () => saveAs();
+$("bPlay").onclick = e => play(e.shiftKey);
+
+/* ---------- abrir, importar, guardar, probar ---------- */
+const clean = a => JSON.parse(JSON.stringify(a));
+function compact(v) {
+  if (Array.isArray(v)) return "[" + v.map(compact).join(", ") + "]";
+  if (v && typeof v === "object") return "{" + Object.entries(v).filter(([, x]) => x !== undefined).map(([k, x]) => JSON.stringify(k) + ": " + compact(x)).join(", ") + "}";
+  return JSON.stringify(v);
+}
+// el mismo formato que serve.py (y que las arenas escritas a mano): una clave por renglón, cada sólido en el suyo
+function fmt(v, ind = 0, depth = 0) {
+  const sp = "  ".repeat(ind + 1), end = "  ".repeat(ind);
+  if (v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length && depth < 2)
+    return "{\n" + Object.entries(v).map(([k, x]) => `${sp}${JSON.stringify(k)}: ${fmt(x, ind + 1, depth + 1)}`).join(",\n") + "\n" + end + "}";
+  if (Array.isArray(v) && v.length && v.every(x => x && typeof x === "object"))
+    return "[\n" + v.map(x => sp + compact(x)).join(",\n") + "\n" + end + "]";
+  return compact(v);
+}
+function normalize(a) {
+  a.size = a.size || [AW, AH]; a.solids = a.solids || []; a.objects = a.objects || []; a.spawns = a.spawns || [];
+  if (a.plate && !a.plate.solid) a.plate.solid = [];
+  return a;
+}
+// (no se llama "open": pisaría window.open y "Probar en el juego" abriría una arena llamada about:blank)
+function openArena(k, arena) {
+  key = k; A = normalize(clean(arena)); sel = null; dirty = false; saved = JSON.stringify(A); hist.undo.length = hist.redo.length = 0;
+  history.replaceState(null, "", "#" + k);
+  if (A.plate && A.plate.src) img(ARENA_DIR + A.plate.src);
+  for (const p of Object.values(A.pieces || {})) img(ARENA_DIR + p.src);
+  palette(); changed(); dirty = false; keepWip(); topbar(); fit();
+}
+function importFile(f) {
+  const rd = new FileReader();
+  rd.onload = async () => {
+    let a;
+    try { a = JSON.parse(rd.result); if (!a.solids) throw new Error("no tiene solids"); }
+    catch (err) { return toast(`No es una arena: ${err.message}`); }
+    if (dirty && !(await ask("Hay cambios sin guardar. ¿Abrir el archivo igual y perderlos?", { ok: "Abrir" }))) return;
+    const k = keyOf(f.name.replace(/\.json$/i, ""));
+    ARENAS[k] = a; openArena(k, a); saved = ""; dirty = true; keepWip(); topbar(); toast(`Abierto ${f.name}: con Guardar queda en arenas/${k}.json`);
+  };
+  rd.readAsText(f);
+}
+const KEY_RE = /^(?:[a-z0-9_]+\/)?[a-z0-9_]+$/;
+const keyOf = s => s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9_/]+/g, "_").replace(/^_+|_+$/g, "");
+async function newArena() {
+  const k = keyOf((await ask("Nombre del archivo de la arena nueva (queda en prototypes/arena/arenas/<nombre>.json):", { input: "nueva", ok: "Seguir" })) || "");
+  if (!k) { topbar(); return; }
+  const src = (await ask("La lámina: una imagen de 1920 × 1080 en prototypes/arena/arenas/ (vacío: una arena del kit, sin lámina).", { input: "", ok: "Crear" })) ?? "";
+  const a = { name: k, note: "", size: [AW, AH], seed: 1, ...(src ? { plate: { src, solid: [] } } : {}), solids: [{ kind: "walk", x: -40, y: 940, w: 2000, h: 200, fill: "full" }], objects: [], spawns: [[480, 940], [1440, 940]], decor: [], pipes: [] };
+  ARENAS[k] = a; openArena(k, a); saved = ""; dirty = true; keepWip(); topbar();
+}
+// guardar: escribe arenas/<nombre>.json (la que está abierta). Guardar como: con otro nombre, una arena nueva
+async function save(k = key) {
+  if (!SERVED) { toast("Para guardar, abrí el editor con serve.py (o Exportar y copiar el archivo a prototypes/arena/arenas/)"); return false; }
+  if (!KEY_RE.test(k)) return saveAs();
+  try {
+    const r = await (await fetch("/api/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: k, arena: clean(A) }) })).json();
+    if (!r.ok) throw new Error(r.error);
+    key = k; ARENAS[key] = clean(A); saved = JSON.stringify(A); dirty = false; keepWip(); history.replaceState(null, "", "#" + key);
+    topbar(); status();
+    toast(`Guardada en ${r.file}.${k.includes("/") ? "" : " En el menú del juego aparece cuando se arma de nuevo; para probarla ya, \"Probar en el juego\"."}`);
+    return true;
+  } catch (err) { toast(`No se pudo guardar: ${err.message}`); return false; }
+}
+async function saveAs() {
+  if (!SERVED) return save();
+  const base = key.split("/").pop(), guess = KEY_RE.test(base) ? `${base}_2` : "nueva";
+  const k = keyOf((await ask("Guardar como: el nombre del archivo (minúsculas, números y _). Queda en prototypes/arena/arenas/<nombre>.json y es una arena más del menú del juego.", { input: guess, ok: "Guardar" })) || "");
+  if (!k) return false;
+  if (!KEY_RE.test(k)) { toast(`Nombre inválido: ${k}`); return false; }
+  if (ARENAS[k] && k !== key && !(await ask(`Ya existe arenas/${k}.json. ¿La pisás?`, { ok: "Pisarla" }))) return false;
+  return save(k);
+}
+// lo que se está editando y no se guardó queda en este navegador: si la página se recarga, vuelve
+const WIP = "arena-editor-wip";
+function keepWip() {
+  try { if (dirty) localStorage.setItem(WIP, JSON.stringify({ key, arena: clean(A), t: Date.now() })); else localStorage.removeItem(WIP); } catch (err) { /* sin localStorage */ }
+}
+// un cartel propio en vez de confirm/prompt (el navegador del panel de Claude no siempre los muestra)
+function ask(msg, { input = null, ok = "Aceptar", cancel = "Cancelar" } = {}) {
+  return new Promise(res => {
+    const d = $("dlg"), inp = $("dlgIn");
+    $("dlgMsg").textContent = msg; $("dlgOk").textContent = ok; $("dlgNo").textContent = cancel;
+    inp.hidden = input === null; inp.value = input ?? "";
+    d.returnValue = "";
+    d.onclose = () => res(d.returnValue === "ok" ? (input === null ? true : inp.value.trim()) : null);
+    d.showModal(); if (input !== null) { inp.focus(); inp.select(); } else $("dlgOk").focus();
+  });
+}
+// probar: la arena va por localStorage (mismo origen) y el juego la abre con ?arena=editor, sin guardar nada
+// probar: el juego, dentro del editor, encima del lienzo. La arena va por localStorage (mismo origen) y el juego la abre
+// con ?arena=editor; arranca solo en "probar arena solo" (desde el spawn elegido, si hay uno). Esc en el juego (vuelve a
+// su menú) o "◀ Editar" vuelven a editar, donde estaba. ⇧ + clic: en otra pestaña
+let playing = null;
+async function play(newTab = false) {
+  if (playing) return stopPlay();
+  try { localStorage.setItem("arena-editor", JSON.stringify({ key, arena: clean(A), t: Date.now() })); }
+  catch (err) { return toast("No se pudo pasar la arena al juego (localStorage)"); }
+  if (SERVED) {
+    try {
+      const s = await (await fetch("/api/game")).json();
+      if (!s.built) {
+        toast("Armando el juego (prototypes/arena/build.py)…");
+        const r = await (await fetch("/api/build", { method: "POST" })).json();
+        if (!r.ok) return toast("No se pudo armar el juego:\n" + r.out.slice(-600));
+      }
+    } catch (err) { /* sin servidor del editor: se abre igual */ }
+  }
+  const url = new URL(GAME, location.href).href;
+  if (newTab) { if (!window.open(url, "arena-juego")) toast("El navegador no dejó abrir otra pestaña"); return; }
+  const fr = $("playFrame"), spawn = sel && sel.t === "spawn" ? sel.i : -1;
+  playing = { started: false, timer: 0 };
+  $("playLayer").hidden = false; topbar();
+  fr.onload = () => {
+    let w = null; try { w = fr.contentWindow; w.startTest; } catch (err) { w = null; }
+    if (!w || typeof w.startTest !== "function") return;   // otro origen o un juego viejo: queda su menú
+    const go = () => {
+      if (!playing) return;
+      w.startTest();   // (G, players y ARENA son const/let del juego: no cuelgan de window, se leen con eval)
+      if (spawn >= 0) w.eval(`if (ARENA.spawns[${spawn}]) { G.testSpawn = ${spawn}; resetPlayer(players[0], ARENA.spawns[${spawn}]); players[0].lives = 99; }`);
+      playing.started = true; fr.focus(); w.focus();
+    };
+    setTimeout(go, 50);
+    // Esc en el juego lo manda a su menú: ahí se vuelve a editar
+    playing.timer = setInterval(() => { try { if (playing && playing.started && w.eval("G.state") === "lobby") stopPlay(); } catch (err) { /* nada */ } }, 150);
+  };
+  fr.src = url;
+}
+function stopPlay() {
+  if (!playing) return;
+  clearInterval(playing.timer); playing = null;
+  $("playFrame").onload = null; $("playFrame").src = "about:blank"; $("playLayer").hidden = true;
+  topbar(); cv.focus(); draw();
+}
+let toastT = 0;
+function toast(s) { const t = $("toast"); t.textContent = s; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 3500); }
+window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+// #nombre en la dirección: abre esa arena (también al cambiarlo a mano)
+window.addEventListener("hashchange", async () => {
+  const k = decodeURIComponent(location.hash.slice(1));
+  if (k === key || !ARENAS[k]) return;
+  if (dirty && !(await ask("Hay cambios sin guardar en esta arena. ¿Cambiar igual y perderlos?", { ok: "Cambiar" }))) { history.replaceState(null, "", "#" + key); return; }
+  openArena(k, ARENAS[k]);
+});
+
+/* ---------- arranque ---------- */
+new ResizeObserver(() => { resize(); }).observe(cv);
+buildEnv();
+(async () => {
+  ARENAS = BUILT;
+  if (SERVED) { try { ARENAS = await (await fetch("/api/arenas")).json(); } catch (err) { toast("Sin servidor: arenas de cuando se armó el editor"); } }
+  const want = decodeURIComponent(location.hash.slice(1));
+  let wip = null; try { wip = JSON.parse(localStorage.getItem(WIP) || "null"); } catch (err) { /* nada */ }
+  resize();
+  if (wip && wip.arena && wip.key && (!want || want === wip.key || !ARENAS[want])) {   // lo que quedó sin guardar
+    const disk = ARENAS[wip.key];
+    if (!disk) ARENAS[wip.key] = clean(wip.arena);
+    // lo que en disco se le agregó después a una pieza (las patas) completa la del borrador
+    for (const [n, p] of Object.entries((disk && disk.pieces) || {})) { const q = wip.arena.pieces && wip.arena.pieces[n]; if (q) for (const f in p) if (!(f in q)) q[f] = p[f]; }
+    openArena(wip.key, wip.arena);
+    saved = disk ? JSON.stringify(normalize(clean(disk))) : ""; dirty = JSON.stringify(A) !== saved; keepWip(); topbar(); status();
+    if (dirty) toast("Volvieron los cambios sin guardar de la otra vez");
+    return;
+  }
+  const k = ARENAS[want] ? want : ARENAS.refineria ? "refineria" : Object.keys(ARENAS)[0];
+  if (k) openArena(k, ARENAS[k]);
+})();
+</script>
+</body>
+</html>

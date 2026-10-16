@@ -1,0 +1,43 @@
+{
+  "name": "Refinería",
+  "note": "Px del juego, y para abajo. Lámina + objetos: la imagen de referencia de Pablo del 2026-10-16 (refs/refineria.webp), limpia de personajes, marcadores, tiros y HUD y después de las cajas y de la plataforma de la columna con Nano Banana 2.1 (backgrounds/arena_refineria, plate_bare opción 2), a 1920 × 1080: es la lámina `plate.src`, lo fijo. Las de arriba están subidas 43 px a mano (estaban en 391, a 149 de las del medio): el hueco que dejaron lo rellenó el modelo (plate_top_fill) y del resultado se usa sólo esa franja. Los sólidos son sólo colisión, calcados encima; `plate.solid` son los recortes de la lámina que van delante del colgado. La y de cada pasarela es la línea de los pies: el borde de atrás de la cara de arriba pintada (la primera fila clara después del contorno negro), que es donde pisan los personajes de la referencia (Pablo, 2026-10-16: antes estaba en la mitad de la cara y se veían parados adelante); el juego los dibuja 3 px más abajo. Piso 940, pasarelas de abajo 724, del medio 532, de arriba 340 y el tope de la columna 432 (de una a otra: 216, 192 y 192). `ledge`: de qué bordes se cuelga uno (los que dan contra la pared, no). Objetos: la plataforma de la columna es una flotante del kit que sube y baja entre 780 (del piso se llega con el salto simple) y 532 (a la altura de las del medio; de ahí al tope, 100). Sin cajas por ahora (Pablo: trancaban; quizás después, unas que dejen pasar al jugador y frenen balas, con otro dibujo)",
+  "size": [1920, 1080],
+  "seed": 11,
+  "plate": {
+    "src": "refineria.webp",
+    "solid": [
+      [0, 333, 526, 58],
+      [1394, 333, 526, 58],
+      [366, 524, 434, 58],
+      [1120, 524, 434, 58],
+      [0, 715, 662, 62],
+      [1258, 715, 662, 62],
+      [903, 426, 115, 46]
+    ]
+  },
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 940, "w": 2000, "h": 200, "fill": "full"},
+    {"kind": "bridge", "x": 0, "y": 724, "w": 654, "ledge": "right"},
+    {"kind": "bridge", "x": 1266, "y": 724, "w": 654, "ledge": "left"},
+    {"kind": "bridge", "x": 373, "y": 532, "w": 421, "ledge": "both"},
+    {"kind": "bridge", "x": 1126, "y": 532, "w": 421, "ledge": "both"},
+    {"kind": "bridge", "x": 0, "y": 340, "w": 518, "ledge": "right"},
+    {"kind": "bridge", "x": 1402, "y": 340, "w": 518, "ledge": "left"},
+    {"kind": "bridge", "x": 916, "y": 432, "w": 90, "ledge": "both"}
+  ],
+  "objects": [
+    {"piece": "platforms/float_m", "x": 960, "y": 780, "move": {"path": [[960, 780], [960, 532]], "speed": 80, "wait": 1.2}}
+  ],
+  "spawns": [
+    [385, 940],
+    [1607, 724],
+    [1250, 532],
+    [373, 340],
+    [1535, 940],
+    [313, 724],
+    [670, 532],
+    [1547, 340]
+  ],
+  "decor": [],
+  "pipes": []
+}

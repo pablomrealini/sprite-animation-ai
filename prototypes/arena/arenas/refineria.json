@@ -1,0 +1,49 @@
+{
+  "name": "Refinería",
+  "note": "Px del juego, y para abajo. Lámina en capas: la armó prototypes/arena/editor/capas.py desde arenas/refineria/entera.json (la lámina entera con la colisión calcada, y su historia). plate.src es el fondo sin las pasarelas y cada pasarela es una pieza pintada (pieces: PNG con alfa, 1 px = 1 px del juego) puesta como objeto (x, y: su esquina de arriba a la izquierda; flip la espeja), con su colisión y su recorte de adelante (front: delante del colgado) relativos a la pieza. Las patas: legs [y0, y1] es la franja de filas de la pieza entre la losa y los pies que se alarga cuando el objeto trae stretch (px de más hacia abajo): la pieza mide h + stretch, lo de arriba de y0 queda igual, la franja se estira a y1 - y0 + stretch y lo de abajo de y1 baja stretch (negativo la acorta). legsGap: cuántos px por encima de la línea de los pies de lo de abajo terminan las patas (lo usa el botón \"Que llegue abajo\" del editor). La y de cada sólido es la línea de los pies: el borde de atrás de la cara de arriba pintada. Se mueven con el editor (prototypes/arena/editor)",
+  "size": [1920, 1080],
+  "seed": 11,
+  "color": {
+    "fondo": {"paleta": 1, "saturacion": 1, "contraste": 1, "brillo": 1, "bruma": 0},
+    "plataformas": {"paleta": 1, "saturacion": 1, "contraste": 1, "brillo": 1, "bruma": 0}
+  },
+  "plate": {
+    "src": "refineria/fondo.webp",
+    "solid": [
+      [903, 426, 115, 46]
+    ]
+  },
+  "pieces": {
+    "pasarela_abajo_izq": {"src": "refineria/pasarela_abajo_izq.png", "w": 729, "h": 225, "solids": [{"kind": "bridge", "x": 0, "y": 17, "w": 654, "ledge": "both"}], "front": [[0, 8, 662, 62]], "legs": [80, 160], "legsGap": 8},
+    "pasarela_abajo_der": {"src": "refineria/pasarela_abajo_der.png", "w": 729, "h": 225, "solids": [{"kind": "bridge", "x": 75, "y": 17, "w": 654, "ledge": "both"}], "front": [[67, 8, 662, 62]], "legs": [80, 160], "legsGap": 8},
+    "pasarela_medio_izq": {"src": "refineria/pasarela_medio_izq.png", "w": 436, "h": 192, "solids": [{"kind": "bridge", "x": 8, "y": 15, "w": 421, "ledge": "both"}], "front": [[1, 7, 434, 58]], "legs": [68, 178], "legsGap": 15},
+    "pasarela_medio_der": {"src": "refineria/pasarela_medio_der.png", "w": 440, "h": 192, "solids": [{"kind": "bridge", "x": 11, "y": 15, "w": 421, "ledge": "both"}], "front": [[5, 7, 434, 58]], "legs": [68, 178], "legsGap": 15},
+    "pasarela_arriba_izq": {"src": "refineria/pasarela_arriba_izq.png", "w": 528, "h": 192, "solids": [{"kind": "bridge", "x": 0, "y": 13, "w": 518, "ledge": "both"}], "front": [[0, 6, 526, 58]], "legs": [78, 176], "legsGap": 13},
+    "pasarela_arriba_der": {"src": "refineria/pasarela_arriba_der.png", "w": 531, "h": 192, "solids": [{"kind": "bridge", "x": 13, "y": 13, "w": 518, "ledge": "both"}], "front": [[5, 6, 526, 58]], "legs": [78, 176], "legsGap": 13}
+  },
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 940, "w": 2000, "h": 200, "fill": "full"},
+    {"kind": "bridge", "x": 916, "y": 432, "w": 90, "ledge": "both"}
+  ],
+  "objects": [
+    {"piece": "pasarela_abajo_izq", "x": 0, "y": 707},
+    {"piece": "pasarela_abajo_der", "x": 1191, "y": 707},
+    {"piece": "pasarela_medio_izq", "x": 365, "y": 517},
+    {"piece": "pasarela_medio_der", "x": 1115, "y": 517},
+    {"piece": "pasarela_arriba_izq", "x": 0, "y": 327},
+    {"piece": "pasarela_arriba_der", "x": 1389, "y": 327},
+    {"piece": "platforms/float_m", "x": 960, "y": 780, "move": {"path": [[960, 780], [960, 532]], "speed": 80, "wait": 1.2}}
+  ],
+  "spawns": [
+    [385, 940],
+    [1607, 724],
+    [1250, 532],
+    [373, 340],
+    [1535, 940],
+    [313, 724],
+    [670, 532],
+    [1547, 340]
+  ],
+  "decor": [],
+  "pipes": []
+}

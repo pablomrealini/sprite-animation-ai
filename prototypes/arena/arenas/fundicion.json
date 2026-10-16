@@ -1,0 +1,43 @@
+{
+  "name": "Fundición",
+  "note": "Px del juego, y para abajo. La pantalla entera es la arena (1920 × 1080 con la cámara al 50%). Simétrica: lo de la derecha es lo de la izquierda espejado. Alturas: piso 980, bloques de los costados 800, puente 760, flotantes 600, repisas 420, bloque del centro 400, flotantes de arriba 270 y la del centro 230. Entre una altura y la vecina que se alcanza hay a lo sumo 200 px (el salto simple es de 192; el doble llega a ~350 y colgándose se gana más)",
+  "size": [1920, 1080],
+  "seed": 7,
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 980, "w": 2000, "h": 200, "fill": "full"},
+    {"kind": "walk", "x": 0, "y": 800, "w": 400, "h": 180, "fill": "row", "legs": true},
+    {"kind": "walk", "x": 1520, "y": 800, "w": 400, "h": 180, "fill": "row", "legs": true},
+    {"kind": "walk", "x": 790, "y": 400, "w": 340, "h": 172, "fill": "row", "legs": false},
+    {"kind": "bridge", "x": 760, "y": 760, "w": 400}
+  ],
+  "platforms": [
+    {"piece": "float_m", "cx": 520, "y": 600},
+    {"piece": "float_m", "cx": 1400, "y": 600},
+    {"piece": "ledge", "wall": "left", "x": 0, "y": 420},
+    {"piece": "ledge", "wall": "right", "x": 1920, "y": 420},
+    {"piece": "float_s", "cx": 360, "y": 270},
+    {"piece": "float_s", "cx": 1560, "y": 270},
+    {"piece": "float_m", "cx": 960, "y": 230}
+  ],
+  "spawns": [
+    [200, 800],
+    [1720, 800],
+    [520, 600],
+    [1400, 600]
+  ],
+  "decor": [
+    {"piece": "landmarks/blast_door", "x": -45, "y": 980, "layer": "back", "flip": true},
+    {"piece": "landmarks/blast_door", "x": 1965, "y": 980, "layer": "back"},
+    {"piece": "landmarks/tank_pair", "x": 250, "y": 980, "layer": "back"},
+    {"piece": "landmarks/tank_pair", "x": 1670, "y": 980, "layer": "back", "flip": true},
+    {"piece": "landmarks/tank_tower", "x": 960, "y": 980, "layer": "back"},
+    {"piece": "small_props/hazard_post", "x": 418, "y": 980, "layer": "mid"},
+    {"piece": "small_props/hazard_post", "x": 1502, "y": 980, "layer": "mid"}
+  ],
+  "pipes": [
+    {"size": "thick", "path": [[0, 892], [330, 892], [330, 980]], "plane": "mid"},
+    {"size": "thick", "path": [[0, 892], [330, 892], [330, 980]], "plane": "mid", "flip": true},
+    {"size": "thin", "path": [[690, 940], [1230, 940]], "plane": "mid"},
+    {"size": "thick", "path": [[-40, 1058], [1960, 1058]], "plane": "front", "scale": 1.5}
+  ]
+}

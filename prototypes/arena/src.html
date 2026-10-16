@@ -1,0 +1,2144 @@
+<meta charset="utf-8">
+<title>Arena del Ranger</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Barlow:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: la arena 16:9 arriba, con el menú de jugadores encima antes de cada partida; abajo controles | reglas. */
+:root {
+  --bg: #0f1422;
+  --panel: #182033;
+  --line: #2c3854;
+  --fg: #eef0f6;
+  --muted: #9aa3bd;
+  --red: #e8392e;
+  --cyan: #59e3ec;
+  --font-display: "Chakra Petch", "Arial Narrow", Arial, sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); }
+body { font: 15px/1.5 var(--font-body); margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+h1 { font: 700 clamp(26px, 4vw, 38px)/1.05 var(--font-display); margin: 0; letter-spacing: 0.01em; text-transform: uppercase; }
+h1 span { color: var(--red); }
+.eyebrow { font: 600 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.stage { position: relative; border: 2px solid var(--line); border-radius: 6px; overflow: hidden; background: #2a6fd0; aspect-ratio: 16 / 9; max-width: 100%; }
+.stage canvas { display: block; width: 100%; height: 100%; outline: none; }
+.lobby[hidden] { display: none; }
+.lobby { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(8, 12, 24, 0.62); padding: 12px; overflow: auto; }
+.lobby .panel { display: grid; gap: 12px; width: min(760px, 100%); }
+.lobby h2 { margin: 0; font: 700 clamp(18px, 3vw, 26px)/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.04em; text-align: center; }
+.slots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 640px) { .slots { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.slot { background: var(--panel); border: 2px solid var(--line); border-top: 6px solid var(--team); border-radius: 6px; padding: 8px; display: grid; gap: 6px; min-width: 0; }
+.slot.off { opacity: 0.55; }
+.slot b { font: 700 15px var(--font-display); text-transform: uppercase; color: var(--team); }
+.slot select { width: 100%; font: 600 13px var(--font-body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 5px; }
+.opts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; }
+.opt { display: flex; align-items: center; gap: 8px; }
+.opt > span, .opt > label { font: 600 13px var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.opt select { font: 600 13px var(--font-body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 5px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.seg button { font: 600 14px var(--font-display); color: var(--muted); background: var(--bg); border: 0; padding: 6px 11px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--red); color: #fff; }
+.seg button:focus-visible, select:focus-visible, .go:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.go { justify-self: center; font: 700 clamp(17px, 2.6vw, 22px)/1 var(--font-display); text-transform: uppercase; color: #fff; background: var(--red); border: 3px solid #0d0f18; border-radius: 6px; padding: 12px 24px; cursor: pointer; box-shadow: 0 4px 0 #0d0f18; }
+.go:disabled { opacity: 0.5; cursor: default; }
+.gos { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.go.alt { background: var(--panel); }
+.hint { margin: 0; text-align: center; font: 600 13px var(--font-display); letter-spacing: 0.05em; color: #dfe6f5; text-shadow: 0 1px 2px #000; max-width: 62ch; justify-self: center; }
+.hint.warn { color: #10131d; background: #ffd21f; border-radius: 5px; padding: 6px 10px; text-shadow: none; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.box h2 { margin: 0; font: 700 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); }
+.keys { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 14px; margin: 0; }
+.keys dt { display: flex; gap: 4px; flex-wrap: wrap; align-items: flex-start; }
+.keys dd { margin: 0; }
+kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 4px; padding: 4px 6px; min-width: 24px; text-align: center; }
+.note { margin: 0; color: var(--muted); font-size: 14px; max-width: 65ch; }
+.note b { color: var(--fg); font-weight: 600; }
+.tune { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px 20px; }
+.tune label { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; font: 600 13px var(--font-display); letter-spacing: 0.04em; color: var(--muted); }
+.tune input { grid-column: 1 / -1; width: 100%; accent-color: var(--red); }
+.tune output { font: 500 13px var(--font-mono); color: var(--fg); }
+.row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.copyBtn { font: 600 14px var(--font-display); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 6px 12px; cursor: pointer; }
+.copyBtn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.copyBtn:disabled { opacity: 0.55; cursor: default; }
+.mono { font: 500 12px/1.4 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; min-width: 0; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Arena del <span>Ranger</span></h1>
+    <div class="eyebrow">VS local · hasta 4 · bots · cámara al 50%</div>
+  </header>
+
+  <div class="stage">
+    <canvas id="game" tabindex="0" aria-label="Arena: hasta cuatro rangers, jugadores o bots, se disparan hasta que queda uno"></canvas>
+    <div class="lobby" id="lobby">
+      <div class="panel">
+        <h2>Elegí quién juega</h2>
+        <div class="slots" id="slots"></div>
+        <div class="opts">
+          <div class="opt"><label for="arenaSel">Arena</label><select id="arenaSel"></select></div>
+          <div class="opt"><span id="lblCount">Jugadores</span><div class="seg" role="group" aria-labelledby="lblCount" id="segCount"></div></div>
+          <div class="opt"><span id="lblHp">Golpes</span><div class="seg" role="group" aria-labelledby="lblHp" id="segHp"></div></div>
+          <div class="opt"><span id="lblLives">Vidas</span><div class="seg" role="group" aria-labelledby="lblLives" id="segLives"></div></div>
+          <div class="opt"><span id="lblBot">Bots</span><div class="seg" role="group" aria-labelledby="lblBot" id="segBot"></div></div>
+        </div>
+        <div class="gos"><button class="go" id="goBtn" type="button">Empezar</button><button class="go alt" id="testBtn" type="button">Probar arena solo</button></div>
+        <p class="hint" id="lobbyMsg">Cargando sprites…</p>
+        <p class="hint" id="padTest" aria-live="off"></p>
+      </div>
+    </div>
+  </div>
+
+  <section class="box" aria-labelledby="hTune">
+    <h2 id="hTune">Ajustes de la granada</h2>
+    <p class="note">Para probar el tiro: cambian el juego en el acto. En "Probar arena solo" se ve, delante del personaje, de dónde sale la granada (la cruz) y la curva que va a hacer. Cuando te guste, tocá Guardar valores: quedan en el artifact, los ve cualquiera que lo abra y de ahí los leo para dejarlos fijos en el juego.</p>
+    <div class="tune" id="tune"></div>
+    <div class="row"><button class="copyBtn" id="tuneSave" type="button">Guardar valores</button><button class="copyBtn" id="tuneReset" type="button">Volver a los de fábrica</button><span class="mono" id="tuneOut"></span></div>
+  </section>
+
+  <div class="cols">
+    <section class="box" aria-labelledby="hControls">
+      <h2 id="hControls">Controles</h2>
+      <dl class="keys">
+        <dt><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dt><dd><b>Teclado izquierdo.</b> Saltar con W o Espacio, agacharse con S. Disparar con F o J, a dos manos con G o K, granada con E o L, golpe con Q o U</dd>
+        <dt><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></dt><dd><b>Teclado derecho.</b> Saltar con ↑, agacharse con ↓. Disparar con <kbd>.</kbd> o Num 1, a dos manos con <kbd>-</kbd> o Num 2, granada con <kbd>,</kbd> o Num 3, golpe con <kbd>M</kbd> o Num 4</dd>
+        <dt><kbd>Stick</kbd><kbd>A</kbd><kbd>X</kbd><kbd>B</kbd></dt><dd><b>Joystick.</b> A salta, X o RT dispara, B o RB a dos manos, Y o LB tira una granada, LT golpea (en PlayStation: X, Cuadrado o R2, Círculo o R1, Triángulo o L1, L2; en Switch, ZL golpea). El primero maneja al Rojo junto con el teclado izquierdo; en el menú, los demás se suman apretando un botón. Start empieza</dd>
+        <dt><kbd>Abajo</kbd>+<kbd>saltar</kbd></dt><dd>Bajar atravesando el puente, las plataformas flotantes y las repisas</dd>
+        <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 5 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y lastiman en un radio, también al que la tiró</dd>
+        <dt><kbd>Golpe</kbd></dt><dd>Un puñetazo corto hacia adelante, a la altura del cuerpo, en el piso o en el aire: saca un golpe, empuja fuerte y aturde un momento. Sirve pegado al otro, donde la bala sale de largo y no le pega. Uno cada medio segundo</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Volver al menú</dd>
+        <dt><kbd>H</kbd></dt><dd>Mostrar las cajas de golpe, lo que se pisa y a quién persigue cada bot</dd>
+      </dl>
+      <p class="note">Los joysticks no se pueden leer desde la página publicada: para jugar con joystick, abrí el juego local en Chrome (está en <b>prototypes/README.md</b>).</p>
+    </section>
+    <section class="box" aria-labelledby="hRules">
+      <h2 id="hRules">Reglas de la prueba</h2>
+      <p class="note"><b>Vidas.</b> Cada uno tiene 3 vidas por partida (se cambia en el menú). Al morir vuelve a los 1,6 s, en el lugar de salida más lejos de los demás, con un haz de luz que avisa dónde. Durante 2 s parpadea y las balas lo atraviesan, hasta que dispara. Gana el último al que le quedan vidas.</p>
+      <p class="note"><b>El arma se calienta.</b> Cada disparo la calienta (el de dos manos, el triple) y deja de enfriarse mientras seguís tirando. La barra arriba de la cabeza muestra cuánto: si llega al tope, el arma se traba, larga vapor y no dispara hasta enfriarse del todo (1,2 s). Tirando sin parar con una mano dura unos 1,7 s.</p>
+      <p class="note"><b>Golpes.</b> El disparo de una mano saca un golpe y empuja; el de dos manos te planta, saca dos y empuja más. 7 disparos por segundo con una mano y 3,5 a dos manos (el polígono tenía 12 y 7). Agachado, el cuerpo es más bajo y las balas de alguien parado pasan cerca de la cabeza. El golpe de cerca llega unos 70 px delante del cuerpo, saca uno, empuja más que el disparo de dos manos y aturde 0,4 s; también le pega al que está agachado.</p>
+      <p class="note"><b>Power-ups.</b> Cada 12 a 18 s (el primero a los 9) aparece uno apoyado en algo que se pisa, con un haz que avisa dónde: el amarillo con la granada recarga las 5, el blanco con la cruz suma 1 golpe de salud (2 si se juega a 5). Se agarran tocándolos; si no te sirve (lo tenés lleno), queda ahí. A los 12 s parpadean y se van. Hay como mucho 2 a la vez (1 con dos jugadores o en la prueba) y los bots a veces van a buscarlos.</p>
+      <p class="note"><b>El ranger es el mismo del polígono</b>, con su feel, doble salto, colgado, subida y salto desde la cornisa. Los otros tres colores salen del mismo atlas al cargar la página: el rojo de la armadura cambia de tono.</p>
+      <p class="note"><b>Provisorio:</b> recibir un golpe y morir son efectos de código (destello, empujón y estallido), sin animación propia. El golpe de cerca usa cuadros del tiro de granada (el puño atrás y el brazo adelante) con un envión del cuerpo y un barrido dibujado. Los power-ups se dibujan por código. Los bots son simples: buscan al más cercano, suben por donde pueden, disparan cuando lo tienen en línea, golpean si lo tienen encima, a veces esquivan o van por un power-up que les sirve y, si pasan un rato sin nadie a tiro, van a buscar altura.</p>
+      <p class="note"><b>Arena:</b> el kit industrial de backgrounds/ranger_industrial (GPT Image 2.5 y Nano Banana 2.1 por fal), armado desde prototypes/arena/arenas/fundicion.json.</p>
+    </section>
+  </div>
+</div>
+
+<script>
+__COLOR_JS__
+</script>
+<script>
+"use strict";
+const SPR = __SPRITE_DATA__;
+// el kit industrial (prototypes/arena/build.py): cada pieza con su tamaño en px del juego y, las capas, en px de pantalla
+const KIT = __KIT_DATA__;
+// efectos de backgrounds/ranger_fx, los elegidos en prototypes/fx_lab (los mismos del polígono)
+const FX = __FX_DATA__;
+// la granada y su explosión dibujadas (backgrounds/ranger_grenade), si ya se eligieron; si no, {} y van por código
+const GREN = __GRENADE_DATA__;
+// la paleta de Pablo (prototypes/arena/paleta.py, de refs/refineria.webp a refs/refineria_paleta_pablo.webp) para color.js
+const COLOR_LUT = decodeLut(__COLOR_LUT__);
+const gradeCache = new Map();   // las imágenes graduadas de la arena de ahora (se vacía al cambiar de arena)
+let hazeRGB = null;             // el color de la bruma de la arena de ahora
+const ARENAS = __ARENA_DATA__;
+// probar desde el editor (prototypes/arena/editor): con ?arena=editor en la URL, la arena que dejó en este navegador
+// (localStorage "arena-editor": {key, arena, t}) entra al menú como "editor" y queda elegida
+try {
+  if (new URLSearchParams(location.search).get("arena") === "editor") {
+    const E = JSON.parse(localStorage.getItem("arena-editor") || "null");
+    if (E && E.arena && typeof E.arena === "object") ARENAS.editor = { ...E.arena, name: `Del editor: ${E.arena.name || E.key || "sin nombre"}` };
+  }
+} catch (e) { /* sin editor */ }
+let ARENA = ARENAS.editor || ARENAS.fundicion || Object.values(ARENAS)[0];   // la del menú: cada arenas/<nombre>.json, todas de 1920 × 1080
+const [AW, AH] = [1920, 1080];
+const VIEW_W = 960, VIEW_H = 540, ZOOM = VIEW_W / AW;   // 0,5: la arena entera en pantalla
+const FX_IMG = {};
+for (const [asset, A] of Object.entries(FX)) for (const [name, p] of Object.entries(A.pieces)) { const im = new Image(); im.src = p.src; FX_IMG[`${asset}/${name}`] = im; }
+const FXT = { flashA: 2 / 60, flashB: 3 / 60, impact: 2 / 60 };
+const FXK = 1.5;   // los efectos del disparo, más grandes que en el polígono: con la cámara al 50% se perdían
+const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
+const CHAR = 0.8, HALF_W = 20 * CHAR, BODY_H = 112 * CHAR;
+const S = { char: CHAR, jumpFx: true, sound: true, debug: false };
+// el feel del polígono ("reporte"), con la cadencia de la arena: a 12 disparos por segundo, tres golpes duraban 0,17 s
+const FEEL = { run: 300, accel: 4500, decel: 6000, air: 3000, v0: 1067, gUp: 2963, gDown: 4898, cut: 480, term: 1400, coyote: 0.10, buffer: 0.10, corner: 12, rate1: 1 / 7, rate2: 1 / 3.5, kick: 0 };
+const RUN_SPEED = FEEL.run;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cv = document.getElementById("game"), ctx = cv.getContext("2d");
+const atlas = new Image();
+let ready = false;
+
+/* ---------- animaciones del ranger (las mismas cuentas que el polígono) ---------- */
+const anim = n => SPR.anims[n];
+const F = (n, i) => anim(n).f[Math.max(0, Math.min(anim(n).f.length - 1, i))];
+function phases(name) {
+  const f = anim(name).f, air = f.map((x, i) => [i, x[8]]).filter(([, l]) => l > 5).map(([i]) => i);
+  const apex = air.reduce((b, i) => (f[i][8] > f[b][8] ? i : b), air[0]);
+  return { prep: Math.max(0, air[0] - 1), rise: air.filter(i => i < apex), apex, fall: air.filter(i => i > apex), land: f.map((_, i) => i).filter(i => i > air[air.length - 1]) };
+}
+const JP = phases("jump");
+const JS = anim("jump_shoot").f;
+const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
+const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
+const noBaked = (n, i) => (anim(n).f[i][11] ? (i + anim(n).f.length - 1) % anim(n).f.length : i);
+const shotFrame = (n, t, per) => { const s = SHOT(n); return noBaked(n, t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]); };
+// colgado de una mano, detrás del canto (ver el polígono); la subida arranca en la pose de dos manos
+const HANG = "hang", HANG_HAND = anim(HANG).f[0];
+const HANG_WALL = 28, HANG_GRIP = 8;
+const WALL_JUMP = { vx: 300, vy: 0.92, lock: 0.14, regrab: 0.3, late: 0.08 };
+const HANG_BUFFER = 0.15;
+const RUN = () => (SPR.anims.run_gun ? "run_gun" : "run");
+const IDLE = () => (SPR.anims.idle_combat ? "idle_combat" : "idle");
+const IDLE_SPEED = SPR.anims.idle_combat ? 1 : 1.4;
+const FLIP = (() => {
+  if (!SPR.anims.double_jump) return [];
+  const turned = anim("double_jump").f.map((f, i) => [i, f]).filter(([, f]) => f[2] / f[3] > 0.95 || f[3] < 100).map(([i]) => i);
+  return turned.length ? Array.from({ length: turned[turned.length - 1] - turned[0] + 1 }, (_, k) => turned[0] + k) : [];
+})();
+const FLIP_DUR = 0.32, DOUBLE_V = 0.9;
+const JFX = { micro: 0.3, hard: 2.8, takeoff: [0.87, 1.15], dbl: [0.84, 1.19], land: [0.18, 0.15], back: 0.8, bump: 9, bumpDecay: 0.85, vy: [-590, -180, 300, 840], dblScale: 1.05 };
+const FLIP_ANG = SPR.anims.double_jump && anim("double_jump").f.length > 8 ? [[1, 0], [2, 38], [3, 62], [4, 93], [5, 225], [6, 307], [7, 360]] : null;
+const GRAB_FRAMES = [6, 7, 8, 9], GRAB_T = GRAB_FRAMES.length * 0.05;
+const CLIMB_SEQ = [[0, 0, 0.02], [2, 0, 0.05], [3, 12, 0.05], [4, 22, 0.05], [13, 31, 0.06], [15, 31, 0.05], [17, 31, 0.05], [19, 8, 0.05], [20, 0, 0.05], [21, 0, 0.06]];
+const CLIMB = SPR.anims.climb && SPR.anims.hang_two ? (() => {
+  const f = anim("climb").f, last = f[f.length - 1], idle = anim(IDLE()).f[0], hang = anim("hang_two").f[0];
+  const cx = g => g[4] + g[2] / 2 - PIV_X, ox = cx(hang) - cx(f[0]);
+  return { ox, dx: ox + cx(last) - cx(idle), rise: last[8], dur: CLIMB_SEQ.reduce((a, s) => a + s[2], 0), exitRun: 0.7, wall: 20, grip: 6, hand: hang[10] };
+})() : null;
+// los pies se hunden en el contorno negro de arriba de la pasarela (si no, parece que flota)
+const FOOT_SINK = 3;
+// altura de la boca sobre los pies, parado y agachado: con eso los bots saben si el otro queda en la línea del disparo
+const MUZZLE_H = -anim("shoot").f[0][7] * CHAR - FOOT_SINK, CROUCH_MUZZLE = -anim("crouch_shoot").f[0][7] * CHAR - FOOT_SINK;
+
+/* ---------- equipos, reglas y bots ---------- */
+// el rojo es el del atlas; los demás cambian el tono del rojo de la armadura (hue en grados), con algo de saturación y brillo
+const TEAM = [
+  { name: "Rojo", hue: null, color: "#e8392e", glow: "232,57,46" },
+  { name: "Azul", hue: 212, sat: 0.95, val: 1.05, color: "#3a8dff", glow: "70,150,255" },
+  { name: "Verde", hue: 124, sat: 0.9, val: 0.95, color: "#35d264", glow: "60,220,110" },
+  { name: "Amarillo", hue: 51, sat: 1, val: 1.25, color: "#ffd21f", glow: "255,215,40" },
+];
+const COMBAT = { power2: 2, knock1: 330, knock2: 560, lift1: 230, lift2: 380, stun: 0.2, crouchH: 0.62 };
+// reaparición: cuánto tarda, cuánto dura la invulnerabilidad (parpadea; disparar la corta) y el haz que avisa dónde
+const RESPAWN = { delay: 1.6, inv: 2.0, beam: 0.45 };
+// temperatura del arma, de 0 a 1: lo que suma cada disparo, cuánto se enfría por segundo después de `delay` sin tirar y,
+// trabada en 1, cuánto por segundo hasta volver a 0 (1,25 s). Una mano sin parar: 7 × 0,085 = 0,6 por segundo, ~1,7 s
+const HEAT = { shot1: 0.085, shot2: 0.24, cool: 0.55, delay: 0.25, overCool: 0.8 };
+// granadas: cuántas por vida (se recargan al reaparecer; en la prueba, sin límite), la mecha, el tiro (px/s, con la carga
+// llena; sin cargar sale con minVx y minVy de eso, y `charge` es lo que tarda en llenarse), cuánto
+// rebotan, el radio del daño (3 golpes cerca del centro, 2 a media distancia, 1 en el borde; también al que la tiró) y
+// el empujón, que sale del centro. Si toca a otro, explota en el acto
+const GRENADE = { count: 5, fuse: 1.3, vx: 800, vy: -800, minVx: 0.4, minVy: 0.62, charge: 0.8, gravity: 2200, bounce: 0.45, friction: 0.72,
+                  r: 9, radius: 150, knock: 720, lift: 520, cooldown: 0.45, anim: 0.32, release: 0.13,
+                  spawnX: 54, spawnY: 114, releaseFrame: 2 };   // los que eligió Pablo; con 0,6 de carga sale como su 620 / -720   // de dónde sale (px del juego desde los pies, hacia adelante y arriba) y en qué cuadro del tiro
+const GRENADE_DEFAULT = { ...GRENADE };
+// golpe de cerca: el puño adelante, a la altura del cuerpo. reach: cuánto llega más allá del borde del cuerpo (la bala sale
+// ~100 px adelante y a quemarropa pasa de largo: esto cubre ese hueco) y back, un poco detrás; el daño, el empujón, lo que
+// aturde, el enfriamiento (desde que arranca), el envión del cuerpo al pegar (px/s) y la congelada del impacto
+const MELEE = { reach: 72, back: 10, dmg: 1, knock: 780, lift: 420, stun: 0.4, cd: 0.5, lunge: 560, hitStop: 0.07 };
+// power-ups (granadas y salud): cuándo aparece el primero (en la partida y en la prueba), cada cuánto los demás (al azar
+// entre los dos), cuántos a la vez (uno con dos jugadores o en la prueba), el aviso del haz antes de aparecer, cuánto
+// duran (los últimos `blink` parpadean), el radio para agarrarlo y a qué altura flota. El de salud cura un tercio de la
+// salud, al menos 1 (+1 con 3 golpes, +2 con 5; con 1 golpe no aparece)
+const PICKUP = { first: 9, firstTest: 3, every: [12, 18], max: 2, warn: 0.75, life: 12, blink: 3, r: 24, lift: 30 };
+const SET = { hp: 3, lives: 3, bot: "normal", count: 4 };   // count: cuántos juegan, de 2 a 4
+// react: cuánto tiene que tenerlo en línea antes de disparar; burst y pause: ráfagas; dodge: probabilidad de esquivar una
+// bala que viene; think: cada cuánto revisa a quién perseguir
+const BOT_LEVELS = {
+  facil: { react: 0.55, burst: 0.25, pause: 0.8, dodge: 0.12, think: 0.7, heatCap: 1.1 },   // heatCap: hasta dónde calienta el arma (los fáciles la traban)
+  normal: { react: 0.32, burst: 0.4, pause: 0.45, dodge: 0.35, think: 0.45, heatCap: 0.85 },
+  dificil: { react: 0.18, burst: 0.6, pause: 0.25, dodge: 0.6, think: 0.3, heatCap: 0.72 },
+};
+// auto: el teclado izquierdo y, además, el primer joystick que no tenga otro lugar (como en el polígono: se agarra y se juega)
+const SLOTS = [{ ctrl: "auto" }, { ctrl: "bot" }, { ctrl: "bot" }, { ctrl: "bot" }];
+const CTRL_NAMES = { auto: "Teclado izq. o joystick", kb1: "Teclado izquierdo", kb2: "Teclado derecho", "pad:0": "Joystick 1", "pad:1": "Joystick 2", "pad:2": "Joystick 3", "pad:3": "Joystick 4", bot: "Bot", off: "Nadie" };
+
+/* ---------- mundo: la arena ---------- */
+// sólidos: lo que se pisa. oneWay: se atraviesa desde abajo y con abajo + saltar (puente, flotantes, repisas)
+const solids = [];
+let needBake = true;   // cambió la arena: hay que prearmarla de nuevo
+const PIECE = n => KIT.pieces[n];
+// piezas pintadas de la arena (ARENA.pieces: PNG con alfa, 1 px = 1 px del juego, src relativo a arenas/, y sus solids y
+// front relativos a la esquina de arriba a la izquierda). Un objeto cuyo piece es una de ellas va con x, y en esa esquina;
+// flip la espeja dentro de su caja y ledge pisa el de sus sólidos. No se mueven
+const painted = o => ARENA.pieces && ARENA.pieces[o.piece];
+const pieceSrc = Pc => `arenas/${Pc.src}`;
+const flipLedge = l => (l === "left" ? "right" : l === "right" ? "left" : l);
+function addSolid(s) {
+  if (s.kind === "bridge") solids.push({ ...s, h: 26, oneWay: true });
+  // cajas: bloquean balas y se suben de un salto, pero no tienen cornisa (colgado de una caja, los pies quedarían bajo la pasarela)
+  else solids.push({ ...s, ground: s.y >= 900, noLedge: s.noLedge ?? (s.kind === "box" || s.y >= 900) });
+}
+function loadArena(name) {
+  ARENA = ARENAS[name] || ARENA; solids.length = 0; gradeCache.clear(); hazeRGB = null;
+  for (const s of ARENA.solids || []) addSolid(s);
+  for (const o of ARENA.objects || []) {
+    const Pc = painted(o); if (!Pc) continue;
+    for (const s of Pc.solids || []) addSolid({ ...s, x: o.x + (o.flip ? Pc.w - s.x - s.w : s.x), y: o.y + s.y,
+                                                ledge: o.ledge || (o.flip ? flipLedge(s.ledge) : s.ledge) || "both" });
+  }
+  for (const p of ARENA.platforms || []) {
+    const A = PIECE("platforms/" + p.piece);
+    const x = p.piece === "ledge" ? (p.wall === "left" ? p.x : p.x - A.w) : p.cx - A.w / 2;
+    solids.push({ kind: "platform", piece: p.piece, flip: p.wall === "left", x, y: p.y, w: A.w, h: 26, drawY: p.y - A.top, oneWay: true });
+  }
+  loadObjects();
+  // los bordes: paredes a los costados y un techo, que no se ven
+  solids.push({ kind: "bound", x: -200, y: -2000, w: 200, h: 5000, bound: true, noLedge: true },
+              { kind: "bound", x: AW, y: -2000, w: 200, h: 5000, bound: true, noLedge: true },
+              { kind: "bound", x: -200, y: -260, w: AW + 400, h: 120, bound: true, noLedge: true });
+  needBake = true;
+}
+// objetos del kit encima de la arena (sobre todo de las pintadas, "lámina + objetos"): cajas que chocan o son decorado,
+// y plataformas, quietas o que se mueven por un recorrido. El que choca tiene su sólido en `solids`; se dibujan cada cuadro
+//   cajas y otras piezas: x es el centro y y la base. solid: false (no choca) o layer: "back" los manda detrás, oscurecidos
+//   platforms/*: y es lo que se pisa; move: {path: [[x, y], ...], speed: px/s, wait: s}, ida y vuelta, llevando al de arriba
+const objects = [];
+const OBJ_BACK_TINT = "rgba(14,24,52,0.35)";
+function loadObjects() {
+  objects.length = 0;
+  for (const o of ARENA.objects || []) {
+    if (painted(o)) continue;   // las pintadas: sus sólidos los puso loadArena y se dibujan en el prearmado
+    const A = PIECE(o.piece); if (!A) continue;
+    const plat = o.piece.startsWith("platforms/");
+    const ob = { o, A, plat, x: o.x, y: o.y, solid: null, back: o.layer === "back" || o.solid === false, seg: 0, dir: 1, waitT: 0 };
+    if (plat) ob.solid = { kind: "platform", x: 0, y: 0, w: A.w, h: 26, oneWay: true, noLedge: !!o.move || o.ledge === "none", obj: ob };
+    else if (o.solid !== false) ob.solid = { kind: "box", x: 0, y: 0, w: A.w - 4, h: A.h - 3, noLedge: true, obj: ob };
+    if (o.move && o.move.path && o.move.path.length > 1) { ob.path = o.move.path; ob.speed = o.move.speed || 120; ob.wait = o.move.wait ?? 0.5; }
+    resetObject(ob);
+    if (ob.solid) solids.push(ob.solid);
+    objects.push(ob);
+  }
+}
+function syncObject(ob) {
+  if (!ob.solid) return;
+  if (ob.plat) { ob.solid.x = ob.x - ob.A.w / 2; ob.solid.y = ob.y; }
+  else { ob.solid.x = ob.x - ob.A.w / 2 + 2; ob.solid.y = ob.y - ob.A.h + 3; }
+}
+function resetObject(ob) {
+  if (ob.path) { [ob.x, ob.y] = ob.path[0]; ob.seg = 0; ob.dir = 1; ob.waitT = ob.wait; }
+  syncObject(ob);
+}
+// las que se mueven: ida y vuelta por los puntos del recorrido, con una pausa en cada punta; al que está parado encima
+// lo lleva con ella (también para arriba y para abajo). Colgarse de una que se mueve no se puede
+function moveObjects(dt) {
+  for (const ob of objects) {
+    if (!ob.path) continue;
+    if (ob.waitT > 0) { ob.waitT -= dt; continue; }
+    const next = ob.seg + ob.dir, [tx, ty] = ob.path[next], ex = tx - ob.x, ey = ty - ob.y, d = Math.hypot(ex, ey), stepLen = ob.speed * dt;
+    let nx = tx, ny = ty;
+    if (d > stepLen) { nx = ob.x + ex / d * stepLen; ny = ob.y + ey / d * stepLen; }
+    else { ob.seg = next; if (next === 0 || next === ob.path.length - 1) { ob.dir = -ob.dir; ob.waitT = ob.wait; } }
+    const riders = ob.solid ? players.filter(q => q.alive && q.onGround && supportAt(q.x, q.y, q) === ob.solid) : [];
+    const mx = nx - ob.x, my = ny - ob.y;
+    ob.x = nx; ob.y = ny; syncObject(ob);
+    for (const q of riders) { q.x = Math.max(HALF_W, Math.min(AW - HALF_W, q.x + mx)); q.y += my; }
+  }
+}
+function drawObjects(back) {
+  for (const ob of objects) {
+    if (ob.back !== back) continue;
+    const A = ob.A, x = ob.x - A.w / 2, y = ob.plat ? ob.y - A.top : ob.y - A.h;
+    put(ctx, ob.o.piece, x, y, { flip: ob.o.flip, tint: back ? OBJ_BACK_TINT : null, grade: "plataformas" });
+  }
+}
+loadArena(Object.keys(ARENAS).find(k => ARENAS[k] === ARENA));
+
+/* ---------- jugadores ---------- */
+const blankInput = () => ({ left: false, right: false, down: false, jumpHeld: false, fire1: false, fire2: false, jp: false, dp: false, gp: false, gh: false, mp: false, face: 0 });   // gp: el toque del botón de granada; gh: mantenido (carga); mp: el toque del golpe
+function newPlayer(slot) {
+  return { slot, team: TEAM[slot], x: 0, y: 0, vx: 0, vy: 0, onGround: true, facing: 1, state: "ground",
+           aim: "none", aimAnim: null, aimT: 0, idleAimT: 0, shotT: 1, crouch: "none", crouchT: 0, jump: null, landT: 0,
+           hang: null, climb: null, grabCD: 0, skipLedge: null, wallLockT: 0, fireCD: 0, t: 0, coyoteT: 0, bufferT: 0, kickT: 0,
+           sqX: 1, sqY: 1, peakY: null, landKind: null, flashT: 0, canDouble: true, flipT: 0, idleT: 0,
+           draw: { name: "idle_combat", i: 0, x: 0, y: 0, k: 1, rot: 0, center: false }, flash: null,
+           hp: 3, alive: false, hitT: 0, stunT: 0, invT: 0, dropS: null, dropT: 0, kills: 0,
+           lives: 3, out: false, respawnT: 0, beam: false, spawnPt: null, heat: 0, heatT: 9, overheat: false, steamT: 0,
+           meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0,
+           in: blankInput(), ctrl: "bot", bot: null, art: null };
+}
+const players = [0, 1, 2, 3].map(newPlayer);
+let P = players[0], I = P.in;   // el jugador que se está actualizando y su entrada: el código del ranger usa P
+const active = () => players.filter(p => p.ctrl !== "off");
+
+/* ---------- entrada ---------- */
+const KB = {
+  kb1: { left: ["KeyA"], right: ["KeyD"], down: ["KeyS"], jump: ["KeyW", "Space"], fire1: ["KeyF", "KeyJ"], fire2: ["KeyG", "KeyK"], gren: ["KeyE", "KeyL"], melee: ["KeyQ", "KeyU"] },
+  kb2: { left: ["ArrowLeft"], right: ["ArrowRight"], down: ["ArrowDown"], jump: ["ArrowUp"], fire1: ["Period", "Numpad1", "Numpad0"], fire2: ["Slash", "Numpad2", "NumpadDecimal"], gren: ["Comma", "Numpad3"], melee: ["KeyM", "Numpad4"] },
+};
+const GAME_KEYS = new Set(Object.values(KB).flatMap(m => Object.values(m).flat()));
+const keys = new Set(), tapped = new Set();
+window.addEventListener("keydown", e => {
+  if (G.state !== "lobby" && GAME_KEYS.has(e.code)) e.preventDefault();
+  if (e.code === "Escape" && G.state !== "lobby") { showLobby(); return; }
+  if (e.code === "KeyH" && !e.repeat) S.debug = !S.debug;
+  if (e.code === "KeyR" && !e.repeat && G.mode === "test" && G.state === "play") {   // prueba: al próximo lugar de salida
+    G.testSpawn = (G.testSpawn + 1) % ARENA.spawns.length; resetPlayer(players[0], ARENA.spawns[G.testSpawn]); players[0].lives = 99;
+  }
+  if (!e.repeat) tapped.add(e.code);
+  keys.add(e.code);
+});
+window.addEventListener("keyup", e => keys.delete(e.code));
+window.addEventListener("blur", () => keys.clear());
+function kbInput(m) {
+  const any = l => l.some(c => keys.has(c)), tap = l => l.some(c => tapped.has(c));
+  return { left: any(m.left), right: any(m.right), down: any(m.down), jumpHeld: any(m.jump), fire1: any(m.fire1), fire2: any(m.fire2), jp: tap(m.jump), dp: tap(m.down), gp: tap(m.gren), gh: any(m.gren), mp: tap(m.melee), face: 0 };
+}
+// joysticks (Gamepad API, mapping estándar): por índice del control, con lo apretado el cuadro anterior para los toques
+let pads = [], padBlocked = false;
+const padPrev = {};
+function readPads() {
+  try { return navigator.getGamepads ? [...navigator.getGamepads()].filter(p => p && p.connected) : []; }
+  catch (e) { padBlocked = true; return []; }
+}
+// los joysticks sin el mapping estándar (los de Switch por Bluetooth, como el PowerA, que aparece como "Lic3 Pro Controller")
+// traen los botones de la cara, L/R/ZL/ZR y +/− en las mismas posiciones, pero la cruceta en un eje: el 9, que va de -1
+// (arriba) a 1 en pasos de 2/7 siguiendo el reloj, y queda en ~1,29 suelta
+function hat(gp) {
+  if (gp.mapping === "standard" || gp.axes.length < 10) return null;
+  const v = gp.axes[9]; if (v > 1.05 || v < -1.05) return null;
+  const k = ((Math.round((v + 1) / (2 / 7)) % 8) + 8) % 8;   // 0 arriba, 1 arriba-derecha, 2 derecha… 7 arriba-izquierda
+  return { up: k === 7 || k <= 1, right: k >= 1 && k <= 3, down: k >= 3 && k <= 5, left: k >= 5 };
+}
+function padState(gp) {
+  const b = i => !!(gp.buttons[i] && (gp.buttons[i].pressed || gp.buttons[i].value > 0.4)), x = gp.axes[0] || 0, y = gp.axes[1] || 0, h = hat(gp) || {};
+  return { left: b(14) || h.left || x < -0.35, right: b(15) || h.right || x > 0.35, down: b(13) || h.down || (y > 0.6 && Math.abs(x) < 0.6), up: b(12) || h.up,
+           jump: b(0), fire1: b(2) || b(7), fire2: b(1) || b(5), gren: b(3) || b(4), melee: b(6), start: b(9), any: gp.buttons.some(q => q.pressed) || !!(h.up || h.down || h.left || h.right) };
+}
+// el joystick del lugar "auto": el primero conectado que ningún lugar tiene elegido
+function autoPad() { return pads.find(gp => !SLOTS.some(x => x.ctrl === `pad:${gp.index}`)) || null; }
+const padOf = p => (p.ctrl === "auto" ? autoPad() : p.ctrl.startsWith("pad:") ? pads.find(q => q.index === +p.ctrl.slice(4)) : null);
+const mergeIn = (a, b) => Object.fromEntries(Object.keys(a).map(k => [k, k === "face" ? a.face || b.face : a[k] || b[k]]));
+function padInput(idx) {
+  const gp = pads.find(p => p.index === idx); if (!gp) return blankInput();
+  const s = padState(gp), o = padPrev[idx] || {};
+  return { left: s.left, right: s.right, down: s.down, jumpHeld: s.jump || s.up, fire1: s.fire1, fire2: s.fire2, jp: (s.jump && !o.jump) || (s.up && !o.up), dp: s.down && !o.down, gp: s.gren && !o.gren, gh: s.gren, mp: s.melee && !o.melee, face: 0 };
+}
+function rumble(p, ms, strong, weak) {
+  const gp = padOf(p);
+  gp?.vibrationActuator?.playEffect?.("dual-rumble", { duration: ms, strongMagnitude: strong, weakMagnitude: weak })?.catch?.(() => {});
+}
+
+/* ---------- colisiones (las del polígono, con lo que se atraviesa desde abajo) ---------- */
+const overlapX = (s, x) => x + HALF_W > s.x && x - HALF_W < s.x + s.w;
+const dropping = s => P.dropT > 0 && P.dropS === s;
+function supportAt(x, y, who = P) { for (const s of solids) if (!s.bound && overlapX(s, x) && Math.abs(s.y - y) < 1.5 && !(who.dropT > 0 && who.dropS === s)) return s; return null; }
+function moveX(dx, footY) {
+  let nx = P.x + dx;
+  for (const s of solids) {
+    if (s.ground || s.oneWay) continue;
+    if (footY > s.y + 1 && footY - BODY_H < s.y + s.h && nx + HALF_W > s.x && nx - HALF_W < s.x + s.w)
+      nx = dx > 0 ? s.x - HALF_W : s.x + s.w + HALF_W;
+  }
+  P.x = Math.max(HALF_W, Math.min(AW - HALF_W, nx));
+}
+function landingTop(x, y0, y1) {
+  let best = null;
+  for (const s of solids) if (!s.bound && !dropping(s) && overlapX(s, x) && y0 <= s.y + 0.5 && y1 >= s.y && (best === null || s.y < best)) best = s.y;
+  return best;
+}
+function ceilingBottom(x, top0, top1) {
+  for (const s of solids) if (!s.ground && !s.oneWay && overlapX(s, x) && top0 >= s.y + s.h - 0.5 && top1 < s.y + s.h) return s.y + s.h;
+  return null;
+}
+function cornerNudge(x, headY) {
+  if (!FEEL.corner) return null;
+  for (const s of solids) {
+    if (s.ground || s.oneWay || s.bound || !(headY < s.y + s.h && headY > s.y - 1) || !overlapX(s, x)) continue;
+    const l = x + HALF_W - s.x, r = s.x + s.w - (x - HALF_W);
+    if (l <= FEEL.corner) return -(l + 0.5);
+    if (r <= FEEL.corner) return r + 0.5;
+    return null;
+  }
+  return null;
+}
+function findLedge() {
+  if (P.grabCD > 0 || P.vy < -220) return null;
+  const hx = P.x + P.facing * HANG_HAND[9] * S.char, hy = P.y + HANG_HAND[10] * S.char;
+  for (const s of solids) {
+    if (s.noLedge) continue;
+    const cx = P.facing > 0 ? s.x : s.x + s.w;
+    const side = s.ledge || "both";   // de qué bordes se puede colgar (en el JSON: "both", "left", "right" o "none")
+    if (side === "none" || (side === "left" && cx !== s.x) || (side === "right" && cx !== s.x + s.w)) continue;
+    if (cx < 30 || cx > AW - 30) continue;   // contra la pared de la arena no hay donde colgarse
+    if (P.skipLedge && P.skipLedge.s === s && P.skipLedge.cx === cx) continue;
+    if (Math.abs(hx - cx) > 22 || hy < s.y - 20 || hy > s.y + 26) continue;
+    if (P.facing > 0 ? P.x > s.x + 4 : P.x < s.x + s.w - 4) continue;
+    const blocked = solids.some(o => o !== s && !o.ground && !o.bound && o.x < cx + 40 && o.x + o.w > cx - 40 && o.y < s.y && o.y + o.h > s.y - BODY_H);
+    if (!blocked) return { s, cx, top: s.y };
+  }
+  return null;
+}
+// alto de la caja de golpe: agachado es más bajo
+const hurtH = Q => (Q.crouch === "hold" || (Q.crouch === "in" && Q.crouchT > 0.06) ? BODY_H * COMBAT.crouchH : BODY_H);
+
+/* ---------- efectos ---------- */
+const bullets = [], fx = [], impacts = [], booms = [], beams = [];   // booms: la onda de una muerte; beams: el haz donde alguien vuelve
+const grenades = [], blasts = [];   // granadas en vuelo y explosiones
+const THROW_ANIM = SPR.anims.throw ? "throw" : "shoot_in";
+// el tiro (clip g11, ver characters/ranger/character.toml): cuadros de "throw" y cuánto dura cada uno. 0–1 puño atrás de
+// la cabeza, 2 la estela, 3 el brazo adelante (ahí sale la granada, de la punta de la mano), 16–18 la vuelta a la pose
+const THROW_SEQ = SPR.anims.throw ? [[0, 0.07], [1, 0.05], [2, 0.05], [3, 0.06], [6, 0.05], [16, 0.03], [17, 0.03], [18, 0.03]] : null;
+// el momento en que sale: el principio del cuadro elegido del tiro (por defecto el 2, la estela)
+function updateRelease() {
+  if (!THROW_SEQ) return;
+  GRENADE.anim = THROW_SEQ.reduce((a, q) => a + q[1], 0);
+  GRENADE.release = THROW_SEQ.slice(0, Math.min(THROW_SEQ.length - 1, GRENADE.releaseFrame)).reduce((a, q) => a + q[1], 0) + 1e-3;
+}
+updateRelease();
+function throwFrame(t) {
+  if (!THROW_SEQ) { const n = anim(THROW_ANIM).f.length; return Math.min(n - 1, Math.floor(t / GRENADE.anim * n)); }
+  let acc = 0; for (const [i, d] of THROW_SEQ) { acc += d; if (t < acc) return i; } return THROW_SEQ[THROW_SEQ.length - 1][0];
+}
+// el golpe de cerca, con cuadros del tiro (no hay clip de melee): 1 el puño atrás, 3 el brazo adelante (pega mientras se
+// ve) y 16–18 la vuelta a la pose. Encima, un envión del cuerpo (off: px del juego hacia adelante) y el barrido por código.
+// Sin el clip del tiro, los del arma que sube
+const MELEE_SEQ = SPR.anims.throw
+  ? [["throw", 1, 0.06, -4], ["throw", 3, 0.1, 10], ["throw", 16, 0.05, 7], ["throw", 17, 0.04, 4], ["throw", 18, 0.04, 1]]
+  : [["shoot2h_in", 0, 0.06, -4], ["shoot2h_in", 3, 0.1, 10], ["shoot2h_in", 2, 0.05, 7], ["shoot2h_in", 1, 0.04, 4], ["shoot2h_in", 0, 0.04, 1]];
+const MELEE_T = { hit0: MELEE_SEQ[0][2], hit1: MELEE_SEQ[0][2] + MELEE_SEQ[1][2], end: MELEE_SEQ.reduce((a, q) => a + q[2], 0) };
+function meleeFrame(t) { let acc = 0; for (const q of MELEE_SEQ) { acc += q[2]; if (t < acc) return q; } return MELEE_SEQ[MELEE_SEQ.length - 1]; }
+// la caja del golpe: delante del cuerpo, de los hombros a las rodillas
+function meleeBox(Q) {
+  const a = Q.x - Q.facing * MELEE.back, b = Q.x + Q.facing * (HALF_W + MELEE.reach);
+  return { x0: Math.min(a, b), x1: Math.max(a, b), y0: Q.y - BODY_H * 0.95, y1: Q.y - 12 };
+}
+// mientras se ve el brazo adelante: a cada uno que toca, una vez por golpe (no atraviesa una pared o una caja)
+function meleeHits() {
+  const M = meleeBox(P);
+  for (const Q of players) {
+    if (Q === P || !Q.alive || Q.ctrl === "off" || Q.invT > 0 || P.meleeHit.has(Q.slot)) continue;
+    if (M.x1 < Q.x - HALF_W || M.x0 > Q.x + HALF_W || M.y1 < Q.y - hurtH(Q) || M.y0 > Q.y) continue;
+    if (!clearShot(P.x, P.y - BODY_H * 0.6, Q.x)) continue;
+    P.meleeHit.add(Q.slot);
+    const hy = Math.max(Q.y - hurtH(Q) + 12, P.y - BODY_H * 0.62);
+    hitPlayer(Q, { vx: P.facing, x: Q.x - P.facing * HALF_W, y: hy, power: MELEE.dmg, owner: P.slot, glow: P.team.glow },
+              { knock: MELEE.knock, lift: MELEE.lift, stun: MELEE.stun, melee: true });
+    G.hitStop = Math.max(G.hitStop, MELEE.hitStop);
+    P.vx *= 0.3; rumble(P, 90, 0.7, 0.4);   // el que pega frena en seco
+  }
+}
+// los dibujos de la explosión, en orden (el post los numera por lectura); los seis primeros
+const BLAST_FRAMES = GREN.explosion ? Object.keys(GREN.explosion).sort((a, b) => parseInt(a.replace(/\D/g, "")) - parseInt(b.replace(/\D/g, ""))).slice(0, 6).map(k => GREN.explosion[k]) : [];
+// la velocidad de salida para una carga de 0 a 1: de minVx/minVy de la llena, a la llena
+function grenadeVel(p, dir) {
+  return { vx: dir * GRENADE.vx * (GRENADE.minVx + (1 - GRENADE.minVx) * p), vy: GRENADE.vy * (GRENADE.minVy + (1 - GRENADE.minVy) * p) };
+}
+function throwGrenade(p) {
+  // sale de arriba y adelante del personaje, en diagonal (GRENADE.spawnX y spawnY, desde los pies), en el piso y en el aire
+  const dir = P.facing, hand = { x: P.x + dir * GRENADE.spawnX, y: P.y - GRENADE.spawnY };
+  const v = grenadeVel(p, dir);
+  grenades.push({ x: hand.x, y: hand.y, vx: v.vx + P.vx * 0.4, vy: v.vy,
+                  t: 0, owner: P.slot, glow: P.team.glow, rot: 0, rest: false });
+  if (G.mode !== "test") P.grenades--;   // en la prueba, sin límite
+  sfx("throw");
+}
+// la granada: cae con gravedad, rebota en lo que choca (en lo que se atraviesa, sólo cayendo desde arriba) y se frena
+// en el piso. Explota a la mecha, o en el acto si toca a otro jugador
+function moveGrenade(Gr, dt) {
+  const r = GRENADE.r, n = Math.max(1, Math.ceil(Math.max(Math.abs(Gr.vx), Math.abs(Gr.vy)) * dt / 6)), h = dt / n;
+  for (let k = 0; k < n; k++) {
+    Gr.vy = Math.min(1600, Gr.vy + GRENADE.gravity * h);
+    const nx = Gr.x + Gr.vx * h;
+    if (solids.some(s => !s.oneWay && nx + r > s.x && nx - r < s.x + s.w && Gr.y + r > s.y && Gr.y - r < s.y + s.h)) Gr.vx = -Gr.vx * 0.55;
+    else Gr.x = nx;
+    const ny = Gr.y + Gr.vy * h;
+    let hit = null;
+    for (const s of solids) {
+      if (Gr.x + r <= s.x || Gr.x - r >= s.x + s.w) continue;
+      if (Gr.vy > 0 && Gr.y + r <= s.y + 0.5 && ny + r >= s.y && !(s.oneWay && false)) { hit = { s, top: true }; break; }
+      if (Gr.vy < 0 && !s.oneWay && Gr.y - r >= s.y + s.h - 0.5 && ny - r <= s.y + s.h) { hit = { s, top: false }; break; }
+    }
+    if (hit && hit.top) {
+      Gr.y = hit.s.y - r;
+      if (Gr.vy > 260) sfx("bounce", Math.min(1, Gr.vy / 900));
+      Gr.vy = -Gr.vy * GRENADE.bounce; Gr.vx *= GRENADE.friction;
+      if (Math.abs(Gr.vy) < 140) Gr.vy = 0;
+      Gr.rest = Gr.vy === 0;
+    } else if (hit) { Gr.y = hit.s.y + hit.s.h + r; Gr.vy = -Gr.vy * 0.4; }
+    else Gr.y = ny;
+    if (Gr.rest) Gr.vx *= Math.pow(0.02, h);   // apoyada, rueda y se frena
+    for (const Q of players) {
+      if (!Q.alive || Q.ctrl === "off" || Q.slot === Gr.owner || Q.invT > 0) continue;
+      if (Gr.x + r > Q.x - HALF_W && Gr.x - r < Q.x + HALF_W && Gr.y + r > Q.y - hurtH(Q) && Gr.y - r < Q.y) return true;   // le pegó: explota
+    }
+  }
+  Gr.rot += Gr.vx * dt / GRENADE.r;
+  return false;
+}
+function explode(Gr) {
+  const R = GRENADE.radius;
+  if (G.state === "play") for (const Q of players) {
+    if (!Q.alive || Q.ctrl === "off" || Q.invT > 0) continue;
+    const cx = Q.x, cy = Q.y - BODY_H / 2, d = Math.hypot(cx - Gr.x, cy - Gr.y);
+    if (d > R) continue;
+    const k = 1 - d / R, dmg = d < R * 0.3 ? 3 : d < R * 0.65 ? 2 : 1, dir = Math.sign(cx - Gr.x) || (Math.random() < 0.5 ? -1 : 1);
+    hitPlayer(Q, { vx: dir, x: cx, y: cy, power: dmg, owner: Gr.owner, glow: "255,170,60" }, { knock: GRENADE.knock * (0.45 + 0.55 * k), lift: GRENADE.lift * (0.45 + 0.55 * k) });
+  }
+  blasts.push({ x: Gr.x, y: Gr.y, t: 0 });
+  burst(Gr.x, Gr.y, "#ffd23a", 26, 700, 0.55, 12); burst(Gr.x, Gr.y, "#ff7a1f", 26, 560, 0.7, 14); burst(Gr.x, Gr.y, "#2a2d38", 16, 420, 0.9, 12);
+  for (let i = 0; i < 12; i++) {   // humo que sube
+    const a = Math.random() * Math.PI * 2, v = 120 + Math.random() * 180;
+    fx.push({ x: Gr.x, y: Gr.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 120, life: 0.9, t: 0.7 + Math.random() * 0.3, color: Math.random() < 0.5 ? "rgba(60,64,78,0.8)" : "rgba(95,100,118,0.7)", size: 30 + Math.random() * 22, g: -60, drag: 3, round: true, grow: 2 });
+  }
+  if (!reduceMotion) shake = Math.max(shake, 0.32);
+  for (const Q of players) if (Q.alive && Math.hypot(Q.x - Gr.x, Q.y - Gr.y) < R * 2) rumble(Q, 220, 0.9, 0.6);
+  sfx("boom");
+}
+let shake = 0, bumpY = 0, hitN = 0, shotN = 0;
+function dust(x, y, n, speed, size, up = 0.25) {
+  const k = S.char;
+  for (let i = 0; i < n; i++) {
+    const side = i % 2 ? 1 : -1, v = speed * k * (0.35 + Math.random() * 0.65);
+    fx.push({ x: x + side * Math.random() * 10 * k, y: y - 2, vx: side * v, vy: -speed * k * up * Math.random(), life: 0.45, t: 0.45 + Math.random() * 0.15,
+              color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: size * k * (0.7 + Math.random() * 0.7), g: 120, drag: 4, round: true, grow: 1.6 });
+  }
+}
+function impact(x, y, dir, big, glow = "159,245,250") {
+  impacts.push({ x, y, dir, t: 0, big, row: hitN++ % 2 ? "b" : "a" });
+  for (let i = 0, n = big ? 10 : 6; i < n; i++) {
+    const a = Math.PI * (0.55 + Math.random() * 0.9), v = 280 * (0.4 + Math.random() * 0.6);
+    fx.push({ x, y, vx: Math.cos(a) * v * dir, vy: Math.sin(a) * v - 84, life: 0.3, t: 0.3, color: `rgb(${glow})`, size: (big ? 5 : 4) * FXK * (0.6 + Math.random() * 0.6), g: 900, add: true });
+  }
+}
+// el impacto del golpe de cerca: una estrella blanca con el borde del color del que pega (se dibuja en render) y chispas
+// y rayitas que salen hacia adelante, en la dirección del golpe
+const pows = [];
+function pow(x, y, dir, glow) {
+  pows.push({ x, y, dir, t: 0, glow, rot: Math.random() * 0.6 });
+  for (let i = 0; i < 12; i++) {
+    const a = (Math.random() - 0.5) * 1.6, v = 300 + Math.random() * 380;
+    fx.push({ x, y, vx: Math.cos(a) * v * dir, vy: Math.sin(a) * v - 60, life: 0.28, t: 0.22 + Math.random() * 0.08, color: i % 3 ? "#ffffff" : `rgb(${glow})`, size: 5 + Math.random() * 4, g: 700, add: true });
+  }
+}
+function muzzleAt(frame, footY) {
+  const qx = P.sqX * (P.draw.k || 1), qy = P.sqY * (P.draw.k || 1), sink = P.state === "hang" || P.state === "climb" ? 0 : FOOT_SINK;
+  return { x: P.x + P.facing * frame[6] * S.char * qx, y: footY + sink + frame[7] * S.char * qy };
+}
+function muzzleNow() { const d = P.draw, f = anim(d.name).f[d.i]; return muzzleAt(f, d.y); }
+function fire(frame, footY, power) {
+  const { x: mx, y: my } = muzzleAt(frame, footY), len = (power > 1 ? 46 : 32) * 1.3;
+  bullets.push({ x: mx + P.facing * len, x0: mx, y: my, vx: 1350 * P.facing, life: 1.5, power, len, owner: P.slot, glow: P.team.glow });
+  P.flash = { t: 0, big: power > 1, v: (shotN++ % 3) + 1, seed: Math.random() * 1000 };
+  if (!reduceMotion) shake = Math.max(shake, power > 1 ? 0.05 : 0.025);
+  if (power > 1) rumble(P, 70, 0.4, 0.25);
+  sfx(power > 1 ? "shot2" : "shot", 0.5);
+  P.invT = 0;   // el que recién vuelve deja de ser invulnerable cuando dispara
+  P.heat += power > 1 ? HEAT.shot2 : HEAT.shot1; P.heatT = 0;
+  if (P.heat >= 1) { P.heat = 1; P.overheat = true; P.steamT = 0; sfx("overheat"); rumble(P, 160, 0.3, 0.6); steam(P, 10); }
+}
+// vapor del arma trabada: bocanadas grises que suben desde la boca
+function steam(Q, n) {
+  const m = muzzleNow();
+  for (let i = 0; i < n; i++) fx.push({ x: m.x - Q.facing * Math.random() * 14, y: m.y - 4, vx: (Math.random() - 0.5) * 60, vy: -80 - Math.random() * 90, life: 0.6, t: 0.5 + Math.random() * 0.2,
+                                        color: Math.random() < 0.5 ? "rgba(225,230,240,0.75)" : "rgba(190,198,215,0.7)", size: 12 + Math.random() * 8, g: -40, drag: 2, round: true, grow: 2.2 });
+}
+function burst(x, y, color, n, speed, life, size) {
+  for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = speed * (0.4 + Math.random() * 0.6);
+    fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - speed * 0.3, life, t: life, color, size: size * (0.6 + Math.random() * 0.6), g: 900 }); }
+}
+function puff(x, y, n, a0, a1, v0, v1, life0, life1, size, alpha, vx = 0) {
+  const k = S.char / 0.8;
+  for (let i = 0; i < n; i++) {
+    const side = i % 2 ? 1 : -1, a = (a0 + Math.random() * (a1 - a0)) * Math.PI / 180, v = (v0 + Math.random() * (v1 - v0)) * k;
+    const life = life0 + Math.random() * (life1 - life0), c = Math.random() < 0.5 ? "169,174,200" : "212,215,230";
+    fx.push({ x: x + side * Math.random() * 8 * k, y: y - 2, vx: side * Math.cos(a) * v + vx, vy: -Math.sin(a) * v, life, t: life,
+              color: `rgba(${c},${alpha})`, size: size * k * (0.7 + Math.random() * 0.6), g: 0, drag: 4, round: true, grow: 0.45 });
+  }
+}
+function squash(x, y) { P.sqX = x; P.sqY = y; }
+function land(fallH, vy) {
+  const H = 128 * S.char;
+  if (fallH < JFX.micro * H) { P.landT = 0; P.landKind = null; sfx("step", 0.5); return; }
+  const hard = fallH >= JFX.hard * H, s = Math.min(1, fallH / (JFX.hard * H)), half = Math.abs(P.vx) > 20 ? 1 : 0.5;
+  squash(1 + JFX.land[0] * s * half, 1 - JFX.land[1] * s * half);
+  P.landKind = hard ? "hard" : "soft"; P.landT = hard ? 0.2 : 1 / 12;
+  if (hard) {
+    puff(P.x, P.y, 16, 8, 22, 150, 260, 0.4, 0.6, 13, 0.5); puff(P.x, P.y, 5, 60, 85, 60, 120, 0.4, 0.55, 11, 0.45);
+    if (!reduceMotion) bumpY = Math.max(bumpY, JFX.bump * 0.5);
+    sfx("landHard", 0.7); rumble(P, 90, 0.45, 0.3);
+  } else { puff(P.x, P.y, 7, 10, 20, 60, 150, 0.3, 0.5, 10, 0.6); sfx("land", 0.4 + 0.3 * s); }
+}
+// golpe: destello blanco, empujón en la dirección de la bala y un momento sin control. Colgado, lo despega de la cornisa.
+// push: el empujón de la granada o del golpe de cerca (knock, lift y, el de cerca, stun)
+function hitPlayer(Q, B, push = null) {
+  const dir = Math.sign(B.vx), big = B.power > 1 || !!push?.melee;
+  Q.hp -= B.power; Q.hitT = 0.12; Q.stunT = push?.stun ?? COMBAT.stun * (big ? 1.4 : 1); Q.meleeT = 0;
+  if (Q.state === "hang" || Q.state === "climb") { Q.state = "air"; Q.hang = Q.climb = null; Q.grabCD = 0.45; }
+  Q.onGround = false; Q.jump = { mode: "phys", fixed: true }; Q.crouch = "none"; Q.aim = "none"; Q.landT = 0;
+  Q.vx = dir * (push ? push.knock : big ? COMBAT.knock2 : COMBAT.knock1); Q.vy = Math.min(Q.vy, -(push ? push.lift : big ? COMBAT.lift2 : COMBAT.lift1));
+  if (push?.melee) pow(B.x, B.y, dir, B.glow);   // el golpe de cerca: la estrella, que salpica hacia adelante
+  else impact(B.x, B.y, dir, big, B.glow);       // salpica hacia el tirador
+  burst(B.x, B.y, Q.team.color, big ? 10 : 6, 260, 0.35, 5);
+  if (!reduceMotion) shake = Math.max(shake, push?.melee ? 0.15 : big ? 0.12 : 0.07);
+  rumble(Q, push?.melee ? 180 : 120, push?.melee ? 0.9 : 0.6, 0.4); sfx(push?.melee ? "punch" : "hit", big ? 0.9 : 0.6);
+  if (Q.hp <= 0) killPlayer(Q, B.owner);
+}
+function killPlayer(Q, killer) {
+  Q.alive = false; Q.hp = 0;
+  const cx = Q.x, cy = Q.y - BODY_H / 2;
+  burst(cx, cy, Q.team.color, 44, 720, 1.0, 18); burst(cx, cy, "#ffffff", 18, 480, 0.5, 11); burst(cx, cy, "#262a36", 18, 600, 1.0, 15);
+  impact(cx, cy, 1, true, Q.team.glow); impact(cx, cy, -1, true, Q.team.glow);
+  booms.push({ x: cx, y: cy, t: 0, glow: Q.team.glow });
+  for (let k = 0; k < 18; k++) { const a = k / 18 * Math.PI * 2, v = 560;   // anillo de humo
+    fx.push({ x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.45, t: 0.45, color: "#ffffff", size: 20, g: 0, drag: 6, round: true, grow: 1.8, add: true }); }
+  if (players[killer] && killer !== Q.slot) players[killer].kills++;   // matarse con la propia granada no suma
+  if (!reduceMotion) shake = Math.max(shake, 0.28);
+  rumble(Q, 300, 1, 0.8); sfx("death");
+  Q.lives = Math.max(0, Q.lives - 1); Q.heat = 0; Q.overheat = false;
+  if (Q.lives > 0) { Q.respawnT = RESPAWN.delay; Q.beam = false; }
+  else { Q.out = true; G.toast = { text: `${Q.team.name} queda afuera`, color: Q.team.color, t: 1.8 }; }
+  if (G.state === "play" && active().filter(p => !p.out).length <= 1) G.slowT = 0.7;   // la muerte que define, en cámara lenta
+}
+// dónde vuelve: el lugar de salida más lejos de los que están vivos (entre los dos mejores, al azar)
+function pickSpawn(Q) {
+  const foes = players.filter(o => o !== Q && o.alive && o.ctrl !== "off");
+  const score = ([x, y]) => (foes.length ? Math.min(...foes.map(o => Math.hypot(o.x - x, (o.y - y) * 1.4))) : Math.random());
+  const ranked = ARENA.spawns.slice().sort((a, b) => score(b) - score(a));
+  return ranked[Math.random() < 0.7 || ranked.length < 2 ? 0 : 1];
+}
+
+/* ---------- sonido provisorio: Web Audio, sin archivos ---------- */
+let actx = null, lastShot = 0;
+const audioOn = () => { try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); else if (actx.state === "suspended") actx.resume(); } catch (e) { /* sin audio */ } };
+window.addEventListener("keydown", audioOn); window.addEventListener("pointerdown", audioOn);
+function sfx(kind, vol = 1) {
+  if (!S.sound || !actx || actx.state !== "running") return;
+  const t = actx.currentTime;
+  if (kind === "shot" || kind === "shot2") { if (t - lastShot < 0.035) return; lastShot = t; }   // cuatro tirando: no se apilan
+  const p = 1 + (Math.random() - 0.5) * 0.1, out = actx.createGain();
+  out.gain.value = 0.45 * vol; out.connect(actx.destination);
+  const tone = (type, f0, f1, dur, g) => {
+    const o = actx.createOscillator(), e = actx.createGain(); o.type = type;
+    o.frequency.setValueAtTime(f0 * p, t); o.frequency.exponentialRampToValueAtTime(f1 * p, t + dur);
+    e.gain.setValueAtTime(g, t); e.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(e).connect(out); o.start(t); o.stop(t + dur + 0.02);
+  };
+  const noise = (fc, q, dur, g, f1 = fc) => {
+    const n = actx.createBufferSource(), b = actx.createBuffer(1, Math.ceil(actx.sampleRate * dur), actx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const bp = actx.createBiquadFilter(), e = actx.createGain(); n.buffer = b; bp.type = "bandpass"; bp.Q.value = q;
+    bp.frequency.setValueAtTime(fc * p, t); bp.frequency.exponentialRampToValueAtTime(f1 * p, t + dur);
+    e.gain.setValueAtTime(g, t); e.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    n.connect(bp).connect(e).connect(out); n.start(t);
+  };
+  if (kind === "jump") { tone("triangle", 220, 520, 0.09, 0.25); noise(1800, 0.8, 0.06, 0.2); }
+  else if (kind === "double") { tone("triangle", 380, 900, 0.12, 0.2); noise(900, 1.2, 0.22, 0.35, 3200); }
+  else if (kind === "land") { tone("sine", 140, 60, 0.08, 0.5); noise(700, 0.9, 0.07, 0.3); }
+  else if (kind === "landHard") { tone("sine", 110, 38, 0.2, 0.8); noise(420, 0.7, 0.16, 0.5); }
+  else if (kind === "step") noise(1500, 1.5, 0.035, 0.15);
+  else if (kind === "shot") { tone("square", 1100, 320, 0.06, 0.09); noise(3200, 1.2, 0.03, 0.15); }
+  else if (kind === "shot2") { tone("sawtooth", 700, 120, 0.12, 0.12); noise(1600, 0.9, 0.08, 0.3); }
+  else if (kind === "hit") { tone("sine", 320, 110, 0.09, 0.5); noise(1300, 1, 0.06, 0.35); }
+  else if (kind === "death") { tone("sine", 220, 40, 0.4, 0.8); noise(700, 0.6, 0.45, 0.7, 120); noise(3000, 1, 0.08, 0.3); }
+  else if (kind === "beep") tone("square", 660, 660, 0.09, 0.12);
+  else if (kind === "go") { tone("square", 990, 990, 0.16, 0.14); tone("triangle", 495, 495, 0.2, 0.2); }
+  else if (kind === "win") { tone("triangle", 523, 523, 0.14, 0.25); setTimeout(() => sfx("win2"), 140); }
+  else if (kind === "win2") tone("triangle", 784, 784, 0.3, 0.25);
+  else if (kind === "overheat") { noise(4200, 0.8, 0.55, 0.45, 1400); tone("square", 520, 180, 0.18, 0.1); }
+  else if (kind === "dry") { noise(3200, 3, 0.025, 0.35); tone("square", 1900, 1700, 0.02, 0.06); }
+  else if (kind === "cool") { tone("sine", 1250, 1250, 0.07, 0.18); }
+  else if (kind === "spawn") { tone("triangle", 260, 880, 0.3, 0.18); noise(2600, 1.4, 0.3, 0.2, 5200); }
+  else if (kind === "throw") { noise(900, 0.8, 0.18, 0.35, 2600); }
+  else if (kind === "bounce") { tone("sine", 260, 180, 0.05, 0.25); noise(1800, 2, 0.03, 0.2); }
+  else if (kind === "tick") tone("square", 1700, 1700, 0.03, 0.06);
+  else if (kind === "boom") { tone("sine", 120, 30, 0.6, 1); noise(500, 0.5, 0.7, 0.9, 90); noise(2400, 0.8, 0.12, 0.5); }
+  else if (kind === "swing") noise(700, 1.1, 0.13, 0.4, 3600);
+  else if (kind === "punch") { tone("sine", 190, 55, 0.14, 0.9); noise(900, 0.8, 0.09, 0.6, 300); noise(3600, 1.2, 0.03, 0.35); }
+  else if (kind === "pickSpawn") { tone("triangle", 520, 1040, 0.22, 0.16); noise(4200, 2, 0.25, 0.12, 7000); }
+  else if (kind === "pickup") { tone("square", 660, 660, 0.07, 0.1); setTimeout(() => sfx("pickup2", vol), 70); }
+  else if (kind === "pickup2") { tone("square", 990, 990, 0.12, 0.1); tone("triangle", 1320, 1320, 0.16, 0.12); }
+  else if (kind === "pickGone") tone("sine", 600, 300, 0.12, 0.1);
+}
+
+/* ---------- actualización de un jugador (la del polígono: P y su entrada I) ---------- */
+function setDraw(name, i, x, y) { const d = P.draw; d.name = name; d.i = i; d.x = x; d.y = y; d.k = 1; d.rot = 0; d.center = false; }
+function wallJump(H) {
+  P.state = "air"; P.onGround = false; P.facing = -P.facing; P.landT = 0; P.aim = "none";
+  P.vx = P.facing * WALL_JUMP.vx; P.vy = -FEEL.v0 * WALL_JUMP.vy;
+  P.jump = { mode: "phys", fixed: true }; P.wallLockT = WALL_JUMP.lock; P.coyoteT = 99; P.bufferT = 0;
+  P.skipLedge = { s: H.s, cx: H.cx, t: WALL_JUMP.regrab };
+  for (let n = 0; n < 9; n++) {
+    const v = 190 * S.char * (0.4 + Math.random() * 0.6), a = (Math.random() - 0.5) * 1.4;
+    fx.push({ x: H.cx, y: P.y - (20 + Math.random() * 60) * S.char, vx: P.facing * Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.35, t: 0.3 + Math.random() * 0.1,
+              color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: 10 * S.char * (0.7 + Math.random() * 0.6), g: 60, drag: 5, round: true, grow: 1.6 });
+  }
+}
+function update(dt) {
+  const ctl = P.stunT <= 0;
+  if (!ctl) { I.jp = I.dp = false; }
+  const left = ctl && I.left, right = ctl && I.right, down = ctl && I.down, jumpHeld = ctl && I.jumpHeld;
+  const fire1 = ctl && I.fire1, fire2 = ctl && I.fire2, firing = fire1 || fire2;
+  const dir = (right ? 1 : 0) - (left ? 1 : 0);
+  P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt; P.idleT += dt; P.wallLockT -= dt;
+  if (P.flash) { P.flash.t += dt; if (P.flash.t >= FXT.flashA + FXT.flashB) P.flash = null; }
+  if (P.skipLedge && (P.skipLedge.t -= dt) <= 0) P.skipLedge = null;
+  if (P.flipT > 0) P.flipT += dt;
+  if (P.onGround || P.state === "hang") { P.canDouble = true; P.flipT = 0; }
+  if (P.onGround || P.state === "hang" || P.state === "climb") P.peakY = null;
+  P.coyoteT = P.onGround ? 0 : P.coyoteT + dt;
+
+  // ---- colgado de una cornisa ----
+  if (P.state === "hang") {
+    const H = P.hang; H.t += dt;
+    const grabbing = H.t < GRAB_T;
+    let name = HANG, i = Math.floor(Math.max(0, H.t - GRAB_T) * 12) % anim(HANG).f.length;
+    if (grabbing) { name = "hang_in"; i = GRAB_FRAMES[Math.min(GRAB_FRAMES.length - 1, Math.floor(H.t / 0.05))]; }
+    P.x = H.cx - P.facing * HANG_WALL * S.char; P.y = H.top - (HANG_HAND[10] + HANG_GRIP) * S.char;
+    setDraw(name, i, P.x, P.y);
+    if (I.jp) H.jumpT = HANG_BUFFER + (grabbing ? GRAB_T - H.t : 0); else H.jumpT = (H.jumpT || 0) - dt;
+    if (H.jumpT > 0 && !grabbing) {
+      if (dir === -P.facing) wallJump(H);
+      else {
+        P.state = "climb";
+        P.climb = { t: 0, hang: H, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34 * S.char, y: H.top } };
+        if (CLIMB) {
+          const from = P.climb.from = { x: H.cx - P.facing * CLIMB.wall * S.char, y: H.top - (CLIMB.hand + CLIMB.grip) * S.char };
+          P.climb.to = { x: from.x + P.facing * CLIMB.dx * S.char, y: H.top };
+          P.climb.err = H.top + FOOT_SINK + CLIMB.rise * S.char - from.y;
+        }
+      }
+    }
+    else if (I.dp) { P.state = "air"; P.onGround = false; P.vy = 60; P.grabCD = 0.35; P.x -= P.facing * 6; }
+    I.jp = I.dp = false;
+    return endPlayer(dt);
+  }
+  // ---- subida ----
+  if (P.state === "climb") {
+    const C = P.climb; C.t += dt;
+    if (C.t < WALL_JUMP.late && dir === -P.facing) { P.x = C.from.x; P.y = C.from.y; wallJump(C.hang); I.jp = I.dp = false; return endPlayer(dt); }
+    const standUp = () => {
+      P.x = C.to.x; P.y = C.to.y; P.state = "ground"; P.onGround = true; P.aim = "none"; P.t = 0;
+      P.vx = CLIMB && dir === P.facing ? P.facing * RUN_SPEED * CLIMB.exitRun : 0;
+    };
+    if (CLIMB) {
+      let j = 0, t = C.t; while (j < CLIMB_SEQ.length - 1 && t >= CLIMB_SEQ[j][2]) t -= CLIMB_SEQ[j++][2];
+      const [i, push] = CLIMB_SEQ[j], k = Math.min(1, C.t / CLIMB.dur), y = C.from.y + C.err * k * k * (3 - 2 * k);
+      setDraw("climb", i, C.from.x + P.facing * (CLIMB.ox + push) * S.char, y);
+      const feetOver = y - anim("climb").f[i][8] * S.char <= C.to.y + FOOT_SINK + 2;
+      if (C.t >= CLIMB.dur || (I.jp && feetOver)) { if (C.t < CLIMB.dur) P.bufferT = Math.max(FEEL.buffer, 0.05); standUp(); }
+    } else if (C.t < 0.14) { const k = C.t / 0.14; setDraw("hang", 0, C.from.x + (C.to.x - C.from.x) * k * 0.4, C.from.y + (C.to.y - C.from.y) * k); }
+    else {
+      P.x = C.to.x; P.y = C.to.y; const i = Math.floor((C.t - 0.14) / 0.055);
+      setDraw("crouch_out", Math.min(i, anim("crouch_out").f.length - 1), P.x, P.y);
+      if (i >= anim("crouch_out").f.length) standUp();
+    }
+    I.jp = I.dp = false;
+    return endPlayer(dt);
+  }
+
+  // facing: el bot mira al que le dispara; si no, hacia donde corre. Recién salido del colgado, no cambia
+  if (P.wallLockT > 0 || P.meleeT > 0) { /* trabado (golpeando, no se da vuelta) */ }
+  else if (ctl && I.face) P.facing = I.face;
+  else if (dir !== 0 && P.crouch === "none") P.facing = dir;
+
+  // bajar atravesando: abajo + saltar sobre el puente, una flotante o una repisa
+  if (down && I.jp && P.onGround) {
+    const sup = supportAt(P.x, P.y);
+    if (sup && sup.oneWay) { P.dropS = sup; P.dropT = 0.3; P.onGround = false; P.vy = 60; P.crouch = "none"; P.jump = { mode: "phys", fixed: true }; I.jp = false; }
+  }
+
+  // granada con carga: apretado, se prepara (el puño atrás, plantado en el piso) y se llena la barra; al soltar, el tiro
+  // arranca en el cuadro de la salida y la granada sale con la fuerza de la carga. Si le pegan mientras carga, se le cae
+  if (P.grenCD > 0) P.grenCD -= dt;
+  if (P.throwT > 0) {
+    P.throwT += dt;
+    if (!P.thrown && P.throwT >= GRENADE.release) { throwGrenade(P.charge); P.thrown = true; }
+    if (P.throwT >= GRENADE.anim) P.throwT = 0;
+  } else if (P.charging) {
+    if (!ctl || G.state !== "play") P.charging = false;
+    else if (I.gh) P.charge = Math.min(1, P.charge + dt / GRENADE.charge);
+    else { P.charging = false; P.throwT = Math.max(1e-4, GRENADE.release - 0.01); P.thrown = false; P.grenCD = GRENADE.cooldown; }
+  } else if (ctl && I.gp && (P.grenades > 0 || G.mode === "test") && P.grenCD <= 0 && G.state === "play" && P.crouch !== "hold" && !(P.meleeT > 0)) {
+    P.charging = true; P.charge = 0; P.invT = 0; P.aim = "none";
+    if (P.crouch === "in") P.crouch = "none";
+  }
+  I.gp = false;
+  const throwing = P.throwT > 0 || P.charging;
+  // golpe de cerca: en el piso o en el aire (tirando la granada, no). Al mostrar el brazo adelante, el envión del cuerpo
+  if (P.meleeCD > 0) P.meleeCD -= dt;
+  if (P.meleeT > 0) {
+    P.meleeT += dt;
+    if (!P.lunged && P.meleeT >= MELEE_T.hit0) {
+      P.lunged = true; squash(1.14, 0.9);
+      P.vx = P.onGround ? P.facing * MELEE.lunge : P.facing * Math.max(Math.abs(P.vx), MELEE.lunge * 0.6);
+    }
+    if (P.meleeT >= MELEE_T.end) P.meleeT = 0;
+  } else if (ctl && I.mp && P.meleeCD <= 0 && G.state === "play" && !throwing) {
+    P.meleeT = 1e-4; P.meleeCD = MELEE.cd; P.meleeHit = new Set(); P.lunged = false; P.invT = 0; P.aim = "none"; P.crouch = "none";
+    sfx("swing", 0.7);
+  }
+  I.mp = false;
+  const meleeing = P.meleeT > 0;
+  // agacharse (solo en el piso, sin moverse; tirando o golpeando, no)
+  const wantCrouch = down && P.onGround && !P.jump && !throwing && !meleeing;
+  if (wantCrouch && P.crouch === "none") { P.crouch = "in"; P.crouchT = 0; P.aim = "none"; }
+  if (!wantCrouch && (P.crouch === "in" || P.crouch === "hold")) { P.crouch = "out"; P.crouchT = 0; }
+  const crouching = P.crouch !== "none";
+  const planted = (fire2 || throwing || meleeing) && P.onGround && !P.jump && !crouching;
+
+  const airborne = !P.onGround || P.jump;
+  if (!ctl) P.vx *= Math.exp(-2.5 * dt);   // empujado: sin control, se frena solo
+  else {
+    const target = P.wallLockT > 0 ? P.facing * WALL_JUMP.vx : crouching || planted ? 0 : dir * RUN_SPEED;
+    const speeding = target !== 0 && Math.sign(target) === Math.sign(P.vx || target) && Math.abs(target) > Math.abs(P.vx);
+    const accel = airborne ? FEEL.air : (speeding ? FEEL.accel : FEEL.decel);
+    P.vx += Math.sign(target - P.vx) * Math.min(Math.abs(target - P.vx), accel * dt);
+  }
+
+  // salto
+  if (I.jp) P.bufferT = Math.max(FEEL.buffer, 1e-4);
+  if (P.bufferT > 0 && !planted && (P.onGround || P.coyoteT < FEEL.coyote) && !P.jump && P.crouch !== "in" && P.crouch !== "hold") {
+    P.bufferT = 0; P.coyoteT = 99;
+    P.onGround = false; P.landT = 0; P.aim = "none"; P.crouch = "none";
+    P.jump = { mode: "phys" }; P.vy = -FEEL.v0;
+    squash(...JFX.takeoff); puff(P.x, P.y, 5, 75, 90, 30, 100, 0.3, 0.45, 9, 0.6, -P.vx * 0.15); sfx("jump", 0.6);
+  } else if (I.jp && !P.onGround && P.canDouble && FLIP.length) {
+    P.canDouble = false; P.bufferT = 0; P.jump = { mode: "phys" }; P.flipT = 1e-4;
+    P.vy = Math.min(P.vy, -FEEL.v0 * DOUBLE_V);
+    const rho = dir * 0.6, cr = Math.cos(rho), sr = Math.sin(rho);
+    for (let k = 0; k < 12; k++) { const a = Math.PI * (0.15 + 0.7 * k / 11), v = 220 * S.char;
+      const vx = Math.cos(a) * v * (k % 2 ? 1 : -1), vy = Math.sin(a) * v * 0.35;
+      fx.push({ x: P.x, y: P.y, vx: vx * cr - vy * sr, vy: vx * sr + vy * cr, life: 0.3, t: 0.3, color: "#e9f6ff", size: 11 * S.char, g: 0, drag: 5, round: true, grow: 1.5 }); }
+    squash(...JFX.dbl); P.flashT = 0.05; sfx("double", 0.6);
+  }
+  I.jp = false; I.dp = false;
+
+  let name = null, idx = 0, drawY = P.y, centered = null;
+  let drawK = 1, drawRot = 0, drawCenter = false;
+  if (!P.onGround) {
+    if (P.jump && !P.jump.fixed && !jumpHeld && P.vy < -FEEL.cut) P.vy = -FEEL.cut;   // salto variable
+    P.vy = Math.min(FEEL.term, P.vy + (P.vy < 0 ? FEEL.gUp : FEEL.gDown) * dt);
+    if (P.peakY === null || P.y < P.peakY) P.peakY = P.y;
+    const ny = P.y + P.vy * dt;
+    moveX(P.vx * dt, P.y);
+    if (P.vy < 0) {
+      const cb = ceilingBottom(P.x, P.y - BODY_H, ny - BODY_H);
+      if (cb !== null) { const nudge = cornerNudge(P.x, ny - BODY_H); if (nudge !== null) { P.x += nudge; P.y = ny; } else { P.vy = 0; P.y = cb + BODY_H; } }
+      else P.y = ny;
+    } else {
+      const top = landingTop(P.x, P.y, ny);
+      if (top !== null) { const fallH = top - (P.peakY ?? top), vy = P.vy; P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.peakY = null; land(fallH, vy); }
+      else P.y = ny;
+    }
+    if (!P.onGround && ctl && !meleeing) { const L = findLedge(); if (L) { P.state = "hang"; P.hang = { t: 0, s: L.s, cx: L.cx, top: L.top, from: { x: P.x, y: P.y } }; P.jump = null; P.vx = P.vy = 0; P.wallLockT = 0; return endPlayer(dt); } }
+  } else {
+    moveX(P.vx * dt, P.y);
+    if (!supportAt(P.x, P.y)) { P.onGround = false; P.vy = 0; }
+  }
+
+  const moving = Math.abs(P.vx) > 20;
+  if (!P.onGround || P.jump) {
+    if (P.flipT > 0 && P.flipT < FLIP_DUR) {
+      name = "double_jump"; idx = FLIP[Math.min(FLIP.length - 1, Math.floor(P.flipT / FLIP_DUR * FLIP.length))];
+      if (FLIP_ANG) {
+        const u = P.flipT / FLIP_DUR, th = 360 * (1 - (1 - u) ** 2);
+        const [fi, fa] = FLIP_ANG.reduce((b, c) => (Math.abs(c[1] - th) < Math.abs(b[1] - th) ? c : b));
+        idx = fi; drawRot = (th - fa) * Math.PI / 180; drawK = JFX.dblScale; drawCenter = true;
+      }
+      const f = anim(name).f[idx];
+      centered = { x: P.x - P.facing * (f[4] + f[2] / 2 - PIV_X) * S.char, y: P.y - BODY_H / 2 - (8 + f[5] + f[3] / 2 - PIV_Y) * S.char };
+    } else if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
+    else {
+      const [a, b, c, e] = JFX.vy, vy = P.vy;
+      if (vy >= e && FLIP_ANG) { name = "double_jump"; idx = 8; drawK = JFX.dblScale; }
+      else { name = "jump"; idx = vy < a ? JP.rise[0] : vy < b ? (JP.rise[1] ?? JP.apex) : vy < c && P.jump ? JP.apex : (JP.fall[JP.fall.length - 1] ?? JP.apex); }
+    }
+    drawY = centered ? centered.y : P.y + anim(name).f[idx][8] * S.char;
+  } else if (crouching) {
+    P.crouchT += dt;
+    if (P.crouch === "in") { idx = Math.floor(P.crouchT / 0.04); name = "crouch_in"; if (idx >= anim("crouch_in").f.length) { P.crouch = "hold"; P.crouchT = 0; } }
+    if (P.crouch === "hold") { name = "crouch_shoot"; idx = shotFrame(name, P.shotT, 0.15); }
+    if (P.crouch === "out") { name = "crouch_out"; idx = Math.floor(P.crouchT / 0.045); if (idx >= anim("crouch_out").f.length) { P.crouch = "none"; name = null; } }
+    if (name) idx = Math.min(idx, anim(name).f.length - 1);
+  }
+  if (!name) {
+    if (moving || firing) P.landT = 0;
+    if (P.landT > 0 && !moving) {
+      P.landT -= dt;
+      if (P.landKind === "hard") { name = "crouch_out"; idx = Math.min(anim(name).f.length - 1, Math.floor((0.2 - P.landT) / 0.05)); }
+      else { name = "jump"; idx = JP.prep; }
+    }
+    else if (moving) { P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = RUN(); idx = Math.floor(P.t * 12) % anim(name).f.length; }
+    else {
+      const want = fire2 ? "two" : fire1 ? "one" : null;
+      if (want && P.aim === "none") { P.aim = want; P.aimAnim = "in"; P.aimT = 0; }
+      else if (want && P.aim !== want && P.aimAnim !== "in") { P.aim = want; P.aimAnim = "in"; P.aimT = 0; }
+      P.aimT += dt;
+      if (P.aim !== "none") {
+        const b = P.aim === "two" ? "shoot2h" : "shoot";
+        if (want) P.idleAimT = 0; else P.idleAimT += dt;
+        if (P.aimAnim === "in") { name = b + "_in"; idx = Math.floor(P.aimT / 0.04); if (idx >= anim(name).f.length) { P.aimAnim = "loop"; P.aimT = 0; } }
+        if (P.aimAnim === "loop") {
+          name = b; const per = Math.max(0.1, P.aim === "two" ? FEEL.rate2 : FEEL.rate1);
+          idx = shotFrame(b, P.shotT, per);
+          if (!want && P.idleAimT > 0.45) { P.aimAnim = "out"; P.aimT = 0; }
+        }
+        if (P.aimAnim === "out") { name = b + "_out"; idx = Math.floor(P.aimT / 0.045); if (idx >= anim(name).f.length) { P.aim = "none"; name = null; } }
+        if (name) idx = Math.min(idx, anim(name).f.length - 1);
+      }
+      if (!name) { name = IDLE(); idx = Math.floor(P.idleT * 12 * IDLE_SPEED) % anim(name).f.length; }
+    }
+    drawY = P.y;
+  }
+  // tirando en el piso: la animación de tiro (el clip "throw"; sin él, el brazo que sube de shoot_in)
+  if (throwing && P.onGround && !P.jump && !crouching) {
+    name = THROW_ANIM; idx = P.charging ? (THROW_SEQ ? THROW_SEQ[1][0] : 0) : throwFrame(P.throwT); drawY = P.y; centered = null;
+    drawK = 1; drawRot = 0; drawCenter = false;
+  }
+  // golpeando: los cuadros del golpe, con el cuerpo corrido hacia adelante (en el aire, igual: los pies donde está)
+  if (meleeing) {
+    const [mn, mi, , off] = meleeFrame(P.meleeT);
+    name = mn; idx = mi; drawY = P.y; centered = { x: P.x + P.facing * off };
+    drawK = 1; drawRot = 0; drawCenter = false;
+  }
+  setDraw(name, idx, centered ? centered.x : P.x, drawY);
+  P.draw.k = drawK; P.draw.rot = drawRot; P.draw.center = drawCenter;
+  if (meleeing && P.meleeT >= MELEE_T.hit0 && P.meleeT < MELEE_T.hit1 && G.state === "play") meleeHits();
+
+  // disparo: sale de la boca del frame que se está mostrando. En la cuenta regresiva no se dispara
+  const aimedReady = !(P.aimAnim === "in" && P.aim !== "none" && !moving && P.onGround && !crouching);
+  if (firing && !throwing && !meleeing && G.state !== "count" && P.fireCD <= 0 && aimedReady && !(P.flipT > 0 && P.flipT < FLIP_DUR) && P.crouch !== "in" && P.crouch !== "out") {
+    if (P.overheat) { P.fireCD = 0.3; sfx("dry"); steam(P, 3); }   // trabada: clic y vapor, no sale nada
+    else {
+      const two = fire2 && !moving && P.onGround && !crouching;
+      const fr = anim(P.draw.name).f[P.draw.i];
+      fire(fr, P.draw.y, two ? COMBAT.power2 : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1;
+    }
+  }
+  endPlayer(dt);
+}
+function endPlayer(dt) {
+  const back = Math.pow(JFX.back, dt * 60); P.sqX = 1 + (P.sqX - 1) * back; P.sqY = 1 + (P.sqY - 1) * back;
+  if (P.flashT > 0) P.flashT -= dt;
+  if (P.hitT > 0) P.hitT -= dt;
+  if (P.stunT > 0) P.stunT -= dt;
+  if (P.invT > 0) P.invT -= dt;
+  if (P.hudGrenT > 0) P.hudGrenT -= dt;
+  if (P.hudHpT > 0) P.hudHpT -= dt;
+  if (P.dropT > 0 && (P.dropT -= dt) <= 0) P.dropS = null;
+  // el arma se enfría: sola después de un rato sin tirar; trabada, hasta 0, largando vapor
+  P.heatT += dt;
+  if (P.overheat) {
+    P.heat -= HEAT.overCool * dt;
+    if ((P.steamT -= dt) <= 0) { steam(P, 1); P.steamT = 0.07; }
+    if (P.heat <= 0) { P.heat = 0; P.overheat = false; sfx("cool"); }
+  } else if (P.heatT > HEAT.delay) P.heat = Math.max(0, P.heat - HEAT.cool * dt);
+}
+
+/* ---------- balas, efectos y golpes: una vez por cuadro ---------- */
+function updateWorld(dt) {
+  for (let i = impacts.length - 1; i >= 0; i--) { impacts[i].t += dt; if (impacts[i].t >= 4 * FXT.impact) impacts.splice(i, 1); }
+  for (let i = booms.length - 1; i >= 0; i--) if ((booms[i].t += dt) > 0.4) booms.splice(i, 1);
+  for (let i = pows.length - 1; i >= 0; i--) if ((pows[i].t += dt) > 0.16) pows.splice(i, 1);
+  for (let i = blasts.length - 1; i >= 0; i--) if ((blasts[i].t += dt) > 0.5) blasts.splice(i, 1);
+  for (let i = grenades.length - 1; i >= 0; i--) {
+    const Gr = grenades[i]; Gr.t += dt;
+    const before = Math.floor(Gr.t / Math.max(0.06, 0.25 * (1 - Gr.t / GRENADE.fuse)));
+    if (moveGrenade(Gr, dt) || Gr.t >= GRENADE.fuse) { grenades.splice(i, 1); explode(Gr); }
+    else if (Gr.t > GRENADE.fuse * 0.55 && before !== Gr.tick) { Gr.tick = before; sfx("tick", 0.5); }   // el pitido se apura al final
+  }
+  for (let i = beams.length - 1; i >= 0; i--) if ((beams[i].t += dt) > (beams[i].dur ?? RESPAWN.beam) + 0.35) beams.splice(i, 1);
+  for (let i = labels.length - 1; i >= 0; i--) if ((labels[i].t += dt) > 1.1) labels.splice(i, 1);
+  if (G.toast && (G.toast.t -= dt) <= 0) G.toast = null;
+  for (let b = bullets.length - 1; b >= 0; b--) {
+    const B = bullets[b]; B.life -= dt;
+    const steps = Math.ceil(Math.abs(B.vx * dt) / 8); let dead = B.life <= 0;
+    for (let s = 0; s < steps && !dead; s++) {
+      B.x += B.vx * dt / steps;
+      if (G.state === "play") for (const Q of players) {
+        if (!Q.alive || Q.slot === B.owner || Q.invT > 0 || Q.ctrl === "off") continue;
+        if (B.x > Q.x - HALF_W && B.x < Q.x + HALF_W && B.y > Q.y - hurtH(Q) && B.y < Q.y + 2) { hitPlayer(Q, B); dead = true; break; }
+      }
+      if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; impact(B.vx > 0 ? S2.x : S2.x + S2.w, B.y, Math.sign(B.vx), false, B.glow); break; }
+    }
+    if (dead || B.x < -100 || B.x > AW + 100) bullets.splice(b, 1);
+  }
+  for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; if (E.drag) { const d = Math.exp(-E.drag * dt); E.vx *= d; E.vy *= d; } E.x += E.vx * dt; E.y += E.vy * dt; if (E.t <= 0) fx.splice(i, 1); }
+  if (shake > 0) shake -= dt;
+  bumpY *= Math.pow(JFX.bumpDecay, dt * 60); if (bumpY < 0.3) bumpY = 0;
+}
+
+/* ---------- power-ups: granadas y salud ---------- */
+// cada tanto aparece uno apoyado en algo que se pisa, con un haz que avisa dónde; flota y late, y al final parpadea y se va.
+// Se agarra tocándolo, si sirve (con las granadas o la salud llenas, queda ahí; en la prueba, siempre)
+const pickups = [], labels = [];   // labels: el texto que sube del que agarró uno
+const PICK_KIND = {
+  gren: { glow: "255,196,60", text: "#ffd23a" },
+  hp: { glow: "255,120,130", text: "#ff8a8a" },
+};
+const pickHeal = () => Math.max(1, Math.round(SET.hp / 3));
+const pickLive = K => K.t >= PICKUP.warn;
+// dónde: la cara de arriba de un sólido (o un lugar de salida), con lugar arriba, lejos de los jugadores y del otro
+// power-up. Sin las plataformas que se mueven
+function pickupSpot() {
+  const live = players.filter(p => p.alive && p.ctrl !== "off");
+  const surf = solids.filter(s => !s.bound && !(s.obj && s.obj.path) && s.w >= 60 && s.y > 120 && s.y < AH - 20);
+  for (let tries = 0; tries < 40 && surf.length; tries++) {
+    let x, y, s;
+    if (Math.random() < 0.3 && ARENA.spawns?.length) { [x, y] = ARENA.spawns[Math.floor(Math.random() * ARENA.spawns.length)]; s = supportAt(x, y, {}); }
+    else { s = surf[Math.floor(Math.random() * surf.length)]; const m = Math.min(60, s.w / 3); x = s.x + m + Math.random() * (s.w - 2 * m); y = s.y; }
+    if (!s || s.bound || (s.obj && s.obj.path) || x < 90 || x > AW - 90) continue;   // contra las paredes de la arena, no
+    if (solids.some(o => o !== s && !o.bound && x + 26 > o.x && x - 26 < o.x + o.w && y - 80 < o.y + o.h && y - 2 > o.y)) continue;   // tapado
+    if (live.some(p => Math.hypot(p.x - x, (p.y - y) * 1.3) < 220)) continue;
+    if (pickups.some(k => Math.hypot(k.x - x, k.y - y) < 360)) continue;
+    return { x, y, s };
+  }
+  return null;
+}
+function spawnPickup() {
+  let kind = Math.random() < 0.5 ? "gren" : "hp";
+  if (SET.hp <= 1) kind = "gren";
+  else if (pickups.some(k => k.kind === kind)) kind = kind === "gren" ? "hp" : "gren";   // si ya hay uno, el otro
+  const spot = pickupSpot(); if (!spot) return false;
+  pickups.push({ kind, x: spot.x, y: spot.y, s: spot.s, t: 0, seed: Math.random() * 6 });
+  beams.push({ x: spot.x, y: spot.y, t: 0, glow: PICK_KIND[kind].glow, dur: PICKUP.warn, w: 0.55 });
+  sfx("pickSpawn");
+  return true;
+}
+function takePickup(Q, K) {
+  const test = G.mode === "test";
+  let text;
+  if (K.kind === "gren") {
+    if (!test && Q.grenades >= GRENADE.count) return false;
+    Q.grenades = GRENADE.count; Q.hudGrenT = 0.8; text = `GRANADAS ×${GRENADE.count}`;
+  } else {
+    if (!test && Q.hp >= SET.hp) return false;
+    const before = Q.hp; Q.hp = Math.min(SET.hp, Q.hp + pickHeal()); Q.hudHpT = 0.8; text = `+${Math.max(1, Q.hp - before)} SALUD`;
+  }
+  const c = PICK_KIND[K.kind], cy = K.y - PICKUP.lift;
+  burst(K.x, cy, `rgb(${c.glow})`, 16, 380, 0.45, 7); burst(K.x, cy, "#ffffff", 8, 260, 0.3, 5);
+  for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2;   // anillo de luz
+    fx.push({ x: K.x, y: cy, vx: Math.cos(a) * 300, vy: Math.sin(a) * 300, life: 0.3, t: 0.3, color: `rgb(${c.glow})`, size: 12, g: 0, drag: 7, round: true, grow: 1.6, add: true }); }
+  labels.push({ x: Q.x, y: Q.y - BODY_H - 92, text, color: c.text, t: 0 });   // arriba del globito con el número
+  Q.flashT = 0.12; rumble(Q, 90, 0.2, 0.5); sfx("pickup", 0.8);
+  return true;
+}
+function updatePickups(dt) {
+  if ((G.pickT -= dt) <= 0) {
+    const max = G.mode === "test" || active().length <= 2 ? 1 : PICKUP.max;
+    if (pickups.length >= max || spawnPickup()) G.pickT = PICKUP.every[0] + Math.random() * (PICKUP.every[1] - PICKUP.every[0]);
+    else G.pickT = 1;   // no encontró lugar libre: prueba de nuevo en un rato
+  }
+  for (let i = pickups.length - 1; i >= 0; i--) {
+    const K = pickups[i]; K.t += dt;
+    if (!pickLive(K)) continue;
+    if (K.t > PICKUP.warn + PICKUP.life) {   // nadie lo agarró: se va
+      pickups.splice(i, 1); burst(K.x, K.y - PICKUP.lift, "rgba(220,226,240,0.8)", 10, 160, 0.4, 8); sfx("pickGone", 0.5); continue;
+    }
+    const cy = K.y - PICKUP.lift;
+    for (const Q of players) {
+      if (!Q.alive || Q.ctrl === "off") continue;
+      if (Q.x + HALF_W < K.x - PICKUP.r || Q.x - HALF_W > K.x + PICKUP.r || Q.y < cy - PICKUP.r || Q.y - hurtH(Q) > cy + PICKUP.r) continue;
+      if (takePickup(Q, K)) { pickups.splice(i, 1); break; }
+    }
+  }
+}
+// para los bots: el power-up que le sirve y está a mano (más cerca, más chances; con un golpe de salud, casi seguro)
+function wantedPickup(Q) {
+  let best = null, bc = Infinity;
+  for (const K of pickups) {
+    if (K.t < PICKUP.warn - 0.3 || PICKUP.warn + PICKUP.life - K.t < 1.5) continue;
+    if (K.kind === "gren" ? Q.grenades >= GRENADE.count : Q.hp >= SET.hp) continue;
+    const c = Math.abs(K.x - Q.x) + 1.6 * Math.abs(K.y - Q.y); if (c < bc) { bc = c; best = K; }
+  }
+  if (!best || bc > 1500) return null;
+  const urgent = best.kind === "hp" && Q.hp <= 1, chance = urgent ? 0.9 : 0.5 * (1 - bc / 1700) + (best.kind === "gren" && Q.grenades === 0 ? 0.3 : 0);
+  return Math.random() < chance ? best : null;
+}
+
+/* ---------- bots ---------- */
+function newBot() { return { target: null, thinkT: 0, aimT: 0, burstT: 0, pauseT: 0, strafe: 0, strafeT: 0, stuckT: 0, holdJ: 0, crouchT: 0, lostT: 0, roam: null, roamT: 0, restT: 0, restMax: 4 + Math.random() * 6, pref: 240 + Math.random() * 220, goal: null, seen: new WeakSet() }; }
+function nearestEnemy(Q) {
+  let best = null, bd = Infinity;
+  for (const o of players) if (o !== Q && o.alive && o.ctrl !== "off") { const d = Math.abs(o.x - Q.x) + 2.2 * Math.abs(o.y - Q.y); if (d < bd) { bd = d; best = o; } }
+  return best;
+}
+// ¿la bala llega? ningún sólido entre la boca y el otro, a la altura de la boca
+function clearShot(x0, y, x1) {
+  const a = Math.min(x0, x1), b = Math.max(x0, x1);
+  return !solids.some(s => !s.bound && y > s.y && y < s.y + s.h && s.x < b && s.x + s.w > a);
+}
+// por dónde subir hacia el objetivo: debajo de algo que se atraviesa (salta y lo pasa) o al lado de un bloque (salta, se
+// cuelga si no llega y sube). Si ese punto no está en lo que pisa, salta desde el borde, empujando hacia allá
+function climbGoal(Q, T) {
+  const sup = supportAt(Q.x, Q.y, Q);
+  let best = null, bestCost = Infinity;
+  for (const s of solids) {
+    if (s.bound || s.ground || s === sup) continue;
+    const up = Q.y - s.y; if (up < 30 || up > (s.oneWay ? 330 : 320)) continue;
+    let x, push;
+    if (s.oneWay) { x = Math.max(s.x + 30, Math.min(s.x + s.w - 30, Q.x)); push = 0; }
+    else { const l = s.x - 34, r = s.x + s.w + 34; x = Math.abs(Q.x - l) < Math.abs(Q.x - r) ? l : r; push = x < s.x ? 1 : -1; if (x < 20 || x > AW - 20) continue; }
+    if (sup && !sup.ground && (x < sup.x + 8 || x > sup.x + sup.w - 8)) {   // fuera de lo que pisa: salta desde el borde
+      const edge = x < sup.x ? sup.x + 10 : sup.x + sup.w - 10; push = Math.sign(x - edge) || push; x = edge;
+    }
+    const tSup = supportAt(T.x, T.y, T), cost = Math.abs(x - Q.x) + Math.abs(s.y - T.y) * 1.5 - (tSup === s ? 260 : 0);
+    if (cost < bestCost) { bestCost = cost; best = { x, push, top: s.y, s, tol: 18 }; }
+  }
+  return best;
+}
+// sin nadie a tiro por un rato, va a buscar altura: una plataforma al azar, con más chances las de más arriba
+function pickRoam(Q) {
+  const cands = solids.filter(s => !s.bound && !s.ground && s.y < Q.y - 60);
+  if (!cands.length) return null;
+  const w = cands.map(s => 1 + (Q.y - s.y) / 200), tot = w.reduce((a, b) => a + b, 0);
+  let r = Math.random() * tot, s = cands[0];
+  for (let i = 0; i < cands.length; i++) if ((r -= w[i]) <= 0) { s = cands[i]; break; }
+  return { x: s.x + s.w * (0.25 + Math.random() * 0.5), y: s.y, s };
+}
+function botInput(Q, dt) {
+  const B = Q.bot, L = BOT_LEVELS[SET.bot], In = blankInput();
+  B.thinkT -= dt;
+  if (!B.target || !B.target.alive || B.thinkT <= 0) { B.target = nearestEnemy(Q); B.thinkT = L.think * (0.7 + Math.random() * 0.6); B.goal = null; }
+  const T = B.target; if (!T) return In;
+  const goalY = B.roam ? B.roam.y : T.y;
+  if (Q.state === "hang") { if (goalY - Q.y < 30) { In.jp = true; In.jumpHeld = true; } else In.dp = true; return In; }
+  if (Q.state === "climb") return In;
+  const dx = T.x - Q.x, adx = Math.abs(dx), dy = T.y - Q.y;
+  // ¿el otro queda en la línea de la boca y nada lo tapa?
+  const my = Q.y - (Q.crouch === "hold" ? CROUCH_MUZZLE : MUZZLE_H), inLine = my > T.y - hurtH(T) + 2 && my < T.y - 2 && adx < 1100 && clearShot(Q.x, my, T.x);
+  B.lostT = inLine ? 0 : B.lostT + dt; B.restT += dt;
+  // un power-up que le sirve: a veces va a buscarlo (se revisa cada ~0,8 s)
+  if ((B.pickT = (B.pickT ?? 0.5) - dt) <= 0) {
+    B.pickT = 0.6 + Math.random() * 0.5;
+    const K = !(B.roam && B.roam.pick) && wantedPickup(Q);
+    if (K) { B.roam = { x: K.x, y: K.y, s: K.s, pick: K }; B.roamT = 6; B.goal = null; B.restT = 0; }
+  }
+  // sin nadie a tiro un rato, o cada tanto aunque lo tenga (para no quedarse en el mismo duelo), cambia de altura
+  if (!B.roam && ((B.lostT > 2.2 && Math.random() < dt * 1.5) || B.restT > B.restMax)) { B.roam = pickRoam(Q); B.roamT = 4; B.goal = null; B.restT = 0; B.restMax = 5 + Math.random() * 6; }
+  // llegó, se cansó, o tiene a alguien cerca y a tiro: pelea. Yendo a un power-up, hasta que alguien lo agarra o se va
+  // (o tiene a alguien encima)
+  if (B.roam) {
+    const K = B.roam.pick, done = K ? !pickups.includes(K) || (inLine && adx < 200) : supportAt(Q.x, Q.y, Q) === B.roam.s || (inLine && adx < 650);
+    if ((B.roamT -= dt) <= 0 || done) { B.roam = null; B.goal = null; B.lostT = 0; }
+  }
+  const D = B.roam || T, gx = D.x - Q.x, gy = D.y - Q.y;   // hacia dónde va: la plataforma elegida o el otro
+  let move = 0;
+  if (Math.abs(gy) < 50) {   // a la misma altura: se acomoda a su distancia y se mueve un poco
+    B.goal = null;
+    if (B.roam) move = Math.abs(gx) > 30 ? Math.sign(gx) : 0;
+    else if (!clearShot(Q.x, my, T.x)) move = Math.sign(dx);   // algo lo tapa (una caja): va hacia el otro y lo salta
+    else if (adx < 130 && Math.abs(dy) < 40 && T.invT <= 0) move = adx > 70 ? Math.sign(dx) : 0;   // encima: se queda a golpear
+    else if (adx > B.pref + 140) move = Math.sign(dx); else if (adx < B.pref - 160) move = -Math.sign(dx);
+    if (B.strafeT > 0) { B.strafeT -= dt; move = B.strafe; }
+    else if (!B.roam && Math.random() < dt * 0.5) { B.strafe = Math.random() < 0.5 ? -1 : 1; B.strafeT = 0.2 + Math.random() * 0.3; }
+  } else if (gy < 0) {       // más arriba: subir
+    if (!B.goal) B.goal = climbGoal(Q, D);
+    const g = B.goal;
+    if (g) {
+      const d = g.x - Q.x;
+      if (Q.onGround) { move = Math.abs(d) > g.tol ? Math.sign(d) : g.push; if (Math.abs(d) <= g.tol) { In.jp = true; B.holdJ = 0.4; } }
+      else {
+        const over = Q.x > g.s.x - 4 && Q.x < g.s.x + g.s.w + 4;   // ya encima de la plataforma
+        move = over && g.s.oneWay ? (Math.abs(D.x - Q.x) > 20 ? Math.sign(D.x - Q.x) : 0) : g.push || (Math.abs(d) > 20 ? Math.sign(d) : 0);
+        if (Q.canDouble && Q.vy > -120 && (Q.y > g.top + 6 || !over)) In.jp = true;   // doble salto en el ápice si todavía no llega
+      }
+    } else move = Math.sign(gx);
+  } else {                   // más abajo: bajar atravesando, o caminar hasta el borde
+    const sup = supportAt(Q.x, Q.y, Q);
+    if (sup && sup.oneWay && Q.onGround) { In.down = true; In.jp = true; }
+    else move = Math.sign(gx) || Q.facing;
+  }
+  // un sólido bajo justo adelante (una caja, un escalón): lo salta en vez de quedarse empujando
+  if (move && Q.onGround) {
+    const ahead = solids.some(s => !s.oneWay && !s.bound && !s.ground && s.y < Q.y - 2 && Q.y - s.y < 170 && s.y + s.h > Q.y - BODY_H &&
+      (move > 0 ? s.x >= Q.x && s.x - (Q.x + HALF_W) < 36 : s.x + s.w <= Q.x && Q.x - HALF_W - (s.x + s.w) < 36));
+    if (ahead) { In.jp = true; B.holdJ = 0.35; }
+  }
+  if (B.holdJ > 0) { B.holdJ -= dt; In.jumpHeld = true; }
+  if (move && Q.onGround && Math.abs(Q.vx) < 25) { B.stuckT += dt; if (B.stuckT > 0.4) { In.jp = true; B.holdJ = 0.3; B.stuckT = 0; B.goal = null; } } else B.stuckT = 0;
+  // esquivar: una bala de otro que viene a la altura del cuerpo
+  for (const b of bullets) {
+    if (b.owner === Q.slot || B.seen.has(b)) continue;
+    if (Math.sign(b.vx) !== Math.sign(Q.x - b.x) || Math.abs(Q.x - b.x) > 280 || b.y < Q.y - BODY_H - 6 || b.y > Q.y) continue;
+    B.seen.add(b);
+    if (Q.onGround && Math.random() < L.dodge) { if (b.y < Q.y - BODY_H * COMBAT.crouchH - 4) B.crouchT = 0.35; else { In.jp = true; B.holdJ = 0.25; } }
+  }
+  if (B.crouchT > 0) { B.crouchT -= dt; In.down = true; move = 0; }
+  // disparo: con el otro en línea un rato (el tiempo de reacción), en ráfagas
+  B.aimT = inLine && T.invT <= 0 ? B.aimT + dt : 0;
+  const coolGun = !Q.overheat && Q.heat < L.heatCap;   // no la lleva al tope (los fáciles sí)
+  if (Q.overheat && Math.abs(dy) < 50 && adx < 500 && !B.roam) move = -Math.sign(dx);   // trabada: se aleja mientras se enfría
+  if (B.aimT > L.react) {
+    In.face = Math.sign(dx) || Q.facing;
+    if (B.burstT > 0 && coolGun) { B.burstT -= dt; In.fire1 = true; if (adx > 160 && !B.crouchT && !(B.roam && B.roam.pick)) move = 0; if (B.burstT <= 0) B.pauseT = L.pause * (0.6 + Math.random() * 0.8); }
+    else if ((B.pauseT -= dt) <= 0) B.burstT = L.burst * (0.6 + Math.random() * 0.8);
+  }
+  // pegado al otro y a la misma altura, golpe (ahí la bala sale más adelante y no le pega), con el tiempo de reacción
+  const close = adx < 2 * HALF_W + MELEE.reach - 8 && Math.abs(dy) < 40 && T.invT <= 0;
+  B.meleeT = close ? (B.meleeT || 0) + dt : 0;
+  if (close && B.meleeT > L.react * 0.5 && Q.meleeCD <= 0 && !Q.charging && !(Q.throwT > 0)) { In.mp = true; In.face = Math.sign(dx) || Q.facing; In.fire1 = false; }
+  B.grenT = (B.grenT ?? 1.5 + Math.random() * 2) - dt;
+  if (B.grenT <= 0) {
+    const fit = Q.grenades > 0 && Q.onGround && G.state === "play" && adx > 160 && adx < 560 && dy > -170 && dy < 90 && T.invT <= 0;
+    if (fit && (!inLine || Math.random() < 0.3)) {   // la carga, según la distancia (con algo de error)
+      In.gp = true; In.gh = true; In.face = Math.sign(dx) || Q.facing; move = 0; B.grenT = 2.5 + Math.random() * 3.5;
+      B.gHold = Math.max(0, Math.min(1, (adx - 200) / 420 + (Math.random() - 0.5) * 0.2)) * GRENADE.charge + 0.02;
+    }
+    else B.grenT = 0.35;
+  }
+  if (B.gHold > 0) { B.gHold -= dt; In.gh = true; In.face = Math.sign(dx) || Q.facing; move = 0; }
+  In.left = move < 0; In.right = move > 0;
+  return In;
+}
+
+/* ---------- partida: a vidas ---------- */
+// mode: "match" o "test" (sola, sin final); pickT: cuánto falta para el próximo power-up; hitStop: la congelada de un golpe
+const G = { state: "lobby", mode: "match", t: 0, winner: -1, slowT: 0, beep: 0, toast: null, testSpawn: 0, pickT: 0, hitStop: 0 };
+function resetPlayer(p, [x, y], inv = 0) {
+  Object.assign(p, { x, y, vx: 0, vy: 0, onGround: true, state: "ground", facing: x < AW / 2 ? 1 : -1, aim: "none", aimAnim: null, crouch: "none",
+                     jump: null, hang: null, climb: null, landT: 0, flash: null, sqX: 1, sqY: 1, canDouble: true, flipT: 0, peakY: null,
+                     hp: SET.hp, alive: true, hitT: 0, stunT: 0, invT: inv, dropS: null, dropT: 0, fireCD: 0, shotT: 1, skipLedge: null, wallLockT: 0,
+                     heat: 0, heatT: 9, overheat: false, respawnT: 0, beam: false, grenades: GRENADE.count, grenCD: 0, throwT: 0, thrown: false, charging: false, charge: 0,
+                     meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0 });
+  p.in = blankInput(); if (p.bot) Object.assign(p.bot, newBot());
+}
+function startMatch() {
+  players.forEach((p, i) => { p.ctrl = SLOTS[i].ctrl; p.bot = p.ctrl === "bot" ? newBot() : null; p.kills = 0; });
+  if (active().length < 2) return;
+  bullets.length = 0; impacts.length = 0; booms.length = 0; beams.length = 0; pickups.length = 0; labels.length = 0; objects.forEach(resetObject);
+  active().forEach((p, k) => { resetPlayer(p, ARENA.spawns[k % ARENA.spawns.length]); p.lives = SET.lives; p.out = false; });
+  players.filter(p => p.ctrl === "off").forEach(p => { p.alive = false; });
+  lobby.hidden = true; cv.focus(); audioOn();
+  G.mode = "match"; G.state = "count"; G.t = 1.6; G.beep = 4; G.winner = -1; G.toast = null; G.pickT = PICKUP.first; G.hitStop = 0;
+}
+// probar la arena: un solo jugador (el primero que no es bot, o teclado y joystick), sin bots ni final. R lo lleva al
+// próximo lugar de salida, H muestra lo que se pisa y las cajas de golpe, Esc vuelve al menú
+function startTest() {
+  const human = SLOTS.find(sl => sl.ctrl !== "bot" && sl.ctrl !== "off");
+  players.forEach((p, i) => { p.ctrl = i === 0 ? (human ? human.ctrl : "auto") : "off"; p.bot = null; p.kills = 0; if (i) p.alive = false; });
+  bullets.length = 0; impacts.length = 0; booms.length = 0; beams.length = 0; pickups.length = 0; labels.length = 0; objects.forEach(resetObject);
+  G.testSpawn = 0; resetPlayer(players[0], ARENA.spawns[0]); players[0].lives = 99; players[0].out = false;
+  lobby.hidden = true; cv.focus(); audioOn();
+  G.mode = "test"; G.state = "play"; G.winner = -1; G.pickT = PICKUP.firstTest; G.hitStop = 0;
+  G.toast = { text: "Prueba: R cambia de lugar · H muestra lo que se pisa · Esc vuelve", color: "#eef0f6", t: 5 };
+}
+// vuelve: el haz avisa dónde un momento antes, y al aparecer parpadea
+function respawns(dt) {
+  for (const p of active()) {
+    if (p.alive || p.out || p.respawnT <= 0) continue;
+    p.respawnT -= dt;
+    if (!p.beam && p.respawnT < RESPAWN.beam) { p.spawnPt = pickSpawn(p); p.beam = true; beams.push({ x: p.spawnPt[0], y: p.spawnPt[1], t: 0, glow: p.team.glow }); sfx("spawn"); }
+    if (p.respawnT <= 0) {
+      resetPlayer(p, p.spawnPt || pickSpawn(p), RESPAWN.inv);
+      burst(p.x, p.y - BODY_H / 2, p.team.color, 18, 380, 0.5, 8); burst(p.x, p.y - BODY_H / 2, "#ffffff", 10, 300, 0.35, 6);
+    }
+  }
+}
+function showLobby() { G.state = "lobby"; lobby.hidden = false; pickups.length = 0; labels.length = 0; G.hitStop = 0; buildSlots(); previewLobby(); }
+function previewLobby() {   // en el menú, los que van a jugar quedan parados en su lugar
+  players.forEach((p, i) => { p.ctrl = SLOTS[i].ctrl; p.bot = null; if (p.ctrl === "off") p.alive = false; });
+  active().forEach((p, k) => { resetPlayer(p, ARENA.spawns[k % ARENA.spawns.length]); p.lives = SET.lives; p.out = false; });
+}
+
+/* ---------- menú de jugadores ---------- */
+const lobby = document.getElementById("lobby"), slotsEl = document.getElementById("slots"), goBtn = document.getElementById("goBtn"), lobbyMsg = document.getElementById("lobbyMsg");
+// el nombre de cada joystick en el menú, como lo informa el navegador ("Xbox One Controller", "Lic3 Pro Controller")
+const padName = gp => gp.id.replace(/\s*\(.*$/, "").trim() || "joystick";
+function ctrlLabel(v, label) {
+  if (v.startsWith("pad:")) { const gp = pads.find(g => g.index === +v.slice(4)); return gp ? `${label}: ${padName(gp)}` : `${label} (sin conectar)`; }
+  if (v === "auto") { const gp = autoPad(); return gp ? `Teclado izq. o ${padName(gp)}` : label; }
+  return label;
+}
+let padKey = "";
+function buildSlots() {
+  slotsEl.innerHTML = "";
+  SLOTS.forEach((s, i) => {
+    const d = document.createElement("div"); d.className = "slot" + (s.ctrl === "off" ? " off" : ""); d.style.setProperty("--team", TEAM[i].color);
+    const id = `slot${i}`;
+    d.innerHTML = `<b>${TEAM[i].name}</b><label class="note" for="${id}">Quién lo maneja</label><select id="${id}"></select>`;
+    const sel = d.querySelector("select");
+    for (const [v, label] of Object.entries(CTRL_NAMES)) { const o = document.createElement("option"); o.value = v; o.textContent = ctrlLabel(v, label); if (v === s.ctrl) o.selected = true; sel.append(o); }
+    sel.addEventListener("change", () => {
+      // un mismo control no puede manejar a dos: el otro pasa a bot
+      const kb = v => v === "kb1" || v === "auto";   // los dos usan el teclado izquierdo
+      if (sel.value !== "bot" && sel.value !== "off") SLOTS.forEach((o, j) => { if (j !== i && (o.ctrl === sel.value || (kb(o.ctrl) && kb(sel.value)))) o.ctrl = "bot"; });
+      s.ctrl = sel.value; buildSlots(); previewLobby();
+    });
+    slotsEl.append(d);
+  });
+  const n = SLOTS.filter(s => s.ctrl !== "off").length;
+  goBtn.disabled = n < 2 || !ready;
+  lobbyHint(true);
+}
+// el aviso de abajo del menú: cuántos joysticks hay, o que esta vista no los deja leer
+let hintKey = "";
+function lobbyHint(force = false) {
+  const n = SLOTS.filter(s => s.ctrl !== "off").length, key = `${ready}|${n}|${padBlocked}|${pads.map(p => p.index).join(",")}`;
+  if (!ready || (!force && key === hintKey)) return;
+  hintKey = key; lobbyMsg.classList.toggle("warn", padBlocked);
+  lobbyMsg.textContent = n < 2 ? "Hacen falta al menos dos."
+    : padBlocked ? "Esta página publicada no deja leer joysticks: se juega con teclado. Para usar joystick, abrí el juego local en Chrome (prototypes/README.md)."
+    : pads.length ? `${pads.length === 1 ? "Un joystick conectado" : pads.length + " joysticks conectados"}: el primero maneja al Rojo junto con el teclado; los demás se suman apretando un botón. Start o Enter empieza.`
+    : "Sin joysticks a la vista: conectá uno y apretá un botón (el navegador no lo muestra hasta que lo usás). Enter empieza.";
+}
+function segButtons(id, items, get, set) {
+  const el = document.getElementById(id);
+  for (const [v, label] of items) {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = label; b.setAttribute("aria-pressed", String(get() === v));
+    b.addEventListener("click", () => { set(v); el.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
+    el.append(b);
+  }
+}
+segButtons("segHp", [[1, "1"], [3, "3"], [5, "5"]], () => SET.hp, v => { SET.hp = v; });
+segButtons("segLives", [[1, "1"], [3, "3"], [5, "5"]], () => SET.lives, v => { SET.lives = v; previewLobby(); });
+// cuántos juegan: los lugares de más quedan en "Nadie"; los que vuelven a entrar, como bots
+segButtons("segCount", [[2, "2"], [3, "3"], [4, "4"]], () => SET.count, v => {
+  SET.count = v; SLOTS.forEach((sl, i) => { if (i >= v) sl.ctrl = "off"; else if (sl.ctrl === "off") sl.ctrl = "bot"; });
+  buildSlots(); previewLobby();
+});
+// la arena: cada arenas/<nombre>.json
+const arenaSel = document.getElementById("arenaSel");
+for (const [k, a] of Object.entries(ARENAS)) { const o = document.createElement("option"); o.value = k; o.textContent = a.name || k; if (a === ARENA) o.selected = true; arenaSel.append(o); }
+arenaSel.addEventListener("change", () => { loadArena(arenaSel.value); previewLobby(); });
+segButtons("segBot", [["facil", "Fáciles"], ["normal", "Normales"], ["dificil", "Difíciles"]], () => SET.bot, v => { SET.bot = v; });
+goBtn.addEventListener("click", startMatch);
+// ajustes de la granada: cada slider cambia GRENADE en el acto. "Guardar valores" los deja en la base del artifact
+// (tuning/grenade: los ve cualquiera que lo abra y Claude los lee para dejarlos fijos); abierta fuera del artifact,
+// en este navegador
+const TUNE = [
+  ["spawnX", "Sale adelante", 0, 180, 2, "px"], ["spawnY", "Sale arriba", 20, 200, 2, "px"],
+  ["releaseFrame", "Cuadro en que sale", 0, THROW_SEQ ? THROW_SEQ.length - 1 : 0, 1, ""],
+  ["vx", "Fuerza adelante (carga llena)", 200, 1400, 10, "px/s"], ["vyUp", "Fuerza arriba (carga llena)", 200, 1500, 10, "px/s"],
+  ["charge", "Tiempo de carga", 0.2, 2, 0.05, "s"],
+  ["fuse", "Mecha", 0.5, 3, 0.1, "s"], ["bounce", "Rebote", 0, 0.8, 0.05, ""], ["radius", "Radio del daño", 60, 260, 5, "px"],
+];
+const tuneGet = k => (k === "vyUp" ? -GRENADE.vy : GRENADE[k]);
+const tuneSet = (k, v) => { if (k === "vyUp") GRENADE.vy = -v; else GRENADE[k] = v; if (k === "releaseFrame") updateRelease(); };
+const TUNE_DOC = "tuning/grenade", TUNE_LOCAL = "arena.grenade.v2";
+let tuneDb = null, tuneDirty = false;
+const tuneValues = () => Object.fromEntries(TUNE.map(([k]) => [k, tuneGet(k)]));
+function tuneApply(v) { if (v && typeof v === "object") for (const [k] of TUNE) if (typeof v[k] === "number" && isFinite(v[k])) tuneSet(k, v[k]); }
+const tuneStatus = t => { document.getElementById("tuneOut").textContent = t; };
+const tuneWhen = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString("es-AR", { day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" }); };
+function tuneLocal(v) { try { localStorage.setItem(TUNE_LOCAL, JSON.stringify(v)); return true; } catch (e) { return false; } }
+function buildTune() {
+  const el = document.getElementById("tune"); el.innerHTML = "";
+  for (const [k, label, min, max, st, unit] of TUNE) {
+    const id = `tune_${k}`, lab = document.createElement("label"); lab.htmlFor = id;
+    lab.innerHTML = `<span>${label}</span><output id="${id}_v"></output><input type="range" id="${id}" min="${min}" max="${max}" step="${st}">`;
+    const inp = lab.querySelector("input"), out = lab.querySelector("output");
+    const show = () => { out.textContent = `${String(tuneGet(k)).replace(".", ",")} ${unit}`.trim(); };
+    inp.value = tuneGet(k); show();
+    inp.addEventListener("input", () => { tuneSet(k, +inp.value); show(); tuneDirty = true; tuneStatus("Cambios sin guardar"); });
+    el.append(lab);
+  }
+}
+try { tuneApply(JSON.parse(localStorage.getItem(TUNE_LOCAL) || "null")); } catch (e) { /* sin guardar */ }
+buildTune();
+(async () => {
+  const db = window.claude?.use ? await window.claude.use("db").catch(() => null) : null;
+  if (!db) { tuneStatus("Abierta fuera del artifact: Guardar los deja en este navegador"); return; }
+  tuneDb = db;
+  try {
+    const snap = await db.doc(TUNE_DOC).get();
+    if (!snap.exists) { tuneStatus("Todavía no se guardó nada en el artifact"); return; }
+    const d = snap.data();
+    if (!tuneDirty) { tuneApply(d.values); buildTune(); }
+    tuneStatus(`Guardados el ${tuneWhen(d.savedAt)}`);
+  } catch (e) { tuneStatus("No pude leer los valores guardados"); }
+})();
+const tuneBtn = document.getElementById("tuneSave");
+tuneBtn.addEventListener("click", async () => {
+  const values = tuneValues(), savedAt = new Date().toISOString();
+  if (!tuneDb) { tuneDirty = false; tuneStatus(tuneLocal(values) ? "Guardados en este navegador" : "Este navegador no deja guardar"); return; }
+  tuneBtn.disabled = true; tuneStatus("Guardando…");
+  const put = () => tuneDb.doc(TUNE_DOC).set({ values, savedAt });
+  try {
+    try { await put(); } catch (e) { if (e?.code !== "unavailable") throw e; await new Promise(r => setTimeout(r, 600 + Math.random() * 600)); await put(); }
+    tuneDirty = false; tuneLocal(values); tuneStatus(`Guardados el ${tuneWhen(savedAt)}`);
+  } catch (e) {
+    tuneStatus(e?.code === "invalid_argument" ? "No tenés permiso para guardar en este artifact" : `No se pudo guardar (${e?.code || "error"})`);
+  } finally { tuneBtn.disabled = false; }
+});
+document.getElementById("tuneReset").addEventListener("click", () => {
+  for (const [k] of TUNE) tuneSet(k, k === "vyUp" ? -GRENADE_DEFAULT.vy : GRENADE_DEFAULT[k]);
+  buildTune(); tuneDirty = true; tuneStatus("Volvieron los de fábrica: tocá Guardar para dejarlos");
+});
+document.getElementById("testBtn").addEventListener("click", startTest);
+// en el menú: un joystick que todavía no juega se suma en el primer lugar que tenga un bot (o nadie); Start empieza
+function lobbyPads() {
+  for (const gp of pads) {
+    const s = padState(gp), o = padPrev[gp.index] || {}, key = `pad:${gp.index}`;
+    if (s.start && !o.start) { startMatch(); return; }
+    const drivesAuto = SLOTS.some(x => x.ctrl === "auto") && autoPad() === gp;   // ya maneja al lugar "auto"
+    if (s.any && !o.any && !drivesAuto && !SLOTS.some(x => x.ctrl === key) && gp.index < 4) {
+      const free = SLOTS.find(x => x.ctrl === "bot") || SLOTS.find(x => x.ctrl === "off");
+      if (free) { free.ctrl = key; buildSlots(); previewLobby(); }
+    }
+  }
+  if (tapped.has("Enter") || tapped.has("NumpadEnter")) startMatch();
+  const key = pads.map(gp => `${gp.index}:${gp.id}`).join("|");   // apareció o se fue un joystick: los nombres del menú cambian
+  if (key !== padKey) { padKey = key; buildSlots(); }
+  lobbyHint();
+  // qué lee el juego de cada joystick, en vivo: para probar uno nuevo sin empezar la partida
+  const txt = pads.map(gp => {
+    const s = padState(gp), act = [s.left && "←", s.right && "→", s.up && "↑", s.down && "↓", s.jump && "salta", s.fire1 && "dispara", s.fire2 && "dos manos", s.gren && "granada", s.melee && "golpe", s.start && "start"].filter(Boolean);
+    return `${gp.id.replace(/\s*\(.*$/, "")}${gp.mapping === "standard" ? "" : " (orden de Switch)"}: ${act.join(" ") || "—"}`;
+  }).join(" · ");
+  if (padTest.textContent !== txt) padTest.textContent = txt;
+}
+const padTest = document.getElementById("padTest");
+
+/* ---------- arena: se prearma a la escala del canvas ---------- */
+const IMG = {};
+let artState = "loading", DS = 1, bakedDS = 0;
+const baked = { back: null, solid: null, front: null };
+// las láminas: arenas pintadas enteras (arenas/<imagen>, de 1920 × 1080), que el build copia a dist/arenas/
+const plateSrc = A => `arenas/${A.plate.src}`;
+const artFiles = [...new Set([...Object.values(KIT.pieces), ...Object.values(KIT.layers)].map(p => p.src)
+  .concat(Object.values(ARENAS).filter(A => A.plate).map(plateSrc))
+  .concat(Object.values(ARENAS).flatMap(A => Object.values(A.pieces || {}).map(pieceSrc)))
+  .concat(Object.values(GREN).flatMap(a => Object.values(a).map(p => p.src))))];
+Promise.all(artFiles.map(src => new Promise((ok, fail) => { const im = new Image(); im.onload = () => { IMG[src] = im; ok(); }; im.onerror = () => fail(src); im.src = src; })))
+  .then(() => { artState = "ok"; }, src => { artState = "error"; lobbyMsg.textContent = `No se pudo cargar la arena (${src}).`; });
+function surface(w, h) { const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; return [c, g]; }
+function tintedImg(im, color) { const [c, g] = surface(im.naturalWidth || im.width, im.naturalHeight || im.height); g.drawImage(im, 0, 0); g.globalCompositeOperation = "source-atop"; g.fillStyle = color; g.fillRect(0, 0, c.width, c.height); return c; }
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+// tintes: lo de fondo hacia el azul del cielo; la subestructura, apenas más oscura que lo que se pisa (los tornillos rojos
+// de cada panel competían con los jugadores); el primer plano, en sombra; la capa media y la cercana, un paso atrás
+const BACK_TINT = "rgba(28,70,140,0.42)", SUB_TINT = "rgba(14,24,52,0.45)", FG_TINT = "rgba(8,14,30,0.3)";
+const LAYER_TINT = { mid: "rgba(40,90,170,0.22)", near: "rgba(16,32,70,0.38)" };
+const tintCache = new Map();
+// grade: el grupo de color de la arena ("plataformas" para los objetos del kit); la imagen graduada y su tinte quedan en
+// gradeCache, que se vacía al cambiar de arena
+function art(name, tint, grade) {
+  const A = PIECE(name), base = IMG[A.src], im = grade ? graded(base, grade, A.src) : base; if (!tint) return im;
+  const cache = im === base ? tintCache : gradeCache, key = `tint|${name}|${tint}`;
+  if (!cache.has(key)) cache.set(key, tintedImg(im, tint)); return cache.get(key);
+}
+// el color de la arena (ARENA.color; la cuenta está en color.js): {fondo: {paleta, saturacion, contraste, brillo, bruma},
+// plataformas: {...}, bruma_color: "#rrggbb"}. Sin bruma_color, el promedio del sexto de arriba de la lámina (sin lámina,
+// [143, 179, 224]), igual que el editor. Sin color, no se gradúa nada. Se gradúa al prearmar: el fondo es la lámina (con el kit, el cielo, las
+// capas y el decorado de atrás); las plataformas, los recortes de plate.solid, las piezas pintadas y los objetos del kit
+// (con el kit, además, el relleno, las caras, los puentes, las flotantes y los caños)
+function colorGroup(name) {
+  const c = ARENA.color && ARENA.color[name];
+  return c && typeof c === "object" && !isNeutral(c) ? c : null;
+}
+function arenaHaze() {
+  if (hazeRGB) return hazeRGB;
+  const hex = String(ARENA.color?.bruma_color || "").replace("#", "");
+  if (/^[0-9a-f]{6}$/i.test(hex)) return (hazeRGB = [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16)));
+  return (hazeRGB = hazeOf(ARENA.plate ? IMG[plateSrc(ARENA)] : null));   // sin lámina, HAZE_DEFAULT (como en el editor)
+}
+function graded(im, group, key) {
+  const g = colorGroup(group); if (!g || !im) return im;
+  const k = `${group}|${key}`;
+  if (!gradeCache.has(k)) gradeCache.set(k, gradeImage(im, COLOR_LUT, g, arenaHaze()));
+  return gradeCache.get(k);
+}
+function gradeSurface(c, group) {
+  const g = colorGroup(group); if (!g) return;
+  const x = c.getContext("2d"), d = x.getImageData(0, 0, c.width, c.height);
+  gradePixels(d.data, COLOR_LUT, g, arenaHaze()); x.putImageData(d, 0, 0);
+}
+// cambiar el color de la arena en vivo (para probar desde la consola): vuelve a graduar y a prearmar
+function setArenaColor(c) { ARENA.color = c; gradeCache.clear(); hazeRGB = null; needBake = true; }
+function put(g, name, x, y, o = {}) {
+  const A = PIECE(name); if (!A) return null;
+  const w = o.w ?? A.w * (o.scale || 1), h = o.h ?? A.h * (o.scale || 1);
+  if (o.flip) { g.save(); g.translate(x + w, y); g.scale(-1, 1); g.drawImage(art(name, o.tint, o.grade), 0, 0, w, h); g.restore(); }
+  else g.drawImage(art(name, o.tint, o.grade), x, y, w, h);
+  return A;
+}
+function clip(g, x, y, w, h, fn) { g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip(); fn(); g.restore(); }
+const WALK_H = () => PIECE("walkway/top_a").h;
+// el relleno de un sólido: paneles de 128 elegidos con semilla (casi todo vigas caladas) y patas hasta el piso
+function drawFill(g, s, i) {
+  const y0 = s.y + WALK_H() - 4, P0 = 128, r = rng(ARENA.seed * 97 + i * 13 + 1);
+  const rows = s.fill === "full" ? Math.ceil((s.y + s.h - y0) / P0) : 1;
+  const items = [["truss_a", 5], ["truss_b", 3], ["machine_a", 0.7], ["machine_b", 0.7], ["machine_c", 0.5]];
+  const grid = [];
+  clip(g, s.x, y0, s.w, s.fill === "full" ? s.h : P0, () => {
+    for (let rr = 0; rr < rows; rr++) {
+      grid.push([]);
+      for (let c = 0; c < Math.ceil(s.w / P0); c++) {
+        const avoid = [grid[rr][c - 1], rr ? grid[rr - 1][c] : null];
+        const list = items.filter(([n]) => !avoid.includes(n)), tot = list.reduce((a, [, w]) => a + w, 0);
+        let x = r() * tot, n = list[0][0]; for (const [m, w] of list) { if ((x -= w) <= 0) { n = m; break; } }
+        grid[rr].push(n); put(g, "substructure/" + n, s.x + c * P0, y0 + rr * P0, { w: P0, h: P0, tint: SUB_TINT });
+      }
+    }
+  });
+  if (s.fill === "row" && s.legs) {   // patas: en las puntas y cada dos paneles, hasta el piso de abajo
+    const col = PIECE("substructure/column"), bottom = s.y + s.h, legs = [s.x, s.x + s.w - col.w];
+    for (let lx = s.x + 2 * P0; lx < s.x + s.w - P0; lx += 2 * P0) legs.push(lx - col.w / 2);
+    clip(g, s.x, y0 + P0 - 4, s.w, bottom - y0 - P0 + 4, () => { for (const cx of legs) for (let yy = y0 + P0 - 4; yy < bottom; yy += col.h) put(g, "substructure/column", cx, yy, { tint: SUB_TINT }); });
+  }
+}
+function drawTop(g, s, i) {
+  const L = PIECE("walkway/cap_left"), R = PIECE("walkway/cap_right"), A = PIECE("walkway/top_a"), r = rng(ARENA.seed * 31 + i * 7 + 3);
+  const left = s.x > 2, right = s.x + s.w < AW - 2;
+  const x0 = s.x + (left ? L.w * 0.6 : 0), x1 = s.x + s.w - (right ? R.w * 0.6 : 0);
+  clip(g, x0, s.y - 10, x1 - x0, A.h + 20, () => { for (let x = x0, n = 0; x < x1; x += A.w - 2, n++) put(g, n % 4 === 2 && r() < 0.8 ? "walkway/top_b" : "walkway/top_a", x, s.y); });
+  if (left) put(g, "walkway/cap_left", s.x, s.y);
+  if (right) put(g, "walkway/cap_right", s.x + s.w - R.w, s.y);
+}
+function drawBridge(g, s) {
+  const A = PIECE("bridge/bridge_a"), n = Math.ceil(s.w / (A.w - 2));
+  clip(g, s.x, s.y - 10, s.w, A.h + 20, () => { for (let i = 0; i < n; i++) put(g, i === Math.floor(n / 2) ? "bridge/bridge_b" : "bridge/bridge_a", s.x + i * (A.w - 2), s.y); });
+}
+// un caño: rectos estirados (las puntas quedan, el medio se estira) y, si dobla, el codo y el recto parado
+function straight(g, im, x, y, len, d, vertical) {
+  const iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height, e = Math.round(iw * 0.12), E = e * d / ih;
+  g.save(); g.translate(x, y); if (vertical) g.rotate(Math.PI / 2);
+  g.drawImage(im, 0, 0, e, ih, 0, -d / 2, E, d); g.drawImage(im, e, 0, iw - 2 * e, ih, E, -d / 2, Math.max(0, len - 2 * E), d); g.drawImage(im, iw - e, 0, e, ih, len - E, -d / 2, E, d);
+  g.restore();
+}
+function drawPipe(g, pipe) {
+  const k = pipe.scale || 1, tint = pipe.plane === "front" ? FG_TINT : null, Sp = PIECE("pipes/" + pipe.size), Eb = PIECE("pipes/" + pipe.size + "_elbow");
+  g.save(); if (pipe.flip) { g.translate(AW, 0); g.scale(-1, 1); }
+  const d = Sp.h * k, [[ax, ay], [bx, by], c] = pipe.path, im = art("pipes/" + pipe.size, tint);
+  if (!c) straight(g, im, ax, ay, bx - ax, d, false);
+  else {
+    const ex = bx - Eb.jx * k, ey = by - Eb.jy * k, ew = Eb.w * k, eh = Eb.h * k;
+    straight(g, im, ax, ay, ex - ax + 6, d, false); straight(g, im, bx, ey + eh - 6, c[1] - (ey + eh) + 6, d, true);
+    g.drawImage(art("pipes/" + pipe.size + "_elbow", tint), ex, ey, ew, eh);
+    if (pipe.size === "thick") { const Fl = PIECE("pipes/flange"); put(g, "pipes/flange", ax + (bx - ax) * 0.4 - Fl.w / 2, ay - Fl.h / 2); }
+  }
+  g.restore();
+}
+const W2S = ZOOM;   // px de pantalla por px del juego
+const FLOOR_S = 980 * ZOOM, FLOOR_75 = 475.5, LAYER_Z = ZOOM / 0.75;   // las capas lejanas, achicadas como en kit.html y apoyadas en el piso
+// arena pintada: el fondo es la lámina entera y encima sus piezas pintadas, en el orden del JSON; lo que se pisa,
+// recortes de la lámina en los rectángulos de plate.solid y de cada pieza en los de su front (así el colgado de una mano
+// sigue detrás del canto); el frente, vacío. Del kit no se dibuja nada (sus objetos van aparte, cada cuadro).
+// Con ARENA.color, la lámina va graduada como fondo, y los recortes de plate.solid y las piezas, como plataformas
+function eachPainted(fn) {
+  for (const o of ARENA.objects || []) {
+    const Pc = painted(o), raw = Pc && IMG[pieceSrc(Pc)]; if (!raw) continue;
+    fn(o, Pc, graded(raw, "plataformas", pieceSrc(Pc)), raw.naturalWidth / Pc.w, raw.naturalHeight / Pc.h);
+  }
+}
+function atPiece(g, o, Pc, draw) { g.save(); g.translate(o.x + (o.flip ? Pc.w : 0), o.y); if (o.flip) g.scale(-1, 1); draw(); g.restore(); }
+// las patas de una pintada (Pc.legs = [y0, y1], filas de la pieza; o.stretch, px de más hacia abajo): la pieza mide
+// Pc.h + stretch; lo de arriba de y0 igual, la franja estirada a y1 - y0 + stretch y lo de abajo de y1 corrido stretch.
+// Se arma una vez en el tamaño natural de la imagen (de a pedazos sobre el prearmado escalado quedarían costuras). pim
+// puede ser la imagen graduada: el caché es por imagen. Lo mismo que legged() en prototypes/arena/editor/editor.html
+const LEGGED = new WeakMap();
+function pieceArt(o, Pc, pim) {
+  const L = Pc.legs, s = L ? Math.max(8 - (L[1] - L[0]), Math.round(o.stretch || 0)) : 0;
+  if (!s) return [pim, Pc.h];
+  let m = LEGGED.get(pim); if (!m) LEGGED.set(pim, (m = new Map()));
+  const k = `${L[0]} ${L[1]} ${s}`;
+  if (!m.has(k)) {
+    const nw = pim.naturalWidth || pim.width, nh = pim.naturalHeight || pim.height, q = nh / Pc.h, y0 = L[0] * q, y1 = L[1] * q;
+    const c = document.createElement("canvas"); c.width = nw; c.height = Math.round((Pc.h + s) * q);
+    const t = c.getContext("2d"); t.imageSmoothingQuality = "high";
+    t.drawImage(pim, 0, 0, nw, y0, 0, 0, nw, y0);
+    t.drawImage(pim, 0, y0, nw, y1 - y0, 0, y0, nw, y1 - y0 + s * q);
+    t.drawImage(pim, 0, y1, nw, nh - y1, 0, y1 + s * q, nw, nh - y1);
+    m.set(k, c);
+  }
+  return [m.get(k), Pc.h + s];
+}
+function bakePlate(W, H, sc) {
+  const raw = IMG[plateSrc(ARENA)], im = graded(raw, "fondo", plateSrc(ARENA)), cut = graded(raw, "plataformas", plateSrc(ARENA));
+  const [b, g] = surface(W, H); g.save(); g.scale(sc, sc); g.drawImage(im, 0, 0, AW, AH);
+  eachPainted((o, Pc, pim) => atPiece(g, o, Pc, () => { const [art, h] = pieceArt(o, Pc, pim); g.drawImage(art, 0, 0, Pc.w, h); }));
+  g.restore(); baked.back = b;
+  const [s, gs] = surface(W, H); gs.save(); gs.scale(sc, sc);
+  const kx = raw.naturalWidth / AW, ky = raw.naturalHeight / AH;
+  for (const [x, y, w, h] of ARENA.plate.solid || []) gs.drawImage(cut, x * kx, y * ky, w * kx, h * ky, x, y, w, h);
+  // el rectángulo sin espejar, dentro de la transformación espejada, cae en el lugar espejado
+  eachPainted((o, Pc, pim, qx, qy) => atPiece(gs, o, Pc, () => { for (const [x, y, w, h] of Pc.front || []) gs.drawImage(pim, x * qx, y * qy, w * qx, h * qy, x, y, w, h); }));
+  gs.restore(); baked.solid = s;
+  baked.front = surface(W, H)[0];
+}
+function bake() {
+  bakedDS = DS; needBake = false;
+  const W = cv.width, H = cv.height, sc = DS * W2S;
+  if (ARENA.plate && IMG[plateSrc(ARENA)]) return bakePlate(W, H, sc);
+  // fondo: cielo, capas, decorado de atrás, relleno de los sólidos y caños
+  const [b, g] = surface(W, H);
+  g.save(); g.scale(DS, DS);
+  for (const name of ["sky", "far", "mid", "near"]) {
+    const L = KIT.layers[name], im = name in LAYER_TINT ? tintedImg(IMG[L.src], LAYER_TINT[name]) : IMG[L.src];
+    const z = name === "sky" ? 1 : LAYER_Z, w = L.w * z, h = L.h * z, y = name === "sky" ? L.y : FLOOR_S + (L.y - FLOOR_75) * z;
+    for (let x = name === "sky" ? 0 : -w * 0.17; x < VIEW_W; x += w) g.drawImage(im, x, y, w, h);
+  }
+  g.restore();
+  g.save(); g.scale(sc, sc);
+  for (const d of ARENA.decor) if (d.layer === "back") { const A = PIECE(d.piece); put(g, d.piece, d.x - A.w / 2, d.y - A.h + 4, { flip: d.flip, tint: BACK_TINT }); }
+  g.restore(); gradeSurface(b, "fondo");
+  // el relleno de los sólidos, los caños y el decorado del medio van con las plataformas (con color, en una capa aparte)
+  const [m, gm] = colorGroup("plataformas") ? surface(W, H) : [b, g];
+  gm.save(); gm.scale(sc, sc);
+  ARENA.solids.forEach((s, i) => { if (s.kind === "walk") drawFill(gm, s, i); });
+  for (const p of ARENA.pipes) if (p.plane === "mid") drawPipe(gm, p);
+  for (const d of ARENA.decor) if (d.layer === "mid") { const A = PIECE(d.piece); put(gm, d.piece, d.x - A.w / 2, d.y - A.h + 4, { flip: d.flip }); }
+  gm.restore();
+  if (m !== b) { gradeSurface(m, "plataformas"); g.drawImage(m, 0, 0); }
+  baked.back = b;
+  // lo que se pisa, aparte: el colgado de una mano va entre el fondo y esto (la mano queda detrás del canto)
+  const [s, gs] = surface(W, H); gs.save(); gs.scale(sc, sc);
+  ARENA.solids.forEach((o, i) => { if (o.kind === "walk") drawTop(gs, o, i); else if (o.kind === "bridge") drawBridge(gs, o); });
+  for (const o of solids) if (o.kind === "platform") put(gs, "platforms/" + o.piece, o.x, o.drawY, { flip: o.flip });
+  gs.restore(); gradeSurface(s, "plataformas"); baked.solid = s;
+  const [f, gf] = surface(W, H); gf.save(); gf.scale(sc, sc);
+  for (const p of ARENA.pipes) if (p.plane === "front") drawPipe(gf, p);
+  gf.restore(); gradeSurface(f, "plataformas"); baked.front = f;
+}
+
+/* ---------- colores de los jugadores: el rojo de la armadura, a otro tono ---------- */
+function recolor(img, T) {
+  const [c, g] = surface(img.naturalWidth, img.naturalHeight); g.drawImage(img, 0, 0);
+  if (T.hue == null) return c;
+  const d = g.getImageData(0, 0, c.width, c.height), a = d.data, th = T.hue / 60;
+  for (let i = 0; i < a.length; i += 4) {
+    if (!a[i + 3]) continue;
+    const r = a[i], gg = a[i + 1], b = a[i + 2], mx = Math.max(r, gg, b), mn = Math.min(r, gg, b), dd = mx - mn;
+    if (mx <= 50 || dd * 255 <= 120 * mx) continue;   // saturación de más de 120/255 y brillo de más de 50
+    let h = mx === r ? ((gg - b) / dd) % 6 : mx === gg ? (b - r) / dd + 2 : (r - gg) / dd + 4; h *= 60; if (h < 0) h += 360;
+    if (Math.min(h, 360 - h) >= 25.4) continue;   // sólo los rojos (±25°): la piel y el casco no cambian
+    const V = Math.min(255, mx * T.val), Sv = Math.min(1, dd / mx * T.sat), C = V * Sv, X = C * (1 - Math.abs((th % 2) - 1)), m = V - C;
+    const [r2, g2, b2] = th < 1 ? [C, X, 0] : th < 2 ? [X, C, 0] : th < 3 ? [0, C, X] : th < 4 ? [0, X, C] : th < 5 ? [X, 0, C] : [C, 0, X];
+    a[i] = r2 + m; a[i + 1] = g2 + m; a[i + 2] = b2 + m;
+  }
+  g.putImageData(d, 0, 0); return c;
+}
+
+/* ---------- dibujo ---------- */
+function drawSprite(Q) {
+  const d = Q.draw, f = anim(d.name).f[d.i]; if (!f || !Q.art) return;
+  const blink = Q.invT > 0 && Math.floor(Q.invT / 0.08) % 2;   // invulnerable: parpadea entre entero y casi transparente
+  const frame = g => ctx.drawImage(Q.art, g[0], g[1], g[2], g[3], -PIV_X + g[4], -PIV_Y + g[5], g[2], g[3]);
+  const sink = Q.state === "hang" || Q.state === "climb" ? 0 : FOOT_SINK;
+  ctx.save(); ctx.translate(Math.round(d.x), Math.round(d.y) + sink);
+  const qx = Q.sqX * (d.k || 1), qy = Q.sqY * (d.k || 1), fs = Q.facing < 0 ? -1 : 1;
+  if (d.center) {
+    const ux = f[4] + f[2] / 2 - PIV_X, uy = f[5] + f[3] / 2 - PIV_Y;
+    ctx.translate(fs * S.char * ux, S.char * uy); ctx.rotate(fs * d.rot); ctx.scale(fs * S.char * qx, S.char * qy); ctx.translate(-ux, -uy);
+  } else ctx.scale(fs * S.char * qx, S.char * qy);
+  if (blink) ctx.globalAlpha = 0.28;
+  frame(f);
+  if (Q.flashT > 0 || Q.hitT > 0 || (Q.invT > 0 && !blink)) { ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = Q.hitT > 0 ? 0.9 : Q.invT > 0 ? 0.35 : 0.7; frame(f); }
+  ctx.restore();
+}
+function drawFlash(Q) {
+  P = Q; const Fl = Q.flash, m = muzzleNow(), age = Fl.t, q = age / (FXT.flashA + FXT.flashB), k = S.char / 0.8 * (Fl.big ? 1.3 : 1) * FXK;
+  const name = (age < FXT.flashA ? "a" : "b") + Fl.v, p = FX.muzzle.pieces[name];
+  ctx.save(); ctx.translate(m.x, m.y); ctx.scale(Q.facing, 1);
+  const R = FX.muzzle.len * k * (0.5 + 0.2 * q);
+  ctx.save(); ctx.beginPath(); ctx.rect(-4, -200, 400, 400); ctx.clip();
+  ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.85 * (1 - q);
+  const gr = ctx.createRadialGradient(2, 0, 1, R * 0.45, 0, R);
+  gr.addColorStop(0, "rgba(235,255,255,0.9)"); gr.addColorStop(0.45, `rgba(${Q.team.glow},0.45)`); gr.addColorStop(1, `rgba(${Q.team.glow},0)`);
+  ctx.fillStyle = gr; ctx.beginPath(); ctx.ellipse(R * 0.45, 0, R, R * 0.65, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  if (FX_IMG[`muzzle/${name}`].complete) ctx.drawImage(FX_IMG[`muzzle/${name}`], -p.ax * k, -p.ay * k, p.w * k, p.h * k);
+  ctx.restore();
+}
+// el número del jugador en un círculo del color del equipo, con aro oscuro (como en prototypes/arena/refs/refineria.webp)
+function badge(g, x, y, R, Q) {
+  g.beginPath(); g.arc(x, y, R, 0, Math.PI * 2); g.fillStyle = "#0b0e18"; g.fill();
+  g.beginPath(); g.arc(x, y, R * 0.8, 0, Math.PI * 2); g.fillStyle = Q.team.color; g.fill();
+  g.beginPath(); g.arc(x, y - R * 0.12, R * 0.62, Math.PI * 1.1, Math.PI * 1.9); g.strokeStyle = "rgba(255,255,255,0.35)"; g.lineWidth = R * 0.12; g.stroke();   // brillo
+  g.font = `700 ${Math.round(R * 1.15)}px 'Chakra Petch', Arial Narrow, sans-serif`; g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
+  g.lineWidth = R * 0.28; g.strokeStyle = "#0b0e18"; g.strokeText(String(Q.slot + 1), x, y + R * 0.05); g.fillStyle = "#ffffff"; g.fillText(String(Q.slot + 1), x, y + R * 0.05);
+  g.textBaseline = "alphabetic";
+}
+// el ícono de la granada (el dibujo de backgrounds/ranger_grenade, a 3 px por px del juego), de h de alto: entera o,
+// gastada, en sombra; flash: recién recargada, brilla. Sin el dibujo, una por código
+const GREN_HUD = GREN.grenade && (GREN.grenade.hud || GREN.grenade.off);
+let grenShadowC = null;
+function grenIcon(g, x, y, h, on, flash = false) {
+  const im = GREN_HUD && IMG[GREN_HUD.src], w = GREN_HUD ? h * GREN_HUD.w / GREN_HUD.h : h * 0.9;
+  if (!im) {
+    const r = h * 0.36, cx = x + w / 2, cy = y + h * 0.58;
+    g.fillStyle = "#0b0e18"; g.beginPath(); g.arc(cx, cy, r + 1.5, 0, Math.PI * 2); g.fill();
+    g.fillStyle = on ? "#e9ecf3" : "#3a4258"; g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.fill();
+    if (on) { g.fillStyle = "#e8392e"; g.fillRect(cx - r, cy - r * 0.28, r * 2, r * 0.56); }
+    g.fillStyle = on ? "#2a2d38" : "#3a4258"; g.fillRect(cx - r * 0.35, cy - r - 3, r * 0.7, 3.5);
+    return w;
+  }
+  g.drawImage(on ? im : (grenShadowC ||= tintedImg(im, "#3a4258")), x, y, w, h);
+  if (flash) { g.save(); g.globalCompositeOperation = "lighter"; g.globalAlpha = 0.85; g.drawImage(im, x, y, w, h); g.restore(); }
+  return w;
+}
+// un power-up: flota y late sobre su sombra, con un halo de su color; los últimos segundos parpadea, cada vez más rápido.
+// Granadas: placa oscura con borde amarillo y la granada; salud: placa blanca con la cruz roja
+function drawPickup(K) {
+  const a = K.t - PICKUP.warn; if (a < 0) return;
+  const left = PICKUP.life - a, c = PICK_KIND[K.kind];
+  const pop = Math.min(1, a / 0.2), sc = pop < 1 ? 0.3 + 0.7 * (1 + 2.2 * (pop - 1) ** 3 + 1.2 * (pop - 1) ** 2) : 1 + 0.06 * Math.sin(a * 7);
+  const bob = Math.sin(a * 3.2 + K.seed) * 5, cx = K.x, cy = K.y - PICKUP.lift + bob, S2 = 21 * sc;
+  ctx.save();
+  ctx.fillStyle = "rgba(10,10,20,0.4)"; ctx.beginPath(); ctx.ellipse(cx, K.y + 1, 18 - bob * 0.5, 5, 0, 0, Math.PI * 2); ctx.fill();
+  if (left < PICKUP.blink && Math.floor(left / (left < 1 ? 0.06 : 0.13)) % 2) { ctx.restore(); return; }
+  // la luz en el piso, que lo ata a donde está apoyado, y el halo
+  ctx.globalCompositeOperation = "lighter";
+  const pad = ctx.createRadialGradient(cx, K.y, 1, cx, K.y, 34);
+  pad.addColorStop(0, `rgba(${c.glow},${0.6 + 0.25 * Math.sin(a * 7)})`); pad.addColorStop(1, `rgba(${c.glow},0)`);
+  ctx.fillStyle = pad; ctx.beginPath(); ctx.ellipse(cx, K.y, 34, 9, 0, 0, Math.PI * 2); ctx.fill();
+  const R = 50 * sc * (1 + 0.1 * Math.sin(a * 7)), gr = ctx.createRadialGradient(cx, cy, 2, cx, cy, R);
+  gr.addColorStop(0, `rgba(${c.glow},0.9)`); gr.addColorStop(0.45, `rgba(${c.glow},0.35)`); gr.addColorStop(1, `rgba(${c.glow},0)`);
+  ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+  ctx.globalCompositeOperation = "source-over";
+  // late: un aro de su color que se abre y se apaga, una vez por segundo
+  const ring = (a * 1.1 + K.seed) % 1;
+  ctx.beginPath(); ctx.roundRect(cx - S2 - 22 * ring, cy - S2 - 22 * ring, (S2 + 22 * ring) * 2, (S2 + 22 * ring) * 2, 8 + 14 * ring);
+  ctx.lineWidth = 4 * (1 - ring) + 1; ctx.strokeStyle = `rgba(${c.glow},${0.9 * (1 - ring)})`; ctx.stroke();
+  ctx.beginPath(); ctx.roundRect(cx - S2, cy - S2, S2 * 2, S2 * 2, 8 * sc); ctx.lineWidth = 5; ctx.strokeStyle = "#0b0e18"; ctx.stroke();
+  if (K.kind === "gren") {
+    ctx.fillStyle = "#1b2234"; ctx.fill();
+    ctx.beginPath(); ctx.roundRect(cx - S2 + 3, cy - S2 + 3, S2 * 2 - 6, S2 * 2 - 6, 5 * sc); ctx.lineWidth = 3; ctx.strokeStyle = c.text; ctx.stroke();
+    const h = 30 * sc, w = GREN_HUD ? h * GREN_HUD.w / GREN_HUD.h : h * 0.9;
+    grenIcon(ctx, cx - w / 2, cy - h * 0.52, h, true);
+  } else {
+    ctx.fillStyle = "#f4f6fb"; ctx.fill();
+    ctx.fillStyle = "rgba(11,14,24,0.12)"; ctx.fillRect(cx - S2 + 2, cy + S2 * 0.45, S2 * 2 - 4, S2 * 0.5);   // sombra de abajo
+    const t = 8 * sc, l = 26 * sc;
+    ctx.fillStyle = "#0b0e18"; ctx.fillRect(cx - t / 2 - 2, cy - l / 2 - 2, t + 4, l + 4); ctx.fillRect(cx - l / 2 - 2, cy - t / 2 - 2, l + 4, t + 4);
+    ctx.fillStyle = "#e8392e"; ctx.fillRect(cx - t / 2, cy - l / 2, t, l); ctx.fillRect(cx - l / 2, cy - t / 2, l, t);
+  }
+  // un brillo que cruza la placa cada tanto
+  const sh = (a * 0.8 + K.seed) % 2.2;
+  if (sh < 0.5) {
+    ctx.save(); ctx.beginPath(); ctx.roundRect(cx - S2, cy - S2, S2 * 2, S2 * 2, 8 * sc); ctx.clip();
+    const sx = cx - S2 * 2 + sh / 0.5 * S2 * 4; ctx.globalCompositeOperation = "lighter"; ctx.fillStyle = "rgba(255,255,255,0.35)";
+    ctx.beginPath(); ctx.moveTo(sx, cy - S2); ctx.lineTo(sx + 10, cy - S2); ctx.lineTo(sx - 10, cy + S2); ctx.lineTo(sx - 20, cy + S2); ctx.fill(); ctx.restore();
+  }
+  ctx.restore();
+}
+// el barrido del golpe de cerca: una media luna del color del equipo con el filo blanco, que abre de arriba hacia
+// adelante mientras se ve el brazo adelante, y unas líneas de velocidad
+function drawSwing(Q) {
+  const t = Q.meleeT - MELEE_T.hit0 + 0.03, dur = MELEE_T.hit1 - MELEE_T.hit0 + 0.08; if (Q.meleeT <= 0 || t < 0 || t > dur) return;
+  const k = t / dur, open = Math.min(1, t / 0.05), cx = Q.x + Q.facing * (HALF_W + 14), cy = Q.y - BODY_H * 0.6, R = 50 + 16 * k;
+  const a0 = -1.3, a1 = a0 + 2.5 * open;
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(Q.facing, 1); ctx.globalAlpha = 1 - k * k;
+  const moon = (r, inner, off) => { ctx.beginPath(); ctx.arc(0, 0, r, a0, a1); ctx.arc(-off, 0, inner, a1, a0, true); ctx.closePath(); };
+  ctx.globalCompositeOperation = "lighter";
+  ctx.fillStyle = `rgba(${Q.team.glow},0.75)`; moon(R, R * 0.8, R * 0.32); ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.95)"; moon(R, R * 0.92, R * 0.1); ctx.fill();
+  ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = `rgba(255,255,255,${0.8 * (1 - k)})`; ctx.lineWidth = 3; ctx.lineCap = "round";
+  for (const [yy, l] of [[-18, 26], [2, 38], [20, 22]]) { const x0 = 8 + 30 * k; ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x0 + l, yy); ctx.stroke(); }
+  ctx.restore();
+}
+// quién es quién: el círculo con el número y un triangulito que apunta a la cabeza
+function drawTag(Q) {
+  const x = Q.x, y = Q.y - BODY_H - 58;
+  ctx.save();
+  ctx.beginPath(); ctx.moveTo(x - 9, y + 13); ctx.lineTo(x + 9, y + 13); ctx.lineTo(x, y + 26); ctx.closePath();
+  ctx.lineJoin = "round"; ctx.lineWidth = 4; ctx.strokeStyle = "#0b0e18"; ctx.stroke(); ctx.fillStyle = Q.team.color; ctx.fill();
+  badge(ctx, x, y, 17, Q);
+  // carga de la granada: amarilla, naranja y roja; llena, titila
+  if (Q.charging) {
+    const W = 58, by = Q.y - BODY_H - 24, full = Q.charge >= 1 && Math.floor(performance.now() / 90) % 2;
+    ctx.fillStyle = "rgba(11,14,24,0.88)"; ctx.fillRect(x - W / 2 - 3, by - 3, W + 6, 13);
+    ctx.fillStyle = full ? "#ffffff" : Q.charge > 0.75 ? "#ff5a2e" : Q.charge > 0.4 ? "#ffb02e" : "#ffd23a";
+    ctx.fillRect(x - W / 2, by, W * Q.charge, 7);
+  }
+  // temperatura del arma, justo arriba de la cabeza: blanca, naranja y roja; trabada, titila
+  else if (Q.heat > 0.02 || Q.overheat) {
+    const W = 58, by = Q.y - BODY_H - 24, hot = Q.overheat && Math.floor(performance.now() / 110) % 2;
+    ctx.fillStyle = "rgba(11,14,24,0.88)"; ctx.fillRect(x - W / 2 - 3, by - 3, W + 6, 13);
+    ctx.fillStyle = Q.overheat ? (hot ? "#ffffff" : "#ff3b2e") : Q.heat > 0.8 ? "#ff5a2e" : Q.heat > 0.5 ? "#ffb02e" : "#eef0f6";
+    ctx.fillRect(x - W / 2, by, W * Math.min(1, Q.heat), 7);
+  }
+  ctx.restore();
+}
+// la curva de la granada (sin rebotes), hasta que choca o explota. Mientras un jugador carga se ve la de su carga; en la
+// prueba, además, la cruz donde sale y, sin cargar, la curva más corta y la más larga
+function arc(Q, p, color) {
+  const dir = Q.facing, v = grenadeVel(p, dir);
+  let x = Q.x + dir * GRENADE.spawnX, y = Q.y - GRENADE.spawnY, vx = v.vx, vy = v.vy; ctx.fillStyle = color;
+  for (let t = 0, k = 0; t < GRENADE.fuse; t += 1 / 120, k++) {
+    vy += GRENADE.gravity / 120; x += vx / 120; y += vy / 120;
+    if (solids.some(s => x > s.x && x < s.x + s.w && y > s.y && y < s.y + Math.max(s.h, 20))) break;
+    if (k % 6 === 0) { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.lineWidth = 2.5; ctx.strokeStyle = "rgba(11,14,24,0.7)"; ctx.stroke(); ctx.fill(); }
+  }
+}
+function drawThrowPreview(Q, test) {
+  ctx.save();
+  if (test) {
+    const x0 = Q.x + Q.facing * GRENADE.spawnX, y0 = Q.y - GRENADE.spawnY;
+    ctx.strokeStyle = "#ffd23a"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x0 - 10, y0); ctx.lineTo(x0 + 10, y0); ctx.moveTo(x0, y0 - 10); ctx.lineTo(x0, y0 + 10); ctx.stroke();
+    if (!Q.charging) { arc(Q, 0, "rgba(255,210,58,0.45)"); arc(Q, 1, "rgba(255,210,58,0.45)"); }
+  }
+  if (Q.charging) arc(Q, Q.charge, "rgba(255,226,90,0.95)");
+  ctx.restore();
+}
+// el haz donde alguien vuelve: una columna de luz del color del equipo que baja, se ensancha y se apaga
+// (el de un power-up: dur es lo que tarda en aparecer y w, el ancho, más angosto)
+function drawBeam(Bm) {
+  const dur = Bm.dur ?? RESPAWN.beam, k = Bm.t / dur, a = k < 1 ? Math.min(1, k * 1.5) : Math.max(0, 1 - (Bm.t - dur) / 0.35), w = (26 + 50 * Math.min(1, k)) * (Bm.w ?? 1);
+  ctx.save(); ctx.globalAlpha = a;
+  const g = ctx.createLinearGradient(Bm.x - w, 0, Bm.x + w, 0);   // del color del equipo, con el centro blanco
+  g.addColorStop(0, `rgba(${Bm.glow},0)`); g.addColorStop(0.3, `rgba(${Bm.glow},0.75)`); g.addColorStop(0.5, "rgba(255,255,255,1)");
+  g.addColorStop(0.7, `rgba(${Bm.glow},0.75)`); g.addColorStop(1, `rgba(${Bm.glow},0)`);
+  ctx.fillStyle = g; ctx.fillRect(Bm.x - w, -100, w * 2, Bm.y + 100);
+  ctx.globalCompositeOperation = "lighter";
+  const r = (30 + 40 * Math.min(1, k)) * (Bm.w ?? 1), gr = ctx.createRadialGradient(Bm.x, Bm.y - 10, 1, Bm.x, Bm.y - 10, r * 2);
+  gr.addColorStop(0, "rgba(255,255,255,0.9)"); gr.addColorStop(1, `rgba(${Bm.glow},0)`);
+  ctx.fillStyle = gr; ctx.beginPath(); ctx.ellipse(Bm.x, Bm.y - 6, r * 2, r * 0.6, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+function drawShadow(Q) {
+  if (Q.state === "hang" || Q.state === "climb") return;
+  const shY = supportAt(Q.x, Q.y, Q) ? Q.y : (landingTop(Q.x, Q.y, AH + 1) ?? AH), hgt = Math.max(0, shY - Q.y), w = 30 * S.char * Math.max(0.4, 1 - hgt / 220);
+  ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(Q.x, shY + FOOT_SINK - 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
+}
+const HUD_K = 0.7;   // el tamaño de las tarjetas de arriba (Pablo, 2026-10-16: 30% más chicas)
+function drawHud() {
+  ctx.save(); ctx.setTransform(DS, 0, 0, DS, 0, 0);
+  // un panel por jugador, arriba al centro: el círculo con el número, la salud de la vida actual en segmentos del color
+  // del equipo (los golpes perdidos, oscuros) y las vidas que le quedan en dos cifras. Esperando volver, la cuenta.
+  // Todo al HUD_K de su tamaño (Pablo: 70%), letras, barras, íconos y márgenes, centrado en la pantalla
+  const act = active(), W = 196, gap = 18, x0 = (VIEW_W / HUD_K - (act.length * W + (act.length - 1) * gap)) / 2;
+  ctx.setTransform(DS * HUD_K, 0, 0, DS * HUD_K, 0, 0);
+  act.forEach((Q, k) => {
+    const x = x0 + k * (W + gap), y = 8, cy = y + 19, R = 18;
+    ctx.globalAlpha = Q.out ? 0.4 : 1;
+    // marco: oscuro, redondeado, con borde del color del equipo
+    ctx.beginPath(); ctx.roundRect(x + R, y + 6, W - R, 26, 7); ctx.fillStyle = "#151a28"; ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = "#0b0e18"; ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x + R + 2, y + 8, W - R - 4, 22, 5); ctx.lineWidth = 1.5; ctx.strokeStyle = Q.team.color; ctx.globalAlpha *= 0.7; ctx.stroke(); ctx.globalAlpha = Q.out ? 0.4 : 1;
+    // salud: segmentos
+    const sx0 = x + R + 22, sx1 = x + W - 44, n = SET.hp, sw = (sx1 - sx0 - (n - 1) * 3) / n, alive = Q.alive || G.state === "lobby";
+    const hpFlash = Q.hudHpT > 0 && Math.floor(Q.hudHpT / 0.08) % 2;   // recién curado: titila en blanco
+    for (let h = 0; h < n; h++) {
+      const on = alive && h < Q.hp, hx = sx0 + h * (sw + 3);
+      ctx.fillStyle = on ? (hpFlash ? "#ffffff" : Q.team.color) : "#2a3142"; ctx.fillRect(hx, y + 12, sw, 13);
+      if (on) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillRect(hx, y + 12, sw, 3); }
+    }
+    ctx.fillStyle = Q.team.color; ctx.globalAlpha *= 0.5; ctx.fillRect(sx0, y + 27, sx1 - sx0, 2); ctx.globalAlpha = Q.out ? 0.4 : 1;
+    if (!Q.alive && !Q.out && G.state === "play") {   // esperando volver
+      ctx.font = "700 13px 'JetBrains Mono', Menlo, monospace"; ctx.textAlign = "center"; ctx.fillStyle = "#eef0f6";
+      ctx.fillText(`vuelve en ${Q.respawnT.toFixed(1).replace(".", ",")}`, (sx0 + sx1) / 2, y + 23);
+    }
+    // granadas: debajo del panel, el dibujo de la granada por cada una que queda (las gastadas, en sombra) sobre una tira
+    // oscura; en la prueba, sin límite, una sola con ∞. Recién recargadas, brillan
+    if (Q.alive || G.state === "lobby") {
+      const inf = G.mode === "test" && G.state !== "lobby", ih = 17, iw = GREN_HUD ? ih * GREN_HUD.w / GREN_HUD.h : ih * 0.9, st = iw + 2;
+      const gx0 = sx0 - 2, gy = y + 35, n = inf ? 1 : GRENADE.count, rowW = inf ? iw + 22 : n * st - 2;
+      const flash = Q.hudGrenT > 0 && Math.floor(Q.hudGrenT / 0.08) % 2;
+      ctx.fillStyle = "rgba(11,14,24,0.8)"; ctx.beginPath(); ctx.roundRect(gx0 - 3, gy - 2, rowW + 6, ih + 4, 4); ctx.fill();
+      for (let gI = 0; gI < n; gI++) grenIcon(ctx, gx0 + gI * st, gy, ih, inf || gI < Q.grenades, flash);
+      if (inf) {
+        ctx.font = "700 19px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.lineJoin = "round"; ctx.lineWidth = 4;
+        ctx.strokeStyle = "#0b0e18"; ctx.strokeText("∞", gx0 + iw + 3, gy + ih - 1); ctx.fillStyle = "#ffd23a"; ctx.fillText("∞", gx0 + iw + 3, gy + ih - 1);
+      }
+    }
+    // vidas: dos cifras en una caja oscura
+    ctx.fillStyle = "#0b0e18"; ctx.beginPath(); ctx.roundRect(x + W - 39, y + 10, 33, 18, 4); ctx.fill();
+    ctx.font = "700 15px 'JetBrains Mono', Menlo, monospace"; ctx.textAlign = "center"; ctx.fillStyle = Q.lives > 0 || G.state === "lobby" ? "#ffffff" : "#5a6378";
+    ctx.fillText(String(Q.lives).padStart(2, "0"), x + W - 22.5, y + 24);
+    badge(ctx, x + R, cy, R, Q);
+  });
+  ctx.setTransform(DS, 0, 0, DS, 0, 0);
+  ctx.globalAlpha = 1; ctx.textAlign = "center";
+  const banner = (text, sub, color = "#ffffff") => {
+    ctx.font = "700 54px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.lineJoin = "round"; ctx.lineWidth = 10; ctx.strokeStyle = "#0b0e18";
+    ctx.strokeText(text, VIEW_W / 2, VIEW_H / 2 - 6); ctx.fillStyle = color; ctx.fillText(text, VIEW_W / 2, VIEW_H / 2 - 6);
+    if (sub) { ctx.font = "600 18px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.lineWidth = 6; ctx.strokeText(sub, VIEW_W / 2, VIEW_H / 2 + 28); ctx.fillStyle = "#eef0f6"; ctx.fillText(sub, VIEW_W / 2, VIEW_H / 2 + 28); }
+  };
+  if (G.state === "count") banner(G.t > 0.4 ? String(Math.ceil((G.t - 0.4) / 0.4)) : "¡YA!", `${SET.lives} ${SET.lives === 1 ? "vida" : "vidas"} cada uno`);
+  else if (G.state === "match") {
+    const w = G.winner, kills = active().map(p => `${p.team.name} ${p.kills}`).join(" · ");
+    banner(w >= 0 ? `¡${TEAM[w].name} gana!` : "Empate", G.t > 1.2 ? `Bajas: ${kills}. Saltar, disparar o Enter: volver al menú` : `Bajas: ${kills}`, w >= 0 ? TEAM[w].color : "#ffffff");
+  }
+  if (G.toast) {
+    ctx.globalAlpha = Math.min(1, G.toast.t / 0.3); ctx.font = "700 20px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.lineJoin = "round"; ctx.lineWidth = 6; ctx.strokeStyle = "#0b0e18";
+    ctx.strokeText(G.toast.text, VIEW_W / 2, 70); ctx.fillStyle = G.toast.color; ctx.fillText(G.toast.text, VIEW_W / 2, 70); ctx.globalAlpha = 1;   // debajo de las granadas del HUD
+  }
+  ctx.restore();
+}
+function render() {
+  const sx = shake > 0 ? (Math.random() - 0.5) * 6 : 0, sy = shake > 0 ? (Math.random() - 0.5) * 6 : 0;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  if (artState !== "ok") { ctx.fillStyle = "#2a6fd0"; ctx.fillRect(0, 0, cv.width, cv.height); drawHud(); return; }
+  if (bakedDS !== DS || needBake) bake();
+  ctx.fillStyle = "#2a6fd0"; ctx.fillRect(0, 0, cv.width, cv.height);
+  const ox = Math.round(sx * DS), oy = Math.round((sy + bumpY) * DS);
+  ctx.drawImage(baked.back, ox, oy);
+  ctx.setTransform(DS * W2S, 0, 0, DS * W2S, ox, oy);
+  const live = players.filter(p => p.alive && p.ctrl !== "off");
+  drawObjects(true);   // objetos de fondo: no chocan, oscurecidos
+  for (const Bm of beams) drawBeam(Bm);
+  for (const Q of live) if (Q.state === "hang") drawSprite(Q);   // colgados: detrás del canto
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(baked.solid, ox, oy);
+  ctx.setTransform(DS * W2S, 0, 0, DS * W2S, ox, oy);
+  drawObjects(false);  // los que chocan: cajas y plataformas, delante de lo pintado
+  for (const K of pickups) drawPickup(K);
+  if (ready) {
+    for (const Q of live) drawShadow(Q);
+    for (const Q of live) if (Q.state !== "hang") drawSprite(Q);
+    for (const Q of live) drawSwing(Q);
+  }
+  for (const B of bullets) {
+    const dir = Math.sign(B.vx), tail = dir > 0 ? Math.max(B.x - B.len, B.x0) : Math.min(B.x + B.len, B.x0), t = B.x - tail;
+    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.lineCap = "round";
+    ctx.strokeStyle = `rgba(${B.glow},0.75)`; ctx.lineWidth = B.power > 1 ? 18 : 13; ctx.beginPath(); ctx.moveTo(B.x, B.y); ctx.lineTo(B.x - t, B.y); ctx.stroke();
+    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = B.power > 1 ? 7 : 5; ctx.beginPath(); ctx.moveTo(B.x, B.y); ctx.lineTo(B.x - t * 0.8, B.y); ctx.stroke();
+    ctx.restore();
+  }
+  for (const Q of live) if (Q.flash) drawFlash(Q);
+  for (const Im of impacts) {
+    if (Im.t < 0.06) {
+      const k = Im.t / 0.06, r = (Im.big ? 26 : 18) * FXK * (0.5 + k);
+      ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - k;
+      const gr = ctx.createRadialGradient(Im.x, Im.y, 1, Im.x, Im.y, r); gr.addColorStop(0, "rgba(240,255,255,1)"); gr.addColorStop(1, "rgba(89,227,236,0)");
+      ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(Im.x, Im.y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    }
+    const i = Math.floor(Im.t / FXT.impact); if (i > 3) continue;
+    const name = Im.row + (i + 1), p = FX.impact.pieces[name], s = S.char / 0.8 * (Im.big ? 1.3 : 1) * FXK, im = FX_IMG[`impact/${name}`];
+    if (!im.complete) continue;
+    ctx.save(); ctx.translate(Im.x, Im.y); ctx.scale(Im.dir * s, s); ctx.drawImage(im, -p.ax, -p.ay, p.w, p.h); ctx.restore();
+  }
+  for (const Gr of grenades) {   // la granada: gira al rodar y la luz titila más rápido al final
+    const blink = Math.floor(Gr.t / Math.max(0.06, 0.25 * (1 - Gr.t / GRENADE.fuse))) % 2, r = GRENADE.r * 1.15;
+    const art = GREN.grenade && GREN.grenade[blink ? "on" : "off"];
+    if (art && IMG[art.src]) {   // el dibujo de backgrounds/ranger_grenade
+      ctx.save(); ctx.translate(Gr.x, Gr.y); ctx.rotate(Gr.rot); ctx.drawImage(IMG[art.src], -art.w / 2, -art.h * 0.58, art.w, art.h);
+      if (blink) { ctx.globalCompositeOperation = "lighter"; ctx.fillStyle = "rgba(255,80,60,0.45)"; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore(); continue;
+    }
+    ctx.save(); ctx.translate(Gr.x, Gr.y); ctx.rotate(Gr.rot);
+    ctx.fillStyle = "#0b0e18"; ctx.beginPath(); ctx.arc(0, 0, r + 3, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#e9ecf3"; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#e8392e"; ctx.fillRect(-r, -r * 0.28, r * 2, r * 0.56);
+    ctx.fillStyle = "#2a2d38"; ctx.fillRect(-r * 0.35, -r - 5, r * 0.7, 6);
+    ctx.fillStyle = blink ? "#ff3b2e" : "#4a1010"; ctx.beginPath(); ctx.arc(0, 0, r * 0.32, 0, Math.PI * 2); ctx.fill();
+    if (blink) { ctx.globalCompositeOperation = "lighter"; ctx.fillStyle = "rgba(255,80,60,0.6)"; ctx.beginPath(); ctx.arc(0, 0, r * 0.9, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
+  for (const Bx of blasts) {   // la explosión: los seis dibujos de backgrounds/ranger_grenade y el anillo de la onda
+    if (BLAST_FRAMES.length) {
+      const k = Bx.t / 0.5, i = Math.min(BLAST_FRAMES.length - 1, Math.floor(k * BLAST_FRAMES.length)), A = BLAST_FRAMES[i];
+      if (IMG[A.src]) ctx.drawImage(IMG[A.src], Bx.x - A.w / 2, Bx.y - A.h / 2 - 10 * k, A.w, A.h);   // el humo sube un poco
+      ctx.save(); ctx.globalAlpha = Math.max(0, 1 - k * 1.6); ctx.strokeStyle = "#fff4d0"; ctx.lineWidth = 10 * (1 - k);
+      ctx.beginPath(); ctx.arc(Bx.x, Bx.y, GRENADE.radius * (0.4 + 0.8 * k), 0, Math.PI * 2); ctx.stroke();
+      if (k < 0.15) { ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - k / 0.15; ctx.fillStyle = "rgba(255,240,200,0.8)"; ctx.beginPath(); ctx.arc(Bx.x, Bx.y, GRENADE.radius * 0.6, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore(); continue;
+    }
+    const k = Bx.t / 0.5, R = GRENADE.radius * (0.35 + 0.75 * (1 - (1 - Math.min(1, k * 1.6)) ** 2));
+    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = Math.max(0, 1 - k);
+    const gr = ctx.createRadialGradient(Bx.x, Bx.y, 1, Bx.x, Bx.y, R);
+    gr.addColorStop(0, "rgba(255,255,240,1)"); gr.addColorStop(0.3, "rgba(255,220,90,0.95)"); gr.addColorStop(0.65, "rgba(255,120,30,0.8)"); gr.addColorStop(1, "rgba(220,60,20,0)");
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(Bx.x, Bx.y, R, 0, Math.PI * 2); ctx.fill();
+    ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = Math.max(0, 1 - k * 1.4); ctx.strokeStyle = "#fff4d0"; ctx.lineWidth = 10 * (1 - k);
+    ctx.beginPath(); ctx.arc(Bx.x, Bx.y, GRENADE.radius * (0.4 + 0.8 * k), 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+  for (const Pw of pows) {   // el golpe de cerca: la estrella se abre y se apaga (quieta durante la congelada)
+    const k = Pw.t / 0.16, r = 26 * (0.8 + 0.5 * k), star = (R, q) => { ctx.beginPath(); for (let i = 0; i < 16; i++) { const a = Pw.rot + i / 16 * Math.PI * 2, rr = i % 2 ? R * q : R; ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } ctx.closePath(); };
+    ctx.save(); ctx.translate(Pw.x, Pw.y); ctx.globalAlpha = Math.max(0, 1 - k * k); ctx.lineJoin = "round";
+    ctx.globalCompositeOperation = "lighter"; ctx.fillStyle = `rgba(${Pw.glow},0.85)`; star(r * 1.4, 0.5); ctx.fill();
+    ctx.globalCompositeOperation = "source-over"; star(r, 0.5); ctx.lineWidth = 4; ctx.strokeStyle = "#0b0e18"; ctx.stroke(); ctx.fillStyle = "#ffffff"; ctx.fill();
+    ctx.restore();
+  }
+  for (const Bm of booms) {   // la onda de una muerte: un destello del color del equipo que se abre y un anillo
+    const k = Bm.t / 0.4, r = 40 + 170 * (1 - (1 - k) ** 2);
+    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = (1 - k) * 0.9;
+    const gr = ctx.createRadialGradient(Bm.x, Bm.y, 1, Bm.x, Bm.y, r); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.35, `rgba(${Bm.glow},0.8)`); gr.addColorStop(1, `rgba(${Bm.glow},0)`);
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(Bm.x, Bm.y, r, 0, Math.PI * 2); ctx.fill();
+    ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 8 * (1 - k); ctx.beginPath(); ctx.arc(Bm.x, Bm.y, r * 1.1, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  }
+  for (const E of fx) {
+    const a = Math.max(0, E.t / E.life); ctx.globalAlpha = E.round ? a * 0.85 : a; ctx.fillStyle = E.color;
+    ctx.globalCompositeOperation = E.add ? "lighter" : "source-over";
+    if (E.round) { const sz = E.size * (1 + (E.grow - 1) * (1 - a)); ctx.beginPath(); ctx.arc(E.x, E.y, sz / 2, 0, Math.PI * 2); ctx.fill(); }
+    else ctx.fillRect(E.x - E.size / 2, E.y - E.size / 2, E.size, E.size);
+  }
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
+  if (ready) for (const Q of live) drawTag(Q);
+  for (const Lb of labels) {   // lo que agarró: sube y se apaga
+    const k = Lb.t / 1.1; ctx.globalAlpha = k < 0.6 ? 1 : 1 - (k - 0.6) / 0.4;
+    ctx.font = "700 30px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = 8; ctx.strokeStyle = "#0b0e18";
+    const ly = Lb.y - 40 * (1 - (1 - Math.min(1, k * 1.6)) ** 2);
+    ctx.strokeText(Lb.text, Lb.x, ly); ctx.fillStyle = Lb.color; ctx.fillText(Lb.text, Lb.x, ly);
+  }
+  ctx.globalAlpha = 1;
+  if (G.state === "play") for (const Q of live) if (Q.ctrl !== "bot" && (Q.charging || (G.mode === "test" && Q === players[0]))) drawThrowPreview(Q, G.mode === "test");
+  if (S.debug) {
+    for (const Q of live) {
+      ctx.strokeStyle = Q.team.color; ctx.lineWidth = 2; ctx.strokeRect(Q.x - HALF_W, Q.y - hurtH(Q), HALF_W * 2, hurtH(Q));
+      if (Q.bot && Q.bot.target) { ctx.setLineDash([8, 8]); ctx.beginPath(); ctx.moveTo(Q.x, Q.y - 50); ctx.lineTo(Q.bot.target.x, Q.bot.target.y - 50); ctx.stroke(); ctx.setLineDash([]); }
+      if (Q.bot && Q.bot.goal) { ctx.fillStyle = Q.team.color; ctx.beginPath(); ctx.arc(Q.bot.goal.x, Q.y - 4, 6, 0, Math.PI * 2); ctx.fill(); }
+      if (Q.bot && Q.bot.roam && Q.bot.roam.pick) { ctx.setLineDash([3, 6]); ctx.beginPath(); ctx.moveTo(Q.x, Q.y - 50); ctx.lineTo(Q.bot.roam.x, Q.bot.roam.y - PICKUP.lift); ctx.stroke(); ctx.setLineDash([]); }
+      if (Q.meleeT > 0) {   // la caja del golpe: llena mientras pega
+        const M = meleeBox(Q), on = Q.meleeT >= MELEE_T.hit0 && Q.meleeT < MELEE_T.hit1;
+        ctx.fillStyle = on ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0)"; ctx.fillRect(M.x0, M.y0, M.x1 - M.x0, M.y1 - M.y0);
+        ctx.strokeStyle = "#ffffff"; ctx.strokeRect(M.x0, M.y0, M.x1 - M.x0, M.y1 - M.y0);
+      }
+    }
+    ctx.strokeStyle = "rgba(255,230,0,0.8)"; for (const s of solids) if (!s.bound) ctx.strokeRect(s.x, s.y, s.w, Math.min(s.h, 40));
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(baked.front, ox, oy);
+  drawHud();
+}
+
+/* ---------- loop ---------- */
+function resize() {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr)); DS = cv.width / VIEW_W;
+}
+window.addEventListener("resize", resize);
+let last = performance.now();
+function step(dt) {
+  pads = readPads();
+  // la congelada del golpe de cerca: todo quieto un instante (los toques quedan para el cuadro siguiente)
+  if (G.hitStop > 0 && G.state === "play") { G.hitStop -= dt; return; }
+  if (G.state === "lobby") lobbyPads();
+  const slow = G.slowT > 0 ? 0.3 : 1; G.slowT -= dt; dt *= slow;
+  for (const p of players) {
+    if (p.ctrl === "off" || !p.alive) { p.in = blankInput(); continue; }
+    if (G.state === "lobby" || G.state === "count") p.in = blankInput();
+    else if (p.ctrl === "bot") p.in = G.state === "play" ? botInput(p, dt) : blankInput();
+    else if (p.ctrl === "auto") { const gp = autoPad(); p.in = gp ? mergeIn(kbInput(KB.kb1), padInput(gp.index)) : kbInput(KB.kb1); }
+    else if (p.ctrl.startsWith("pad:")) p.in = padInput(+p.ctrl.slice(4));
+    else p.in = kbInput(KB[p.ctrl]);
+  }
+  // fin de la partida: cualquier jugador que salta o dispara vuelve al menú
+  if (G.state === "match" && G.t > 1.2 && (players.some(p => p.ctrl !== "bot" && p.ctrl !== "off" && (p.in.jp || p.in.fire1)) || tapped.has("Enter"))) { showLobby(); }
+  moveObjects(dt);
+  if (ready) for (const p of players) {
+    if (!p.alive || p.ctrl === "off") continue;
+    P = p; I = p.in;
+    if (P.state === "ground" || P.state === "air") P.state = P.onGround ? "ground" : "air";
+    update(dt);
+  }
+  updateWorld(dt);
+  if (G.state === "play") { respawns(dt); updatePickups(dt); }
+  if (G.state === "count") {
+    G.t -= dt;
+    const n = Math.ceil((G.t - 0.4) / 0.4); if (n < G.beep && n > 0) { G.beep = n; sfx("beep"); }
+    if (G.t <= 0.4 && G.beep > 0) { G.beep = 0; sfx("go"); }
+    if (G.t <= 0) G.state = "play";
+  } else if (G.state === "play") {
+    const left = active().filter(p => !p.out);   // los que tienen vidas (vivos o esperando volver)
+    if (G.mode !== "test" && left.length <= 1) { G.state = "match"; G.t = 0; G.winner = left.length ? left[0].slot : -1; sfx("win"); }
+  } else if (G.state === "match") G.t += dt / slow;
+  for (const gp of pads) padPrev[gp.index] = padState(gp);
+  tapped.clear();
+}
+function tick(now) {
+  const dt = Math.min(1 / 30, (now - last) / 1000); last = now;
+  step(dt);
+  render();
+  requestAnimationFrame(tick);
+}
+function start() { resize(); buildSlots(); previewLobby(); requestAnimationFrame(tick); }
+atlas.onload = () => {
+  players.forEach(p => { p.art = recolor(atlas, p.team); });
+  ready = true; buildSlots();
+};
+atlas.onerror = () => { lobbyMsg.textContent = "No se pudo cargar el atlas de sprites."; };
+// adentro de la página (data:): abierta desde el disco, un PNG de al lado no deja leer sus píxeles para los colores
+atlas.src = "__ATLAS_SRC__";
+(document.fonts ? document.fonts.ready : Promise.resolve()).finally(() => { window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(); });
+</script>
