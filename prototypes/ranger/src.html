@@ -97,6 +97,13 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
     <section class="box" aria-labelledby="hSettings">
       <h2 id="hSettings">Ajustes de prueba</h2>
       <div class="row">
+        <span class="lbl" id="lblRS">Correr y disparar</span>
+        <div class="seg" role="group" aria-labelledby="lblRS">
+          <button type="button" id="rsSplit" aria-pressed="true">Cuerpo partido</button>
+          <button type="button" id="rsSwing" aria-pressed="false">Mano que balancea</button>
+        </div>
+      </div>
+      <div class="row">
         <span class="lbl" id="lblFeel">Feel</span>
         <div class="seg" role="group" aria-labelledby="lblFeel">
           <button type="button" id="fRep" aria-pressed="true">Reporte</button>
@@ -169,10 +176,14 @@ const JS = anim("jump_shoot").f;
 const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
 const HANG_HAND = anim("hang").f[0];                 // mano del colgado relativa al pivot
 const HANG_WALL = 30, HANG_GRIP = 6;                 // del pivot a la cara de la pared, y de la punta de la mano a los dedos
+// correr disparando con cuerpo partido: piernas del run debajo de la cintura y torso del disparo arriba, con el rebote
+// de cada frame del run (medido en la punta del casco). La costura va a 46 px de los pies y el torso la tapa 6 px
+const RS_CUT = 46, RS_OVER = 6;
+const RS_DY = anim("run").f.map(f => f[10] - anim("shoot").f[0][10]);
 const GRAB_FRAMES = [6, 7, 8, 9];                    // de hang_in: el momento en que agarra
 
 /* ---------- ajustes ---------- */
-const S = { jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte" };
+const S = { jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte", runShoot: "split" };
 function seg(ids, onPick) {
   ids.forEach(([id, val]) => document.getElementById(id).addEventListener("click", () => {
     ids.forEach(([o]) => document.getElementById(o).setAttribute("aria-pressed", String(o === id)));
@@ -184,6 +195,7 @@ seg([["t1", 1], ["t05", 0.5], ["t025", 0.25]], v => { S.slow = v; });
 seg([["dOff", false], ["dOn", true]], v => { S.debug = v; });
 const runSpeedEl = document.getElementById("runSpeed");
 runSpeedEl.addEventListener("input", () => { S.runSpeed = +runSpeedEl.value; document.getElementById("runVal").textContent = S.runSpeed + " px/s"; });
+seg([["rsSplit", "split"], ["rsSwing", "swing"]], v => { S.runShoot = v; });
 seg([["fRep", "reporte"], ["fAnt", "anterior"]], v => { S.feel = v; FEEL = FEELS[v]; S.runSpeed = FEEL.run; runSpeedEl.value = FEEL.run; document.getElementById("runVal").textContent = FEEL.run + " px/s"; });
 function setDebug(v) { S.debug = v; document.getElementById("dOff").setAttribute("aria-pressed", String(!v)); document.getElementById("dOn").setAttribute("aria-pressed", String(v)); }
 
@@ -314,7 +326,7 @@ function burst(x, y, color, n, speed, life, size) {
 }
 
 /* ---------- actualización ---------- */
-function setDraw(name, i, x, y) { P.draw.name = name; P.draw.i = i; P.draw.x = x; P.draw.y = y; }
+function setDraw(name, i, x, y, torso = null) { P.draw.name = name; P.draw.i = i; P.draw.x = x; P.draw.y = y; P.draw.torso = torso; }
 function update(dt) {
   const left = held("ArrowLeft") || held("KeyA"), right = held("ArrowRight") || held("KeyD");
   const down = held("ArrowDown") || held("KeyS");
@@ -379,7 +391,7 @@ function update(dt) {
   }
   jumpPressed = false; downPressed = false;
 
-  let name = null, idx = 0, drawY = P.y;
+  let name = null, idx = 0, drawY = P.y, torso = null;
   if (P.jump && P.jump.mode === "root") {
     const J = P.jump, a = anim("jump"); J.t += dt;
     const fpos = J.t * 1000 / a.ms, i = Math.floor(fpos);
@@ -434,7 +446,13 @@ function update(dt) {
     }
     if (!name) {
       if (P.landT > 0 && !moving) { P.landT -= dt; name = "jump"; idx = JP.land[Math.min(JP.land.length - 1, Math.floor((0.2 - P.landT) / 0.07))] ?? 0; }
-      else if (moving) { P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = "run"; idx = Math.floor(P.t * 12) % anim("run").f.length; }   // el ciclo acompaña la velocidad
+      else if (moving) {
+        P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = "run"; idx = Math.floor(P.t * 12) % anim("run").f.length;   // el ciclo acompaña la velocidad
+        if (firing && S.runShoot === "split") {
+          const n = anim("shoot").f.length, per = Math.max(0.1, FEEL.rate1);
+          torso = { name: "shoot", i: P.shotT < per ? Math.min(n - 1, Math.floor(P.shotT / (per / n))) : 0, dy: RS_DY[idx] };
+        }
+      }
       else {
         // apuntar: entra, dispara (un ciclo de retroceso por disparo), y si deja de disparar baja el arma
         const want = fire2 ? "two" : fire1 ? "one" : null;
@@ -459,14 +477,14 @@ function update(dt) {
       drawY = P.y;
     }
   }
-  setDraw(name, idx, P.x, drawY);
+  setDraw(name, idx, P.x, drawY, torso);
 
   // disparo: sale de la boca del frame que se está mostrando
   const aimedReady = !(P.aimAnim === "in" && P.aim !== "none" && !moving && P.onGround && !crouching);
   if (firing && P.fireCD <= 0 && aimedReady && P.crouch !== "in" && P.crouch !== "out") {
     const two = fire2 && !moving && P.onGround && !crouching;
-    const fr = anim(P.draw.name).f[P.draw.i];
-    fire(fr, P.draw.y, two ? 2 : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1; P.kickT = 0.06;
+    const T = P.draw.torso, fr = T ? anim(T.name).f[T.i] : anim(P.draw.name).f[P.draw.i];
+    fire(fr, P.draw.y + (T ? T.dy : 0), two ? 2 : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1; P.kickT = 0.06;
   }
   finishUpdate(dt, true);
 }
@@ -568,10 +586,20 @@ function drawTarget(T) {
 function drawSprite() {
   const d = P.draw, f = anim(d.name).f[d.i];
   if (!f) return;
-  const kick = P.kickT > 0 ? -P.facing * FEEL.kick * (P.kickT / 0.06) : 0;   // retroceso por código: 2-3 px hacia atrás
-  ctx.save(); ctx.translate(Math.round(d.x - camX + kick), Math.round(d.y));
+  const kick = P.kickT > 0 ? -FEEL.kick * (P.kickT / 0.06) : 0;   // retroceso por código: 2-3 px hacia atrás
+  const frame = g => ctx.drawImage(atlas, g[0], g[1], g[2], g[3], -PIV_X + g[4], -PIV_Y + g[5], g[2], g[3]);
+  ctx.save(); ctx.translate(Math.round(d.x - camX), Math.round(d.y));
   if (P.facing < 0) ctx.scale(-1, 1);
-  ctx.drawImage(atlas, f[0], f[1], f[2], f[3], -PIV_X + f[4], -PIV_Y + f[5], f[2], f[3]);
+  if (d.torso) {
+    // cuerpo partido: piernas del run debajo de la cintura; arriba, el torso del disparo con el rebote del run.
+    // El retroceso mueve sólo el torso
+    const t = d.torso, tf = anim(t.name).f[t.i];
+    ctx.save(); ctx.beginPath(); ctx.rect(-CELL_W, -RS_CUT + t.dy, CELL_W * 2, CELL_H); ctx.clip(); frame(f); ctx.restore();
+    ctx.save(); ctx.translate(Math.round(kick), t.dy);
+    ctx.beginPath(); ctx.rect(-CELL_W, -CELL_H * 2, CELL_W * 2, CELL_H * 2 - RS_CUT + RS_OVER); ctx.clip(); frame(tf); ctx.restore();
+  } else {
+    ctx.translate(Math.round(kick), 0); frame(f);
+  }
   ctx.restore();
 }
 function drawFlash(Fl) {
