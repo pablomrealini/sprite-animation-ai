@@ -1,17 +1,17 @@
 {
   "character": "ranger",
-  "created": "2026-10-16T13:55:05+00:00",
+  "created": "2026-10-16T16:19:32+00:00",
   "tool": "spritepipe 0.1",
   "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
-  "config": "# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).\n# Los comandos van desde la raíz del repo.\n#\n# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).\n#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,\n#    poses/ranger_jump_magenta_16x9.png.\n# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)\n#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno\n#    se retocó en Davinci, reemplazarlo.\n#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)\n#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos\n# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver \"Limpieza previa\" en\n#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,\n#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en\n#    work/00_clean/ y se reusan mientras no cambie nada.\n#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).\n# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml\n#\n# Los clips vienen \"on twos\" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.\n# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin\n# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = \"bt601\".\n# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios\n# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.\n\n[character]\nname = \"ranger\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"run\"\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo\nhole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo\n\n[output]\nextra_scales = [0.5]\n\n# --- clips de Davinci ----------------------------------------------------------------------------\n# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.\n\n[[clip]]\nname = \"run\"              # r01\nfile = \"clips/raw/r01.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run2.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot\"            # r04: disparo con una mano\nfile = \"clips/raw/r04.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot2h\"          # r02: disparo a dos manos\nfile = \"clips/raw/r02.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 604.6    # el personaje viene ~27% más grande: 474 / 0,784 (la escala con que se validó; medido, ~606)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot2h.txt\"\n\n[[clip]]\nname = \"crouch_shoot\"     # r06: agachado disparando\nfile = \"clips/raw/r06.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/crouch_shoot.txt\"\n\n[[clip]]\nname = \"jump\"             # r08: saltos\nfile = \"clips/raw/r08.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"jump_shoot\"       # r05: salto disparando, con fondo en degradé\nfile = \"clips/raw/r05.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"hang\"             # r07: salta, agarra la barra y cuelga\nfile = \"clips/raw/r07.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }   # la barra de la que se cuelga\nbody_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande\nmodel = \"seedance-2.0\"\nprompt = \"prompts/hang.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n# --- quieto y correr ---------------------------------------------------------------------------\n[[animation]]\nname = \"idle\"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad\nclip = \"shoot\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"            # los frames 2 y 3 son iguales: con \"sharpest\" se queda con uno solo\n\n[[animation]]\nname = \"run\"\nclip = \"run\"\nkind = \"cycle\"\nskip_seconds = 0.6        # los primeros 12 frames está parado\nloop_seconds = [0.4, 1.1]\n\n# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [14, 20]\n\n[[animation]]\nname = \"shoot\"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga\nclip = \"shoot\"\nkind = \"cycle\"\nloop_start = 38\nloop_length = 8\n\n[[animation]]\nname = \"shoot_out\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [84, 92]\n\n# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nkind = \"cycle\"\nloop_start = 36\nloop_length = 10\n\n[[animation]]\nname = \"shoot2h_out\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]            # el mismo tramo que shoot2h_in, al revés\nreverse = true\n\n# --- agachado: baja, dispara en loop, se para ---------------------------------------------------\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [10, 16]\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch_shoot\"\nkind = \"cycle\"\nloop_start = 58\nloop_length = 10\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [85, 92]\npick = \"first\"            # con \"sharpest\" el 90 le gana al 89 por poco y la salida pierde un frame\n\n# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------\n[[animation]]\nname = \"jump\"\nclip = \"jump\"\nkind = \"oneshot\"\ntrim = [10, 29]\n\n[[animation]]\nname = \"jump_shoot\"\nclip = \"jump_shoot\"\nkind = \"oneshot\"\ntrim = [10, 35]\n\n# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [12, 32]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.5, 2.0]\n\n# --- trepar a la cornisa (todavía sin clip) -------------------------------------------------------\n# La pose arranca colgado y con el personaje más chico, así que su alto (521 px) no es el cuerpo parado.\n# poses/ranger_hang_concept.png es el frame 94 del hang limpio de los scripts sueltos (r07 a ×0,975, el\n# tamaño con que sale hang), donde el ranger mide 473 px parado y 556 colgado: parado mediría\n# 521 × 473 / 556 ≈ 443 px de la pose. Con eso el clip sale a la escala del run.\n# [[animation]]\n# name = \"climb\"\n# clip = \"clips/climb.mp4\"\n# kind = \"oneshot\"\n# loop = false\n# model = \"seedance-2.0\"\n# prompt = \"prompts/climb.txt\"\n# pose = \"../../poses/ranger_climb_magenta_16x9.png\"\n# pose_body_height_px = 443\n\n# --- clips generados por API (spritepipe bakeoff con generate.toml: Seedance 2.0 en fal.ai) ---------\n# fal devuelve magenta puro (#FF26FF), y la compresión lo hace \"sangrar\" en los blancos del casco: con\n# key_method = \"chroma\" el despill lo limpia (con distancia quedaban manchas semitransparentes). Con magenta\n# puro el rojo de la armadura no corre peligro: la pantalla es min(R, B) - G y en el rojo B es bajo.\n# body_height_px = 363 en los tres: medido idle contra idle (misma pose parada), así salen a 129 px como el resto.\n# g01 es la primera prueba de run_legs (sin el prompt mate); quedó en raw/ pero no se usa.\n\n[[clip]]\nname = \"run_legs\"         # g02: run con las manos arriba de la cintura, para el cuerpo partido\nfile = \"clips/raw/g02_run_legs.mp4\"\ncolor_matrix = \"bt601\"    # fal tampoco etiqueta el color; con BT.601 el rojo coincide con el concept\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs.txt\"\n\n[[clip]]\nname = \"idle_breath\"      # g03: idle respirando, con la pose como primer y último frame\nfile = \"clips/raw/g03_idle_breath.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_breath.txt\"\n\n[[clip]]\nname = \"double_jump\"      # g04: dos saltos con mortal\nfile = \"clips/raw/g04_double_jump.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/double_jump.txt\"\n\n[[animation]]\nname = \"run_legs\"\nclip = \"run_legs\"\nkind = \"cycle\"\nskip_seconds = 0.5\nloop_seconds = [0.4, 1.1]\n\n[[animation]]\nname = \"idle_breath\"\nclip = \"idle_breath\"\nkind = \"cycle\"\nskip_seconds = 0.2\nloop_seconds = [1.5, 4.5]\n\n[[animation]]\nname = \"double_jump\"      # el primer salto con mortal\nclip = \"double_jump\"\nkind = \"oneshot\"\ntrim = [22, 54]\n",
+  "config": "# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).\n# Los comandos van desde la raíz del repo.\n#\n# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).\n#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,\n#    poses/ranger_jump_magenta_16x9.png.\n# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)\n#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno\n#    se retocó en Davinci, reemplazarlo.\n#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)\n#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos\n# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver \"Limpieza previa\" en\n#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,\n#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en\n#    work/00_clean/ y se reusan mientras no cambie nada.\n#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).\n# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml\n#\n# Los clips vienen \"on twos\" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.\n# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin\n# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = \"bt601\".\n# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios\n# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.\n\n[character]\nname = \"ranger\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"run\"\nanchor = \"clip\"            # todas las animaciones de un clip comparten el ancla de su frame 0 (la pose parada):\n                          # con el centroide, el cuerpo saltaba ~8 px para atrás al extender el brazo para disparar\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo\nhole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo\n\n[output]\nextra_scales = [0.5]\n\n# --- clips de Davinci ----------------------------------------------------------------------------\n# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.\n\n[[clip]]\nname = \"run\"              # r01\nfile = \"clips/raw/r01.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run2.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot\"            # r04: disparo con una mano\nfile = \"clips/raw/r04.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot2h\"          # r02: disparo a dos manos\nfile = \"clips/raw/r02.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 658      # medido por la cara y el casco contra r04 (1,40×), no por el alto: abre mucho las piernas\n                          # y queda más bajo, así que igualar el alto lo agrandaba ~8%\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot2h.txt\"\n\n[[clip]]\nname = \"crouch_shoot\"     # r06: agachado disparando\nfile = \"clips/raw/r06.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/crouch_shoot.txt\"\n\n[[clip]]\nname = \"jump\"             # r08: saltos\nfile = \"clips/raw/r08.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"jump_shoot\"       # r05: salto disparando, con fondo en degradé\nfile = \"clips/raw/r05.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"hang\"             # r07: salta, agarra la barra y cuelga\nfile = \"clips/raw/r07.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }   # la barra de la que se cuelga\nbody_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande\nmodel = \"seedance-2.0\"\nprompt = \"prompts/hang.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n# --- quieto y correr ---------------------------------------------------------------------------\n[[animation]]\nname = \"idle\"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad\nclip = \"shoot\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"            # los frames 2 y 3 son iguales: con \"sharpest\" se queda con uno solo\n\n[[animation]]\nname = \"run\"\nclip = \"run\"\nkind = \"cycle\"\nskip_seconds = 0.6        # los primeros 12 frames está parado\nloop_seconds = [0.4, 1.1]\n\n# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [14, 20]\n\n[[animation]]\nname = \"shoot\"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga\nclip = \"shoot\"\nkind = \"cycle\"\nloop_start = 38\nloop_length = 8\n\n[[animation]]\nname = \"shoot_out\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [84, 92]\n\n# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nkind = \"cycle\"\nloop_start = 36\nloop_length = 10\n\n[[animation]]\nname = \"shoot2h_out\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]            # el mismo tramo que shoot2h_in, al revés\nreverse = true\n\n# --- agachado: baja, dispara en loop, se para ---------------------------------------------------\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [10, 16]\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch_shoot\"\nkind = \"cycle\"\nloop_start = 58\nloop_length = 10\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [85, 92]\npick = \"first\"            # con \"sharpest\" el 90 le gana al 89 por poco y la salida pierde un frame\n\n# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------\n[[animation]]\nname = \"jump\"\nclip = \"jump\"\nkind = \"oneshot\"\ntrim = [10, 29]\n\n[[animation]]\nname = \"jump_shoot\"\nclip = \"jump_shoot\"\nkind = \"oneshot\"\ntrim = [10, 35]\n\n# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [12, 32]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.5, 2.0]\n\n# --- trepar a la cornisa (todavía sin clip) -------------------------------------------------------\n# La pose arranca colgado y con el personaje más chico, así que su alto (521 px) no es el cuerpo parado.\n# poses/ranger_hang_concept.png es el frame 94 del hang limpio de los scripts sueltos (r07 a ×0,975, el\n# tamaño con que sale hang), donde el ranger mide 473 px parado y 556 colgado: parado mediría\n# 521 × 473 / 556 ≈ 443 px de la pose. Con eso el clip sale a la escala del run.\n# [[animation]]\n# name = \"climb\"\n# clip = \"clips/climb.mp4\"\n# kind = \"oneshot\"\n# loop = false\n# model = \"seedance-2.0\"\n# prompt = \"prompts/climb.txt\"\n# pose = \"../../poses/ranger_climb_magenta_16x9.png\"\n# pose_body_height_px = 443\n\n# --- clips generados por API (spritepipe bakeoff con generate.toml: Seedance 2.0 en fal.ai) ---------\n# fal devuelve magenta puro (#FF26FF), y la compresión lo hace \"sangrar\" en los blancos del casco: con\n# key_method = \"chroma\" el despill lo limpia (con distancia quedaban manchas semitransparentes). Con magenta\n# puro el rojo de la armadura no corre peligro: la pantalla es min(R, B) - G y en el rojo B es bajo.\n# body_height_px = 363 en los tres: medido idle contra idle (misma pose parada), así salen a 129 px como el resto.\n# g01 es la primera prueba de run_legs (sin el prompt mate); quedó en raw/ pero no se usa.\n\n[[clip]]\nname = \"run_legs\"         # g02: run con las manos arriba de la cintura, para el cuerpo partido\nfile = \"clips/raw/g02_run_legs.mp4\"\ncolor_matrix = \"bt601\"    # fal tampoco etiqueta el color; con BT.601 el rojo coincide con el concept\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs.txt\"\n\n[[clip]]\nname = \"idle_breath\"      # g05: idle respirando sobre magenta apagado (g03, sobre magenta puro, tenía agujeros en el casco)\nfile = \"clips/raw/g05_idle_breath.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, muzzle_steady = true }   # el modelo le pone destellos cian en la boca\nbody_height_px = 355      # este toma sale 2% más chico que g03: así mide 129 px como el idle\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_breath.txt\"\n\n[[clip]]\nname = \"double_jump\"      # g06: saltos con mortal sobre magenta apagado (g04, sobre magenta puro, tenía agujeros)\nfile = \"clips/raw/g06_double_jump.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/double_jump.txt\"\n\n[[animation]]\nname = \"run_legs\"\nclip = \"run_legs\"\nkind = \"cycle\"\nskip_seconds = 0.5\nloop_seconds = [0.4, 1.1]\n\n[[animation]]\nname = \"idle_breath\"\nclip = \"idle_breath\"\nkind = \"cycle\"\nloop_start = 81           # una respiración sola (1 s). Entre los frames 48 y 78 cambia el peso de pie y mueve\nloop_length = 24          # la pierna, que en un idle de acción no va\n\n[[animation]]\nname = \"double_jump\"      # un ciclo completo: parado, despega, mortal, aterriza (el clip lo repite cada ~24 frames)\nclip = \"double_jump\"\nkind = \"oneshot\"\ntrim = [24, 44]\n\n[[clip]]\nname = \"idle_combat\"      # g07: idle de combate (respiración rápida, pies quietos), toma 2 de clips/gen3\nfile = \"clips/raw/g07_idle_combat.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, muzzle_steady = true }\nbody_height_px = 372      # esta toma trae al personaje ~5% más grande: así mide 129–132 px respirando\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_combat.txt\"\n\n[[animation]]\nname = \"idle_combat\"\nclip = \"idle_combat\"\nkind = \"cycle\"\nskip_seconds = 0.2\nloop_seconds = [0.4, 1.6]\n\n[[clip]]\nname = \"run_gun\"          # g08: run con la pistola al pecho a dos manos (pose de poses_gen, Nano Banana 2.1 #2), toma 1 de gen4\nfile = \"clips/raw/g08_run_gun.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 372\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs_chest.txt\"\n\n[[animation]]\nname = \"run_gun\"\nclip = \"run_gun\"\nkind = \"cycle\"\nskip_seconds = 0.3\nloop_seconds = [0.4, 1.2]\n\n",
   "align": {
     "canvas": {
-      "w": 632,
-      "h": 895
+      "w": 586,
+      "h": 853
     },
     "pivot_px": {
-      "x": 316,
-      "y": 820
+      "x": 293,
+      "y": 765
     },
     "scale": 0.27321237993596587,
     "pixel_factor": null,
@@ -19,13 +19,13 @@
   },
   "variants": {
     "1x": {
-      "w": 173,
-      "h": 245,
+      "w": 160,
+      "h": 233,
       "scale": 0.27321237993596587
     },
     "0.5x": {
-      "w": 86,
-      "h": 122,
+      "w": 80,
+      "h": 117,
       "scale": 0.13660618996798293
     }
   },
@@ -48,13 +48,14 @@
       "source": "shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
-        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-cfc39c41.mp4",
+        "key": "cfc39c4118ed85c072008abdd3845c675f3f9353d2285f754c5a16c8dc33d347",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -152,6 +153,12 @@
         ],
         "pose_px": 1039.0,
         "standing_pose_px": 1039.0,
+        "frame0_anchor_x": 634.579,
+        "native_indices": [
+          0,
+          2,
+          3
+        ],
         "scale": 1.0,
         "same_pose_as": [
           "run",
@@ -182,13 +189,14 @@
       "source": "run",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/run-02687295.mp4",
-        "key": "02687295c1a20a3c57a73ded33d0177d4cc5806cd77e5dafd769bb375ac0afd0",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/run-ab8416c6.mp4",
+        "key": "ab8416c6365554a52083ae2343deeddc58ca274a7ae5bfcab3fd44c530fd8506",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r01.mp4",
         "params": {
           "cut_muzzle": false,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -327,6 +335,16 @@
         ],
         "pose_px": 1039.0,
         "standing_pose_px": 1039.0,
+        "frame0_anchor_x": 634.9961,
+        "native_indices": [
+          54,
+          56,
+          58,
+          60,
+          62,
+          64
+        ],
+        "camera_drift_x": -0.0054,
         "scale": 1.0,
         "same_pose_as": [
           "idle",
@@ -357,13 +375,14 @@
       "source": "shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
-        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-cfc39c41.mp4",
+        "key": "cfc39c4118ed85c072008abdd3845c675f3f9353d2285f754c5a16c8dc33d347",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -463,6 +482,13 @@
         ],
         "pose_px": 1039.0,
         "standing_pose_px": 1039.0,
+        "frame0_anchor_x": 634.579,
+        "native_indices": [
+          14,
+          16,
+          18,
+          19
+        ],
         "scale": 1.0,
         "same_pose_as": [
           "idle",
@@ -493,13 +519,14 @@
       "source": "shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
-        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-cfc39c41.mp4",
+        "key": "cfc39c4118ed85c072008abdd3845c675f3f9353d2285f754c5a16c8dc33d347",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -603,6 +630,14 @@
         ],
         "pose_px": 1039.0,
         "standing_pose_px": 1039.0,
+        "frame0_anchor_x": 634.579,
+        "native_indices": [
+          38,
+          40,
+          42,
+          44
+        ],
+        "camera_drift_x": -0.0005,
         "scale": 1.0,
         "same_pose_as": [
           "idle",
@@ -633,13 +668,14 @@
       "source": "shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-34b35598.mp4",
-        "key": "34b355982747f664f815245a5b75c9de9c13e59aee00e476ae08698073c3d177",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot-cfc39c41.mp4",
+        "key": "cfc39c4118ed85c072008abdd3845c675f3f9353d2285f754c5a16c8dc33d347",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r04.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -741,6 +777,14 @@
         ],
         "pose_px": 1039.0,
         "standing_pose_px": 1039.0,
+        "frame0_anchor_x": 634.579,
+        "native_indices": [
+          84,
+          86,
+          89,
+          90,
+          91
+        ],
         "scale": 1.0,
         "same_pose_as": [
           "idle",
@@ -771,13 +815,14 @@
       "source": "shoot2h",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-7744c663.mp4",
-        "key": "7744c663811ac14d5fbf95203ae77bf6c30575656b139e1bfbfb3112f825ba0b",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-55de913e.mp4",
+        "key": "55de913e49cfac117790c611a84110bfce7545d7b80aa26d35be8aef2ba9c70f",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -854,17 +899,24 @@
       "loop": false,
       "scale": {
         "source": "body_height_px",
-        "body_px": 604.6,
+        "body_px": 658.0,
         "video": [
           1280,
           720
         ],
         "frame0_px": 604.0,
-        "scale": 0.784,
+        "frame0_anchor_x": 386.1708,
+        "native_indices": [
+          6,
+          8,
+          10,
+          12
+        ],
+        "scale": 0.7204,
         "final_body_px": 129.5027,
         "scale_xy": [
-          0.78438,
-          0.78333
+          0.72031,
+          0.72083
         ]
       }
     },
@@ -885,13 +937,14 @@
       "source": "shoot2h",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-7744c663.mp4",
-        "key": "7744c663811ac14d5fbf95203ae77bf6c30575656b139e1bfbfb3112f825ba0b",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-55de913e.mp4",
+        "key": "55de913e49cfac117790c611a84110bfce7545d7b80aa26d35be8aef2ba9c70f",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -974,17 +1027,26 @@
       "loop": true,
       "scale": {
         "source": "body_height_px",
-        "body_px": 604.6,
+        "body_px": 658.0,
         "video": [
           1280,
           720
         ],
         "frame0_px": 604.0,
-        "scale": 0.784,
+        "frame0_anchor_x": 386.1708,
+        "native_indices": [
+          36,
+          38,
+          40,
+          42,
+          44
+        ],
+        "camera_drift_x": 0.0975,
+        "scale": 0.7204,
         "final_body_px": 129.5027,
         "scale_xy": [
-          0.78438,
-          0.78333
+          0.72031,
+          0.72083
         ]
       }
     },
@@ -1005,13 +1067,14 @@
       "source": "shoot2h",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-7744c663.mp4",
-        "key": "7744c663811ac14d5fbf95203ae77bf6c30575656b139e1bfbfb3112f825ba0b",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/shoot2h-55de913e.mp4",
+        "key": "55de913e49cfac117790c611a84110bfce7545d7b80aa26d35be8aef2ba9c70f",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r02.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -1090,17 +1153,24 @@
       "loop": false,
       "scale": {
         "source": "body_height_px",
-        "body_px": 604.6,
+        "body_px": 658.0,
         "video": [
           1280,
           720
         ],
         "frame0_px": 604.0,
-        "scale": 0.784,
+        "frame0_anchor_x": 386.1708,
+        "native_indices": [
+          12,
+          10,
+          8,
+          6
+        ],
+        "scale": 0.7204,
         "final_body_px": 129.5027,
         "scale_xy": [
-          0.78438,
-          0.78333
+          0.72031,
+          0.72083
         ]
       }
     },
@@ -1121,13 +1191,14 @@
       "source": "crouch_shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-8251a508.mp4",
-        "key": "8251a50872dcc111014194715aa2862421b96d0bb2196ffb63827b2e533bb610",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-f8e351c5.mp4",
+        "key": "f8e351c5fdc8d3b608c9802f1937b02e6f303608eca12b2c779881d9d7262691",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -1222,6 +1293,13 @@
           720
         ],
         "frame0_px": 594.0,
+        "frame0_anchor_x": 635.9369,
+        "native_indices": [
+          10,
+          12,
+          14,
+          15
+        ],
         "scale": 0.79,
         "final_body_px": 129.5027,
         "scale_xy": [
@@ -1247,13 +1325,14 @@
       "source": "crouch_shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-8251a508.mp4",
-        "key": "8251a50872dcc111014194715aa2862421b96d0bb2196ffb63827b2e533bb610",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-f8e351c5.mp4",
+        "key": "f8e351c5fdc8d3b608c9802f1937b02e6f303608eca12b2c779881d9d7262691",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -1354,6 +1433,15 @@
           720
         ],
         "frame0_px": 594.0,
+        "frame0_anchor_x": 635.9369,
+        "native_indices": [
+          58,
+          60,
+          62,
+          64,
+          66
+        ],
+        "camera_drift_x": 0.1493,
         "scale": 0.79,
         "final_body_px": 129.5027,
         "scale_xy": [
@@ -1379,13 +1467,14 @@
       "source": "crouch_shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-8251a508.mp4",
-        "key": "8251a50872dcc111014194715aa2862421b96d0bb2196ffb63827b2e533bb610",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/crouch_shoot-f8e351c5.mp4",
+        "key": "f8e351c5fdc8d3b608c9802f1937b02e6f303608eca12b2c779881d9d7262691",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r06.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -1480,6 +1569,13 @@
           720
         ],
         "frame0_px": 594.0,
+        "frame0_anchor_x": 635.9369,
+        "native_indices": [
+          85,
+          87,
+          89,
+          90
+        ],
         "scale": 0.79,
         "final_body_px": 129.5027,
         "scale_xy": [
@@ -1505,13 +1601,14 @@
       "source": "jump",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/jump-e0b77eb8.mp4",
-        "key": "e0b77eb8f12d035bc3935a61956d2a9b11876c17fc0c4e1b3d33f063e5b46172",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/jump-4622c021.mp4",
+        "key": "4622c02121376669ec34c69a47f54c7a19f341ec8db4c0e17be7209caa69c600",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r08.mp4",
         "params": {
           "cut_muzzle": false,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -1633,6 +1730,19 @@
         ],
         "pose_px": 1039.0,
         "standing_pose_px": 1039.0,
+        "frame0_anchor_x": 635.1539,
+        "native_indices": [
+          10,
+          12,
+          14,
+          17,
+          19,
+          21,
+          22,
+          24,
+          27,
+          28
+        ],
         "scale": 1.0,
         "same_pose_as": [
           "idle",
@@ -1663,13 +1773,14 @@
       "source": "jump_shoot",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/jump_shoot-b75f193f.mp4",
-        "key": "b75f193feb3ee01f5733ca67ec540f4f407a7e14bd7ec995418c4bb29105262d",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/jump_shoot-541f341d.mp4",
+        "key": "541f341d53c2c30972f1a908baa251a58310bc53384bf8452594e31abbc44344",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r05.mp4",
         "params": {
           "cut_muzzle": true,
           "cut_left": true,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -1791,6 +1902,22 @@
         ],
         "pose_px": 1039.0,
         "standing_pose_px": 1039.0,
+        "frame0_anchor_x": 634.6881,
+        "native_indices": [
+          10,
+          13,
+          15,
+          17,
+          19,
+          20,
+          23,
+          24,
+          26,
+          28,
+          30,
+          33,
+          34
+        ],
         "scale": 1.0,
         "same_pose_as": [
           "idle",
@@ -1821,13 +1948,14 @@
       "source": "hang",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/hang-d6716486.mp4",
-        "key": "d6716486dc1c22b04e5abd6589bcb68f0e5095b7a5c795f300285decb4b9251c",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/hang-10cfdbf6.mp4",
+        "key": "10cfdbf641ab29476c940d85af5e37106046e353053e560723559027888d2f4a",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r07.mp4",
         "params": {
           "cut_muzzle": false,
           "cut_left": false,
-          "prop_rows": true
+          "prop_rows": true,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -1935,6 +2063,19 @@
           720
         ],
         "frame0_px": 486.0,
+        "frame0_anchor_x": 634.7687,
+        "native_indices": [
+          12,
+          14,
+          16,
+          19,
+          20,
+          23,
+          25,
+          27,
+          29,
+          31
+        ],
         "scale": 0.9749,
         "final_body_px": 129.5027,
         "scale_xy": [
@@ -1960,13 +2101,14 @@
       "source": "hang",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/hang-d6716486.mp4",
-        "key": "d6716486dc1c22b04e5abd6589bcb68f0e5095b7a5c795f300285decb4b9251c",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/hang-10cfdbf6.mp4",
+        "key": "10cfdbf641ab29476c940d85af5e37106046e353053e560723559027888d2f4a",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/r07.mp4",
         "params": {
           "cut_muzzle": false,
           "cut_left": false,
-          "prop_rows": true
+          "prop_rows": true,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 97,
@@ -2115,6 +2257,19 @@
           720
         ],
         "frame0_px": 486.0,
+        "frame0_anchor_x": 634.7687,
+        "native_indices": [
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54
+        ],
+        "camera_drift_x": -0.3255,
         "scale": 0.9749,
         "final_body_px": 129.5027,
         "scale_xy": [
@@ -2140,13 +2295,14 @@
       "source": "run_legs",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/run_legs-c5762b48.mp4",
-        "key": "c5762b486eff622963cc517b2d200631ed9303cfe839960ffea6610d7fb0bbd9",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/run_legs-74e04673.mp4",
+        "key": "74e046739bcdd64846dab20c00e83c4a2764103777153bfdfd611cfd3ce692d3",
         "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g02_run_legs.mp4",
         "params": {
           "cut_muzzle": false,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 121,
@@ -2156,7 +2312,7 @@
         "removed_px": 144458
       },
       "model": "seedance-2.0 (fal)",
-      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character runs in place like on a treadmill, facing right, no forward travel. Fast arcade run with big strides, knees lift high, the body bounces on every step. Both hands stay above the waist the whole time: the blaster is held in front of the chest pointing forward, and the free hand is a fist at chest height; the arms pump only a little and never swing down to the hips. The blaster stays in the same hand as in the input image. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character runs in place like on a treadmill, facing right, no forward travel. Fast arcade run with big strides, knees lift high, the body bounces on every step. Both hands stay above the waist the whole time: the blaster is held in front of the chest pointing forward, and the free hand is a fist at chest height; the arms pump only a little and never swing down to the hips. The blaster stays in the same hand as in the input image. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat background, the same color as in the input image, unchanged.\n",
       "pose": null,
       "pose_sha256": null,
       "qa": {
@@ -2268,6 +2424,16 @@
           720
         ],
         "frame0_px": 357.0,
+        "frame0_anchor_x": 624.5826,
+        "native_indices": [
+          92,
+          94,
+          96,
+          98,
+          100,
+          102
+        ],
+        "camera_drift_x": -0.0041,
         "scale": 1.3058,
         "final_body_px": 129.5027,
         "scale_xy": [
@@ -2277,8 +2443,8 @@
       }
     },
     "idle_breath": {
-      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g03_idle_breath.mp4",
-      "clip_sha256": "cb4fbe6c6e0fe1391b82edba314020f1a30ff158365161fd87288308371e000c",
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g05_idle_breath.mp4",
+      "clip_sha256": "755f306f81dd7f6db02978d16cf1b9073d83b8405110eca2c949f0d72ffdf5be",
       "video": {
         "width": 1280,
         "height": 720,
@@ -2293,23 +2459,24 @@
       "source": "idle_breath",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/idle_breath-76752a95.mp4",
-        "key": "76752a953557a7729159f73c736453540c7cfe24f41dde83f1925a9ff9031d04",
-        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g03_idle_breath.mp4",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/idle_breath-3eb47e39.mp4",
+        "key": "3eb47e39980b55d341212f53c6d26ad7da4f2bc06f387c89dd9f09517e3c965e",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g05_idle_breath.mp4",
         "params": {
-          "cut_muzzle": false,
+          "cut_muzzle": true,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": true
         },
         "color_matrix": "bt601",
         "frames": 121,
-        "bg": "#F200F7",
-        "muzzle_x": null,
+        "bg": "#C12E7F",
+        "muzzle_x": 760,
         "cut_left_x": null,
-        "removed_px": 161936
+        "removed_px": 15243
       },
       "model": "seedance-2.0 (fal)",
-      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame and the last frame. The character stands in place facing right in an alert idle: clear, visible breathing, chest and shoulders rise and fall, the head bobs slightly with each breath, the blaster hand bounces a little, he shifts his weight from one foot to the other once, one blink. Feet stay planted. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame and the last frame. The character stands in place facing right in an alert idle: clear, visible breathing, chest and shoulders rise and fall, the head bobs slightly with each breath, the blaster hand bounces a little, he shifts his weight from one foot to the other once, one blink. Feet stay planted. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat background, the same color as in the input image, unchanged.\n",
       "pose": null,
       "pose_sha256": null,
       "qa": {
@@ -2319,62 +2486,31 @@
           "frames": 121,
           "fps": 24.0,
           "seconds": 5.04,
-          "bg_color": "#F201F7",
-          "key_strength": 0.945,
+          "bg_color": "#C02E7F",
+          "key_strength": 0.318,
           "key_method": "chroma",
           "char_height_px": 352.0,
           "char_height_pct": 48.9,
-          "drift_pct": 0.3,
+          "drift_pct": 0.1,
           "drift_px_per_s": [
-            -0.23,
+            0.07,
             -0.0
           ],
-          "zoom_pct": 0.1,
+          "zoom_pct": 0.0,
           "frames_touching_edge": 0,
-          "bg_std": 0.17,
+          "bg_std": 0.1,
           "bg_drift": 0.0,
           "scene_cuts_at": [],
-          "motion": 2.7,
-          "static_tail_frames": 6
+          "motion": 1.33,
+          "static_tail_frames": 0
         }
       },
       "selection": {
-        "start": 56,
-        "length": 36,
-        "score": 0.629,
-        "seam": 1.03,
-        "motion": 1.64,
-        "seconds": 1.5,
-        "candidates": [
-          {
-            "start": 56,
-            "length": 36,
-            "score": 0.629
-          },
-          {
-            "start": 55,
-            "length": 36,
-            "score": 0.663
-          },
-          {
-            "start": 57,
-            "length": 36,
-            "score": 0.663
-          },
-          {
-            "start": 6,
-            "length": 98,
-            "score": 0.687
-          },
-          {
-            "start": 6,
-            "length": 100,
-            "score": 0.693
-          }
-        ],
-        "quality": "aceptable",
+        "start": 81,
+        "length": 24,
+        "manual": true,
         "camera_drift_px_per_native_frame": [
-          0.0021,
+          0.0005,
           0.0
         ]
       },
@@ -2382,32 +2518,20 @@
         "K": 2,
         "effective_fps": 12.0,
         "native_indices": [
-          56,
-          58,
-          60,
-          62,
-          64,
-          66,
-          68,
-          70,
-          72,
-          74,
-          76,
-          78,
-          80,
-          82,
-          84,
-          86,
-          88,
-          90
+          81,
+          83,
+          85,
+          87,
+          89,
+          91,
+          93,
+          95,
+          97,
+          99,
+          101,
+          103
         ],
         "durations_ms": [
-          83.3,
-          83.3,
-          83.3,
-          83.3,
-          83.3,
-          83.3,
           83.3,
           83.3,
           83.3,
@@ -2423,11 +2547,11 @@
         ]
       },
       "key": {
-        "key_color": "#F201F7",
+        "key_color": "#C02E7F",
         "method": [
           [
-            "chroma",
-            "global"
+            "distance",
+            "connected"
           ]
         ],
         "tolerance": [
@@ -2439,23 +2563,39 @@
       "loop": true,
       "scale": {
         "source": "body_height_px",
-        "body_px": 363.0,
+        "body_px": 355.0,
         "video": [
           1280,
           720
         ],
-        "frame0_px": 351.0,
-        "scale": 1.3058,
+        "frame0_px": 355.0,
+        "frame0_anchor_x": 620.0516,
+        "native_indices": [
+          81,
+          83,
+          85,
+          87,
+          89,
+          91,
+          93,
+          95,
+          97,
+          99,
+          101,
+          103
+        ],
+        "camera_drift_x": 0.0005,
+        "scale": 1.3352,
         "final_body_px": 129.5027,
         "scale_xy": [
-          1.30547,
-          1.30556
+          1.33516,
+          1.33472
         ]
       }
     },
     "double_jump": {
-      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g04_double_jump.mp4",
-      "clip_sha256": "9cd0f46a90af8ce8c86304f11d201f7dee806556d06bd097bff94add72f0d956",
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g06_double_jump.mp4",
+      "clip_sha256": "09489ac94f7b730cc47f5edcba195946d79d9f8d6f70345009068746962f39ad",
       "video": {
         "width": 1280,
         "height": 720,
@@ -2470,23 +2610,24 @@
       "source": "double_jump",
       "color_matrix": "bt601",
       "clean": {
-        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/double_jump-3b67bc8d.mp4",
-        "key": "3b67bc8d69bda2e5b372221663dd93ede2b30ac81338be05e3b305d694c9d8a1",
-        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g04_double_jump.mp4",
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/double_jump-ea47a0da.mp4",
+        "key": "ea47a0daf0613d2c1a9da98f7bb0180860ffe4e821db366eaf382b970d193a22",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g06_double_jump.mp4",
         "params": {
           "cut_muzzle": false,
           "cut_left": false,
-          "prop_rows": false
+          "prop_rows": false,
+          "muzzle_steady": false
         },
         "color_matrix": "bt601",
         "frames": 121,
-        "bg": "#FA06FC",
+        "bg": "#D03686",
         "muzzle_x": null,
         "cut_left_x": null,
-        "removed_px": 104903
+        "removed_px": 603
       },
       "model": "seedance-2.0 (fal)",
-      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character jumps straight up in place, facing right, no forward travel. At the top of the jump he does one fast forward somersault: tucks into a tight ball, spins one full turn, opens up into a falling pose and lands with a squash. Very fast and snappy. The blaster stays in his hand. Do it twice in a row. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat magenta background, unchanged.\n",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame. The character jumps straight up in place, facing right, no forward travel. At the top of the jump he does one fast forward somersault: tucks into a tight ball, spins one full turn, opens up into a falling pose and lands with a squash. Very fast and snappy. The blaster stays in his hand. Do it twice in a row. Matte flat colors with no shine and no reflections: the background color never reflects or glows on the character. Keep the same character design and art style: thick black outlines, flat colors. Solid flat background, the same color as in the input image, unchanged.\n",
       "pose": null,
       "pose_sha256": null,
       "qa": {
@@ -2496,59 +2637,47 @@
           "frames": 121,
           "fps": 24.0,
           "seconds": 5.04,
-          "bg_color": "#FA06FB",
-          "key_strength": 0.957,
+          "bg_color": "#CF3686",
+          "key_strength": 0.314,
           "key_method": "chroma",
-          "char_height_px": 309.3,
-          "char_height_pct": 43.0,
-          "drift_pct": 17.3,
+          "char_height_px": 352.0,
+          "char_height_pct": 48.9,
+          "drift_pct": 16.9,
           "drift_px_per_s": [
-            -0.26,
-            10.7
+            -0.07,
+            11.91
           ],
-          "zoom_pct": 1.3,
+          "zoom_pct": 2.9,
           "frames_touching_edge": 0,
-          "bg_std": 0.14,
+          "bg_std": 0.06,
           "bg_drift": 0.0,
           "scene_cuts_at": [],
-          "motion": 77.89,
-          "static_tail_frames": 3
+          "motion": 78.43,
+          "static_tail_frames": 0
         }
       },
       "selection": {
-        "start": 22,
-        "length": 32,
+        "start": 24,
+        "length": 20,
         "static_tail_trimmed": 0
       },
       "timing": {
         "K": 2,
         "effective_fps": 12.0,
         "native_indices": [
-          22,
           25,
-          26,
-          28,
-          31,
+          27,
+          29,
+          30,
           32,
-          34,
-          36,
-          38,
+          35,
+          37,
+          39,
           40,
           42,
-          44,
-          46,
-          48,
-          50,
-          52,
-          53
+          43
         ],
         "durations_ms": [
-          83.3,
-          83.3,
-          83.3,
-          83.3,
-          83.3,
-          83.3,
           83.3,
           83.3,
           83.3,
@@ -2563,11 +2692,11 @@
         ]
       },
       "key": {
-        "key_color": "#FA06FB",
+        "key_color": "#CF3686",
         "method": [
           [
-            "chroma",
-            "global"
+            "distance",
+            "connected"
           ]
         ],
         "tolerance": [
@@ -2584,12 +2713,362 @@
           1280,
           720
         ],
-        "frame0_px": 352.0,
+        "frame0_px": 354.0,
+        "frame0_anchor_x": 619.9376,
+        "native_indices": [
+          25,
+          27,
+          29,
+          30,
+          32,
+          35,
+          37,
+          39,
+          40,
+          42,
+          43
+        ],
         "scale": 1.3058,
         "final_body_px": 129.5027,
         "scale_xy": [
           1.30547,
           1.30556
+        ]
+      }
+    },
+    "idle_combat": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g07_idle_combat.mp4",
+      "clip_sha256": "b2b000d5b3a70e7e4587689c675c2332fb5c4a056f2a3519b6cc9582fd2a9892",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "idle_combat",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/idle_combat-442d3d7d.mp4",
+        "key": "442d3d7d0fd3549ab3beaa1bc8a1e8fe77be82e45ecebe79f972d5583e2ac770",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g07_idle_combat.mp4",
+        "params": {
+          "cut_muzzle": true,
+          "cut_left": false,
+          "prop_rows": false,
+          "muzzle_steady": true
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#D33283",
+        "muzzle_x": 765,
+        "cut_left_x": null,
+        "removed_px": 438
+      },
+      "model": "seedance-2.0 (fal)",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame and the last frame. Combat-ready idle for a fast action game: the character stands in place facing right, alert and tense, with quick, energetic breathing: chest and shoulders pump up and down clearly in a fast rhythm, about two breaths per second, the head bobs with each breath, the blaster bounces slightly with the shoulders. The feet and legs stay completely still and planted the whole time: no weight shift, no stepping, no knee bending. No blinking. Matte flat colors with no shine and no reflections. Keep the same character design and art style: thick black outlines, flat colors. Solid flat background, the same color as in the input image, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "fondo poco plano (desvío 7.77): el key va a necesitar más tolerancia"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#D23282",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 320.0,
+          "char_height_pct": 44.4,
+          "drift_pct": 0.6,
+          "drift_px_per_s": [
+            -0.39,
+            0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 7.77,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 3.93,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 71,
+        "length": 14,
+        "score": 0.504,
+        "seam": 1.59,
+        "motion": 3.15,
+        "seconds": 0.583,
+        "candidates": [
+          {
+            "start": 78,
+            "length": 28,
+            "score": 0.454
+          },
+          {
+            "start": 79,
+            "length": 26,
+            "score": 0.471
+          },
+          {
+            "start": 79,
+            "length": 28,
+            "score": 0.478
+          },
+          {
+            "start": 71,
+            "length": 14,
+            "score": 0.504
+          },
+          {
+            "start": 93,
+            "length": 12,
+            "score": 0.523
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          -0.0105,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          71,
+          73,
+          75,
+          77,
+          79,
+          81,
+          83
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#D23282",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 372.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 372.0,
+        "frame0_anchor_x": 617.8124,
+        "native_indices": [
+          71,
+          73,
+          75,
+          77,
+          79,
+          81,
+          83
+        ],
+        "camera_drift_x": -0.0105,
+        "scale": 1.2742,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          1.27422,
+          1.27361
+        ]
+      }
+    },
+    "run_gun": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g08_run_gun.mp4",
+      "clip_sha256": "c45198c872c580bf8833bafe74ed3bf455879feb5e2d0d5a50c292689eda4c2b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "run_gun",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/run_gun-cc8eb239.mp4",
+        "key": "cc8eb23949867b787c33a7b8c3016f77e2073622a4123e905216c80e2e47f5c6",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g08_run_gun.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": false,
+          "muzzle_steady": false
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#D23887",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 280
+      },
+      "model": "seedance-2.0 (fal)",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame and the last frame. The character runs in place like on a treadmill, facing right, no forward travel. Fast arcade run with big strides, knees lift high, the body bounces on every step, the torso leans slightly forward. Both hands hold the blaster together in front of the chest the whole time, exactly as in the input image, pointing forward: the arms stay bent close to the body and only bounce with the torso, they never swing and never go down to the hips. Nothing moves below the waist except the legs. Matte flat colors with no shine and no reflections. Keep the same character design and art style: thick black outlines, flat colors. Solid flat background, the same color as in the input image, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#D13886",
+          "key_strength": 0.306,
+          "key_method": "chroma",
+          "char_height_px": 389.3,
+          "char_height_pct": 54.1,
+          "drift_pct": 0.2,
+          "drift_px_per_s": [
+            -0.01,
+            0.19
+          ],
+          "zoom_pct": 0.5,
+          "frames_touching_edge": 0,
+          "bg_std": 0.06,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 39.22,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 13,
+        "length": 12,
+        "score": 0.22,
+        "seam": 1.7,
+        "motion": 7.75,
+        "seconds": 0.5,
+        "candidates": [
+          {
+            "start": 35,
+            "length": 24,
+            "score": 0.198
+          },
+          {
+            "start": 37,
+            "length": 24,
+            "score": 0.208
+          },
+          {
+            "start": 36,
+            "length": 24,
+            "score": 0.209
+          },
+          {
+            "start": 13,
+            "length": 12,
+            "score": 0.22
+          },
+          {
+            "start": 11,
+            "length": 12,
+            "score": 0.226
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          -0.0027,
+          0.0131
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          13,
+          15,
+          17,
+          19,
+          21,
+          23
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#D13886",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 372.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 388.0,
+        "frame0_anchor_x": 629.6863,
+        "native_indices": [
+          13,
+          15,
+          17,
+          19,
+          21,
+          23
+        ],
+        "camera_drift_x": -0.0027,
+        "scale": 1.2742,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          1.27422,
+          1.27361
         ]
       }
     }

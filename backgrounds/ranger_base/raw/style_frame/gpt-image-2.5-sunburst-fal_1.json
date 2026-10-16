@@ -1,0 +1,66 @@
+{
+  "set": "ranger_base",
+  "asset": "style_frame",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA full-screen gameplay screenshot of a side-scrolling shooter level (no HUD). The ranger character from the reference image stands on the ground in the left third of the screen, facing right, about one quarter of the screen height tall. The floor is a steel walkway along the bottom eighth of the screen with a thin cyan light strip. Gameplay layer: steel blocks of different heights and one floating steel platform, all with yellow-and-black hazard stripes on their top edge, a sci-fi supply crate, a warning sign on a post and a round red-and-white shooting target on a stand. Behind them, parallax layers: base structures at mid distance (hangars, a control tower, radar dishes, fences, searchlight beams), a far futuristic city skyline, and a violet night sky with stars and an orange ringed planet. The background layers are desaturated and low contrast so the character and the gameplay layer stand out.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1141,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14509-1375-7142-80dd-80d86a0e1b00",
+  "created": "2026-10-16T14:07:11+00:00",
+  "sha256": "7fae584c3fb3867bb35760c338abb8184dd57c85ed7094670cc31be17d471e0a",
+  "post": {
+    "file": "backgrounds/ranger_base/post/style_frame/gpt-image-2.5-sunburst-fal_1.png",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_1.png",
+        "w": 2560,
+        "h": 1440
+      }
+    }
+  }
+}

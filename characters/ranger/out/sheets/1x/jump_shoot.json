@@ -1,9 +1,9 @@
 {
   "cell": {
-    "w": 173,
-    "h": 245
+    "w": 160,
+    "h": 233
   },
-  "cols": 11,
+  "cols": 12,
   "rows": 2,
   "count": 13,
   "oversize": false,
@@ -11,7 +11,7 @@
   "loop": false,
   "pivot": {
     "x": 0.5,
-    "y": 0.9162
+    "y": 0.89683
   },
   "durations_ms": [
     83.3,

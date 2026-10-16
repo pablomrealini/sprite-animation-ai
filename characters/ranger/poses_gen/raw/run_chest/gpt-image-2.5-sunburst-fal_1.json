@@ -1,0 +1,74 @@
+{
+  "set": "poses_gen",
+  "asset": "run_chest",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same ranger, same design, same proportions, same colors and the same art style (bold uniform black outlines, flat cel colors, chunky shapes). Full body, side view facing right, the same size in the frame as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the pose into a running stride, mid-step: the front leg reaching forward with the heel touching the ground, the back leg pushed back with only the toe touching the ground, the legs clearly separated, both boots pointing to the right, the torso leaning slightly forward. Both hands hold the blaster together in front of the chest, at chest height, pointing straight forward to the right, elbows bent close to the body. Nothing hangs below the waist except the legs: no hand, no arm and no gun near the hips. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/ranger/poses_gen/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "native",
+  "size_requested": "1440×2160",
+  "size": [
+    1440,
+    2160
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1169,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14575-5e01-7313-817a-60f7ef45ea4b",
+  "created": "2026-10-16T16:05:24+00:00",
+  "sha256": "dfb8bba58e0deec4570bac36cfd10a85d2b5b857eda1aa32a828b0cfed89acf7",
+  "post": {
+    "file": "characters/ranger/poses_gen/post/run_chest/gpt-image-2.5-sunburst-fal_1.png",
+    "source": {
+      "w": 1440,
+      "h": 2160
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6938,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        102,
+        344,
+        1391,
+        1851
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_1.png",
+        "w": 1289,
+        "h": 1507
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "set": "poses_gen",
+  "asset": "run_chest",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same ranger, same design, same proportions, same colors and the same art style (bold uniform black outlines, flat cel colors, chunky shapes). Full body, side view facing right, the same size in the frame as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the pose into a running stride, mid-step: the front leg reaching forward with the heel touching the ground, the back leg pushed back with only the toe touching the ground, the legs clearly separated, both boots pointing to the right, the torso leaning slightly forward. Both hands hold the blaster together in front of the chest, at chest height, pointing straight forward to the right, elbows bent close to the body. Nothing hangs below the waist except the legs: no hand, no arm and no gun near the hips. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/ranger/poses_gen/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2:3 2K",
+  "size": [
+    1696,
+    2528
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14575-fe98-7e31-88c3-2f0319116d31",
+  "created": "2026-10-16T16:06:02+00:00",
+  "sha256": "8f7442a54e1a132b23e689578f3c61d9bbfb76ea696be912f6cdc021d9ce266f",
+  "post": {
+    "file": "characters/ranger/poses_gen/post/run_chest/nano-banana-2.1_1.png",
+    "source": {
+      "w": 1696,
+      "h": 2528
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#06FC03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7196,
+      "opaque": 0.2757,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        216,
+        380,
+        1509,
+        2160
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 1293,
+        "h": 1780
+      }
+    }
+  }
+}

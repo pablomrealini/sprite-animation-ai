@@ -163,6 +163,8 @@ def run_character(cfg_path: Path, strict: bool) -> int:
         _print_qa(qres)
         bodies[anim.name] = align.clip_body(anim_key(ch, anim), anim, imgio.load(raw[0]), qres["metrics"].get("pose_mad_region"),
                                             fixed_key)
+        if ch.anchor == "clip":  # el frame 0 del clip es la pose parada: de ahí sale el ancla de todas sus animaciones
+            bodies[anim.name]["frame0_anchor_x"] = align.image_anchor_x(imgio.load(raw[0]), anim_key(ch, anim), fixed_key)
         if qres["verdict"] == "fail":
             failed = True
             if strict:
@@ -183,8 +185,10 @@ def run_character(cfg_path: Path, strict: bool) -> int:
         if anim.reverse:
             indices.reverse()
         timing = decimate.run(raw_dir, w / "02_fps", indices, K, eff, anim.pick, anim.kind, anim.holds)
+        bodies[anim.name]["native_indices"] = timing["native_indices"]
         if anim.kind == "cycle":
             dx, dy = select.periodic_drift(an, sel["length"], round(anim.skip_seconds * info["fps"]))
+            bodies[anim.name]["camera_drift_x"] = dx  # px del clip por frame nativo
             sign = -K if anim.reverse else K
             drifts[anim.name] = (dx * sign, dy * sign)  # por frame de salida
             sel["camera_drift_px_per_native_frame"] = [round(dx, 4), round(dy, 4)]

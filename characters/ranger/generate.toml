@@ -1,4 +1,6 @@
 # Generación de clips del ranger por API (Seedance 2.0 en fal.ai), con el mismo formato que el bake-off.
+# Las poses van sobre magenta apagado (#C42D7D, `pad-pose --bg C42D7D`): con magenta puro Seedance pinta el
+# casco blanco con reflejos del fondo y el recorte los deja como agujeros (probado: 0 contra ~1.500 px por frame).
 # Desde la raíz del repo:
 #   uv run --project pipeline spritepipe bakeoff characters/ranger/generate.toml --dry-run
 # Sin FAL_KEY en el entorno es siempre un dry-run: muestra los pedidos y el costo, no manda nada.
@@ -14,23 +16,23 @@ audio = false
 max_usd = 15              # si la estimación lo pasa, no se manda nada
 max_parallel = 3
 game_fps = 12
-out_dir = "clips/gen"
+out_dir = "clips/gen2"
 
 [[animation]]
 name = "run_legs"         # piernas compartidas para el cuerpo partido: manos siempre arriba de la cintura
-pose = "../../poses/ranger_master_magenta_16x9.png"
+pose = "../../poses/ranger_master_dullmagenta_16x9.png"
 prompt = "prompts/run_legs.txt"
 kind = "cycle"
 
 [[animation]]
 name = "idle_breath"
-pose = "../../poses/ranger_master_magenta_16x9.png"
+pose = "../../poses/ranger_master_dullmagenta_16x9.png"
 prompt = "prompts/idle_breath.txt"
 kind = "cycle"
 last_frame = true         # la misma pose como último frame: loop cerrado
 
 [[animation]]
 name = "double_jump"
-pose = "../../poses/ranger_jump_magenta_16x9.png"
+pose = "../../poses/ranger_jump_dullmagenta_16x9.png"
 prompt = "prompts/double_jump.txt"
 kind = "oneshot"

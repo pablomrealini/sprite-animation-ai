@@ -1,0 +1,82 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_run_legs_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "run_legs",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "error",
+      "handle": {
+        "request_id": "01a1457a-552b-7d13-a142-7492970f0c56",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1457a-552b-7d13-a142-7492970f0c56/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1457a-552b-7d13-a142-7492970f0c56"
+      },
+      "submitted": "2026-10-16T16:10:07+00:00",
+      "detail": "no pude bajar el video: [Errno 2] No such file or directory: '/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/gen4/seedance-2.0_run_legs_1.mp4.part' -> '/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/gen4/seedance-2.0_run_legs_1.mp4'",
+      "finished": "2026-10-16T16:14:39+00:00"
+    },
+    {
+      "clip": "seedance-2.0_run_legs_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "run_legs",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "error",
+      "handle": {
+        "request_id": "01a1457a-5770-7603-b991-53e1a82c3b69",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1457a-5770-7603-b991-53e1a82c3b69/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1457a-5770-7603-b991-53e1a82c3b69"
+      },
+      "submitted": "2026-10-16T16:10:08+00:00",
+      "detail": "no pude bajar el video: [Errno 2] No such file or directory: '/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/gen4/seedance-2.0_run_legs_2.mp4.part' -> '/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/gen4/seedance-2.0_run_legs_2.mp4'",
+      "finished": "2026-10-16T16:15:13+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_run_legs_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "run_legs",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.2,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 64.44,
+      "loop_score": 0.271,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 64.44): el modelo re-renderizó",
+        "fondo poco plano (desvío 8.25): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_run_legs_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "run_legs",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.6,
+      "zoom_pct": 0.8,
+      "edge_frames": 0,
+      "pose_mad": 55.73,
+      "loop_score": 0.335,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 55.73): el modelo re-renderizó",
+        "fondo poco plano (desvío 8.24): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

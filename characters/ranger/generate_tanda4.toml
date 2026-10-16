@@ -1,0 +1,27 @@
+# Tanda 4: run de piernas desde la pose con la pistola al pecho (poses_gen, Nano Banana 2.1 #2).
+# Generación de clips del ranger por API (Seedance 2.0 en fal.ai), con el mismo formato que el bake-off.
+# Las poses van sobre magenta apagado (#C42D7D, `pad-pose --bg C42D7D`): con magenta puro Seedance pinta el
+# casco blanco con reflejos del fondo y el recorte los deja como agujeros (probado: 0 contra ~1.500 px por frame).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/ranger/generate.toml --dry-run
+# Sin FAL_KEY en el entorno es siempre un dry-run: muestra los pedidos y el costo, no manda nada.
+# Los clips bajan a clips/gen/ con el QA de `check`; los que sirvan se pasan a clips/raw/ y a la config.
+
+[bakeoff]
+models = ["seedance-2.0"]
+clips_per_model = 2       # tomas por animación
+duration = 5              # s
+aspect_ratio = "16:9"
+resolution = "720p"       # lo mismo que devolvía Davinci (1280×720)
+audio = false
+max_usd = 15              # si la estimación lo pasa, no se manda nada
+max_parallel = 3
+game_fps = 12
+out_dir = "clips/gen4"
+
+[[animation]]
+name = "run_legs"
+pose = "../../poses/ranger_run_chest_dullmagenta_16x9.png"
+prompt = "prompts/run_legs_chest.txt"
+kind = "cycle"
+last_frame = true         # la misma pose de zancada como último frame: loop cerrado

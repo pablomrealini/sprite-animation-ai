@@ -1,0 +1,185 @@
+{
+  "set": "ranger_base",
+  "asset": "platform_kit",
+  "model": "seedream-5-pro",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/bytedance/seedream/v5/pro/edit",
+  "model_docs": "https://fal.ai/models/bytedance/seedream/v5/pro/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA 2D platformer tileset sheet with five separate pieces, all exactly the same height, with wide empty space between them, front orthographic view. Top row, left to right: the left end cap of a steel platform, a straight middle segment of the platform top that tiles seamlessly left to right, the right end cap. Bottom row, left to right: a body block segment that tiles seamlessly left to right below the platform top, and a small standalone floating steel platform with a cyan light strip underneath. Gunmetal blue-grey riveted steel panels, a bright top edge, yellow-and-black hazard stripes along the top lip. The pieces do not touch each other or the image edges.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2048×1152",
+  "size": [
+    2048,
+    1152
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.0675,
+  "price_note": "Precio \"tentativo\": US$0,0675 por imagen de hasta 1536² px, 0,135 hasta 2048², más 0,0045 por cada referencia después de la primera. Sin seed",
+  "usage": null,
+  "request_id": "01a1450a-317b-7b30-a786-66d081abd81b",
+  "created": "2026-10-16T14:08:39+00:00",
+  "sha256": "b27dfafe9741ef8e8cd41b519c0e872a68172644f3da4c58770b34d5f8191e18",
+  "post": {
+    "file": "backgrounds/ranger_base/post/platform_kit/seedream-5-pro_1",
+    "source": {
+      "w": 2048,
+      "h": 1152
+    },
+    "notes": [
+      "top mide 156 px contra 219: queda a su escala, con aire abajo",
+      "floating mide 157 px contra 219: queda a su escala, con aire abajo"
+    ],
+    "key": {
+      "key_color": "#0EEE3A",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.755,
+      "opaque": 0.241,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "height": {
+      "height": 219,
+      "scales": {
+        "edge_left": 0.991,
+        "top": 1.0,
+        "edge_right": 1.0,
+        "body": 0.8902,
+        "floating": 1.0
+      }
+    },
+    "pieces": {
+      "edge_left": [
+        163,
+        256,
+        547,
+        477
+      ],
+      "top": [
+        568,
+        261,
+        1495,
+        417
+      ],
+      "edge_right": [
+        1518,
+        257,
+        1892,
+        476
+      ],
+      "body": [
+        163,
+        699,
+        1083,
+        945
+      ],
+      "floating": [
+        1359,
+        723,
+        1865,
+        880
+      ]
+    },
+    "trim": {
+      "edge_left": [
+        0,
+        0,
+        381,
+        219
+      ],
+      "top": [
+        0,
+        0,
+        927,
+        219
+      ],
+      "edge_right": [
+        0,
+        0,
+        374,
+        219
+      ],
+      "body": [
+        0,
+        0,
+        819,
+        219
+      ],
+      "floating": [
+        0,
+        0,
+        506,
+        219
+      ]
+    },
+    "files": {
+      "edge_left": {
+        "file": "edge_left.png",
+        "w": 381,
+        "h": 219
+      },
+      "top": {
+        "file": "top.png",
+        "w": 927,
+        "h": 219
+      },
+      "edge_right": {
+        "file": "edge_right.png",
+        "w": 374,
+        "h": 219
+      },
+      "body": {
+        "file": "body.png",
+        "w": 819,
+        "h": 219
+      },
+      "floating": {
+        "file": "floating.png",
+        "w": 506,
+        "h": 219
+      }
+    },
+    "seam": {
+      "top:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.39,
+          "peak": 2.97,
+          "verdict": "ok"
+        }
+      },
+      "body:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.24,
+          "peak": 1.15,
+          "verdict": "ok"
+        }
+      }
+    }
+  }
+}

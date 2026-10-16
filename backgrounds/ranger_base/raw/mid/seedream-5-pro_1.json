@@ -1,0 +1,104 @@
+{
+  "set": "ranger_base",
+  "asset": "mid",
+  "model": "seedream-5-pro",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/bytedance/seedream/v5/pro/edit",
+  "model_docs": "https://fal.ai/models/bytedance/seedream/v5/pro/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nThis is a middle background layer: a bit desaturated and lower contrast than the gameplay layer, colors leaning toward violet, dark outlines thinner than in the gameplay layer, medium detail.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA seamless horizontally tiling parallax layer: military training base structures at medium distance (hangars, a control tower, radar dishes, fuel tanks, chain-link fences, searchlights) standing on a common ground line at the bottom edge, in the lower 60% of the image, continuing past the left and right edges. Nothing above them.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "mid",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2656×880",
+  "size": [
+    2656,
+    880
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.0675,
+  "price_note": "Precio \"tentativo\": US$0,0675 por imagen de hasta 1536² px, 0,135 hasta 2048², más 0,0045 por cada referencia después de la primera. Sin seed",
+  "usage": null,
+  "request_id": "01a1450a-096d-7123-abc4-3e1f085d004d",
+  "created": "2026-10-16T14:08:36+00:00",
+  "sha256": "2cfcbd7734aa28a103057cff21e53aeeea22efe8b323ea940e312d932fa42c71",
+  "post": {
+    "file": "backgrounds/ranger_base/post/mid/seedream-5-pro_1.png",
+    "source": {
+      "w": 2656,
+      "h": 880
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#00F30E",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6226,
+      "opaque": 0.3683,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.0,
+        "left": 0.561,
+        "right": 0.602
+      },
+      "flags": []
+    },
+    "seam": {
+      "x": {
+        "before": {
+          "axis": "x",
+          "score": 5.28,
+          "peak": 42.77,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 319,
+          "cut_error": 0.00117,
+          "cut_x": [
+            2,
+            73
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.96,
+          "peak": 6.93,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "image": [
+        0,
+        441,
+        2337,
+        880
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "seedream-5-pro_1.png",
+        "w": 2337,
+        "h": 439
+      }
+    }
+  }
+}

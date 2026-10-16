@@ -42,7 +42,7 @@ import numpy as np
 from . import imgio
 from .config import Clean
 
-CLEAN_VERSION = 3  # subirla cuando cambie el resultado, para invalidar los clips cacheados
+CLEAN_VERSION = 5  # subirla cuando cambie el resultado, para invalidar los clips cacheados
 REF_HEIGHT = 720  # alto de video con el que se calibraron las distancias en px
 
 STRIP = 24  # columnas de cada borde lateral donde se mide el fondo
@@ -162,14 +162,18 @@ def keep_mask(a: np.ndarray, params: Clean) -> tuple[np.ndarray, np.ndarray, np.
     return keep, keep & ~fx, gun, int(fg0.sum())
 
 
-def muzzle_limit(rights: list[int], s: float = 1.0) -> int | None:
+def muzzle_limit(rights: list[int], s: float = 1.0, steady: bool = False) -> int | None:
     """Columna de la boca del arma: cuantil bajo del borde derecho con el brazo extendido.
 
     El brazo está extendido donde el borde derecho pasa por más de MUZZLE_EXTENDED px al de los
     primeros 5 frames (la pose de arranque)."""
     r = np.array(rights)
     ext = r[r > np.median(r[:5]) + _px(MUZZLE_EXTENDED, s)]
-    return int(np.percentile(ext, MUZZLE_QUANTILE)) + _px(MUZZLE_GAP, s) if len(ext) else None
+    if len(ext) and not steady:
+        return int(np.percentile(ext, MUZZLE_QUANTILE)) + _px(MUZZLE_GAP, s)
+    # el brazo no se mueve (un idle con el arma siempre al frente): la boca es el borde derecho típico, y lo que
+    # pase de ahí es un destello
+    return int(np.median(r)) + _px(MUZZLE_GAP, s) if len(r) else None
 
 
 def run(frames: np.ndarray, params: Clean) -> tuple[list[np.ndarray], dict]:
@@ -189,7 +193,7 @@ def run(frames: np.ndarray, params: Clean) -> tuple[list[np.ndarray], dict]:
         rights.append(int(cols.max()) if len(cols) else -1)
         lefts.append(int(cols.min()) if len(cols) else W)
 
-    limit = muzzle_limit(rights, s) if params.cut_muzzle else None
+    limit = muzzle_limit(rights, s, params.muzzle_steady) if params.cut_muzzle else None
     left = int(np.percentile(lefts, 50)) - _px(LEFT_GAP, s) if params.cut_left else None
     left = left if left is None or left > 0 else None  # el cuerpo ya está pegado al borde
     out = []

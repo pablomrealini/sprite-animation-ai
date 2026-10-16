@@ -28,6 +28,8 @@ style = "hd"
 game_fps = 12
 target_height = 128
 scale_reference = "run"
+anchor = "clip"            # todas las animaciones de un clip comparten el ancla de su frame 0 (la pose parada):
+                          # con el centroide, el cuerpo saltaba ~8 px para atrás al extender el brazo para disparar
 
 [key]
 color = "auto"
@@ -63,7 +65,8 @@ name = "shoot2h"          # r02: disparo a dos manos
 file = "clips/raw/r02.mp4"
 color_matrix = "bt601"
 clean = { cut_muzzle = true }
-body_height_px = 604.6    # el personaje viene ~27% más grande: 474 / 0,784 (la escala con que se validó; medido, ~606)
+body_height_px = 658      # medido por la cara y el casco contra r04 (1,40×), no por el alto: abre mucho las piernas
+                          # y queda más bajo, así que igualar el alto lo agrandaba ~8%
 model = "seedance-2.0"
 prompt = "prompts/shoot2h.txt"
 
@@ -243,21 +246,19 @@ model = "seedance-2.0 (fal)"
 prompt = "prompts/run_legs.txt"
 
 [[clip]]
-name = "idle_breath"      # g03: idle respirando, con la pose como primer y último frame
-file = "clips/raw/g03_idle_breath.mp4"
+name = "idle_breath"      # g05: idle respirando sobre magenta apagado (g03, sobre magenta puro, tenía agujeros en el casco)
+file = "clips/raw/g05_idle_breath.mp4"
 color_matrix = "bt601"
-clean = true
-key_method = "chroma"
-body_height_px = 363
+clean = { cut_muzzle = true, muzzle_steady = true }   # el modelo le pone destellos cian en la boca
+body_height_px = 355      # este toma sale 2% más chico que g03: así mide 129 px como el idle
 model = "seedance-2.0 (fal)"
 prompt = "prompts/idle_breath.txt"
 
 [[clip]]
-name = "double_jump"      # g04: dos saltos con mortal
-file = "clips/raw/g04_double_jump.mp4"
+name = "double_jump"      # g06: saltos con mortal sobre magenta apagado (g04, sobre magenta puro, tenía agujeros)
+file = "clips/raw/g06_double_jump.mp4"
 color_matrix = "bt601"
 clean = true
-key_method = "chroma"
 body_height_px = 363
 model = "seedance-2.0 (fal)"
 prompt = "prompts/double_jump.txt"
@@ -273,11 +274,44 @@ loop_seconds = [0.4, 1.1]
 name = "idle_breath"
 clip = "idle_breath"
 kind = "cycle"
-skip_seconds = 0.2
-loop_seconds = [1.5, 4.5]
+loop_start = 81           # una respiración sola (1 s). Entre los frames 48 y 78 cambia el peso de pie y mueve
+loop_length = 24          # la pierna, que en un idle de acción no va
 
 [[animation]]
-name = "double_jump"      # el primer salto con mortal
+name = "double_jump"      # un ciclo completo: parado, despega, mortal, aterriza (el clip lo repite cada ~24 frames)
 clip = "double_jump"
 kind = "oneshot"
-trim = [22, 54]
+trim = [24, 44]
+
+[[clip]]
+name = "idle_combat"      # g07: idle de combate (respiración rápida, pies quietos), toma 2 de clips/gen3
+file = "clips/raw/g07_idle_combat.mp4"
+color_matrix = "bt601"
+clean = { cut_muzzle = true, muzzle_steady = true }
+body_height_px = 372      # esta toma trae al personaje ~5% más grande: así mide 129–132 px respirando
+model = "seedance-2.0 (fal)"
+prompt = "prompts/idle_combat.txt"
+
+[[animation]]
+name = "idle_combat"
+clip = "idle_combat"
+kind = "cycle"
+skip_seconds = 0.2
+loop_seconds = [0.4, 1.6]
+
+[[clip]]
+name = "run_gun"          # g08: run con la pistola al pecho a dos manos (pose de poses_gen, Nano Banana 2.1 #2), toma 1 de gen4
+file = "clips/raw/g08_run_gun.mp4"
+color_matrix = "bt601"
+clean = true
+body_height_px = 372
+model = "seedance-2.0 (fal)"
+prompt = "prompts/run_legs_chest.txt"
+
+[[animation]]
+name = "run_gun"
+clip = "run_gun"
+kind = "cycle"
+skip_seconds = 0.3
+loop_seconds = [0.4, 1.2]
+

@@ -1,0 +1,120 @@
+{
+  "set": "ranger_base",
+  "asset": "props",
+  "model": "seedream-5-pro",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/bytedance/seedream/v5/pro/edit",
+  "model_docs": "https://fal.ai/models/bytedance/seedream/v5/pro/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nThree separate game props in one row, same scale, side view, standing on an implied ground line, with wide empty space between them, not touching the image edges. Left to right: a sci-fi steel supply crate with a red stripe; a warning sign on a post with a yellow-and-black hazard border and a simple pictogram; a shooting practice target, a round red-and-white bullseye on a steel stand.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2048×1152",
+  "size": [
+    2048,
+    1152
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.0675,
+  "price_note": "Precio \"tentativo\": US$0,0675 por imagen de hasta 1536² px, 0,135 hasta 2048², más 0,0045 por cada referencia después de la primera. Sin seed",
+  "usage": null,
+  "request_id": "01a1450a-be1a-7830-ba0e-fb6ab6142726",
+  "created": "2026-10-16T14:09:16+00:00",
+  "sha256": "b62d28f712835ba2257674fafced49f473f4df0ef9db487e048c7bcdb89fb7a6",
+  "post": {
+    "file": "backgrounds/ranger_base/post/props/seedream-5-pro_1",
+    "source": {
+      "w": 2048,
+      "h": 1152
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#24E946",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.826,
+      "opaque": 0.1717,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "crate": [
+        233,
+        545,
+        701,
+        887
+      ],
+      "sign": [
+        871,
+        334,
+        1191,
+        884
+      ],
+      "target": [
+        1390,
+        360,
+        1821,
+        888
+      ]
+    },
+    "trim": {
+      "crate": [
+        0,
+        0,
+        468,
+        342
+      ],
+      "sign": [
+        0,
+        0,
+        320,
+        550
+      ],
+      "target": [
+        0,
+        0,
+        431,
+        528
+      ]
+    },
+    "files": {
+      "crate": {
+        "file": "crate.png",
+        "w": 468,
+        "h": 342
+      },
+      "sign": {
+        "file": "sign.png",
+        "w": 320,
+        "h": 550
+      },
+      "target": {
+        "file": "target.png",
+        "w": 431,
+        "h": 528
+      }
+    }
+  }
+}

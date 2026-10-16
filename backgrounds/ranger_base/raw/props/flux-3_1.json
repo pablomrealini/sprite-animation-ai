@@ -1,0 +1,120 @@
+{
+  "set": "ranger_base",
+  "asset": "props",
+  "model": "flux-3",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/blackforestlabs/flux-3/edit-image",
+  "model_docs": "https://fal.ai/models/blackforestlabs/flux-3/edit-image/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nThree separate game props in one row, same scale, side view, standing on an implied ground line, with wide empty space between them, not touching the image edges. Left to right: a sci-fi steel supply crate with a red stripe; a warning sign on a post with a yellow-and-black hazard border and a simple pictogram; a shooting practice target, a round red-and-white bullseye on a steel stand.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "16:9 1k",
+  "size": [
+    1360,
+    768
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.048,
+  "price_note": "US$0,048 por imagen de 1K (1 Mpx), con cualquier cantidad de referencias. fal no publica el precio de 2k ni de 4k: se pide siempre 1k. Sin seed",
+  "usage": null,
+  "request_id": "01a1450b-b5eb-7831-8df5-3b585df7c9cd",
+  "created": "2026-10-16T14:09:52+00:00",
+  "sha256": "93015e4cba09576e7cf801ac85a15c247ef60cd9ac09f646a2a3372438f833cc",
+  "post": {
+    "file": "backgrounds/ranger_base/post/props/flux-3_1",
+    "source": {
+      "w": 1360,
+      "h": 768
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#0BEA08",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7988,
+      "opaque": 0.1977,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "crate": [
+        82,
+        308,
+        487,
+        563
+      ],
+      "sign": [
+        546,
+        228,
+        818,
+        563
+      ],
+      "target": [
+        897,
+        225,
+        1252,
+        563
+      ]
+    },
+    "trim": {
+      "crate": [
+        0,
+        0,
+        405,
+        255
+      ],
+      "sign": [
+        0,
+        0,
+        272,
+        335
+      ],
+      "target": [
+        0,
+        0,
+        355,
+        338
+      ]
+    },
+    "files": {
+      "crate": {
+        "file": "crate.png",
+        "w": 405,
+        "h": 255
+      },
+      "sign": {
+        "file": "sign.png",
+        "w": 272,
+        "h": 335
+      },
+      "target": {
+        "file": "target.png",
+        "w": 355,
+        "h": 338
+      }
+    }
+  }
+}

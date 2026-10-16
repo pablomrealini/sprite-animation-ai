@@ -1,0 +1,199 @@
+{
+  "set": "ranger_base",
+  "asset": "platform_kit",
+  "model": "flux-3",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/blackforestlabs/flux-3/edit-image",
+  "model_docs": "https://fal.ai/models/blackforestlabs/flux-3/edit-image/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA 2D platformer tileset sheet with five separate pieces, all exactly the same height, with wide empty space between them, front orthographic view. Top row, left to right: the left end cap of a steel platform, a straight middle segment of the platform top that tiles seamlessly left to right, the right end cap. Bottom row, left to right: a body block segment that tiles seamlessly left to right below the platform top, and a small standalone floating steel platform with a cyan light strip underneath. Gunmetal blue-grey riveted steel panels, a bright top edge, yellow-and-black hazard stripes along the top lip. The pieces do not touch each other or the image edges.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "16:9 1k",
+  "size": [
+    1360,
+    768
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.048,
+  "price_note": "US$0,048 por imagen de 1K (1 Mpx), con cualquier cantidad de referencias. fal no publica el precio de 2k ni de 4k: se pide siempre 1k. Sin seed",
+  "usage": null,
+  "request_id": "01a1450b-b161-7b23-97c5-6031173dcf6a",
+  "created": "2026-10-16T14:09:51+00:00",
+  "sha256": "9c83b2de12e6ed5dd41510661b791de702cee18666a9df7467fb5aa3f9518f65",
+  "post": {
+    "file": "backgrounds/ranger_base/post/platform_kit/flux-3_1",
+    "source": {
+      "w": 1360,
+      "h": 768
+    },
+    "notes": [
+      "floating mide 123 px contra 216: queda a su escala, con aire abajo"
+    ],
+    "key": {
+      "key_color": "#0ACB1D",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6542,
+      "opaque": 0.3412,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "height": {
+      "height": 216,
+      "scales": {
+        "edge_left": 1.0,
+        "top": 1.1309,
+        "edge_right": 1.0,
+        "body": 0.9231,
+        "floating": 1.0
+      }
+    },
+    "pieces": {
+      "edge_left": [
+        99,
+        122,
+        323,
+        338
+      ],
+      "top": [
+        431,
+        147,
+        935,
+        338
+      ],
+      "edge_right": [
+        1038,
+        122,
+        1263,
+        338
+      ],
+      "body": [
+        99,
+        404,
+        854,
+        638
+      ],
+      "floating": [
+        941,
+        450,
+        1240,
+        573
+      ]
+    },
+    "trim": {
+      "edge_left": [
+        0,
+        0,
+        224,
+        216
+      ],
+      "top": [
+        0,
+        0,
+        502,
+        216
+      ],
+      "edge_right": [
+        0,
+        0,
+        225,
+        216
+      ],
+      "body": [
+        0,
+        0,
+        697,
+        216
+      ],
+      "floating": [
+        0,
+        0,
+        299,
+        216
+      ]
+    },
+    "files": {
+      "edge_left": {
+        "file": "edge_left.png",
+        "w": 224,
+        "h": 216
+      },
+      "top": {
+        "file": "top.png",
+        "w": 502,
+        "h": 216
+      },
+      "edge_right": {
+        "file": "edge_right.png",
+        "w": 225,
+        "h": 216
+      },
+      "body": {
+        "file": "body.png",
+        "w": 697,
+        "h": 216
+      },
+      "floating": {
+        "file": "floating.png",
+        "w": 299,
+        "h": 216
+      }
+    },
+    "seam": {
+      "top:x": {
+        "before": {
+          "axis": "x",
+          "score": 3.19,
+          "peak": 12.88,
+          "verdict": "warn"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 68,
+          "cut_error": 0.00231,
+          "cut_x": [
+            15,
+            53
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 1.47,
+          "peak": 3.99,
+          "verdict": "ok"
+        }
+      },
+      "body:x": {
+        "before": {
+          "axis": "x",
+          "score": 1.77,
+          "peak": 14.93,
+          "verdict": "ok"
+        }
+      }
+    }
+  }
+}

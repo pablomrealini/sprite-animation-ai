@@ -1,0 +1,26 @@
+# PRUEBA DEL CASCO: idle con la pose sobre magenta apagado (#C42D7D, como devolvía Davinci) en vez de
+# magenta puro, para ver si desaparecen los reflejos que dejan agujeros en el casco.
+# Generación de clips del ranger por API (Seedance 2.0 en fal.ai), con el mismo formato que el bake-off.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/ranger/generate.toml --dry-run
+# Sin FAL_KEY en el entorno es siempre un dry-run: muestra los pedidos y el costo, no manda nada.
+# Los clips bajan a clips/gen/ con el QA de `check`; los que sirvan se pasan a clips/raw/ y a la config.
+
+[bakeoff]
+models = ["seedance-2.0"]
+clips_per_model = 1       # prueba del casco: una sola toma
+duration = 5              # s
+aspect_ratio = "16:9"
+resolution = "720p"       # lo mismo que devolvía Davinci (1280×720)
+audio = false
+max_usd = 2               # si la estimación lo pasa, no se manda nada
+max_parallel = 3
+game_fps = 12
+out_dir = "clips/gen_dull"
+
+[[animation]]
+name = "idle_breath"
+pose = "../../poses/ranger_master_dullmagenta_16x9.png"
+prompt = "prompts/idle_breath.txt"
+kind = "cycle"
+last_frame = true

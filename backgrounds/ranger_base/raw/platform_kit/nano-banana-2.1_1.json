@@ -1,0 +1,200 @@
+{
+  "set": "ranger_base",
+  "asset": "platform_kit",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA 2D platformer tileset sheet with five separate pieces, all exactly the same height, with wide empty space between them, front orthographic view. Top row, left to right: the left end cap of a steel platform, a straight middle segment of the platform top that tiles seamlessly left to right, the right end cap. Bottom row, left to right: a body block segment that tiles seamlessly left to right below the platform top, and a small standalone floating steel platform with a cyan light strip underneath. Gunmetal blue-grey riveted steel panels, a bright top edge, yellow-and-black hazard stripes along the top lip. The pieces do not touch each other or the image edges.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14509-a10f-70c1-b3d4-474c30676083",
+  "created": "2026-10-16T14:07:26+00:00",
+  "sha256": "89471963d9a12dba7ee5c1d3ecf4dd4eee0a39d65a35644b06efce452b7a6b2c",
+  "post": {
+    "file": "backgrounds/ranger_base/post/platform_kit/nano-banana-2.1_1",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [
+      "body mide 585 px contra 439: queda a su escala, más alta que las demás",
+      "floating mide 224 px contra 439: queda a su escala, con aire abajo"
+    ],
+    "key": {
+      "key_color": "#02FC03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6803,
+      "opaque": 0.3147,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "height": {
+      "height": 439,
+      "scales": {
+        "edge_left": 1.0,
+        "top": 1.0,
+        "edge_right": 1.0,
+        "body": 1.0,
+        "floating": 1.0
+      }
+    },
+    "pieces": {
+      "edge_left": [
+        200,
+        201,
+        748,
+        640
+      ],
+      "top": [
+        919,
+        201,
+        1833,
+        640
+      ],
+      "edge_right": [
+        2004,
+        201,
+        2553,
+        640
+      ],
+      "body": [
+        657,
+        808,
+        1311,
+        1393
+      ],
+      "floating": [
+        1487,
+        981,
+        2159,
+        1205
+      ]
+    },
+    "trim": {
+      "edge_left": [
+        0,
+        0,
+        548,
+        439
+      ],
+      "top": [
+        0,
+        0,
+        804,
+        439
+      ],
+      "edge_right": [
+        0,
+        0,
+        549,
+        439
+      ],
+      "body": [
+        0,
+        0,
+        654,
+        585
+      ],
+      "floating": [
+        0,
+        0,
+        672,
+        439
+      ]
+    },
+    "files": {
+      "edge_left": {
+        "file": "edge_left.png",
+        "w": 548,
+        "h": 439
+      },
+      "top": {
+        "file": "top.png",
+        "w": 804,
+        "h": 439
+      },
+      "edge_right": {
+        "file": "edge_right.png",
+        "w": 549,
+        "h": 439
+      },
+      "body": {
+        "file": "body.png",
+        "w": 654,
+        "h": 585
+      },
+      "floating": {
+        "file": "floating.png",
+        "w": 672,
+        "h": 439
+      }
+    },
+    "seam": {
+      "top:x": {
+        "before": {
+          "axis": "x",
+          "score": 6.73,
+          "peak": 16.07,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 110,
+          "cut_error": 0.00023,
+          "cut_x": [
+            42,
+            89
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.56,
+          "peak": 3.33,
+          "verdict": "ok"
+        }
+      },
+      "body:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.18,
+          "peak": 1.26,
+          "verdict": "ok"
+        }
+      }
+    }
+  }
+}

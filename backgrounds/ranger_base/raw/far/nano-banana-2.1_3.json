@@ -1,0 +1,97 @@
+{
+  "set": "ranger_base",
+  "asset": "far",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nThis is a distant background layer: desaturated and low contrast compared to the gameplay layer, colors pushed toward the violet of the night sky (atmospheric perspective), thinner dark-violet outlines instead of black, simple shapes with little detail, so that a red, white and black character in front stands out.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA seamless horizontally tiling parallax layer: a distant futuristic city skyline (towers, domes, antenna masts with tiny red lights, small warm windows) occupying the lower half of the image, reaching the bottom edge and continuing past the left and right edges. Nothing above the skyline.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "far",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "background": "key",
+  "size_requested": "21:9 2K",
+  "size": [
+    3168,
+    1344
+  ],
+  "seed": 9,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a1451c-0ec3-7100-8a9a-e2029299a15d",
+  "created": "2026-10-16T14:27:37+00:00",
+  "sha256": "bba21fb29eac209b165f0960128c73cfc3808727cc16623fe67ae3f8dbd4fa08",
+  "post": {
+    "file": "backgrounds/ranger_base/post/far/nano-banana-2.1_3.png",
+    "source": {
+      "w": 3168,
+      "h": 1344
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FD03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.3308,
+      "opaque": 0.6613,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.0,
+        "left": 0.422,
+        "right": 0.422
+      },
+      "flags": []
+    },
+    "seam": {
+      "x": {
+        "before": {
+          "axis": "x",
+          "score": 0.57,
+          "peak": 1.18,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "image": [
+        0,
+        143,
+        3168,
+        1344
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_3.png",
+        "w": 3168,
+        "h": 1201
+      }
+    }
+  }
+}

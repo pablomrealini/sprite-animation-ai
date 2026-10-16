@@ -1,0 +1,111 @@
+{
+  "set": "ranger_base",
+  "asset": "near",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA seamless horizontally tiling parallax layer that sits right behind the gameplay: stacked cargo containers, pipes, railings, low barrier walls with hazard stripes, cables and small cyan lights, in the lower third of the image, reaching the bottom edge and continuing past the left and right edges. Slightly darker and less saturated than the gameplay layer. Nothing in the upper two thirds.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    },
+    {
+      "file": "backgrounds/ranger_base/style_frame.png",
+      "sha256": "b75d784eecc40fe36ab879cfa2644e6c40ca789986d9b8eb6ef4167b3fd561a5"
+    }
+  ],
+  "background": "key",
+  "size_requested": "21:9 2K",
+  "size": [
+    3168,
+    1344
+  ],
+  "seed": 9,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a1451c-6ef5-7100-86b3-cc8fb0be3dc0",
+  "created": "2026-10-16T14:28:09+00:00",
+  "sha256": "81320ac5a87cf2fb691c2e634c8ccabc997094bfbf38d3f936ce503b10c4d8e7",
+  "post": {
+    "file": "backgrounds/ranger_base/post/near/nano-banana-2.1_3.png",
+    "source": {
+      "w": 3168,
+      "h": 1344
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#01FD04",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.5364,
+      "opaque": 0.4605,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.0,
+        "left": 0.514,
+        "right": 0.496
+      },
+      "flags": []
+    },
+    "seam": {
+      "x": {
+        "before": {
+          "axis": "x",
+          "score": 6.71,
+          "peak": 32.84,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 380,
+          "cut_error": 0.00448,
+          "cut_x": [
+            2,
+            346
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.25,
+          "peak": 0.72,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "image": [
+        0,
+        665,
+        2788,
+        1344
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_3.png",
+        "w": 2788,
+        "h": 679
+      }
+    }
+  }
+}

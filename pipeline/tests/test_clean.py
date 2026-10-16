@@ -233,7 +233,7 @@ def test_ensure_caches_by_clip_and_parameters(tmp_path):
     d = clean.ensure(raw, config.Clean(), tmp_path / "c", "shoot", matrix="bt601")
     assert not d["cached"] and d["path"] != a["path"]
     meta = json.loads(a["path"].with_suffix(".json").read_text(encoding="utf-8"))
-    assert meta["params"] == {"cut_muzzle": False, "cut_left": False, "prop_rows": False}
+    assert meta["params"] == {"cut_muzzle": False, "cut_left": False, "prop_rows": False, "muzzle_steady": False}
 
 
 def test_color_matrix_overrides_the_untagged_default(tmp_path):

@@ -20,3 +20,11 @@ prototypes/*/dist/
 
 # clips que bajó spritepipe bakeoff: los elegidos se copian a clips/raw/ (queda el bakeoff.md/.json)
 characters/*/clips/gen*/*.mp4
+
+# alternativas de las comparaciones de imagen (gen-images): quedan en disco y en compare.html; al repo van
+# la config, compare.html/.md, gen.json, los .json de procedencia y la elegida (post/ ya commiteado, o
+# copiada a poses/). Una elegida nueva en post/ se agrega con `git add -f`.
+backgrounds/*/raw/**/*.png
+backgrounds/*/post/**
+characters/*/poses_gen/raw/**/*.png
+characters/*/poses_gen/post/**

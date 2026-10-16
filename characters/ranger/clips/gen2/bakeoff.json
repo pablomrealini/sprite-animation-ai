@@ -1,0 +1,158 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_idle_breath_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_breath",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a1451e-8e6c-7a32-8ddb-2342452a54b4",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1451e-8e6c-7a32-8ddb-2342452a54b4/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1451e-8e6c-7a32-8ddb-2342452a54b4"
+      },
+      "submitted": "2026-10-16T14:29:52+00:00",
+      "detail": "",
+      "finished": "2026-10-16T14:48:20+00:00"
+    },
+    {
+      "clip": "seedance-2.0_idle_breath_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_breath",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a1451e-9099-7151-9249-29a6d07d9693",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1451e-9099-7151-9249-29a6d07d9693/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1451e-9099-7151-9249-29a6d07d9693"
+      },
+      "submitted": "2026-10-16T14:29:53+00:00",
+      "detail": "",
+      "finished": "2026-10-16T14:33:41+00:00"
+    },
+    {
+      "clip": "seedance-2.0_double_jump_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "double_jump",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a1451e-998d-7a13-aeea-b1abc6d547af",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1451e-998d-7a13-aeea-b1abc6d547af/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1451e-998d-7a13-aeea-b1abc6d547af"
+      },
+      "submitted": "2026-10-16T14:29:55+00:00",
+      "detail": "",
+      "finished": "2026-10-16T14:35:05+00:00"
+    },
+    {
+      "clip": "seedance-2.0_double_jump_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "double_jump",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a14522-3596-7bb3-9cc8-45335a68cf4e",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14522-3596-7bb3-9cc8-45335a68cf4e/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14522-3596-7bb3-9cc8-45335a68cf4e"
+      },
+      "submitted": "2026-10-16T14:33:52+00:00",
+      "detail": "",
+      "finished": "2026-10-16T14:37:44+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_idle_breath_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_breath",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 0.1,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 19.85,
+      "loop_score": 0.433,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 19.85)",
+        "fondo poco plano (desvío 7.56): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_idle_breath_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_breath",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 0.5,
+      "zoom_pct": 0.5,
+      "edge_frames": 0,
+      "pose_mad": 20.76,
+      "loop_score": 1.286,
+      "loop_quality": "costura visible",
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 20.76)",
+        "fondo poco plano (desvío 7.91): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_double_jump_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "double_jump",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 18.6,
+      "zoom_pct": 2.5,
+      "edge_frames": 0,
+      "pose_mad": 24.18,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 24.18)",
+        "fondo poco plano (desvío 8.08): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_double_jump_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "double_jump",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 22.6,
+      "zoom_pct": 8.9,
+      "edge_frames": 0,
+      "pose_mad": 24.07,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 24.07)",
+        "fondo poco plano (desvío 8.04): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

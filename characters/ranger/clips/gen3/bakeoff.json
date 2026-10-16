@@ -1,0 +1,82 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_idle_combat_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_combat",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a1455e-0ced-7c32-a85d-2f80baf61028",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1455e-0ced-7c32-a85d-2f80baf61028/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1455e-0ced-7c32-a85d-2f80baf61028"
+      },
+      "submitted": "2026-10-16T15:39:14+00:00",
+      "detail": "",
+      "finished": "2026-10-16T15:42:50+00:00"
+    },
+    {
+      "clip": "seedance-2.0_idle_combat_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_combat",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a1455e-0f1a-7d33-a06f-4d931b030ecf",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1455e-0f1a-7d33-a06f-4d931b030ecf/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a1455e-0f1a-7d33-a06f-4d931b030ecf"
+      },
+      "submitted": "2026-10-16T15:39:14+00:00",
+      "detail": "",
+      "finished": "2026-10-16T15:42:27+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_idle_combat_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_combat",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.1,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 55.98,
+      "loop_score": 0.445,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 55.98): el modelo re-renderizó",
+        "fondo poco plano (desvío 7.72): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_idle_combat_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_combat",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.2,
+      "zoom_pct": 0.1,
+      "edge_frames": 0,
+      "pose_mad": 53.76,
+      "loop_score": 0.285,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 53.76): el modelo re-renderizó",
+        "fondo poco plano (desvío 7.67): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

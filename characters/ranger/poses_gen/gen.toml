@@ -1,0 +1,39 @@
+# Poses de arranque del ranger para los clips de video, editadas desde el concept con la API de imagen.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images characters/ranger/poses_gen/gen.toml --dry-run
+# La elegida se pasa por `spritepipe pad-pose ... --bg C42D7D` (magenta apagado) antes de mandarla a Seedance.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1"]
+images_per_asset = 2
+max_usd = 1
+max_parallel = 2
+key_color = "#00FF00"     # para el modelo sin alfa (Nano Banana); el ranger no tiene verde
+quality = "high"
+resolution = "2K"
+seed = 7
+ref_bg = "#FFFFFF"
+
+[styles]
+same = """
+Use the attached image as the exact reference for the character: the same ranger, same design, same \
+proportions, same colors and the same art style (bold uniform black outlines, flat cel colors, chunky shapes). \
+Full body, side view facing right, the same size in the frame as the reference.
+"""
+no_text = "No text, letters, numbers or logos."
+
+[[asset]]
+name = "run_chest"        # primer y último frame del run de piernas: manos y arma arriba de la cintura
+style = ["same", "no_text"]
+prompt = """
+Change only the pose into a running stride, mid-step: the front leg reaching forward with the heel touching \
+the ground, the back leg pushed back with only the toe touching the ground, the legs clearly separated, both \
+boots pointing to the right, the torso leaning slightly forward. Both hands hold the blaster together in front \
+of the chest, at chest height, pointing straight forward to the right, elbows bent close to the body. Nothing \
+hangs below the waist except the legs: no hand, no arm and no gun near the hips. Matte flat colors with no \
+shine and no reflections.
+"""
+refs = ["../../../poses/ranger_concept.png"]
+ref_role = "character"
+aspect = "2:3"
+alpha = "cutout"

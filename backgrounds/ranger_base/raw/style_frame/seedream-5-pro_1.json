@@ -1,0 +1,66 @@
+{
+  "set": "ranger_base",
+  "asset": "style_frame",
+  "model": "seedream-5-pro",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/bytedance/seedream/v5/pro/edit",
+  "model_docs": "https://fal.ai/models/bytedance/seedream/v5/pro/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA full-screen gameplay screenshot of a side-scrolling shooter level (no HUD). The ranger character from the reference image stands on the ground in the left third of the screen, facing right, about one quarter of the screen height tall. The floor is a steel walkway along the bottom eighth of the screen with a thin cyan light strip. Gameplay layer: steel blocks of different heights and one floating steel platform, all with yellow-and-black hazard stripes on their top edge, a sci-fi supply crate, a warning sign on a post and a round red-and-white shooting target on a stand. Behind them, parallax layers: base structures at mid distance (hangars, a control tower, radar dishes, fences, searchlight beams), a far futuristic city skyline, and a violet night sky with stars and an orange ringed planet. The background layers are desaturated and low contrast so the character and the gameplay layer stand out.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "2048×1152",
+  "size": [
+    2048,
+    1152
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.0675,
+  "price_note": "Precio \"tentativo\": US$0,0675 por imagen de hasta 1536² px, 0,135 hasta 2048², más 0,0045 por cada referencia después de la primera. Sin seed",
+  "usage": null,
+  "request_id": "01a1450a-05c7-77e0-a3b8-8350addd746f",
+  "created": "2026-10-16T14:09:35+00:00",
+  "sha256": "2e0f92debbd495a0bb728df65c3bbb381c333b4dc7554693ea2e2676bfe48b05",
+  "post": {
+    "file": "backgrounds/ranger_base/post/style_frame/seedream-5-pro_1.png",
+    "source": {
+      "w": 2048,
+      "h": 1152
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "seedream-5-pro_1.png",
+        "w": 2048,
+        "h": 1152
+      }
+    }
+  }
+}

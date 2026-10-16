@@ -29,6 +29,7 @@ class Clean:
     cut_muzzle: bool = False  # borra lo que queda delante de la boca del arma (rayos, fogonazo)
     cut_left: bool = False  # borra lo que cruza por detrás del personaje
     prop_rows: bool = False  # borra utilería dibujada que cruza el cuadro (una barra)
+    muzzle_steady: bool = False  # con cut_muzzle: el arma no se mueve (un idle), la boca es el borde derecho típico
 
 
 COLOR_MATRICES = ("bt601", "bt709")
@@ -94,6 +95,7 @@ class Character:
     min_island_px: int
     # Alineación y reducción
     margin_px: int
+    anchor: str  # ancla horizontal: "centroid" (centroide por animación) | "clip" (el frame 0 de cada clip)
     pixel_factor: int | None
     palette_colors: int
     palette: Path | None
@@ -161,6 +163,12 @@ def _clean(anim: str, value) -> Clean | None:
         if not isinstance(v, bool):
             raise ValueError(f"{anim}: clean.{k} tiene que ser true o false")
     return Clean(**value)
+
+
+def _anchor(value: str) -> str:
+    if value not in ("centroid", "clip"):
+        raise ValueError(f"[character] anchor tiene que ser \"centroid\" o \"clip\", no {value!r}")
+    return value
 
 
 def _clips(data: dict) -> dict[str, dict]:
@@ -275,6 +283,7 @@ def load(path: str | Path) -> Character:
         despill_band_px=int(key.get("despill_band_px", 3)),
         min_island_px=int(key.get("min_island_px", 64)),
         margin_px=int(ch.get("margin_px", 8)),
+        anchor=_anchor(ch.get("anchor", "centroid")),
         pixel_factor=ch.get("pixel_factor"),
         palette_colors=int(ch.get("palette_colors", 24)),
         palette=_path(root, ch.get("palette")),

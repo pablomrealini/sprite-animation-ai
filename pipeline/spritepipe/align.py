@@ -61,6 +61,12 @@ def _measure(alpha: np.ndarray) -> dict | None:
     }
 
 
+def image_anchor_x(img: np.ndarray, ch: Character, fixed_key: np.ndarray | None) -> float | None:
+    """Ancla horizontal (centroide del alfa) de un frame sin keyear, en px del clip."""
+    m = _measure(key.key_frame(img[..., :3], ch, fixed_key)[0][..., 3])
+    return m["anchor_x"] if m else None
+
+
 def body_height(alpha: np.ndarray) -> float | None:
     """Alto del personaje en px: desde la fila opaca más alta hasta la línea de piso."""
     m = _measure(alpha)
@@ -244,6 +250,14 @@ def run(ch: Character, key_dirs: dict[str, Path], kinds: dict[str, str], out_dir
         if drift is not None:  # medida en px del clip
             drift = (drift[0] * kxy[name][0], drift[1] * kxy[name][1])
         shifts[name], drifts[name] = _shifts(meas[name], kinds[name], grid, drift)
+        b = (bodies or {}).get(name, {})
+        if ch.anchor == "clip" and b.get("frame0_anchor_x") is not None and b.get("native_indices"):
+            # Todas las animaciones de un clip comparten el ancla de su frame 0 (la pose parada), corrida por la
+            # deriva de cámara hasta cada frame. Así el cuerpo no salta cuando el brazo se extiende (el centroide
+            # sí se corre) y las animaciones encadenadas de clips distintos arrancan en el mismo lugar.
+            k, d = kxy[name][0], b.get("camera_drift_x", 0.0)
+            shifts[name] = [(_snap(-(b["frame0_anchor_x"] + d * n) * k, grid), sy)
+                            for n, (_, sy) in zip(b["native_indices"], shifts[name])]
         for m, (dx, dy) in zip(meas[name], shifts[name]):
             if m:
                 x0, y0, x1, y1 = m["bbox"]

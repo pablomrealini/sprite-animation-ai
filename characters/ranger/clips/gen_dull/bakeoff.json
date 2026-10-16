@@ -1,0 +1,45 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_idle_breath_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_breath",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a14519-cb18-7ca0-b6ca-7fd07c9288c9",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14519-cb18-7ca0-b6ca-7fd07c9288c9/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14519-cb18-7ca0-b6ca-7fd07c9288c9"
+      },
+      "submitted": "2026-10-16T14:24:40+00:00",
+      "detail": "",
+      "finished": "2026-10-16T14:27:44+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_idle_breath_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_breath",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "warn",
+      "drift_pct": 0.2,
+      "zoom_pct": 0.3,
+      "edge_frames": 0,
+      "pose_mad": 20.66,
+      "loop_score": 1.318,
+      "loop_quality": "costura visible",
+      "flags": [
+        "el frame 0 se aparta de la pose (MAD 20.66)",
+        "fondo poco plano (desvío 7.96): el key va a necesitar más tolerancia",
+        "casi sin movimiento (mediana 0.83): típico de first==last"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

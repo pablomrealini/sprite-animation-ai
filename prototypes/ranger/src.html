@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Polígono del Ranger</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,7 +70,7 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
     <canvas id="game" tabindex="0" aria-label="Juego de prueba: el ranger corre, salta, se cuelga de las cornisas y dispara"></canvas>
     <div class="overlay" id="overlay">
       <div>
-        <button id="startBtn" type="button">Clic para jugar</button>
+        <button id="startBtn" type="button">Clic o botón del control para jugar</button>
         <p id="loadMsg">Cargando sprites…</p>
       </div>
     </div>
@@ -88,26 +89,50 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
         <dt><kbd>W</kbd><kbd>↑</kbd><kbd>Espacio</kbd></dt><dd>Saltar. En el aire, otra vez: doble salto con mortal. Colgado de una cornisa: subir</dd>
         <dt><kbd>S</kbd><kbd>↓</kbd></dt><dd>Agacharse. Colgado: soltarse</dd>
         <dt><kbd>Clic</kbd><kbd>J</kbd></dt><dd>Disparar con una mano. Con el mouse, apunta al lado del cursor</dd>
-        <dt><kbd>Clic der.</kbd><kbd>K</kbd></dt><dd>Disparar con las dos manos: más lento y pega doble</dd>
+        <dt><kbd>Clic der.</kbd><kbd>K</kbd></dt><dd>Disparar con las dos manos: te planta en el lugar, más lento y pega triple</dd>
         <dt><kbd>G</kbd></dt><dd>Mostrar u ocultar colisión, pivot, boca del arma y mano</dd>
       </dl>
-      <p class="note">Las cornisas se agarran solas: saltá contra el borde de un bloque y el ranger se cuelga si la mano llega. Los blancos aguantan cuatro impactos (dos con el disparo a dos manos) y vuelven a los tres segundos.</p>
+      <h2>Control (Xbox o compatible)</h2>
+      <dl class="keys">
+        <dt><kbd>Stick izq.</kbd><kbd>Cruceta</kbd></dt><dd>Correr. Abajo: agacharse; colgado, soltarse. Cruceta arriba: subir a la cornisa</dd>
+        <dt><kbd>A</kbd></dt><dd>Saltar, y otra vez en el aire para el doble salto</dd>
+        <dt><kbd>X</kbd><kbd>RT</kbd></dt><dd>Disparar con una mano</dd>
+        <dt><kbd>B</kbd><kbd>RB</kbd></dt><dd>Disparar con las dos manos: te planta en el lugar y pega triple (vibra)</dd>
+        <dt><kbd>Vista</kbd></dt><dd>Mostrar u ocultar las guías</dd>
+      </dl>
+      <p class="note" id="padStatus" aria-live="polite">Sin control. Conectalo y apretá cualquier botón: el navegador no lo muestra hasta que lo usás.</p>
+      <p class="note">Las cornisas se agarran solas: saltá contra el borde de un bloque y el ranger se cuelga si la mano llega. Los blancos aguantan cuatro impactos de una mano y dos a dos manos y vuelven a los tres segundos.</p>
     </section>
 
     <section class="box" aria-labelledby="hSettings">
       <h2 id="hSettings">Ajustes de prueba</h2>
       <div class="row">
-        <span class="lbl" id="lblSet">Animaciones</span>
+        <span class="lbl" id="lblSet">Run</span>
         <div class="seg" role="group" aria-labelledby="lblSet">
-          <button type="button" id="setNew" aria-pressed="true">Nuevas (API)</button>
-          <button type="button" id="setOld" aria-pressed="false">Anteriores</button>
+          <button type="button" id="setGun" aria-pressed="true">Pistola al pecho</button>
+          <button type="button" id="setOld" aria-pressed="false">Anterior</button>
+          <button type="button" id="setNew" aria-pressed="false">De piernas (en prueba)</button>
         </div>
       </div>
       <div class="row">
         <span class="lbl" id="lblRS">Correr y disparar</span>
         <div class="seg" role="group" aria-labelledby="lblRS">
-          <button type="button" id="rsSplit" aria-pressed="true">Cuerpo partido</button>
-          <button type="button" id="rsSwing" aria-pressed="false">Mano que balancea</button>
+          <button type="button" id="rsSwing" aria-pressed="true">Cuerpo entero</button>
+          <button type="button" id="rsSplit" aria-pressed="false">Cuerpo partido (en prueba)</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblChar">Personaje</span>
+        <div class="seg" role="group" aria-labelledby="lblChar">
+          <button type="button" id="c80" aria-pressed="true">80%</button>
+          <button type="button" id="c100" aria-pressed="false">100%</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl" id="lblZoom">Cámara</span>
+        <div class="seg" role="group" aria-labelledby="lblZoom">
+          <button type="button" id="z100" aria-pressed="true">100%</button>
+          <button type="button" id="z75" aria-pressed="false">75%</button>
         </div>
       </div>
       <div class="row">
@@ -145,9 +170,10 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
         </div>
       </div>
       <div class="readout mono" id="readout" aria-live="off">quieto · idle 1/3</div>
-      <p class="note"><b>Feel "reporte":</b> 300 px/s, salto de 192 px (1,5 alturas) que sube en 0,36 s y cae en 0,28, coyote y buffer de 0,1 s, corrección de esquina, 12 disparos/s y retroceso de 2,5 px por código. "Anterior" es como estaba, para comparar.</p>
-      <p class="note"><b>Animaciones nuevas (API):</b> idle respirando, run con las manos arriba de la cintura (para correr con y sin disparar con las mismas piernas) y doble salto con mortal, generados con Seedance 2.0 por fal.ai. "Anteriores" vuelve al idle quieto y al run viejo, para comparar.</p>
-      <p class="note"><b>Provisorio:</b> con "Anteriores" el idle es un cuadro quieto, la subida a la cornisa es un salto de posición con la animación de pararse (falta el clip de trepar) y al correr dispara desde la mano que balancea, porque no hay run disparando. Los rayos, chispas y el fogonazo son efectos de código.</p>
+      <p class="note"><b>Feel "reporte":</b> 300 px/s, salto de 192 px (1,5 alturas) que sube en 0,36 s y cae en 0,28, coyote y buffer de 0,1 s, corrección de esquina y 12 disparos/s. "Anterior" es como estaba, para comparar.</p>
+      <p class="note"><b>Generadas por API</b> (Seedance 2.0 en fal.ai, con la pose sobre magenta apagado): el idle de combate, el doble salto con mortal y el <b>run con la pistola al pecho</b>, que se usa también al disparar corriendo. La pose de arranque del run salió de la API de imagen (Nano Banana 2.1). "De piernas" es la prueba vieja, con la pistola que baja a la cadera.</p>
+      <p class="note"><b>Provisorio:</b> la subida a la cornisa es un salto de posición con la animación de pararse (falta el clip de trepar) y con el run "Anterior" dispara desde la mano que balancea. Los rayos, chispas y el fogonazo son efectos de código.</p>
+      <p class="note"><b>Fondo generado por API:</b> cielo, ciudad, base y capa cercana con Nano Banana 2.1; bloques, plataformas, blancos, caja y cartel con GPT Image 2.5 (fal.ai). Los bloques se arman con las piezas del kit; las colisiones son las de antes.</p>
     </section>
   </div>
 </div>
@@ -155,13 +181,20 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
 <script>
 "use strict";
 const SPR = __SPRITE_DATA__;
+// fondo: el arte de backgrounds/ranger_base (spritepipe gen-images), que prototypes/build.py achica a bg/;
+// acá vienen las medidas en px del juego (y `k`, px del juego por px de la hoja, en el kit y los props)
+const BG = __BG_DATA__;
 const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
 const VIEW_W = 960, VIEW_H = 540, GROUND = 474, WORLD_W = 3900;
-const HALF_W = 20, BODY_H = 112;
+// tamaño del personaje: el sprite se dibuja a CHAR del atlas (128 px a 1) y la colisión, la boca del arma y la mano
+// del colgado lo acompañan. El mundo (bloques, saltos, velocidades) no cambia
+const CHAR_DEFAULT = 0.8;
+let HALF_W = 20 * CHAR_DEFAULT, BODY_H = 112 * CHAR_DEFAULT;
+const TWO_HAND_POWER = 3;   // daño del disparo a dos manos (una mano: 1). Es más lento: 7 por segundo contra 12
 // feel: "reporte" sale de reports/Movimiento y disparo en run-and-guns.md (salto de 1,5 alturas, 2,34 alturas/s);
 // "anterior" es como estaba el prototipo
 const FEELS = {
-  reporte:  { run: 300, accel: 4500, decel: 6000, air: 3000, v0: 1067, gUp: 2963, gDown: 4898, cut: 480, term: 1400, coyote: 0.10, buffer: 0.10, corner: 12, rate1: 1 / 12, rate2: 1 / 7, kick: 2.5 },
+  reporte:  { run: 300, accel: 4500, decel: 6000, air: 3000, v0: 1067, gUp: 2963, gDown: 4898, cut: 480, term: 1400, coyote: 0.10, buffer: 0.10, corner: 12, rate1: 1 / 12, rate2: 1 / 7, kick: 0 },   // kick 0: el disparo dibujado ya trae el retroceso
   anterior: { run: 260, accel: 3000, decel: 3000, air: 1800, v0: 660, gUp: 1950, gDown: 1950, cut: 280, term: 1e9, coyote: 0, buffer: 0, corner: 0, rate1: 0.16, rate2: 0.2, kick: 0 },
 };
 let FEEL = FEELS.reporte;
@@ -181,15 +214,24 @@ function phases(name) {
 }
 const JP = phases("jump");
 const JS = anim("jump_shoot").f;
-const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
+// el frame en el aire con el brazo extendido, sin el fogonazo dibujado (si no, se ve un destello fijo)
+const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
+// disparo en loop: arranca en el frame del fogonazo y termina en el anterior, que es el que queda de reposo.
+// Así no hay destello sin disparar (el agachado traía el fogonazo en el frame 0, que era el de reposo)
+const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
+const shotFrame = (n, t, per) => { const s = SHOT(n); return t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]; };
 const HANG_HAND = anim("hang").f[0];                 // mano del colgado relativa al pivot
 const HANG_WALL = 30, HANG_GRIP = 6;                 // del pivot a la cara de la pared, y de la punta de la mano a los dedos
 // correr disparando con cuerpo partido: piernas del run debajo de la cintura y torso del disparo arriba, con el rebote
 // de cada frame del run (medido en la punta del casco). La costura va a 46 px de los pies y el torso la tapa 6 px
 const RS_CUT = 46, RS_OVER = 6;
-const RS_DY = Object.fromEntries(["run", "run_legs"].filter(n => SPR.anims[n]).map(n => [n, anim(n).f.map(f => f[10] - anim("shoot").f[0][10])]));
-const RUN = () => (S.runSet === "nuevo" && SPR.anims.run_legs ? "run_legs" : "run");
-const IDLE = () => (S.runSet === "nuevo" && SPR.anims.idle_breath ? "idle_breath" : "idle");
+const RS_DY = Object.fromEntries(["run", "run_legs", "run_gun"].filter(n => SPR.anims[n]).map(n => [n, anim(n).f.map(f => f[10] - anim("shoot").f[0][10])]));
+// run: el de la pistola al pecho a dos manos (run_gun) es el de siempre, también al disparar corriendo: el arma
+// ya apunta al frente, así que la bala sale de su boca sin partir el cuerpo ni cambiar de ciclo de piernas
+const RUN = () => (S.runSet === "gun" && SPR.anims.run_gun ? "run_gun" : S.runSet === "nuevo" && SPR.anims.run_legs ? "run_legs" : "run");
+// idle: el de combate (respiración rápida, pies quietos) si está; si no, la respiración lenta acelerada
+const IDLE = () => (SPR.anims.idle_combat ? "idle_combat" : SPR.anims.idle_breath ? "idle_breath" : "idle");
+const IDLE_SPEED = SPR.anims.idle_combat ? 1 : 1.4;
 // doble salto: el mortal son los frames de double_jump con el cuerpo girado (más anchos que altos o encogidos);
 // se dibujan centrados en el cuerpo, porque el clip trae el giro y un corrimiento hacia adelante
 const FLIP = (() => {   // del primer al último frame girado, contiguos (cabeza abajo el cuerpo vuelve a ser alto)
@@ -201,7 +243,7 @@ const FLIP_DUR = 0.42, DOUBLE_V = 0.9;
 const GRAB_FRAMES = [6, 7, 8, 9];                    // de hang_in: el momento en que agarra
 
 /* ---------- ajustes ---------- */
-const S = { jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte", runShoot: "split", runSet: "nuevo" };
+const S = { char: CHAR_DEFAULT, zoom: 1, jumpMode: "phys", slow: 1, runSpeed: 300, debug: false, feel: "reporte", runShoot: "swing", runSet: SPR.anims.run_gun ? "gun" : "anterior" };
 function seg(ids, onPick) {
   ids.forEach(([id, val]) => document.getElementById(id).addEventListener("click", () => {
     ids.forEach(([o]) => document.getElementById(o).setAttribute("aria-pressed", String(o === id)));
@@ -214,7 +256,11 @@ seg([["dOff", false], ["dOn", true]], v => { S.debug = v; });
 const runSpeedEl = document.getElementById("runSpeed");
 runSpeedEl.addEventListener("input", () => { S.runSpeed = +runSpeedEl.value; document.getElementById("runVal").textContent = S.runSpeed + " px/s"; });
 seg([["rsSplit", "split"], ["rsSwing", "swing"]], v => { S.runShoot = v; });
-seg([["setNew", "nuevo"], ["setOld", "anterior"]], v => { S.runSet = v; });
+seg([["setGun", "gun"], ["setOld", "anterior"], ["setNew", "nuevo"]], v => { S.runSet = v; });
+// escala: la cámara se aleja y todo se ve más chico (personaje, bloques, saltos), con el mismo feel en px del mundo
+const VW = () => VIEW_W / S.zoom;   // ancho del mundo que entra en pantalla
+seg([["z75", 0.75], ["z100", 1]], v => { S.zoom = v; });
+seg([["c80", 0.8], ["c100", 1]], v => { S.char = v; HALF_W = 20 * v; BODY_H = 112 * v; });
 seg([["fRep", "reporte"], ["fAnt", "anterior"]], v => { S.feel = v; FEEL = FEELS[v]; S.runSpeed = FEEL.run; runSpeedEl.value = FEEL.run; document.getElementById("runVal").textContent = FEEL.run + " px/s"; });
 function setDebug(v) { S.debug = v; document.getElementById("dOff").setAttribute("aria-pressed", String(!v)); document.getElementById("dOn").setAttribute("aria-pressed", String(v)); }
 
@@ -237,6 +283,11 @@ function can(x, y) { targets.push({ kind: "can", x: x - 10, y: y - 26, w: 20, h:
 board(640, GROUND); can(930, GROUND - 84); can(1010, GROUND - 84); board(1340, GROUND - 196);
 board(1690, GROUND - 300); can(2030, GROUND - 150); can(2190, GROUND - 230); can(2240, GROUND - 230);
 board(2520, GROUND - 330); board(2620, GROUND); board(2930, GROUND - 250); can(3380, GROUND - 120); board(3700, GROUND); board(3530, GROUND - 330);
+// utilería: sólo se dibuja, no choca ni frena los disparos. x es el centro y y la base
+const props = [];
+const prop = (name, x, y) => props.push({ name, x, y });
+prop("sign", 470, GROUND); prop("crate", 1150, GROUND); prop("crate", 2345, GROUND); prop("crate", 2360, GROUND - BG.props.crate.h + 2);
+prop("sign", 3170, GROUND); prop("crate", 3810, GROUND);
 
 /* ---------- personaje ---------- */
 const P = { x: 300, y: GROUND, vx: 0, vy: 0, onGround: true, facing: 1, state: "ground",
@@ -278,7 +329,51 @@ const overlay = document.getElementById("overlay");
   const up = () => touchHeld.delete(code);
   b.addEventListener("pointerup", up); b.addEventListener("pointercancel", up); b.addEventListener("pointerleave", up);
 });
-const held = c => keys.has(c) || touchHeld.has(c);
+/* ---------- control (Gamepad API, mapping "standard": Xbox, PlayStation y la mayoría de los genéricos) ---------- */
+const padHeld = new Set();
+const PAD_BUTTONS = { 0: "Space", 2: "KeyJ", 7: "KeyJ", 1: "KeyK", 5: "KeyK", 12: "ArrowUp", 13: "ArrowDown", 14: "ArrowLeft", 15: "ArrowRight" };
+const PAD_DEAD = 0.35, PAD_DOWN = 0.6;   // zona muerta del stick; abajo pide más recorrido para no agacharse sin querer
+const padStatus = document.getElementById("padStatus");
+let padPrev = new Set(), padViewPrev = false, padBlocked = false, padName = "", usedPad = false;
+function readPads() {
+  try { return navigator.getGamepads ? [...navigator.getGamepads()].filter(p => p && p.connected) : []; }
+  catch (e) { padBlocked = true; return []; }   // la página publicada puede no tener permiso para leer controles
+}
+function pollPad() {
+  const gp = readPads()[0], now = new Set();
+  if (gp) {
+    gp.buttons.forEach((b, i) => { if (PAD_BUTTONS[i] && (b.pressed || b.value > 0.4)) now.add(PAD_BUTTONS[i]); });
+    const x = gp.axes[0] || 0, y = gp.axes[1] || 0;
+    if (x < -PAD_DEAD) now.add("ArrowLeft");
+    if (x > PAD_DEAD) now.add("ArrowRight");
+    if (y > PAD_DOWN && Math.abs(x) < PAD_DOWN) now.add("ArrowDown");
+    const view = !!(gp.buttons[8] && gp.buttons[8].pressed);
+    const anyPress = gp.buttons.some(b => b.pressed) || Math.abs(x) > PAD_DEAD || Math.abs(y) > PAD_DOWN;
+    if (anyPress) usedPad = true;
+    if (!active && ready && anyPress) { active = true; overlay.hidden = true; padPrev = now; padViewPrev = view; return; }   // el botón que arranca no salta
+    if (active && view && !padViewPrev) setDebug(!S.debug);
+    padViewPrev = view;
+    const name = gp.id.replace(/\s*\(.*$/, "") || "control";
+    if (name !== padName) { padName = name; padStatus.textContent = `Control conectado: ${name}.`; }
+  } else if (padName) {
+    padName = ""; padStatus.textContent = "Se desconectó el control. Volvé a conectarlo y apretá cualquier botón.";
+  }
+  if (padBlocked && !padName) padStatus.textContent = "Esta vista no deja leer el control. Abrí el juego local (está en prototypes/README.md).";
+  if (active) for (const c of now) if (!padPrev.has(c)) {
+    if (c === "Space" || c === "ArrowUp") jumpPressed = true;
+    if (c === "ArrowDown") downPressed = true;
+  }
+  padHeld.clear();
+  if (active) now.forEach(c => padHeld.add(c));
+  padPrev = now;
+}
+function rumble(ms, strong, weak) {
+  if (!usedPad) return;
+  const gp = readPads()[0];
+  gp?.vibrationActuator?.playEffect?.("dual-rumble", { duration: ms, strongMagnitude: strong, weakMagnitude: weak })?.catch?.(() => {});
+}
+window.addEventListener("gamepadconnected", e => { padStatus.textContent = `Control detectado: ${e.gamepad.id.replace(/\s*\(.*$/, "")}.`; });
+const held = c => keys.has(c) || touchHeld.has(c) || padHeld.has(c);
 document.getElementById("startBtn").addEventListener("click", () => { active = true; overlay.hidden = true; cv.focus(); });
 cv.addEventListener("focus", () => { if (ready) { active = true; overlay.hidden = true; } });
 
@@ -318,7 +413,7 @@ function cornerNudge(x, headY) {
 // cornisa agarrable: esquina superior de un bloque, con lugar arriba para subir
 function findLedge() {
   if (P.grabCD > 0 || P.vy < -220) return null;
-  const hx = P.x + P.facing * HANG_HAND[9], hy = P.y + HANG_HAND[10];
+  const hx = P.x + P.facing * HANG_HAND[9] * S.char, hy = P.y + HANG_HAND[10] * S.char;
   for (const s of solids) {
     if (s.ground) continue;
     const cx = P.facing > 0 ? s.x : s.x + s.w;
@@ -334,10 +429,11 @@ function findLedge() {
 const bullets = [], fx = [];
 let flash = null, hits = 0, shake = 0, camX = 0;
 function fire(frame, footY, power) {
-  const mx = P.x + P.facing * frame[6], my = footY + frame[7];
+  const mx = P.x + P.facing * frame[6] * S.char, my = footY + frame[7] * S.char;
   bullets.push({ x: mx, y: my, vx: 1350 * P.facing, life: 0.75, power, len: power > 1 ? 46 : 32 });
   flash = { x: mx, y: my, t: 0.06, dir: P.facing, big: power > 1, seed: Math.random() * 1000 };
   if (!reduceMotion) shake = Math.max(shake, power > 1 ? 0.07 : 0.04);
+  if (power > 1) rumble(70, 0.4, 0.25);
 }
 function burst(x, y, color, n, speed, life, size) {
   for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = speed * (0.4 + Math.random() * 0.6);
@@ -366,9 +462,9 @@ function update(dt) {
     const i = grabbing ? GRAB_FRAMES[Math.floor(H.t / 0.05)] : Math.floor((H.t - 0.2) * 12) % anim("hang").f.length;
     // en el sprite, la mano apoya los dedos hacia adelante y el brazo y el torso llegan hasta +30 px del
     // pivot: la pared va ahí (sin que el cuerpo la pise) y los dedos, 6 px bajo el tope de la mano, sobre la cornisa
-    P.x = H.cx - P.facing * HANG_WALL; P.y = H.top - HANG_HAND[10] - HANG_GRIP;
+    P.x = H.cx - P.facing * HANG_WALL * S.char; P.y = H.top - (HANG_HAND[10] + HANG_GRIP) * S.char;
     setDraw(name, i, P.x, P.y);
-    if (jumpPressed && !grabbing) { P.state = "climb"; P.climb = { t: 0, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34, y: H.top } }; }
+    if (jumpPressed && !grabbing) { P.state = "climb"; P.climb = { t: 0, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34 * S.char, y: H.top } }; }
     else if (downPressed) { P.state = "air"; P.onGround = false; P.vy = 60; P.grabCD = 0.35; P.x -= P.facing * 6; }
     jumpPressed = downPressed = false;
     return finishUpdate(dt, false);
@@ -387,7 +483,7 @@ function update(dt) {
   }
 
   // facing: mira al cursor mientras dispara con el mouse; si no, hacia donde corre
-  if (firing && (mouseL || mouseR) && usedMouse) { const px = P.x - camX; if (Math.abs(mouseX - px) > 8) P.facing = mouseX < px ? -1 : 1; }
+  if (firing && (mouseL || mouseR) && usedMouse) { const px = P.x - camX, mx = mouseX / S.zoom; if (Math.abs(mx - px) > 8) P.facing = mx < px ? -1 : 1; }
   else if (dir !== 0 && P.crouch === "none") P.facing = dir;
 
   // agacharse (solo en el piso, sin moverse)
@@ -395,16 +491,18 @@ function update(dt) {
   if (wantCrouch && P.crouch === "none") { P.crouch = "in"; P.crouchT = 0; P.aim = "none"; }
   if (!wantCrouch && (P.crouch === "in" || P.crouch === "hold")) { P.crouch = "out"; P.crouchT = 0; }
   const crouching = P.crouch !== "none";
+  // disparo a dos manos: mientras se mantiene en el piso, el ranger se planta (no camina ni salta) y pega más
+  const planted = fire2 && P.onGround && !P.jump && !crouching;
 
   const airborne = !P.onGround || P.jump;
-  const target = crouching ? 0 : dir * S.runSpeed;
+  const target = crouching || planted ? 0 : dir * S.runSpeed;
   const speeding = target !== 0 && Math.sign(target) === Math.sign(P.vx || target) && Math.abs(target) > Math.abs(P.vx);
   const accel = airborne ? FEEL.air : (speeding ? FEEL.accel : FEEL.decel);
   P.vx += Math.sign(target - P.vx) * Math.min(Math.abs(target - P.vx), accel * dt);
 
   // salto
   if (jumpPressed) P.bufferT = Math.max(FEEL.buffer, 1e-4);     // buffer: el salto apretado justo antes de tocar el piso cuenta
-  if (P.bufferT > 0 && (P.onGround || P.coyoteT < FEEL.coyote) && !P.jump && P.crouch !== "in" && P.crouch !== "hold") {
+  if (P.bufferT > 0 && !planted && (P.onGround || P.coyoteT < FEEL.coyote) && !P.jump && P.crouch !== "in" && P.crouch !== "hold") {
     P.bufferT = 0; P.coyoteT = 99;
     P.onGround = false; P.landT = 0; P.aim = "none"; P.crouch = "none";
     if (S.jumpMode === "root") P.jump = { mode: "root", t: 0, baseY: P.y };
@@ -421,12 +519,12 @@ function update(dt) {
     moveX(P.vx * dt, P.y);
     if (i >= a.f.length) { P.jump = null; P.y = J.baseY; P.onGround = !!supportAt(P.x, P.y); if (!P.onGround) P.vy = 0; }
     else {
-      const l0 = a.f[i][8], l1 = a.f[Math.min(i + 1, a.f.length - 1)][8], l = Math.max(0, l0 + (l1 - l0) * (fpos - i));
+      const l0 = a.f[i][8] * S.char, l1 = a.f[Math.min(i + 1, a.f.length - 1)][8] * S.char, l = Math.max(0, l0 + (l1 - l0) * (fpos - i));
       const ny = J.baseY - l, top = ny > P.y ? landingTop(P.x, P.y, ny) : null;
       P.y = top !== null ? top : ny;
       if (top !== null && top < J.baseY - 1) { P.jump = null; P.onGround = true; P.landT = 0.2; }
       name = firing ? "jump_shoot" : "jump"; idx = firing ? AIR_SHOT : i; drawY = P.jump ? J.baseY : P.y;
-      if (firing) drawY = P.y + JS[AIR_SHOT][8];
+      if (firing) drawY = P.y + JS[AIR_SHOT][8] * S.char;
     }
   }
   if (!P.jump || P.jump.mode === "phys") {
@@ -460,14 +558,14 @@ function update(dt) {
       if (P.flipT > 0 && P.flipT < FLIP_DUR) {
         name = "double_jump"; idx = FLIP[Math.min(FLIP.length - 1, Math.floor(P.flipT / FLIP_DUR * FLIP.length))];
         const f = anim(name).f[idx];
-        torso = { centered: true, x: P.x - P.facing * (f[4] + f[2] / 2 - PIV_X), y: P.y - BODY_H / 2 - 8 - (f[5] + f[3] / 2 - PIV_Y) };
+        torso = { centered: true, x: P.x - P.facing * (f[4] + f[2] / 2 - PIV_X) * S.char, y: P.y - BODY_H / 2 - (8 + f[5] + f[3] / 2 - PIV_Y) * S.char };
       } else if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
       else { name = "jump"; idx = P.vy < -240 ? JP.rise[0] : P.vy < -60 ? (JP.rise[1] ?? JP.apex) : P.vy < 160 ? JP.apex : (JP.fall[0] ?? JP.apex); }
-      drawY = torso && torso.centered ? torso.y : P.y + anim(name).f[idx][8];
+      drawY = torso && torso.centered ? torso.y : P.y + anim(name).f[idx][8] * S.char;
     } else if (crouching) {
       P.crouchT += dt;
       if (P.crouch === "in") { idx = Math.floor(P.crouchT / 0.04); name = "crouch_in"; if (idx >= anim("crouch_in").f.length) { P.crouch = "hold"; P.crouchT = 0; } }
-      if (P.crouch === "hold") { name = "crouch_shoot"; idx = P.shotT < 0.15 ? Math.min(4, Math.floor(P.shotT / 0.03)) : 0; }
+      if (P.crouch === "hold") { name = "crouch_shoot"; idx = shotFrame(name, P.shotT, 0.15); }
       if (P.crouch === "out") { name = "crouch_out"; idx = Math.floor(P.crouchT / 0.045); if (idx >= anim("crouch_out").f.length) { P.crouch = "none"; name = null; } }
       if (name) idx = Math.min(idx, anim(name).f.length - 1);
     }
@@ -477,7 +575,7 @@ function update(dt) {
         P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = RUN(); idx = Math.floor(P.t * 12) % anim(name).f.length;   // el ciclo acompaña la velocidad
         if (firing && S.runShoot === "split") {
           const n = anim("shoot").f.length, per = Math.max(0.1, FEEL.rate1);
-          torso = { name: "shoot", i: P.shotT < per ? Math.min(n - 1, Math.floor(P.shotT / (per / n))) : 0, dy: RS_DY[name][idx] };
+          torso = { name: "shoot", i: shotFrame("shoot", P.shotT, per), dy: RS_DY[name][idx] };
         }
       }
       else {
@@ -493,13 +591,13 @@ function update(dt) {
           if (P.aimAnim === "in") { name = b + "_in"; idx = Math.floor(P.aimT / 0.04); if (idx >= anim(name).f.length) { P.aimAnim = "loop"; P.aimT = 0; } }
           if (P.aimAnim === "loop") {
             name = b; const n = anim(b).f.length, per = Math.max(0.1, P.aim === "two" ? FEEL.rate2 : FEEL.rate1);
-            idx = P.shotT < per ? Math.min(n - 1, Math.floor(P.shotT / (per / n))) : 0;
+            idx = shotFrame(b, P.shotT, per);
             if (!want && P.idleAimT > 0.45) { P.aimAnim = "out"; P.aimT = 0; }
           }
           if (P.aimAnim === "out") { name = b + "_out"; idx = Math.floor(P.aimT / 0.045); if (idx >= anim(name).f.length) { P.aim = "none"; name = null; } }
           if (name) idx = Math.min(idx, anim(name).f.length - 1);
         }
-        if (!name) { name = IDLE(); idx = Math.floor(P.idleT * 12) % anim(name).f.length; }
+        if (!name) { name = IDLE(); idx = Math.floor(P.idleT * 12 * IDLE_SPEED) % anim(name).f.length; }
       }
       drawY = P.y;
     }
@@ -512,7 +610,7 @@ function update(dt) {
   if (firing && P.fireCD <= 0 && aimedReady && !(P.flipT > 0 && P.flipT < FLIP_DUR) && P.crouch !== "in" && P.crouch !== "out") {
     const two = fire2 && !moving && P.onGround && !crouching;
     const T = P.draw.torso, fr = T ? anim(T.name).f[T.i] : anim(P.draw.name).f[P.draw.i];
-    fire(fr, P.draw.y + (T ? T.dy : 0), two ? 2 : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1; P.kickT = 0.06;
+    fire(fr, P.draw.y + (T ? T.dy * S.char : 0), two ? TWO_HAND_POWER : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1; P.kickT = 0.06;
   }
   finishUpdate(dt, true);
 }
@@ -531,93 +629,139 @@ function finishUpdate(dt) {
       }
       if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; burst(B.x, B.y, "#9ff5fa", 5, 180, 0.25, 3); break; }
     }
-    if (dead || B.x < camX - 100 || B.x > camX + VIEW_W + 100) bullets.splice(b, 1);
+    if (dead || B.x < camX - 100 || B.x > camX + VW() + 100) bullets.splice(b, 1);
   }
   for (const T of targets) { if (T.hit > 0) T.hit -= dt; if (T.dead > 0) { T.dead -= dt; if (T.dead <= 0) { T.dead = 0; T.hp = T.max; } } }
   for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; E.x += E.vx * dt; E.y += E.vy * dt; if (E.t <= 0) fx.splice(i, 1); }
   if (flash) { flash.t -= dt; if (flash.t <= 0) flash = null; }
   if (P.kickT > 0) P.kickT -= dt;
   if (shake > 0) shake -= dt;
-  const want = P.x - VIEW_W * 0.42 + P.facing * 70;
+  const want = P.x - VW() * 0.42 + P.facing * 70;
   camX += (want - camX) * Math.min(1, dt * 5);
-  camX = Math.max(0, Math.min(WORLD_W - VIEW_W, camX));
+  camX = Math.max(0, Math.min(WORLD_W - VW(), camX));
 }
 
 /* ---------- fondo: base de entrenamiento de noche ---------- */
+// todo se prearma a la escala del canvas (y otra vez si cambia el tamaño): las capas se repiten en x en px
+// enteros del canvas, sin costuras, y los bloques salen de una pieza cada uno
 function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
-function makeLayer(w, draw) { const c = document.createElement("canvas"); c.width = w; c.height = VIEW_H; draw(c.getContext("2d"), w); return c; }
-const OUT = "#0d0f18";
-const layerSky = makeLayer(VIEW_W, (g, w) => {
-  const gr = g.createLinearGradient(0, 0, 0, GROUND);
-  gr.addColorStop(0, "#151236"); gr.addColorStop(0.6, "#3d2563"); gr.addColorStop(1, "#b5577e");
-  g.fillStyle = gr; g.fillRect(0, 0, w, VIEW_H);
-  const r = rng(3); g.fillStyle = "#ffffff";
-  for (let i = 0; i < 90; i++) { g.globalAlpha = 0.3 + r() * 0.7; g.fillRect(r() * w, r() * 300, r() > 0.9 ? 2 : 1, r() > 0.9 ? 2 : 1); }
-  g.globalAlpha = 1;
+const OUT = "#0d0f18", PANEL = "#515f6f", HIT_TINT = "rgba(159,245,250,0.8)";
+const PARALLAX = [["sky", 0.02], ["far", 0.15], ["mid", 0.3], ["near", 0.6]];   // de atrás para adelante: cuánto sigue a la cámara
+const NEAR_TINT = "rgba(24,18,52,0.4)";   // near va justo detrás de la capa de juego: más oscura y hacia el violeta del cielo
+// cortes del kit en px de la hoja: el tope de un bloque tiene las franjas hasta 150 y el contorno de abajo en 340;
+// el cuerpo se repite cada 302; de la plataforma flotante se repite el tramo 330-489 (una vuelta de las franjas)
+const KIT = { stripes: 150, topH: 340, bodyStep: 302, outline: 12, floatMid: [330, 489] };
+// los pies se hunden en el contorno negro del borde de arriba de pisos y bloques: parado justo encima, ese
+// contorno se lee como un hueco y el ranger parece flotar
+const FOOT_SINK = Math.round(KIT.outline * BG.kit.top.k) + 1;
+const IMG = {}, baked = { layers: {}, solids: new Map(), props: {}, targets: {} };
+let bgState = "loading", DS = 1, bakeDS = 0, bakeZ = 0;   // DS: px del canvas por px del juego
+const bgFiles = [...new Set([BG.layers, BG.kit, BG.props].flatMap(o => Object.values(o).map(p => p.src)))];
+Promise.all(bgFiles.map(src => new Promise((ok, fail) => {
+  const im = new Image(); im.onload = () => { IMG[src] = im; ok(); }; im.onerror = () => fail(src); im.src = src;
+}))).then(() => { bgState = "ok"; }, src => {
+  bgState = "error"; document.getElementById("loadMsg").textContent = `No se pudo cargar el fondo (${src}).`;
 });
-const layerPlanet = makeLayer(700, g => {
-  g.fillStyle = "#e7a35e"; g.strokeStyle = OUT; g.lineWidth = 4;
-  g.beginPath(); g.arc(520, 150, 70, 0, Math.PI * 2); g.fill(); g.stroke();
-  g.fillStyle = "rgba(255,255,255,0.18)"; g.beginPath(); g.arc(495, 125, 32, 0, Math.PI * 2); g.fill();
-  g.strokeStyle = "#f3d7a5"; g.lineWidth = 6; g.beginPath(); g.ellipse(520, 150, 118, 22, -0.25, 0, Math.PI * 2); g.stroke();
-});
-const layerCity = makeLayer(1800, (g, w) => {
-  const r = rng(11); g.lineWidth = 3; g.strokeStyle = OUT;
-  let x = 0;
-  while (x < w) {
-    const bw = 50 + r() * 90, bh = 60 + r() * 150;
-    g.fillStyle = "#2a1f4a"; g.fillRect(x, GROUND - 40 - bh, bw, bh + 60); g.strokeRect(x, GROUND - 40 - bh, bw, bh + 60);
-    g.fillStyle = "rgba(255,190,120,0.55)";
-    for (let wy = GROUND - 30 - bh; wy < GROUND - 50; wy += 14) for (let wx = x + 8; wx < x + bw - 10; wx += 14) if (r() > 0.6) g.fillRect(wx, wy, 5, 6);
-    if (r() > 0.6) { g.strokeStyle = "#2a1f4a"; g.beginPath(); g.moveTo(x + bw / 2, GROUND - 40 - bh); g.lineTo(x + bw / 2, GROUND - 80 - bh); g.stroke(); g.strokeStyle = OUT;
-      g.fillStyle = "#e8392e"; g.fillRect(x + bw / 2 - 2, GROUND - 84 - bh, 4, 4); }
-    x += bw + 6 + r() * 30;
-  }
-});
-function drawLayer(c, par, y) { const off = -((camX * par) % c.width); for (let x = off; x < VIEW_W; x += c.width) ctx.drawImage(c, x, y); }
-function drawGround() {
-  ctx.fillStyle = "#3b4058"; ctx.fillRect(0, GROUND, VIEW_W, VIEW_H - GROUND);
-  ctx.fillStyle = "#2b2f43";
-  for (let wx = Math.floor(camX / 80) * 80; wx < camX + VIEW_W + 80; wx += 80) ctx.fillRect(wx - camX, GROUND + 14, 2, VIEW_H);
-  ctx.fillStyle = "#59e3ec"; ctx.fillRect(0, GROUND + 6, VIEW_W, 3);
-  ctx.strokeStyle = OUT; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(VIEW_W, GROUND); ctx.stroke();
+const px = v => Math.round(v * DS);
+function surface(w, h) {
+  const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h));
+  const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; return [c, g];
 }
-function drawSolid(s) {
-  const x = Math.round(s.x - camX), y = s.y;
-  if (x > VIEW_W + 10 || x + s.w < -10) return;
-  ctx.fillStyle = s.kind === "slab" ? "#6a7390" : "#565f7c"; ctx.fillRect(x, y, s.w, s.h);
-  ctx.fillStyle = "#8b95b5"; ctx.fillRect(x, y, s.w, 6);
-  // franjas de peligro en el canto: marcan la cornisa agarrable
-  ctx.save(); ctx.beginPath(); ctx.rect(x, y + 6, s.w, 8); ctx.clip();
-  ctx.fillStyle = "#f2c230"; ctx.fillRect(x, y + 6, s.w, 8); ctx.fillStyle = "#15171f";
-  for (let k = -10; k < s.w + 10; k += 16) { ctx.beginPath(); ctx.moveTo(x + k, y + 14); ctx.lineTo(x + k + 8, y + 6); ctx.lineTo(x + k + 14, y + 6); ctx.lineTo(x + k + 6, y + 14); ctx.fill(); }
+function tinted(c, color) { const [t, g] = surface(c.width, c.height); g.drawImage(c, 0, 0); g.globalCompositeOperation = "source-atop"; g.fillStyle = color; g.fillRect(0, 0, t.width, t.height); return t; }
+function clipped(g, x, y, w, h, draw) { if (w <= 0) return; g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip(); draw(); g.restore(); }
+function bakeBlock(s) {
+  // tope: el tramo del medio repetido de punta a punta, sin las puntas con ochava del kit, así la esquina de
+  // arriba es recta y la mano del colgado apoya sobre metal; abajo, el cuerpo repetido
+  const K = BG.kit, k = K.top.k, W = px(s.w), H = px(s.h), rowH = px(K.top.h), lw = Math.max(2, px(KIT.outline * k));
+  const [c, g] = surface(W, H);
+  g.fillStyle = PANEL; g.fillRect(0, px(KIT.stripes * k), W, H);
+  for (let y = px(KIT.topH * k); y < H; y += px(KIT.bodyStep * k))
+    for (let x = 0; x < W; x += px(K.body.w)) g.drawImage(IMG[K.body.src], x, y, px(K.body.w), px(K.body.h));
+  clipped(g, 0, 0, W, rowH, () => { for (let x = 0; x < W; x += px(K.top.w)) g.drawImage(IMG[K.top.src], x, 0, px(K.top.w), rowH); });
+  // los costados, de arriba abajo: el tope y el cuerpo repetidos no traen contorno en los cortes
+  g.fillStyle = OUT; g.fillRect(0, 0, lw, H); g.fillRect(W - lw, 0, lw, H);
+  return c;
+}
+function bakeSlab(s) {
+  // plataforma flotante: el tramo del medio repetido de punta a punta (estirado apenas para cerrar las franjas),
+  // sin las puntas en diagonal, para que se pueda colgar de las esquinas; contorno en los cortes
+  const F = BG.kit.floating, im = IMG[F.src], k = F.k, r = im.naturalWidth / (F.w / k), [a, b] = KIT.floatMid;
+  const W = px(s.w), [c, g] = surface(W, px(F.h)), H = c.height, lw = Math.max(2, px(KIT.outline * k));
+  const n = Math.max(1, Math.round(W / px((b - a) * k)));
+  for (let i = 0; i < n; i++) {
+    const x0 = Math.round(i * W / n), x1 = Math.round((i + 1) * W / n);
+    g.drawImage(im, a * r, 0, (b - a) * r, im.naturalHeight, x0, 0, x1 - x0, H);
+  }
+  g.globalCompositeOperation = "source-atop"; g.fillStyle = OUT; g.fillRect(0, 0, lw, H); g.fillRect(W - lw, 0, lw, H);
+  return c;
+}
+function bake() {
+  bakeDS = DS; bakeZ = S.zoom;
+  for (const [name] of PARALLAX) {
+    // el cielo llena la pantalla; las capas con edificios se achican con la escala, apoyadas abajo
+    const z = name === "sky" ? 1 : S.zoom, L = BG.layers[name], [c, g] = surface(px(L.w * z), px(L.h * z));
+    g.drawImage(IMG[L.src], 0, 0, c.width, c.height);
+    baked.layers[name] = name === "near" ? tinted(c, NEAR_TINT) : c;
+  }
+  // piso: el cuerpo del kit repetido, sobre el contorno (lo que el cuerpo no tapa queda como junta)
+  const B = BG.kit.body, [c, g] = surface(px(B.w), px((VIEW_H - GROUND) / 0.5));   // alcanza hasta escala 50%
+  g.fillStyle = OUT; g.fillRect(0, 0, c.width, c.height);
+  for (let y = 0; y < c.height; y += px(KIT.bodyStep * B.k)) g.drawImage(IMG[B.src], 0, y, c.width, px(B.h));
+  baked.ground = c;
+  for (const s of solids) if (!s.ground) baked.solids.set(s, s.kind === "slab" ? bakeSlab(s) : bakeBlock(s));
+  for (const name of ["crate", "sign"]) {
+    const A = BG.props[name], [c, g] = surface(px(A.w), px(A.h)); g.drawImage(IMG[A.src], 0, 0, c.width, c.height); baked.props[name] = c;
+  }
+  // blancos: el del tablero a su alto y el de la lata más chico; el impacto es la misma imagen teñida
+  const A = BG.props.target;
+  for (const kind of ["board", "can"]) {
+    const h = targets.find(t => t.kind === kind).h, [c, g] = surface(px(h * A.w / A.h), px(h));
+    g.drawImage(IMG[A.src], 0, 0, c.width, c.height); baked.targets[kind] = [c, tinted(c, HIT_TINT)];
+  }
+}
+function tileX(c, par, y) { const off = -(Math.round(camX * par * DS) % c.width); for (let x = off; x < cv.width; x += c.width) ctx.drawImage(c, x, y); }
+function drawBackground(sx, sy) {
+  if (bgState !== "ok") { ctx.fillStyle = "#241a46"; ctx.fillRect(0, 0, VIEW_W, VIEW_H); ctx.fillStyle = "#3b4058"; ctx.fillRect(0, GROUND, VIEW_W, VIEW_H - GROUND); return; }
+  if (bakeDS !== DS || bakeZ !== S.zoom) bake();
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, Math.round(sx * DS), Math.round(sy * DS));   // en px del canvas
+  for (const [name, par] of PARALLAX) tileX(baked.layers[name], par * S.zoom, cv.height - baked.layers[name].height);
   ctx.restore();
-  if (s.kind === "slab") { ctx.fillStyle = "rgba(89,227,236,0.6)"; ctx.fillRect(x + 12, y + s.h - 4, s.w - 24, 3); }
-  else { ctx.fillStyle = "#4a5270"; for (let ry = y + 30; ry < y + s.h - 8; ry += 34) ctx.fillRect(x + 8, ry, s.w - 16, 2); }
-  ctx.strokeStyle = OUT; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, y + 1.5, s.w - 3, s.h - 3);
+}
+// el piso va en el mundo (con la escala): el cuerpo del kit repetido debajo de GROUND
+function drawGround() {
+  if (!baked.ground) return;
+  const w = baked.ground.width / bakeDS;
+  for (let x = Math.floor(camX / w) * w; x < camX + VW() + w; x += w) drawBaked(baked.ground, Math.round(x - camX), GROUND);
+}
+// lo prearmado se dibuja a su tamaño en px del juego
+const drawBaked = (c, x, y) => ctx.drawImage(c, x, y, c.width / bakeDS, c.height / bakeDS);
+function drawSolid(s) {
+  const x = Math.round(s.x - camX), c = baked.solids.get(s);
+  if (x > VW() + 10 || x + s.w < -10) return;
+  if (c) return drawBaked(c, x, s.y);
+  ctx.fillStyle = "#565f7c"; ctx.fillRect(x, s.y, s.w, s.h); ctx.strokeStyle = OUT; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, s.y + 1.5, s.w - 3, s.h - 3);
+}
+function drawProp(p) {
+  const c = baked.props[p.name]; if (!c) return;
+  const w = c.width / bakeDS, x = Math.round(p.x - camX - w / 2);
+  if (x < VW() && x + w > 0) drawBaked(c, x, p.y - c.height / bakeDS);
 }
 function drawTarget(T) {
   if (T.dead) return;
-  const x = Math.round(T.x - camX), cx = x + T.w / 2, hit = T.hit > 0;
-  ctx.lineWidth = 3; ctx.strokeStyle = OUT;
-  if (T.kind === "board") {
-    ctx.fillStyle = "#3b3f55"; ctx.fillRect(cx - 4, T.y + 40, 8, T.h - 40); ctx.strokeRect(cx - 4, T.y + 40, 8, T.h - 40);
-    for (const [col, rad] of [["#eef0f6", 22], ["#e8392e", 16], ["#eef0f6", 10], ["#e8392e", 5]]) { ctx.fillStyle = hit ? "#9ff5fa" : col; ctx.beginPath(); ctx.arc(cx, T.y + 24, rad, 0, Math.PI * 2); ctx.fill(); }
-    ctx.beginPath(); ctx.arc(cx, T.y + 24, 22, 0, Math.PI * 2); ctx.stroke();
-    if (T.hp < T.max) { ctx.fillStyle = "#59e3ec"; ctx.fillRect(cx - 22, T.y + 52, 44 * (T.max - T.hp) / T.max, 4); }
-  } else {
-    ctx.fillStyle = hit ? "#9ff5fa" : "#c9ced8"; ctx.fillRect(x, T.y, T.w, T.h);
-    ctx.fillStyle = hit ? "#9ff5fa" : "#e8392e"; ctx.fillRect(x, T.y + 8, T.w, 9);
-    ctx.strokeRect(x + 1.5, T.y + 1.5, T.w - 3, T.h - 3);
-  }
+  const art = baked.targets[T.kind], cx = Math.round(T.x + T.w / 2 - camX);
+  if (!art) { ctx.fillStyle = T.hit > 0 ? "#9ff5fa" : "#e8392e"; ctx.fillRect(cx - T.w / 2, T.y, T.w, T.h); return; }
+  const c = art[T.hit > 0 ? 1 : 0], w = c.width / bakeDS;
+  drawBaked(c, Math.round(cx - w / 2), T.y + T.h - c.height / bakeDS);
+  if (T.hp < T.max && T.kind === "board") { ctx.fillStyle = "#59e3ec"; ctx.fillRect(cx - 22, T.y + 56, 44 * (T.max - T.hp) / T.max, 4); }
 }
 function drawSprite() {
   const d = P.draw, f = anim(d.name).f[d.i];
   if (!f) return;
   const kick = P.kickT > 0 ? -FEEL.kick * (P.kickT / 0.06) : 0;   // retroceso por código: 2-3 px hacia atrás
   const frame = g => ctx.drawImage(atlas, g[0], g[1], g[2], g[3], -PIV_X + g[4], -PIV_Y + g[5], g[2], g[3]);
-  ctx.save(); ctx.translate(Math.round(d.x - camX), Math.round(d.y));
-  if (P.facing < 0) ctx.scale(-1, 1);
+  const sink = P.state === "hang" || P.state === "climb" ? 0 : FOOT_SINK;
+  ctx.save(); ctx.translate(Math.round(d.x - camX), Math.round(d.y) + sink);
+  ctx.scale(P.facing < 0 ? -S.char : S.char, S.char);
   if (d.torso) {
     // cuerpo partido: piernas del run debajo de la cintura; arriba, el torso del disparo con el rebote del run.
     // El retroceso mueve sólo el torso
@@ -643,12 +787,16 @@ function drawFlash(Fl) {
 function render() {
   const sx = shake > 0 ? (Math.random() - 0.5) * 3 : 0, sy = shake > 0 ? (Math.random() - 0.5) * 3 : 0;
   ctx.save(); ctx.translate(sx, sy);
-  ctx.drawImage(layerSky, 0, 0); drawLayer(layerPlanet, 0.06, 0); drawLayer(layerCity, 0.3, 0); drawGround();
+  drawBackground(sx, sy);
+  // mundo: escalado alrededor de la línea del piso, que queda donde estaba en pantalla
+  ctx.save(); ctx.translate(0, GROUND * (1 - S.zoom)); ctx.scale(S.zoom, S.zoom);
+  if (bgState === "ok") drawGround();
+  for (const p of props) drawProp(p);
   for (const s of solids) if (!s.ground) drawSolid(s);
   for (const T of targets) drawTarget(T);
   if (P.state !== "hang" && P.state !== "climb") {
-    const shY = supportAt(P.x, P.y) ? P.y : (landingTop(P.x, P.y, GROUND + 1) ?? GROUND), hgt = Math.max(0, shY - P.y), w = 30 * Math.max(0.4, 1 - hgt / 220);
-    ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(P.x - camX, shY + 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
+    const shY = supportAt(P.x, P.y) ? P.y : (landingTop(P.x, P.y, GROUND + 1) ?? GROUND), hgt = Math.max(0, shY - P.y), w = 30 * S.char * Math.max(0.4, 1 - hgt / 220);
+    ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(P.x - camX, shY + FOOT_SINK - 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
   }
   if (ready) drawSprite();
   for (const B of bullets) {
@@ -666,9 +814,10 @@ function render() {
     const x = P.x - camX, d = P.draw, f = anim(d.name).f[d.i];
     ctx.strokeStyle = "#ff5ad1"; ctx.lineWidth = 1.5; ctx.strokeRect(x - HALF_W, P.y - BODY_H, HALF_W * 2, BODY_H);
     ctx.beginPath(); ctx.moveTo(d.x - camX - 10, d.y); ctx.lineTo(d.x - camX + 10, d.y); ctx.moveTo(d.x - camX, d.y - 10); ctx.lineTo(d.x - camX, d.y + 4); ctx.stroke();
-    ctx.fillStyle = "#ffef5a"; ctx.beginPath(); ctx.arc(d.x - camX + P.facing * f[6], d.y + f[7], 3.5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#59e3ec"; ctx.beginPath(); ctx.arc(x + P.facing * HANG_HAND[9], P.y + HANG_HAND[10], 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#ffef5a"; ctx.beginPath(); ctx.arc(d.x - camX + P.facing * f[6] * S.char, d.y + f[7] * S.char, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#59e3ec"; ctx.beginPath(); ctx.arc(x + P.facing * HANG_HAND[9] * S.char, P.y + HANG_HAND[10] * S.char, 3.5, 0, Math.PI * 2); ctx.fill();
   }
+  ctx.restore();   // mundo
   ctx.restore();
   ctx.fillStyle = "rgba(18,21,34,0.78)"; ctx.fillRect(VIEW_W - 168, 14, 154, 34);
   ctx.fillStyle = "#e8392e"; ctx.font = "700 15px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.fillText("IMPACTOS", VIEW_W - 156, 37);
@@ -678,7 +827,7 @@ function render() {
 /* ---------- loop ---------- */
 function resize() {
   const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
-  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr)); DS = cv.width / VIEW_W;
   ctx.setTransform(cv.width / VIEW_W, 0, 0, cv.height / VIEW_H, 0, 0); ctx.imageSmoothingEnabled = true;
 }
 window.addEventListener("resize", resize);
@@ -687,6 +836,7 @@ const STATE_ES = { ground: "en el piso", air: "en el aire", hang: "colgado", cli
 let last = performance.now(), readT = 0;
 function tick(now) {
   const dt = Math.min(1 / 30, (now - last) / 1000) * S.slow; last = now;
+  pollPad();
   if (ready && dt > 0) { if (P.state === "ground" || P.state === "air") P.state = P.onGround ? "ground" : "air"; update(dt); }
   render();
   readT -= dt;
@@ -698,11 +848,11 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 function start(saved) {
-  if (saved && typeof saved.x === "number") { P.x = saved.x; hits = saved.hits || 0; camX = Math.max(0, P.x - VIEW_W * 0.42); }
+  if (saved && typeof saved.x === "number") { P.x = saved.x; hits = saved.hits || 0; camX = Math.max(0, P.x - VW() * 0.42); }
   resize(); requestAnimationFrame(tick);
 }
 window.claude?.hot?.snapshot?.(() => ({ x: P.x, hits }));
-atlas.onload = () => { ready = true; document.getElementById("loadMsg").textContent = "Teclado y mouse"; };
+atlas.onload = () => { ready = true; if (bgState !== "error") document.getElementById("loadMsg").textContent = "Teclado, mouse o control"; };
 atlas.onerror = () => { document.getElementById("loadMsg").textContent = "No se pudo cargar el atlas de sprites (ranger_1x-0.png)."; };
 atlas.src = "ranger_1x-0.png";
 (document.fonts ? document.fonts.ready : Promise.resolve()).finally(() => {
