@@ -186,7 +186,7 @@ input[type="range"] { accent-color: var(--red); width: 160px; max-width: 100%; }
       <div class="readout mono" id="readout" aria-live="off">quieto · idle 1/3</div>
       <p class="note"><b>Feel "reporte":</b> 300 px/s, salto de 192 px (1,5 alturas) que sube en 0,36 s y cae en 0,28, coyote y buffer de 0,1 s, corrección de esquina y 12 disparos/s. "Anterior" es como estaba, para comparar.</p>
       <p class="note"><b>Efectos del salto "nuevos"</b> (reports/Saltos con buen feel.md): el golpe del aterrizaje sale de la altura de caída (duro desde 2,8 alturas: polvo, squash, golpe vertical de cámara y agachado), squash y stretch desde los pies, cinco dibujos en el aire elegidos por velocidad, el mortal girado por código en 0,32 s y sonidos sintetizados provisorios. "Anteriores" es como estaba.</p>
-      <p class="note"><b>Generadas por API</b> (Seedance 2.0 en fal.ai, con la pose sobre magenta apagado): el idle de combate, el doble salto con mortal, el <b>run con la pistola al pecho</b>, que se usa también al disparar corriendo, y el <b>colgado con las dos manos y la subida a la cornisa</b>, que arrancan de la misma pose y terminan en la del idle. Las poses de arranque del run y del colgado salieron de la API de imagen (Nano Banana 2.1). "De piernas" es la prueba vieja, con la pistola que baja a la cadera.</p>
+      <p class="note"><b>Generadas por API</b> (Seedance 2.0 en fal.ai, con la pose sobre magenta apagado): el idle de combate, el doble salto con mortal, el <b>run con la pistola al pecho</b>, que se usa también al disparar corriendo, y la <b>subida a la cornisa</b>, que arranca colgado de las dos manos y termina en la pose del idle (el colgado quieto es el de una mano, detrás del bloque: el de dos manos se generó pero quedó peor). Las poses de arranque del run y del colgado salieron de la API de imagen (Nano Banana 2.1). "De piernas" es la prueba vieja, con la pistola que baja a la cadera.</p>
       <p class="note"><b>Provisorio:</b> con el run "Anterior" dispara desde la mano que balancea. La subida usa 10 de los 22 frames del clip, unos 0,5 s; saltar con los pies ya sobre el canto la corta. Los rayos, chispas y el fogonazo son efectos de código.</p>
       <p class="note"><b>Fondo generado por API:</b> cielo, ciudad, base y capa cercana con Nano Banana 2.1; bloques, plataformas, blancos, caja y cartel con GPT Image 2.5 (fal.ai). Los bloques se arman con las piezas del kit; las colisiones son las de antes.</p>
     </section>
@@ -200,6 +200,13 @@ const SPR = __SPRITE_DATA__;
 // acá vienen las medidas en px del juego (y `k`, px del juego por px de la hoja, en el kit y los props). En `deco`, la
 // utilería de backgrounds/ranger_props, con su papel y sus puntos medidos en px de la hoja
 const BG = __BG_DATA__;
+// efectos de backgrounds/ranger_fx (spritepipe gen-images), los elegidos en prototypes/fx_lab: por pieza, tamaño y
+// ancla en px del juego con el personaje al 80% (prototypes/build.py los achica a fx/)
+const FX = __FX_DATA__;
+const FX_IMG = {};
+for (const [asset, A] of Object.entries(FX)) for (const [name, p] of Object.entries(A.pieces)) { const im = new Image(); im.src = p.src; FX_IMG[`${asset}/${name}`] = im; }
+// la mezcla elegida (2026-10-16), en frames de 60 Hz: el fogonazo, 2 del primer dibujo y 3 del segundo; el impacto, 2 por dibujo
+const FXT = { flashA: 2 / 60, flashB: 3 / 60, impact: 2 / 60 };
 const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
 const VIEW_W = 960, VIEW_H = 540, GROUND = 474, WORLD_W = 5000;
 // tamaño del personaje: el sprite se dibuja a CHAR del atlas (128 px a 1) y la colisión, la boca del arma y la mano
@@ -235,12 +242,17 @@ const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).re
 // disparo en loop: arranca en el frame del fogonazo y termina en el anterior, que es el que queda de reposo.
 // Así no hay destello sin disparar (el agachado traía el fogonazo en el frame 0, que era el de reposo)
 const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
-const shotFrame = (n, t, per) => { const s = SHOT(n); return t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]; };
+// el frame con el destello que dibujó el modelo de video (cortado por la limpieza) se cambia por el anterior del clip
+const noBaked = (n, i) => (anim(n).f[i][11] ? (i + anim(n).f.length - 1) % anim(n).f.length : i);
+const shotFrame = (n, t, per) => { const s = SHOT(n); return noBaked(n, t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]); };
 // colgado: con el clip de dos manos (hang_two, por API) cuelga con el cuerpo contra la pared y las manos sobre el
 // canto, y se dibuja delante del bloque. Sin ese clip queda el de una mano (r07): la mano viene de agarrar una barra,
 // y donde estaba la barra le queda un hueco (x +29..+38, y -143..-131 del pivot). Ése se dibuja DETRÁS del bloque:
 // la pared a +28 y el tope del bloque a -144 tapan el hueco y la muñeca, y quedan a la vista sólo los dedos
-const HANG2 = !!SPR.anims.hang_two;
+// Pablo prefirió el de una mano: el de dos manos (hang_two) quedó feo colgado. La subida (climb) arranca en la pose de
+// dos manos igual, anclada donde quedaría ese colgado (ver CLIMB): al empezar a subir, la otra mano agarra el canto
+const HANG_TWO_HANDS = false;
+const HANG2 = HANG_TWO_HANDS && !!SPR.anims.hang_two;
 const HANG = HANG2 ? "hang_two" : "hang";
 const HANG_HAND = anim(HANG).f[0];                   // mano del colgado (el punto más alto) relativa al pivot
 // con dos manos la pared va al frente del puño de adelante (la cara asoma 6 px más, contra el bloque) y el canto, 6 px
@@ -294,12 +306,15 @@ const GRAB_T = HANG2 ? 0.1 : GRAB_FRAMES.length * 0.05;   // con dos manos no ha
 // El clip dura 1,8 s y se queda acostado más de medio segundo: se usan 10 de sus 22 frames, ~0,5 s. El modelo apoya
 // las rodillas 31 px detrás de la pared del colgado: cada frame lleva su avance (px del atlas) para que apoyen en el
 // canto y, al pararse, los pies no se muevan. [frame, avance, s]
-const CLIMB_SEQ = [[0, 0, 0.04], [2, 0, 0.05], [3, 12, 0.05], [4, 22, 0.05], [13, 31, 0.06], [15, 31, 0.05], [17, 31, 0.05], [19, 8, 0.05], [20, 0, 0.05], [21, 0, 0.06]];
-const CLIMB = SPR.anims.climb && HANG2 ? (() => {
-  const f = anim("climb").f, last = f[f.length - 1], idle = anim(IDLE()).f[0], hang = anim(HANG).f[0];
+// (el frame 0 es el colgado de dos manos: saliendo del de una mano dura 0,02 s, lo justo para que agarre con la otra)
+const CLIMB_SEQ = [[0, 0, HANG2 ? 0.04 : 0.02], [2, 0, 0.05], [3, 12, 0.05], [4, 22, 0.05], [13, 31, 0.06], [15, 31, 0.05], [17, 31, 0.05], [19, 8, 0.05], [20, 0, 0.05], [21, 0, 0.06]];
+const CLIMB = SPR.anims.climb && SPR.anims.hang_two ? (() => {
+  const f = anim("climb").f, last = f[f.length - 1], idle = anim(IDLE()).f[0], hang = anim("hang_two").f[0];
   const cx = g => g[4] + g[2] / 2 - PIV_X;
   const ox = cx(hang) - cx(f[0]);   // el frame 0 de la subida viene corrido del colgado (cada clip se ancla en el suyo)
-  return { ox, dx: ox + cx(last) - cx(idle), rise: last[8], dur: CLIMB_SEQ.reduce((a, s) => a + s[2], 0), exitRun: 0.7 };
+  // wall, grip y hand: dónde quedaría el colgado de dos manos, que es la pose del frame 0 (desde ahí se ancla la subida)
+  return { ox, dx: ox + cx(last) - cx(idle), rise: last[8], dur: CLIMB_SEQ.reduce((a, s) => a + s[2], 0), exitRun: 0.7,
+           wall: 20, grip: 6, hand: hang[10] };
 })() : null;
 
 /* ---------- ajustes ---------- */
@@ -519,18 +534,31 @@ function dust(x, y, n, speed, size, up = 0.25) {
               color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: size * k * (0.7 + Math.random() * 0.7), g: 120, drag: 4, round: true, grow: 1.6 });
   }
 }
-function impact(x, y, dir, big) { impacts.push({ x, y, dir, t: 0.09, life: 0.09, big }); }
+let shotN = 0, hitN = 0;
+// impacto: el dibujo de 4 frames (las dos filas de la hoja se turnan) y chispas hacia el tirador, que se suman al fondo
+function impact(x, y, dir, big) {
+  impacts.push({ x, y, dir, t: 0, big, row: hitN++ % 2 ? "b" : "a" });
+  for (let i = 0, n = big ? 10 : 6; i < n; i++) {
+    const a = Math.PI * (0.55 + Math.random() * 0.9), v = 280 * (0.4 + Math.random() * 0.6);
+    fx.push({ x, y, vx: Math.cos(a) * v * dir, vy: Math.sin(a) * v - 84, life: 0.3, t: 0.3, color: "#9ff5fa", size: (big ? 5 : 4) * (0.6 + Math.random() * 0.6), g: 900, add: true });
+  }
+}
 // boca del arma en el mundo para un frame dibujado con los pies en footY: la misma cuenta que drawSprite, con el
 // hundido de los pies y el squash del salto (que escala desde los pies). La usan el disparo y los efectos de la boca
 function muzzleAt(frame, footY) {
   const qx = P.sqX * (P.draw.k || 1), qy = P.sqY * (P.draw.k || 1), sink = P.state === "hang" || P.state === "climb" ? 0 : FOOT_SINK;
   return { x: P.x + P.facing * frame[6] * S.char * qx, y: footY + sink + frame[7] * S.char * qy };
 }
+// la boca del frame que está en pantalla, con la misma cuenta que el disparo (hundido en el piso y squash del salto)
+function muzzleNow() {
+  const d = P.draw, T = d.torso, f = T ? anim(T.name).f[T.i] : anim(d.name).f[d.i];
+  return muzzleAt(f, d.y + (T ? T.dy * S.char : 0));
+}
 function fire(frame, footY, power) {
   const { x: mx, y: my } = muzzleAt(frame, footY);
   const len = power > 1 ? 46 : 32;   // la estela arranca en la boca y no se dibuja por detrás de ella (x0)
   bullets.push({ x: mx + P.facing * len, x0: mx, y: my, vx: 1350 * P.facing, life: 0.75, power, len });
-  flash = { x: mx, y: my, t: 0.06, dir: P.facing, big: power > 1, seed: Math.random() * 1000 };
+  flash = { t: 0, big: power > 1, v: (shotN++ % 3) + 1, seed: Math.random() * 1000 };   // sin x, y: va en la boca de cada frame
   if (!reduceMotion) shake = Math.max(shake, power > 1 ? 0.07 : 0.04);
   if (power > 1) rumble(70, 0.4, 0.25);
 }
@@ -631,6 +659,10 @@ function update(dt) {
   const firing = fire1 || fire2;
   const dir = (right ? 1 : 0) - (left ? 1 : 0);
   P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt; P.idleT = (P.idleT || 0) + dt; P.wallLockT -= dt;
+  // los relojes del fogonazo y de los impactos cuentan para arriba y avanzan antes del disparo: lo que nace en este
+  // frame se dibuja con edad 0 (si no, el primer dibujo del fogonazo duraba 1 frame en vez de 2)
+  for (let i = impacts.length - 1; i >= 0; i--) { impacts[i].t += dt; if (impacts[i].t >= 4 * FXT.impact) impacts.splice(i, 1); }
+  if (flash) { flash.t += dt; if (flash.t >= FXT.flashA + FXT.flashB) flash = null; }
   if (P.skipLedge && (P.skipLedge.t -= dt) <= 0) P.skipLedge = null;
   if (P.flipT > 0) P.flipT += dt;
   if (P.onGround || P.state === "hang") { P.canDouble = true; P.flipT = 0; }
@@ -657,8 +689,10 @@ function update(dt) {
         P.state = "climb";
         P.climb = { t: 0, hang: H, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34 * S.char, y: H.top } };
         if (CLIMB) {   // dónde termina parado, y cuánto hay que corregir el clip para que los pies caigan en el canto
-          P.climb.to = { x: P.x + P.facing * CLIMB.dx * S.char, y: H.top };
-          P.climb.err = H.top + FOOT_SINK + CLIMB.rise * S.char - P.y;
+          // arranca donde quedaría el colgado de dos manos (la pose del frame 0), no donde cuelga el de una mano
+          const from = P.climb.from = { x: H.cx - P.facing * CLIMB.wall * S.char, y: H.top - (CLIMB.hand + CLIMB.grip) * S.char };
+          P.climb.to = { x: from.x + P.facing * CLIMB.dx * S.char, y: H.top };
+          P.climb.err = H.top + FOOT_SINK + CLIMB.rise * S.char - from.y;
         }
       }
     }
@@ -866,18 +900,16 @@ function finishUpdate(dt) {
       B.x += B.vx * dt / steps;
       for (const T of targets) if (!T.dead && B.x > T.x && B.x < T.x + T.w && B.y > T.y && B.y < T.y + T.h) {
         T.hp -= B.power; T.hit = 0.08; hits++; dead = true;
-        burst(B.x, B.y, "#9ff5fa", B.power > 1 ? 16 : 11, 320, 0.38, B.power > 1 ? 8 : 6); impact(B.x, B.y, Math.sign(B.vx), B.power > 1);
+        impact(B.vx > 0 ? T.x : T.x + T.w, B.y, Math.sign(B.vx), B.power > 1);   // en la cara que mira al tirador
         if (T.hp <= 0) { T.dead = 3; burst(T.x + T.w / 2, T.y + T.h / 2, T.kind === "can" ? "#e8392e" : "#c79a5a", 30, 460, 0.8, 10); burst(T.x + T.w / 2, T.y + T.h / 2, "#ffffff", 10, 300, 0.35, 6); }
         break;
       }
-      if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; burst(B.x, B.y, "#9ff5fa", 9, 220, 0.3, 5); impact(B.x, B.y, Math.sign(B.vx), false); break; }
+      if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; impact(B.vx > 0 ? S2.x : S2.x + S2.w, B.y, Math.sign(B.vx), false); break; }
     }
     if (dead || B.x < camX - 100 || B.x > camX + VW() + 100) bullets.splice(b, 1);
   }
   for (const T of targets) { if (T.hit > 0) T.hit -= dt; if (T.dead > 0) { T.dead -= dt; if (T.dead <= 0) { T.dead = 0; T.hp = T.max; } } }
   for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; if (E.drag) { const d = Math.exp(-E.drag * dt); E.vx *= d; E.vy *= d; } E.x += E.vx * dt; E.y += E.vy * dt; if (E.t <= 0) fx.splice(i, 1); }
-  for (let i = impacts.length - 1; i >= 0; i--) { impacts[i].t -= dt; if (impacts[i].t <= 0) impacts.splice(i, 1); }
-  if (flash) { flash.t -= dt; if (flash.t <= 0) flash = null; }
   if (P.kickT > 0) P.kickT -= dt;
   if (shake > 0) shake -= dt;
   // utilería: el reloj de las animaciones y las chispas del tablero abierto
@@ -1072,18 +1104,26 @@ function drawSprite() {
   ctx.restore();
 }
 function drawFlash(Fl) {
-  // chico y pegado a la punta del cañón: un halo corto y un destello en cruz alargado hacia adelante, a la escala
-  // del personaje. Nada por detrás de la boca
-  const r = rng(Math.floor(Fl.seed)), s = (Fl.big ? 1.3 : 1) * S.char, life = 1 - Fl.t / 0.06;
-  ctx.save(); ctx.translate(Fl.x - camX, Fl.y); ctx.scale(Fl.dir, 1); ctx.globalCompositeOperation = "lighter";
-  ctx.beginPath(); ctx.rect(0, -40, 120, 80); ctx.clip();
-  const R = 11 * s * (1 + 0.3 * life), glow = ctx.createRadialGradient(1, 0, 0.5, R * 0.35, 0, R);
-  glow.addColorStop(0, "rgba(235,255,255,1)"); glow.addColorStop(0.5, "rgba(130,240,248,0.55)"); glow.addColorStop(1, "rgba(89,227,236,0)");
-  ctx.fillStyle = glow; ctx.beginPath(); ctx.ellipse(R * 0.35, 0, R, R * 0.6, 0, 0, Math.PI * 2); ctx.fill();
-  const L = (14 + r() * 6) * s, Wd = (4 + r() * 2) * s;   // la punta larga, hacia adelante
-  ctx.fillStyle = "rgba(240,255,255,0.95)";
-  ctx.beginPath(); ctx.moveTo(0, -Wd / 2); ctx.lineTo(L, 0); ctx.lineTo(0, Wd / 2); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(2 * s, -7 * s); ctx.lineTo(4 * s, 0); ctx.lineTo(2 * s, 7 * s); ctx.lineTo(0, 0); ctx.closePath(); ctx.fill();   // los brazos cortos de la cruz
+  // la mezcla elegida en prototypes/fx_lab: el dibujo pegado a la boca del frame en pantalla, un halo sumado que no
+  // pasa de la boca para atrás y tres chispas finas hacia adelante. A dos manos, todo un 30% más grande
+  const m = muzzleNow(), age = Fl.t, dur = FXT.flashA + FXT.flashB, q = age / dur, k = S.char / 0.8 * (Fl.big ? 1.3 : 1);
+  const name = (age < FXT.flashA ? "a" : "b") + Fl.v, p = FX.muzzle.pieces[name];
+  ctx.save(); ctx.translate(m.x - camX, m.y); ctx.scale(P.facing, 1);
+  const R = FX.muzzle.len * k * (0.5 + 0.2 * q);
+  ctx.save(); ctx.beginPath(); ctx.rect(-4, -200, 400, 400); ctx.clip();
+  ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.85 * (1 - q);
+  const g = ctx.createRadialGradient(2, 0, 1, R * 0.45, 0, R);
+  g.addColorStop(0, "rgba(235,255,255,0.9)"); g.addColorStop(0.45, "rgba(89,227,236,0.45)"); g.addColorStop(1, "rgba(89,227,236,0)");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(R * 0.45, 0, R, R * 0.65, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  ctx.drawImage(FX_IMG[`muzzle/${name}`], -p.ax * k, -p.ay * k, p.w * k, p.h * k);
+  if (age < 0.08) {
+    const r = rng(Math.floor(Fl.seed)), L = FX.muzzle.len * S.char / 0.8;
+    ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - age / 0.08; ctx.strokeStyle = "#eaffff"; ctx.lineWidth = 1.6; ctx.lineCap = "round";
+    for (let i = 0; i < 3; i++) {
+      const a = (r() - 0.5) * 1.1, d = L * 0.5 + (380 + r() * 260) * age, ln = 4 + r() * 4;
+      ctx.beginPath(); ctx.moveTo(Math.cos(a) * d, Math.sin(a) * d); ctx.lineTo(Math.cos(a) * (d + ln), Math.sin(a) * (d + ln)); ctx.stroke();
+    }
+  }
   ctx.restore();
 }
 function render() {
@@ -1115,23 +1155,30 @@ function render() {
     ctx.restore();
   }
   if (flash) drawFlash(flash);
-  for (const I of impacts) {   // destello del impacto: un círculo que se abre y se apaga
-    const k = 1 - I.t / I.life, r = (I.big ? 26 : 18) * (0.5 + k);
-    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - k;
-    const g = ctx.createRadialGradient(I.x - camX, I.y, 1, I.x - camX, I.y, r); g.addColorStop(0, "rgba(240,255,255,1)"); g.addColorStop(1, "rgba(89,227,236,0)");
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(I.x - camX, I.y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  for (const I of impacts) {
+    if (I.t < 0.06) {   // destello: el círculo que se abre y se apaga, en 0,06 s
+      const k = I.t / 0.06, r = (I.big ? 26 : 18) * (0.5 + k);
+      ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - k;
+      const g = ctx.createRadialGradient(I.x - camX, I.y, 1, I.x - camX, I.y, r); g.addColorStop(0, "rgba(240,255,255,1)"); g.addColorStop(1, "rgba(89,227,236,0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(I.x - camX, I.y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    }
+    const i = Math.floor(I.t / FXT.impact);   // el dibujo: salpica hacia el tirador; con la bala hacia la izquierda, espejado
+    if (i > 3) continue;
+    const name = I.row + (i + 1), p = FX.impact.pieces[name], s = S.char / 0.8 * (I.big ? 1.3 : 1);
+    ctx.save(); ctx.translate(I.x - camX, I.y); ctx.scale(I.dir * s, s); ctx.drawImage(FX_IMG[`impact/${name}`], -p.ax, -p.ay, p.w, p.h); ctx.restore();
   }
   for (const E of fx) {
     const a = Math.max(0, E.t / E.life); ctx.globalAlpha = E.round ? a * 0.85 : a; ctx.fillStyle = E.color;
+    ctx.globalCompositeOperation = E.add ? "lighter" : "source-over";
     if (E.round) { const sz = E.size * (1 + (E.grow - 1) * (1 - a)); ctx.beginPath(); ctx.arc(E.x - camX, E.y, sz / 2, 0, Math.PI * 2); ctx.fill(); }
     else ctx.fillRect(E.x - camX - E.size / 2, E.y - E.size / 2, E.size, E.size);
   }
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
   if (S.debug && ready) {
-    const x = P.x - camX, d = P.draw, f = anim(d.name).f[d.i];
+    const x = P.x - camX, d = P.draw;
     ctx.strokeStyle = "#ff5ad1"; ctx.lineWidth = 1.5; ctx.strokeRect(x - HALF_W, P.y - BODY_H, HALF_W * 2, BODY_H);
     ctx.beginPath(); ctx.moveTo(d.x - camX - 10, d.y); ctx.lineTo(d.x - camX + 10, d.y); ctx.moveTo(d.x - camX, d.y - 10); ctx.lineTo(d.x - camX, d.y + 4); ctx.stroke();
-    ctx.fillStyle = "#ffef5a"; ctx.beginPath(); ctx.arc(d.x - camX + P.facing * f[6] * S.char, d.y + f[7] * S.char, 3.5, 0, Math.PI * 2); ctx.fill();
+    const m = muzzleNow(); ctx.fillStyle = "#ffef5a"; ctx.beginPath(); ctx.arc(m.x - camX, m.y, 3.5, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = "#59e3ec"; ctx.beginPath(); ctx.arc(x + P.facing * HANG_HAND[9] * S.char, P.y + HANG_HAND[10] * S.char, 3.5, 0, Math.PI * 2); ctx.fill();
   }
   ctx.restore();   // mundo

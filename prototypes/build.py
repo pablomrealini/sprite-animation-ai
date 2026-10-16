@@ -34,6 +34,17 @@ BACKGROUNDS = {
     },
 }
 
+# efectos de spritepipe gen-images (backgrounds/<set>/post/), elegidos en prototypes/fx_lab: la hoja de cada efecto y su
+# tamaño en px del juego con el personaje al 80%. El fogonazo se mide por el ancho medio de sus primeros dibujos; el
+# impacto, por el alto medio de los más grandes (los 2)
+FX = {
+    "ranger": {
+        "set": "ranger_fx",
+        "muzzle": {"opt": "gpt-image-2.5-sunburst-fal_2", "len": 26, "ref": ("w", ["a1", "a2", "a3"])},
+        "impact": {"opt": "gpt-image-2.5-sunburst-fal_1", "len": 50, "ref": ("h", ["a2", "b2"])},
+    },
+}
+
 
 def measure(out: Path, name: str) -> dict:
     at = json.loads((out / f"{name}_1x-0.json").read_text())
@@ -110,6 +121,44 @@ def export_backgrounds(name: str, dist: Path) -> dict:
     return data
 
 
+def fx_anchor(a: np.ndarray, where: str) -> tuple[float, float]:
+    """El punto que va en la boca (fogonazo: el borde izquierdo) o en el contacto (impacto: el centro del primer
+    frame y la punta derecha de los demás), en px de la imagen."""
+    ys, xs = np.nonzero(a >= 128)
+    if where == "center":
+        return float(xs.mean()), float(ys.mean())
+    edge = int(xs.min()) if where == "left" else int(xs.max())
+    band = max(2, round(0.04 * a.shape[1]))   # las filas de la punta, en el 4% del ancho más cerca del borde
+    cols = slice(edge, edge + band) if where == "left" else slice(edge - band + 1, edge + 1)
+    return float(edge), float(np.nonzero((a[:, cols] >= 128).any(1))[0].mean())
+
+
+def export_fx(name: str, dist: Path) -> dict:
+    """Achica las piezas elegidas a EXPORT px por px del juego; devuelve su tamaño y su ancla en px del juego."""
+    cfg = FX[name]
+    post, out = ROOT / "backgrounds" / cfg["set"] / "post", dist / "fx"
+    out.mkdir(exist_ok=True)
+    data = {}
+    for asset in ("muzzle", "impact"):
+        c = cfg[asset]
+        pieces = {p.stem: Image.open(p).convert("RGBA") for p in sorted((post / asset / c["opt"]).glob("*.png"))}
+        axis, ref = c["ref"]
+        k = c["len"] / float(np.mean([pieces[r].width if axis == "w" else pieces[r].height for r in ref]))
+        data[asset] = {"len": c["len"], "pieces": {}}
+        for piece, im in pieces.items():
+            a = np.asarray(im).copy()
+            a[..., 3][a[..., 3] >= 250] = 255   # GPT Image llega a 254: lo opaco, opaco
+            im = Image.fromarray(a, "RGBA").convert("RGBa")   # premultiplicado, como export_image
+            im = im.resize((max(1, round(im.width * k * EXPORT)), max(1, round(im.height * k * EXPORT))), Image.LANCZOS).convert("RGBA")
+            im.save(out / f"{asset}_{piece}.png", optimize=True)
+            where = "left" if asset == "muzzle" else "center" if piece.endswith("1") else "right"
+            ax, ay = fx_anchor(np.asarray(im)[..., 3], where)
+            data[asset]["pieces"][piece] = {"src": f"fx/{asset}_{piece}.png", "w": round(im.width / EXPORT, 2),
+                                            "h": round(im.height / EXPORT, 2), "ax": round(ax / EXPORT, 2),
+                                            "ay": round(ay / EXPORT, 2)}
+    return data
+
+
 def main(name: str) -> None:
     proto, out = ROOT / "prototypes" / name, ROOT / "characters" / name / "out"
     data = measure(out, name)
@@ -118,6 +167,8 @@ def main(name: str) -> None:
     html = (proto / "src.html").read_text(encoding="utf-8").replace("__SPRITE_DATA__", json.dumps(data, separators=(",", ":")))
     if name in BACKGROUNDS:
         html = html.replace("__BG_DATA__", json.dumps(export_backgrounds(name, dist), separators=(",", ":")))
+    if name in FX:
+        html = html.replace("__FX_DATA__", json.dumps(export_fx(name, dist), separators=(",", ":")))
     (dist / "index.html").write_text(html, encoding="utf-8")
     shutil.copy(out / f"{name}_1x-0.png", dist / f"{name}_1x-0.png")
     print(f"✓ {dist / 'index.html'}  ({', '.join(f'{k} {len(v['f'])}' for k, v in data['anims'].items())})")
