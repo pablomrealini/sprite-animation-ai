@@ -351,7 +351,7 @@ models = ["nano-banana-2.1"]  # opcional: sólo estos modelos de [gen] generan e
 aspect = "3:1"           # cada modelo usa el tamaño permitido más parecido
 alpha = "layer"          # opaque (cielo, style frame) | layer (aire arriba) | cutout (prop, pieza)
 tile = "x"               # se repite en x: se revisa y arregla la costura
-seam = "cut"             # cut | crossfade | mask | none
+seam = "cut"             # cut | crossfade | clear | mask | none
 ```
 
 La comparación del 2026-10-16 (los 4 modelos en `style_frame`, `mid`, `platform_kit` y `props`, US$1,13) quedó en `backgrounds/ranger_base/compare.html`. `compare.html` y `compare.md` muestran siempre todo lo que se generó en el set, aunque la corrida haya sido con `--models` o `--assets`, o un asset ya no elija ese modelo.
@@ -377,6 +377,7 @@ En la carpeta del set (`backgrounds/<set>/`):
 4. **Costura.** En lo que se repite en x (o en y), la diferencia entre la última columna y la primera se compara con la típica entre columnas vecinas: cerca de 1 no se ve, hasta 2 está bien, entre 2 y 4 se nota apenas, más de 4 es un corte. Calibrado a ojo con las capas `mid` de `ranger_base`: GPT 23,6 (corte claro), Seedream 5,3 (se nota), FLUX 3,4 (apenas) y Nano Banana 1,9 (no se ve). El reporte trae también el peor de 16 tramos (`peak`) como dato. No decide nada, porque un contorno vertical que cae justo en la vuelta lo dispara sin que haya costura. Si no está bien, una franja del final (`seam_px`, por defecto el 12% del ancho) se superpone al principio y la capa pierde ese ancho. Si el resultado no mejora, se descarta y queda en el reporte como `fix_discarded`:
    - `cut`: corte de error mínimo (image quilting, Efros y Freeman 2001). Es un camino de arriba abajo por donde las dos franjas más se parecen, con 2 px de fundido. No duplica contornos y, en una capa con transparencia, pasa por el aire entre las siluetas.
    - `crossfade`: fundido lineal en toda la franja. Va para cielos y degradés; en dibujo de línea deja contornos dobles.
+   - `clear`: para cielos con cosas sueltas, como nubes. Una nube cortada por el borde no empalma con ningún corte ni fundido, porque del otro lado no sigue. Entonces se borra lo que toca el primer o el último borde y ahí queda el fondo de cada fila (la mediana de lo que no es una cosa). Lo demás no cambia y la capa conserva el ancho, salvo que el degradé mismo no cierre: en ese caso, además, va un `crossfade`. Lo usa el cielo de `ranger_industrial`.
    - `mask`: no toca la capa. Escribe la capa corrida medio ancho, con la costura en el centro, y una máscara de la franja (transparente = lo que se edita, la convención de OpenAI). Sirve para retocarla a mano o con un modelo de edición con máscara.
 5. **Recorte.** Al bbox del alfa con 2 px de aire, salvo en los ejes que se repiten. A una capa se le recorta el aire de arriba y conserva el ancho; el recorte queda en el reporte (`trim`) para alinearla en el engine.
 

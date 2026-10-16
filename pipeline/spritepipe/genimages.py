@@ -43,7 +43,7 @@ KEYS = {"openai": "OPENAI_API_KEY", "fal": "FAL_KEY"}  # proveedor -> variable d
 RESUME_HOURS = 24  # un pedido de fal enviado y no bajado se retoma sin pagarlo de nuevo
 STATUS = {"done": "ok", "blocked": "bloqueado", "error": "error", "submitted": "enviado", None: "pendiente"}
 ALPHA_KINDS = ("opaque", "layer", "cutout")
-SEAMS = ("cut", "crossfade", "mask", "none")
+SEAMS = ("cut", "crossfade", "clear", "mask", "none")
 
 REF_CLAUSE = {
     "character": "The character in the reference image is the hero of this game: draw the character exactly as "

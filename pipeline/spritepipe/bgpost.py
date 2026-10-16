@@ -16,6 +16,9 @@ Todo se hace en alfa premultiplicado, así los bordes semitransparentes no arras
          las dos franjas más se parecen, con 2 px de fundido. No duplica contornos y, en una capa con
          transparencia, pasa por el aire entre las siluetas.
     crossfade: fundido lineal en toda la franja. Para cielos y degradés; en dibujo de línea deja contornos dobles.
+    clear: para cielos con cosas sueltas (nubes). Una nube cortada por el borde no empalma con ningún corte ni
+         fundido, porque del otro lado no sigue: se borra lo que toca el borde y ahí queda el fondo de cada
+         fila. La capa conserva su ancho, salvo que el fondo mismo no cierre (entonces, además, crossfade).
     mask: no toca la capa. Escribe la capa corrida medio ancho (la costura queda en el centro) y la máscara
          de la franja (transparente = lo que se edita, la convención de OpenAI), para editarla a mano o con
          un modelo de edición con máscara.
@@ -40,6 +43,9 @@ FEATHER = 2  # px de fundido a cada lado del corte de error mínimo
 # 23,6 (corte claro), Seedream 5,3 (se nota), FLUX 3,4 (apenas), Nano Banana 1,9 (no se ve).
 SEAM_OK, SEAM_WARN = 2.0, 4.0
 SEAM_BANDS = 16
+CLEAR_DIFF = 0.12  # clear: diferencia con el fondo de la fila (suma de RGB premultiplicado, de 0 a 3) que es una cosa
+CLEAR_GROW = 6  # clear: px que se agranda lo que toca el borde, para llevarse el contorno y el antialias
+CLEAR_DEGREE = 4  # clear: grado del polinomio del degradé de arriba abajo
 PIECE_MIN_FRAC = 0.02  # una pieza más chica que esto (en área, respecto de la mayor) es basura
 PIECE_GAP_PX = 2  # partes a menos de esto se juntan en una pieza (un tornillo suelto, una luz)
 HEIGHT_SNAP = 0.15  # piezas que difieren menos que esto de la altura común se escalan a ella; las otras, no
@@ -50,7 +56,7 @@ class PostSpec:
     expect: str = "cutout"  # "opaque" (cielo, style frame) | "layer" (capa con aire arriba) | "cutout" (props, kit)
     key: str | None = None  # "#RRGGBB" si el modelo dibujó sobre un color plano; None si trae alfa o es opaco
     tile: dict[str, str] = field(default_factory=dict)  # pieza ("" = la imagen entera) -> "x" | "y" | "xy"
-    seam: str = "cut"  # "cut" | "crossfade" | "mask" | "none"
+    seam: str = "cut"  # "cut" | "crossfade" | "clear" | "mask" | "none"
     seam_px: float = 0.12  # ancho de la franja de la costura: px, o fracción del ancho si es < 1
     trim: bool = True
     split: list[str] = field(default_factory=list)  # nombres de las piezas de una hoja, en orden de lectura
@@ -276,10 +282,47 @@ def _min_cut(err: np.ndarray, lo: int, hi: int) -> np.ndarray:
     return path
 
 
+def _sky_gradient(f: np.ndarray) -> np.ndarray:
+    """El fondo de cada fila de un cielo: la mediana de la fila, ajustada a un polinomio suave de arriba abajo sin
+    las filas que se apartan. En una fila casi tapada por nubes, la mediana es color de nube y el ajuste la saca."""
+    med = np.median(f, axis=1)
+    y = np.linspace(-1, 1, len(med))
+    keep = np.ones(len(med), bool)
+    for _ in range(4):
+        fit = np.stack([np.polyval(np.polyfit(y[keep], med[keep, c], CLEAR_DEGREE), y) for c in range(f.shape[2])], 1)
+        keep = np.abs(med - fit).sum(-1) < CLEAR_DIFF / 2
+        if keep.sum() < CLEAR_DEGREE + 2:
+            break
+    return fit
+
+
+def clear_edges(rgba: np.ndarray, axis: str = "x") -> tuple[np.ndarray, dict]:
+    """Borra lo que toca el primer o el último borde (las nubes cortadas) y deja ahí el fondo de cada fila (el
+    degradé va a lo largo del borde, ver _sky_gradient). Lo que no toca el borde no cambia."""
+    f = _along(premul(rgba), axis)
+    bg = _sky_gradient(f)
+    thing = np.abs(f - bg[:, None]).sum(-1) > CLEAR_DIFF
+    k = 2 * CLEAR_GROW + 1
+    grown = cv2.dilate(thing.astype(np.uint8), np.ones((k, k), np.uint8))
+    _, labels = cv2.connectedComponents(grown, connectivity=8)
+    edge = (set(np.unique(labels[:, 0])) | set(np.unique(labels[:, -1]))) - {0}
+    gone = np.isin(labels, list(edge)).astype(np.float32)
+    t = np.maximum(gone, cv2.GaussianBlur(gone, (0, 0), 1.5))[..., None]
+    out = unpremul(_along(f * (1 - t) + np.broadcast_to(bg[:, None], f.shape) * t, axis))
+    return out, {"method": "clear", "cleared": len(edge), "cleared_frac": round(float(gone.mean()), 4)}
+
+
 def fix_seam(rgba: np.ndarray, method: str, overlap: float, axis: str = "x") -> tuple[np.ndarray, dict]:
     """La franja final se superpone a la inicial y la capa pierde ese ancho. El nuevo último px es el que
     estaba justo antes de la franja, y el nuevo primero, el que le seguía: la vuelta empalma por
-    construcción, y la unión queda adentro, donde el corte o el fundido la esconden."""
+    construcción, y la unión queda adentro, donde el corte o el fundido la esconden. Con clear, primero se
+    borra lo que toca el borde, y sólo si el fondo mismo no cierra se funde la franja."""
+    if method == "clear":
+        out, info = clear_edges(rgba, axis)
+        if seam_score(out, axis)["verdict"] == "ok":
+            return out, {**info, "overlap_px": 0}
+        out, more = fix_seam(out, "crossfade", overlap, axis)
+        return out, {**info, "overlap_px": more["overlap_px"], "then": "crossfade"}
     f = _along(premul(rgba), axis)
     w_total = f.shape[1]
     w = int(round(overlap * w_total if overlap < 1 else overlap))
@@ -296,7 +339,7 @@ def fix_seam(rgba: np.ndarray, method: str, overlap: float, axis: str = "x") -> 
         info = {"cut_error": round(float(err[np.arange(len(path)), path].mean()), 5),
                 "cut_x": [int(path.min()), int(path.max())]}
     else:
-        raise ValueError(f"seam tiene que ser cut, crossfade, mask o none, no {method!r}")
+        raise ValueError(f"seam tiene que ser cut, crossfade, clear, mask o none, no {method!r}")
     blend = tail * (1 - t)[..., None] + head * t[..., None]
     out = np.concatenate([blend, f[:, w:w_total - w]], axis=1)
     out = unpremul(_along(out, axis))
@@ -342,7 +385,7 @@ def _finish(name: str, img: np.ndarray, spec: PostSpec, tile: str, dest: Path, r
     for axis in tile:
         before = seam_score(img, axis)
         entry = {"before": before}
-        if spec.seam in ("cut", "crossfade") and before["verdict"] != "ok":
+        if spec.seam in ("cut", "crossfade", "clear") and before["verdict"] != "ok":
             fixed, how = fix_seam(img, spec.seam, spec.seam_px, axis)
             after = seam_score(fixed, axis)
             if after["score"] < before["score"]:

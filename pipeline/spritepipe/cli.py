@@ -424,7 +424,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="opaque: cielo o style frame; layer: capa con aire arriba; cutout: prop o pieza suelta")
     bp.add_argument("--key", help="color plano del fondo a sacar, #RRGGBB (los modelos sin alfa)")
     bp.add_argument("--tile", choices=["x", "y", "xy"], help="ejes en que la imagen se repite")
-    bp.add_argument("--seam", choices=["cut", "crossfade", "mask", "none"], default="cut")
+    bp.add_argument("--seam", choices=["cut", "crossfade", "clear", "mask", "none"], default="cut")
     bp.add_argument("--seam-px", type=float, default=0.12, help="franja de la costura: px, o fracción si es < 1")
     bp.add_argument("--split", help="nombres de las piezas de una hoja, en orden de lectura, separados por coma")
     bp.add_argument("--same-height", action="store_true", help="en una hoja: las piezas a una misma altura (un kit)")

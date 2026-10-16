@@ -232,3 +232,23 @@ def test_process_with_mask_leaves_the_layer_and_writes_the_edit_files(tmp_path):
     assert rep["seam"]["x"]["mask"] == ["near_post.seam_x.png", "near_post.seam_x_mask.png"]
     assert (tmp_path / "near_post.seam_x_mask.png").exists()
     assert imgio.load(tmp_path / "near_post.png").shape[1] == 1200
+
+
+def _cloudy_sky(w=900, h=300):
+    """Degradé vertical con tres nubes de contorno oscuro: una cortada por cada borde y una adentro."""
+    img = _sky(w, h)[..., :3].copy()
+    img[:] = img[:, :1]  # el degradé, igual en toda la fila: lo que no cierra son las nubes
+    for cx in (20, 450, w - 30):
+        cv2.ellipse(img, (cx, 150), (90, 40), 0, 0, 360, (250, 250, 250), -1)
+        cv2.ellipse(img, (cx, 150), (90, 40), 0, 0, 360, (20, 30, 60), 3)
+    return _rgba(img)
+
+
+def test_clear_removes_the_clouds_cut_by_the_edge_and_keeps_the_rest():
+    img = _cloudy_sky()
+    assert bgpost.seam_score(img)["verdict"] == "fail"
+    out, how = bgpost.fix_seam(img, "clear", 0.12)
+    assert how["cleared"] == 2 and how["overlap_px"] == 0 and out.shape == img.shape
+    assert bgpost.seam_score(out)["verdict"] == "ok"
+    assert (np.abs(out[:, :150].astype(int) - img[:, 600:601].astype(int)).max()) <= 2  # ahí quedó el degradé
+    assert (out[:, 360:540] == img[:, 360:540]).all()  # la nube de adentro, intacta
