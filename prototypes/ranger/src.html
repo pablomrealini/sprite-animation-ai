@@ -168,6 +168,7 @@ const JP = phases("jump");
 const JS = anim("jump_shoot").f;
 const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
 const HANG_HAND = anim("hang").f[0];                 // mano del colgado relativa al pivot
+const HANG_WALL = 30, HANG_GRIP = 6;                 // del pivot a la cara de la pared, y de la punta de la mano a los dedos
 const GRAB_FRAMES = [6, 7, 8, 9];                    // de hang_in: el momento en que agarra
 
 /* ---------- ajustes ---------- */
@@ -330,9 +331,9 @@ function update(dt) {
     const grabbing = H.t < GRAB_FRAMES.length * 0.05;
     const name = grabbing ? "hang_in" : "hang";
     const i = grabbing ? GRAB_FRAMES[Math.floor(H.t / 0.05)] : Math.floor((H.t - 0.2) * 12) % anim("hang").f.length;
-    // la pose viene de colgarse de una barra: se corre la mano 10 px sobre la cornisa para que el cuerpo
-    // quede contra la pared, hasta tener un colgado de cornisa de verdad
-    P.x = H.cx - P.facing * (HANG_HAND[9] - 10); P.y = H.top - HANG_HAND[10] + 2;
+    // en el sprite, la mano apoya los dedos hacia adelante y el brazo y el torso llegan hasta +30 px del
+    // pivot: la pared va ahí (sin que el cuerpo la pise) y los dedos, 6 px bajo el tope de la mano, sobre la cornisa
+    P.x = H.cx - P.facing * HANG_WALL; P.y = H.top - HANG_HAND[10] - HANG_GRIP;
     setDraw(name, i, P.x, P.y);
     if (jumpPressed && !grabbing) { P.state = "climb"; P.climb = { t: 0, from: { x: P.x, y: P.y }, to: { x: H.cx + P.facing * 34, y: H.top } }; }
     else if (downPressed) { P.state = "air"; P.onGround = false; P.vy = 60; P.grabCD = 0.35; P.x -= P.facing * 6; }
