@@ -1,9 +1,9 @@
 {
   "character": "ranger",
-  "created": "2026-10-16T17:56:10+00:00",
+  "created": "2026-10-16T21:33:43+00:00",
   "tool": "spritepipe 0.1",
   "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
-  "config": "# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).\n# Los comandos van desde la raíz del repo.\n#\n# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).\n#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,\n#    poses/ranger_jump_magenta_16x9.png.\n# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)\n#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno\n#    se retocó en Davinci, reemplazarlo.\n#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)\n#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos\n# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver \"Limpieza previa\" en\n#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,\n#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en\n#    work/00_clean/ y se reusan mientras no cambie nada.\n#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).\n# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml\n#\n# Los clips vienen \"on twos\" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.\n# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin\n# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = \"bt601\".\n# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios\n# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.\n\n[character]\nname = \"ranger\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"run\"\nanchor = \"clip\"            # todas las animaciones de un clip comparten el ancla de su frame 0 (la pose parada):\n                          # con el centroide, el cuerpo saltaba ~8 px para atrás al extender el brazo para disparar\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo\nhole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo\n\n[output]\nextra_scales = [0.5]\n\n# --- clips de Davinci ----------------------------------------------------------------------------\n# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.\n\n[[clip]]\nname = \"run\"              # r01\nfile = \"clips/raw/r01.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run2.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot\"            # r04: disparo con una mano\nfile = \"clips/raw/r04.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot2h\"          # r02: disparo a dos manos\nfile = \"clips/raw/r02.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 680      # por el ancho del casco contra el disparo de r04 (a 658 seguía 3% más grande): abre mucho las piernas\n                          # y queda más bajo, así que igualar el alto lo agrandaba ~8%\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot2h.txt\"\n\n[[clip]]\nname = \"crouch_shoot\"     # r06: agachado disparando\nfile = \"clips/raw/r06.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/crouch_shoot.txt\"\n\n[[clip]]\nname = \"jump\"             # r08: saltos\nfile = \"clips/raw/r08.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"jump_shoot\"       # r05: salto disparando, con fondo en degradé\nfile = \"clips/raw/r05.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"hang\"             # r07: salta, agarra la barra y cuelga\nfile = \"clips/raw/r07.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }   # la barra de la que se cuelga\nbody_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande\nmodel = \"seedance-2.0\"\nprompt = \"prompts/hang.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n# --- quieto y correr ---------------------------------------------------------------------------\n[[animation]]\nname = \"idle\"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad\nclip = \"shoot\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"            # los frames 2 y 3 son iguales: con \"sharpest\" se queda con uno solo\n\n[[animation]]\nname = \"run\"\nclip = \"run\"\nkind = \"cycle\"\nskip_seconds = 0.6        # los primeros 12 frames está parado\nloop_seconds = [0.4, 1.1]\n\n# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [14, 20]\n\n[[animation]]\nname = \"shoot\"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga\nclip = \"shoot\"\nkind = \"cycle\"\nloop_start = 38\nloop_length = 8\n\n[[animation]]\nname = \"shoot_out\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [84, 92]\n\n# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nkind = \"cycle\"\nloop_start = 36\nloop_length = 10\n\n[[animation]]\nname = \"shoot2h_out\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]            # el mismo tramo que shoot2h_in, al revés\nreverse = true\n\n# --- agachado: baja, dispara en loop, se para ---------------------------------------------------\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [10, 16]\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch_shoot\"\nkind = \"cycle\"\nloop_start = 58\nloop_length = 10\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [85, 92]\npick = \"first\"            # con \"sharpest\" el 90 le gana al 89 por poco y la salida pierde un frame\n\n# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------\n[[animation]]\nname = \"jump\"\nclip = \"jump\"\nkind = \"oneshot\"\ntrim = [10, 29]\n\n[[animation]]\nname = \"jump_shoot\"\nclip = \"jump_shoot\"\nkind = \"oneshot\"\ntrim = [10, 35]\n\n# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [12, 32]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.5, 2.0]\n\n# --- trepar a la cornisa: ver \"colgado con las dos manos y subida\", al final (g09 y g10, por API) ---------------\n\n# --- clips generados por API (spritepipe bakeoff con generate.toml: Seedance 2.0 en fal.ai) ---------\n# fal devuelve magenta puro (#FF26FF), y la compresión lo hace \"sangrar\" en los blancos del casco: con\n# key_method = \"chroma\" el despill lo limpia (con distancia quedaban manchas semitransparentes). Con magenta\n# puro el rojo de la armadura no corre peligro: la pantalla es min(R, B) - G y en el rojo B es bajo.\n# body_height_px = 363 en los tres: medido idle contra idle (misma pose parada), así salen a 129 px como el resto.\n# g01 es la primera prueba de run_legs (sin el prompt mate); quedó en raw/ pero no se usa.\n\n[[clip]]\nname = \"run_legs\"         # g02: run con las manos arriba de la cintura, para el cuerpo partido\nfile = \"clips/raw/g02_run_legs.mp4\"\ncolor_matrix = \"bt601\"    # fal tampoco etiqueta el color; con BT.601 el rojo coincide con el concept\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs.txt\"\n\n[[clip]]\nname = \"idle_breath\"      # g05: idle respirando sobre magenta apagado (g03, sobre magenta puro, tenía agujeros en el casco)\nfile = \"clips/raw/g05_idle_breath.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, muzzle_steady = true }   # el modelo le pone destellos cian en la boca\nbody_height_px = 355      # este toma sale 2% más chico que g03: así mide 129 px como el idle\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_breath.txt\"\n\n[[clip]]\nname = \"double_jump\"      # g06: saltos con mortal sobre magenta apagado (g04, sobre magenta puro, tenía agujeros)\nfile = \"clips/raw/g06_double_jump.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/double_jump.txt\"\n\n[[animation]]\nname = \"run_legs\"\nclip = \"run_legs\"\nkind = \"cycle\"\nskip_seconds = 0.5\nloop_seconds = [0.4, 1.1]\n\n[[animation]]\nname = \"idle_breath\"\nclip = \"idle_breath\"\nkind = \"cycle\"\nloop_start = 81           # una respiración sola (1 s). Entre los frames 48 y 78 cambia el peso de pie y mueve\nloop_length = 24          # la pierna, que en un idle de acción no va\n\n[[animation]]\nname = \"double_jump\"      # un ciclo completo: parado, despega, mortal, aterriza (el clip lo repite cada ~24 frames)\nclip = \"double_jump\"\nkind = \"oneshot\"\ntrim = [24, 44]\n\n[[clip]]\nname = \"idle_combat\"      # g07: idle de combate (respiración rápida, pies quietos), toma 2 de clips/gen3\nfile = \"clips/raw/g07_idle_combat.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, muzzle_steady = true }\nbody_height_px = 372      # esta toma trae al personaje ~5% más grande: así mide 129–132 px respirando\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_combat.txt\"\n\n[[animation]]\nname = \"idle_combat\"\nclip = \"idle_combat\"\nkind = \"cycle\"\nskip_seconds = 0.2\nloop_seconds = [0.4, 1.6]\n\n[[clip]]\nname = \"run_gun\"          # g08: run con la pistola al pecho a dos manos (pose de poses_gen, Nano Banana 2.1 #2), toma 1 de gen4\nfile = \"clips/raw/g08_run_gun.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 372\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs_chest.txt\"\n\n[[animation]]\nname = \"run_gun\"\nclip = \"run_gun\"\nkind = \"cycle\"\nskip_seconds = 0.3\nloop_seconds = [0.4, 1.2]\n\n# --- colgado con las dos manos y subida a la cornisa (generate_climb.toml, toma 1 de cada uno en clips/gen5) -------\n# La pose colgada es poses_gen hang_two #1 (Nano Banana 2.1). climb_frames.py la pone chica y abajo sobre magenta\n# apagado (primer frame de los dos clips) y arma el último de la subida: el concept parado sobre el canto, a la misma\n# escala (por el ancho del blanco del casco). Los dos clips arrancan en la misma pose, así el colgado empalma con la\n# subida, y la subida termina en la pose del idle. La toma 2 de la subida se funde del colgado a agachado en el aire\n# sin pasar por el canto (frame 11): no sirve. De los colgados quedó la toma 2 (g10, costura 0,95); la 1 es más\n# quieta pero con la costura visible (1,68).\n# body_height_px = 253 en los dos: parado al final de la subida mide 252 px de video, contra 371 del idle_combat\n# (g07, que declara 372). El frame 0 de los dos mide 314 px: la misma pose a la misma escala.\n[[clip]]\nname = \"climb\"            # g09: colgado → tira para arriba → se tira de panza sobre el canto → se para\nfile = \"clips/raw/g09_climb.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 253\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/climb.txt\"\n\n[[clip]]\nname = \"hang_two\"         # g10: colgado de las dos manos, respira y balancea apenas las piernas\nfile = \"clips/raw/g10_hang_two.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 253\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/hang_two.txt\"\n\n[[animation]]\nname = \"climb\"\nclip = \"climb\"\nkind = \"oneshot\"\ntrim = [10, 62]\n\n[[animation]]\nname = \"hang_two\"\nclip = \"hang_two\"\nkind = \"cycle\"\nskip_seconds = 0.2\n",
+  "config": "# Ranger: segundo personaje (casco blanco y rojo, armadura, pistola de una mano).\n# Los comandos van desde la raíz del repo.\n#\n# 1. Concept: poses/ranger_concept.png (de la imagen que pasó Pablo, con el alfa interior puesto en 255).\n#    Poses para el modelo: spritepipe pad-pose → poses/ranger_master_magenta_16x9.png y, con --feet 0.92,\n#    poses/ranger_jump_magenta_16x9.png.\n# 2. Clips: Davinci con Seedance 2.0, image-to-video, 1280×720. Los originales están en clips/raw/ (r01..r08)\n#    y cada uno es un [[clip]] de abajo. Los prompts de prompts/ son los que se le pasaron a Pablo; si alguno\n#    se retocó en Davinci, reemplazarlo.\n#      r01 run · r02 disparo a dos manos · r03 trepar (sin procesar: dibuja la cornisa y la cámara sigue)\n#      r04 disparo · r05 salto disparando · r06 agachado disparando · r07 colgarse · r08 saltos\n# 3. Limpieza previa: la hace el pipeline con `clean` en cada [[clip]] (ver \"Limpieza previa\" en\n#    pipeline/README.md): fondo plano modelado por fila (r05 vino en degradé), sombra de piso como fondo,\n#    rayos y humo fuera, corte en la boca del arma y la barra de r07 borrada. Los clips limpios quedan en\n#    work/00_clean/ y se reusan mientras no cambie nada.\n#    r02 y r06 traen al personaje ~27% más grande que el run: lo corrige body_height_px (escala por clip).\n# 4. uv run --project pipeline spritepipe run characters/ranger/character.toml\n#\n# Los clips vienen \"on twos\" (cada pose dura 2 frames a 24 fps): a 12 fps no se pierde nada.\n# Davinci devuelve video sin tag de color, codificado en BT.601: con la BT.709 que el pipeline supone sin\n# tag, el rojo se corre a naranja. Por eso cada [[clip]] declara color_matrix = \"bt601\".\n# clips/run.mp4 es el run viejo, vertical (560×752): ya no se usa. Los demás clips/*.mp4 son los limpios\n# que armaban los scripts sueltos, antes de que la limpieza pasara al pipeline: tampoco se usan.\n\n[character]\nname = \"ranger\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 128\nscale_reference = \"run\"\nanchor = \"clip\"            # todas las animaciones de un clip comparten el ancla de su frame 0 (la pose parada):\n                          # con el centroide, el cuerpo saltaba ~8 px para atrás al extender el brazo para disparar\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondos magenta apagados y personaje rojo: con chroma se va el rojo\nhole_max_frac = 0.0005    # huecos de fondo entre la mochila y el brazo\n\n[output]\nextra_scales = [0.5]\n\n# --- clips de Davinci ----------------------------------------------------------------------------\n# Las animaciones los nombran en `clip` y heredan archivo, limpieza, pose, modelo, prompt y escala.\n\n[[clip]]\nname = \"run\"              # r01\nfile = \"clips/raw/r01.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/run2.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot\"            # r04: disparo con una mano\nfile = \"clips/raw/r04.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"shoot2h\"          # r02: disparo a dos manos\nfile = \"clips/raw/r02.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 680      # por el ancho del casco contra el disparo de r04 (a 658 seguía 3% más grande): abre mucho las piernas\n                          # y queda más bajo, así que igualar el alto lo agrandaba ~8%\nmodel = \"seedance-2.0\"\nprompt = \"prompts/shoot2h.txt\"\n\n[[clip]]\nname = \"crouch_shoot\"     # r06: agachado disparando\nfile = \"clips/raw/r06.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true }\nbody_height_px = 600      # como r02: 474 / 0,79 (medido, ~601)\nmodel = \"seedance-2.0\"\nprompt = \"prompts/crouch_shoot.txt\"\n\n[[clip]]\nname = \"jump\"             # r08: saltos\nfile = \"clips/raw/r08.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"jump_shoot\"       # r05: salto disparando, con fondo en degradé\nfile = \"clips/raw/r05.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, cut_left = true }   # los rayos también cruzan por detrás\nmodel = \"seedance-2.0\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n[[clip]]\nname = \"hang\"             # r07: salta, agarra la barra y cuelga\nfile = \"clips/raw/r07.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }   # la barra de la que se cuelga\nbody_height_px = 486.2    # 474 / 0,975: con la pose sola quedaría a la escala del run, 2,5% más grande\nmodel = \"seedance-2.0\"\nprompt = \"prompts/hang.txt\"\npose = \"../../poses/ranger_concept.png\"\n\n# --- quieto y correr ---------------------------------------------------------------------------\n[[animation]]\nname = \"idle\"             # provisorio: el cuadro quieto del arranque del disparo. Falta un idle de verdad\nclip = \"shoot\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"            # los frames 2 y 3 son iguales: con \"sharpest\" se queda con uno solo\n\n[[animation]]\nname = \"run\"\nclip = \"run\"\nkind = \"cycle\"\nskip_seconds = 0.6        # los primeros 12 frames está parado\nloop_seconds = [0.4, 1.1]\n\n# --- disparo con una mano: sube el brazo, dispara en loop, baja el brazo ------------------------\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [14, 20]\n\n[[animation]]\nname = \"shoot\"            # un disparo completo: apunta, dispara, retrocede, vuelve. En loop es ráfaga\nclip = \"shoot\"\nkind = \"cycle\"\nloop_start = 38\nloop_length = 8\n\n[[animation]]\nname = \"shoot_out\"\nclip = \"shoot\"\nkind = \"oneshot\"\ntrim = [84, 92]\n\n# --- disparo con dos manos: la vuelta a una mano es la entrada al revés --------------------------\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nkind = \"cycle\"\nloop_start = 36\nloop_length = 10\n\n[[animation]]\nname = \"shoot2h_out\"\nclip = \"shoot2h\"\nkind = \"oneshot\"\ntrim = [6, 14]            # el mismo tramo que shoot2h_in, al revés\nreverse = true\n\n# --- agachado: baja, dispara en loop, se para ---------------------------------------------------\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [10, 16]\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch_shoot\"\nkind = \"cycle\"\nloop_start = 58\nloop_length = 10\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch_shoot\"\nkind = \"oneshot\"\ntrim = [85, 92]\npick = \"first\"            # con \"sharpest\" el 90 le gana al 89 por poco y la salida pierde un frame\n\n# --- saltos (la subida queda dentro del sprite, como root motion) --------------------------------\n[[animation]]\nname = \"jump\"\nclip = \"jump\"\nkind = \"oneshot\"\ntrim = [10, 29]\n\n[[animation]]\nname = \"jump_shoot\"\nclip = \"jump_shoot\"\nkind = \"oneshot\"\ntrim = [10, 35]\n\n# --- colgarse: salta y agarra, después cuelga en loop ---------------------------------------------\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [12, 32]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.5, 2.0]\n\n# --- trepar a la cornisa: ver \"colgado con las dos manos y subida\", al final (g09 y g10, por API) ---------------\n\n# --- clips generados por API (spritepipe bakeoff con generate.toml: Seedance 2.0 en fal.ai) ---------\n# fal devuelve magenta puro (#FF26FF), y la compresión lo hace \"sangrar\" en los blancos del casco: con\n# key_method = \"chroma\" el despill lo limpia (con distancia quedaban manchas semitransparentes). Con magenta\n# puro el rojo de la armadura no corre peligro: la pantalla es min(R, B) - G y en el rojo B es bajo.\n# body_height_px = 363 en los tres: medido idle contra idle (misma pose parada), así salen a 129 px como el resto.\n# g01 es la primera prueba de run_legs (sin el prompt mate); quedó en raw/ pero no se usa.\n\n[[clip]]\nname = \"run_legs\"         # g02: run con las manos arriba de la cintura, para el cuerpo partido\nfile = \"clips/raw/g02_run_legs.mp4\"\ncolor_matrix = \"bt601\"    # fal tampoco etiqueta el color; con BT.601 el rojo coincide con el concept\nclean = true\nkey_method = \"chroma\"\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs.txt\"\n\n[[clip]]\nname = \"idle_breath\"      # g05: idle respirando sobre magenta apagado (g03, sobre magenta puro, tenía agujeros en el casco)\nfile = \"clips/raw/g05_idle_breath.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, muzzle_steady = true }   # el modelo le pone destellos cian en la boca\nbody_height_px = 355      # este toma sale 2% más chico que g03: así mide 129 px como el idle\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_breath.txt\"\n\n[[clip]]\nname = \"double_jump\"      # g06: saltos con mortal sobre magenta apagado (g04, sobre magenta puro, tenía agujeros)\nfile = \"clips/raw/g06_double_jump.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 363\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/double_jump.txt\"\n\n[[animation]]\nname = \"run_legs\"\nclip = \"run_legs\"\nkind = \"cycle\"\nskip_seconds = 0.5\nloop_seconds = [0.4, 1.1]\n\n[[animation]]\nname = \"idle_breath\"\nclip = \"idle_breath\"\nkind = \"cycle\"\nloop_start = 81           # una respiración sola (1 s). Entre los frames 48 y 78 cambia el peso de pie y mueve\nloop_length = 24          # la pierna, que en un idle de acción no va\n\n[[animation]]\nname = \"double_jump\"      # un ciclo completo: parado, despega, mortal, aterriza (el clip lo repite cada ~24 frames)\nclip = \"double_jump\"\nkind = \"oneshot\"\ntrim = [24, 44]\n\n[[clip]]\nname = \"idle_combat\"      # g07: idle de combate (respiración rápida, pies quietos), toma 2 de clips/gen3\nfile = \"clips/raw/g07_idle_combat.mp4\"\ncolor_matrix = \"bt601\"\nclean = { cut_muzzle = true, muzzle_steady = true }\nbody_height_px = 372      # esta toma trae al personaje ~5% más grande: así mide 129–132 px respirando\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/idle_combat.txt\"\n\n[[animation]]\nname = \"idle_combat\"\nclip = \"idle_combat\"\nkind = \"cycle\"\nskip_seconds = 0.2\nloop_seconds = [0.4, 1.6]\n\n[[clip]]\nname = \"run_gun\"          # g08: run con la pistola al pecho a dos manos (pose de poses_gen, Nano Banana 2.1 #2), toma 1 de gen4\nfile = \"clips/raw/g08_run_gun.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 372\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/run_legs_chest.txt\"\n\n[[animation]]\nname = \"run_gun\"\nclip = \"run_gun\"\nkind = \"cycle\"\nskip_seconds = 0.3\nloop_seconds = [0.4, 1.2]\n\n# --- colgado con las dos manos y subida a la cornisa (generate_climb.toml, toma 1 de cada uno en clips/gen5) -------\n# La pose colgada es poses_gen hang_two #1 (Nano Banana 2.1). climb_frames.py la pone chica y abajo sobre magenta\n# apagado (primer frame de los dos clips) y arma el último de la subida: el concept parado sobre el canto, a la misma\n# escala (por el ancho del blanco del casco). Los dos clips arrancan en la misma pose, así el colgado empalma con la\n# subida, y la subida termina en la pose del idle. La toma 2 de la subida se funde del colgado a agachado en el aire\n# sin pasar por el canto (frame 11): no sirve. De los colgados quedó la toma 2 (g10, costura 0,95); la 1 es más\n# quieta pero con la costura visible (1,68).\n# body_height_px = 253 en los dos: parado al final de la subida mide 252 px de video, contra 371 del idle_combat\n# (g07, que declara 372). El frame 0 de los dos mide 314 px: la misma pose a la misma escala.\n[[clip]]\nname = \"climb\"            # g09: colgado → tira para arriba → se tira de panza sobre el canto → se para\nfile = \"clips/raw/g09_climb.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 253\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/climb.txt\"\n\n[[clip]]\nname = \"hang_two\"         # g10: colgado de las dos manos, respira y balancea apenas las piernas\nfile = \"clips/raw/g10_hang_two.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 253\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/hang_two.txt\"\n\n[[animation]]\nname = \"climb\"\nclip = \"climb\"\nkind = \"oneshot\"\ntrim = [10, 62]\n\n[[animation]]\nname = \"hang_two\"\nclip = \"hang_two\"\nkind = \"cycle\"\nskip_seconds = 0.2\n\n# g11: tira una granada con la mano libre (el blaster queda al pecho), toma 2 de clips/gen6 (generate_grenade.toml).\n# El tiro va con la mano vacía: la granada la dibuja la arena. La toma 1 trajo un rayo amarillo suelto y el blaster\n# saltaba de mano; en la 2, el cuadro 49 es una estela roja pegada al brazo (se queda) y en el 50 hay una rayita cian\n# suelta (la limpieza deja sólo la mancha más grande). Cuadros del clip: 30–48 puño atrás de la cabeza, 49 estela,\n# 50–77 brazo adelante, 78–85 vuelve a la pose. body_height_px: el cuadro 0 mide 374 px contra 353 del de g05 (355)\n[[clip]]\nname = \"throw\"\nfile = \"clips/raw/g11_throw.mp4\"\ncolor_matrix = \"bt601\"\nclean = true\nbody_height_px = 376\nmodel = \"seedance-2.0 (fal)\"\nprompt = \"prompts/throw.txt\"\n\n[[animation]]\nname = \"throw\"            # desde el puño atrás hasta que vuelve a la pose; la arena elige qué cuadros usa (THROW_SEQ)\nclip = \"throw\"\nkind = \"oneshot\"\ntrim = [44, 84]\ntrim_static_tail = false\n",
   "align": {
     "canvas": {
       "w": 996,
@@ -3419,6 +3419,181 @@
         "scale_xy": [
           1.87344,
           1.87361
+        ]
+      }
+    },
+    "throw": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g11_throw.mp4",
+      "clip_sha256": "47ce7190577338ee4a2004e1a9db067097cb5bcdd00861ff8833e7046d89616b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "throw",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/work/00_clean/throw-d6d4011a.mp4",
+        "key": "d6d4011aeaef508bd11b89d1b166c16a7458b380143223956fead8db0b98f981",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/ranger/clips/raw/g11_throw.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": false,
+          "muzzle_steady": false
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#D33688",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 6300
+      },
+      "model": "seedance-2.0 (fal)",
+      "prompt": "2D cartoon video game sprite animation, classic arcade style. Static locked camera, fixed framing, no zoom. Use the input image as the first frame and the last frame. The character stands in place facing right, feet planted, keeping the blaster in his right hand close to his chest the whole time. With his free left hand he makes one quick, strong overhand throw toward the right, like throwing a small grenade: the left arm swings back behind the head, then whips forward and up, the torso twists into the throw and the front shoulder drops, the arm follows through pointing forward and up at about 45 degrees, then he settles back into the starting pose and stays completely still for the rest of the clip. The throwing hand is empty: no grenade, no object, no projectile is visible at any moment. No blinking. Matte flat colors with no shine and no reflections. Keep the same character design and art style: thick black outlines, flat colors. Solid flat background, the same color as in the input image, unchanged.\n",
+      "pose": null,
+      "pose_sha256": null,
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.29): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#D33687",
+          "key_strength": 0.318,
+          "key_method": "chroma",
+          "char_height_px": 373.3,
+          "char_height_pct": 51.9,
+          "drift_pct": 6.3,
+          "drift_px_per_s": [
+            4.7,
+            -0.0
+          ],
+          "zoom_pct": 0.7,
+          "frames_touching_edge": 0,
+          "bg_std": 0.08,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 0.29,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 44,
+        "length": 40,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          44,
+          46,
+          49,
+          51,
+          53,
+          55,
+          57,
+          58,
+          61,
+          62,
+          65,
+          67,
+          69,
+          70,
+          73,
+          75,
+          77,
+          78,
+          81,
+          83
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#D33687",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "body_height_px",
+        "body_px": 376.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 375.0,
+        "frame0_anchor_x": 615.7128,
+        "native_indices": [
+          44,
+          46,
+          49,
+          51,
+          53,
+          55,
+          57,
+          58,
+          61,
+          62,
+          65,
+          67,
+          69,
+          70,
+          73,
+          75,
+          77,
+          78,
+          81,
+          83
+        ],
+        "scale": 1.2606,
+        "final_body_px": 129.5027,
+        "scale_xy": [
+          1.26094,
+          1.26111
         ]
       }
     }

@@ -1,0 +1,29 @@
+# Granadas: el ranger tira una granada con la mano libre (la del blaster se queda al pecho). Seedance 2.0 en fal.ai,
+# con el mismo formato que las tandas anteriores y la pose maestra sobre magenta apagado (#C42D7D).
+# El tiro va con la mano vacía: la granada la dibuja el juego (prototypes/arena), que la suelta en el frame en que el
+# brazo pasa adelante. Así el clip no trae un objeto que se separa del personaje y que la limpieza tendría que borrar.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/ranger/generate_grenade.toml --dry-run
+# Sin FAL_KEY en el entorno es siempre un dry-run: muestra los pedidos y el costo, no manda nada.
+# Los clips bajan a clips/gen6/ con el QA de `check`; el que sirva pasa a clips/raw/ y a character.toml.
+# Generadas el 2026-10-16 (US$3,03): quedó la toma 2 como g11_throw (ver character.toml). La 1 trajo un rayo amarillo
+# suelto en el cuadro del tiro y el blaster cambiaba de mano.
+
+[bakeoff]
+models = ["seedance-2.0"]
+clips_per_model = 2       # tomas
+duration = 5              # s: el tiro dura ~0,6 s y el resto queda quieto; la animación usa sólo el tramo del tiro
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 5               # si la estimación lo pasa, no se manda nada
+max_parallel = 2
+game_fps = 12
+out_dir = "clips/gen6"
+
+[[animation]]
+name = "throw"
+pose = "../../poses/ranger_master_dullmagenta_16x9.png"
+prompt = "prompts/throw.txt"
+kind = "oneshot"
+last_frame = true         # vuelve a la pose de arranque: el tiro empalma con el idle

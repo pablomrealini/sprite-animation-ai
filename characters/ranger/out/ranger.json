@@ -20,8 +20,8 @@
         {
           "image": "ranger_1x-0.png",
           "data": "ranger_1x-0.json",
-          "w": 1566,
-          "h": 1571
+          "w": 1815,
+          "h": 1705
         }
       ],
       "animations": {
@@ -956,6 +956,112 @@
             }
           ],
           "sheet": "sheets/1x/hang_two.png"
+        },
+        "throw": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "throw/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0019",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/throw.png"
         }
       }
     },
@@ -972,8 +1078,8 @@
         {
           "image": "ranger_0.5x-0.png",
           "data": "ranger_0.5x-0.json",
-          "w": 814,
-          "h": 823
+          "w": 891,
+          "h": 891
         }
       ],
       "animations": {
@@ -1908,6 +2014,112 @@
             }
           ],
           "sheet": "sheets/0.5x/hang_two.png"
+        },
+        "throw": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "throw/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0019",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/throw.png"
         }
       }
     }

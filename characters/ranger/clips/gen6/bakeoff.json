@@ -1,0 +1,89 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_throw_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "throw",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a14698-8a76-7510-b43c-a42bdb137655",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14698-8a76-7510-b43c-a42bdb137655/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14698-8a76-7510-b43c-a42bdb137655"
+      },
+      "submitted": "2026-10-16T21:22:44+00:00",
+      "detail": "",
+      "finished": "2026-10-16T21:28:59+00:00"
+    },
+    {
+      "clip": "seedance-2.0_throw_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "throw",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "status": "done",
+      "handle": {
+        "request_id": "01a14698-8ca9-7881-8515-3ef72337c897",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14698-8ca9-7881-8515-3ef72337c897/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14698-8ca9-7881-8515-3ef72337c897"
+      },
+      "submitted": "2026-10-16T21:22:45+00:00",
+      "detail": "",
+      "finished": "2026-10-16T21:25:57+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_throw_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "throw",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 3.2,
+      "zoom_pct": 0.5,
+      "edge_frames": 2,
+      "pose_mad": 56.42,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 56.42): el modelo re-renderizó",
+        "el personaje toca el borde del cuadro en 2 frames (arma o capa cortada)",
+        "fondo poco plano (desvío 8.32): el key va a necesitar más tolerancia",
+        "el color del fondo cambia durante el clip (9.0/255)",
+        "casi sin movimiento (mediana 0.19): típico de first==last"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_throw_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "throw",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 5.9,
+      "zoom_pct": 2.4,
+      "edge_frames": 1,
+      "pose_mad": 56.31,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 56.31): el modelo re-renderizó",
+        "el personaje toca el borde del cuadro en 1 frames (arma o capa cortada)",
+        "fondo poco plano (desvío 8.71): el key va a necesitar más tolerancia",
+        "el color del fondo cambia durante el clip (10.0/255)",
+        "posible corte de escena en los frames [49]",
+        "casi sin movimiento (mediana 0.23): típico de first==last"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

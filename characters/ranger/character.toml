@@ -340,3 +340,24 @@ name = "hang_two"
 clip = "hang_two"
 kind = "cycle"
 skip_seconds = 0.2
+
+# g11: tira una granada con la mano libre (el blaster queda al pecho), toma 2 de clips/gen6 (generate_grenade.toml).
+# El tiro va con la mano vacía: la granada la dibuja la arena. La toma 1 trajo un rayo amarillo suelto y el blaster
+# saltaba de mano; en la 2, el cuadro 49 es una estela roja pegada al brazo (se queda) y en el 50 hay una rayita cian
+# suelta (la limpieza deja sólo la mancha más grande). Cuadros del clip: 30–48 puño atrás de la cabeza, 49 estela,
+# 50–77 brazo adelante, 78–85 vuelve a la pose. body_height_px: el cuadro 0 mide 374 px contra 353 del de g05 (355)
+[[clip]]
+name = "throw"
+file = "clips/raw/g11_throw.mp4"
+color_matrix = "bt601"
+clean = true
+body_height_px = 376
+model = "seedance-2.0 (fal)"
+prompt = "prompts/throw.txt"
+
+[[animation]]
+name = "throw"            # desde el puño atrás hasta que vuelve a la pose; la arena elige qué cuadros usa (THROW_SEQ)
+clip = "throw"
+kind = "oneshot"
+trim = [44, 84]
+trim_static_tail = false
