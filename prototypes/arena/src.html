@@ -115,7 +115,7 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
         <dt><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></dt><dd><b>Teclado derecho.</b> Saltar con ↑, agacharse con ↓. Disparar con <kbd>.</kbd> o Num 1, a dos manos con <kbd>-</kbd> o Num 2, granada con <kbd>,</kbd> o Num 3, golpe con <kbd>M</kbd> o Num 4</dd>
         <dt><kbd>Stick</kbd><kbd>A</kbd><kbd>X</kbd><kbd>B</kbd></dt><dd><b>Joystick.</b> A salta, X o RT dispara, B o RB a dos manos, Y o LB tira una granada, LT golpea (en PlayStation: X, Cuadrado o R2, Círculo o R1, Triángulo o L1, L2; en Switch, ZL golpea). El primero maneja al Rojo junto con el teclado izquierdo; en el menú, los demás se suman apretando un botón. Start empieza</dd>
         <dt><kbd>Abajo</kbd>+<kbd>saltar</kbd></dt><dd>Bajar atravesando el puente, las plataformas flotantes y las repisas</dd>
-        <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 5 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y lastiman en un radio, también al que la tiró</dd>
+        <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 3 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y matan de una a cualquiera en el radio, también al que la tiró</dd>
         <dt><kbd>Golpe</kbd></dt><dd>Un puñetazo corto hacia adelante, a la altura del cuerpo, en el piso o en el aire: saca un golpe, empuja fuerte y aturde un momento. Sirve pegado al otro, donde la bala sale de largo y no le pega. Uno cada medio segundo</dd>
         <dt><kbd>Esc</kbd></dt><dd>Volver al menú</dd>
         <dt><kbd>H</kbd></dt><dd>Mostrar las cajas de golpe, lo que se pisa y a quién persigue cada bot</dd>
@@ -125,9 +125,9 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
     <section class="box" aria-labelledby="hRules">
       <h2 id="hRules">Reglas de la prueba</h2>
       <p class="note"><b>Vidas.</b> Cada uno tiene 3 vidas por partida (se cambia en el menú). Al morir vuelve a los 1,6 s, en el lugar de salida más lejos de los demás, con un haz de luz que avisa dónde. Durante 2 s parpadea y las balas lo atraviesan, hasta que dispara. Gana el último al que le quedan vidas.</p>
-      <p class="note"><b>El arma se calienta.</b> Cada disparo la calienta (el de dos manos, el triple) y deja de enfriarse mientras seguís tirando. La barra arriba de la cabeza muestra cuánto: si llega al tope, el arma se traba, larga vapor y no dispara hasta enfriarse del todo (1,2 s). Tirando sin parar con una mano dura unos 1,7 s.</p>
+      <p class="note"><b>El arma se calienta.</b> Cada disparo la calienta (el de dos manos, el triple) y deja de enfriarse mientras seguís tirando. La barra arriba de la cabeza muestra cuánto: si llega al tope, el arma se traba, larga vapor y no dispara hasta enfriarse del todo (1,2 s). Tirando sin parar con una mano dura menos de un segundo (6 tiros).</p>
       <p class="note"><b>Golpes.</b> El disparo de una mano saca un golpe y empuja; el de dos manos te planta, saca dos y empuja más. 7 disparos por segundo con una mano y 3,5 a dos manos (el polígono tenía 12 y 7). Agachado, el cuerpo es más bajo y las balas de alguien parado pasan cerca de la cabeza. El golpe de cerca llega unos 70 px delante del cuerpo, saca uno, empuja más que el disparo de dos manos y aturde 0,4 s; también le pega al que está agachado.</p>
-      <p class="note"><b>Power-ups.</b> Cada 12 a 18 s (el primero a los 9) aparece uno apoyado en algo que se pisa, con un haz que avisa dónde: el amarillo con la granada recarga las 5, el blanco con la cruz suma 1 golpe de salud (2 si se juega a 5). Se agarran tocándolos; si no te sirve (lo tenés lleno), queda ahí. A los 12 s parpadean y se van. Hay como mucho 2 a la vez (1 con dos jugadores o en la prueba) y los bots a veces van a buscarlos.</p>
+      <p class="note"><b>Power-ups.</b> Cada 12 a 18 s (el primero a los 9) aparece uno apoyado en algo que se pisa, con un haz que avisa dónde: el amarillo con la granada recarga las 3, el blanco con la cruz suma 1 golpe de salud (2 si se juega a 5). Se agarran tocándolos; si no te sirve (lo tenés lleno), queda ahí. A los 12 s parpadean y se van. Hay como mucho 2 a la vez (1 con dos jugadores o en la prueba) y los bots a veces van a buscarlos.</p>
       <p class="note"><b>El ranger es el mismo del polígono</b>, con su feel, doble salto, colgado, subida y salto desde la cornisa. Los otros tres colores salen del mismo atlas al cargar la página: el rojo de la armadura cambia de tono.</p>
       <p class="note"><b>Provisorio:</b> recibir un golpe y morir son efectos de código (destello, empujón y estallido), sin animación propia. El golpe de cerca usa cuadros del tiro de granada (el puño atrás y el brazo adelante) con un envión del cuerpo y un barrido dibujado. Los power-ups se dibujan por código. Los bots son simples: buscan al más cercano, suben por donde pueden, disparan cuando lo tienen en línea, golpean si lo tienen encima, a veces esquivan o van por un power-up que les sirve y, si pasan un rato sin nadie a tiro, van a buscar altura.</p>
       <p class="note"><b>Arena:</b> el kit industrial de backgrounds/ranger_industrial (GPT Image 2.5 y Nano Banana 2.1 por fal), armado desde prototypes/arena/arenas/fundicion.json.</p>
@@ -232,13 +232,14 @@ const COMBAT = { power2: 2, knock1: 330, knock2: 560, lift1: 230, lift2: 380, st
 // reaparición: cuánto tarda, cuánto dura la invulnerabilidad (parpadea; disparar la corta) y el haz que avisa dónde
 const RESPAWN = { delay: 1.6, inv: 2.0, beam: 0.45 };
 // temperatura del arma, de 0 a 1: lo que suma cada disparo, cuánto se enfría por segundo después de `delay` sin tirar y,
-// trabada en 1, cuánto por segundo hasta volver a 0 (1,25 s). Una mano sin parar: 7 × 0,085 = 0,6 por segundo, ~1,7 s
-const HEAT = { shot1: 0.085, shot2: 0.24, cool: 0.55, delay: 0.25, overCool: 0.8 };
+// trabada en 1, cuánto por segundo hasta volver a 0 (1,25 s). Una mano sin parar: 7 × 0,17 = 1,2 por segundo, ~0,9 s (6 tiros)
+const HEAT = { shot1: 0.17, shot2: 0.48, cool: 0.55, delay: 0.25, overCool: 0.8 };   // Pablo, 2026-10-16: el doble por tiro (se traba en la mitad de los tiros)
 // granadas: cuántas por vida (se recargan al reaparecer; en la prueba, sin límite), la mecha, el tiro (px/s, con la carga
 // llena; sin cargar sale con minVx y minVy de eso, y `charge` es lo que tarda en llenarse), cuánto
-// rebotan, el radio del daño (3 golpes cerca del centro, 2 a media distancia, 1 en el borde; también al que la tiró) y
+// rebotan, el radio del daño (adentro del radio mata de una, a cualquiera que no esté invulnerable, también al que la
+// tiró) y
 // el empujón, que sale del centro. Si toca a otro, explota en el acto
-const GRENADE = { count: 5, fuse: 1.3, vx: 800, vy: -800, minVx: 0.4, minVy: 0.62, charge: 0.8, gravity: 2200, bounce: 0.45, friction: 0.72,
+const GRENADE = { count: 3, fuse: 1.3, vx: 800, vy: -800, minVx: 0.4, minVy: 0.62, charge: 0.8, gravity: 2200, bounce: 0.45, friction: 0.72,
                   r: 9, radius: 150, knock: 720, lift: 520, cooldown: 0.45, anim: 0.32, release: 0.13,
                   spawnX: 54, spawnY: 114, releaseFrame: 2 };   // los que eligió Pablo; con 0,6 de carga sale como su 620 / -720   // de dónde sale (px del juego desde los pies, hacia adelante y arriba) y en qué cuadro del tiro
 const GRENADE_DEFAULT = { ...GRENADE };
@@ -250,7 +251,7 @@ const MELEE = { reach: 72, back: 10, dmg: 1, knock: 780, lift: 420, stun: 0.4, c
 // entre los dos), cuántos a la vez (uno con dos jugadores o en la prueba), el aviso del haz antes de aparecer, cuánto
 // duran (los últimos `blink` parpadean), el radio para agarrarlo y a qué altura flota. El de salud cura un tercio de la
 // salud, al menos 1 (+1 con 3 golpes, +2 con 5; con 1 golpe no aparece)
-const PICKUP = { first: 9, firstTest: 3, every: [12, 18], max: 2, warn: 0.75, life: 12, blink: 3, r: 24, lift: 30 };
+const PICKUP = { first: 9, firstTest: 3, every: [12, 18], max: 2, warn: 0.75, life: 12, blink: 3, r: 24, lift: 56 };   // lift: a qué altura flota sobre lo que se pisa (Pablo: más arriba, a la altura del pecho)
 const SET = { hp: 3, lives: 3, bot: "normal", count: 4 };   // count: cuántos juegan, de 2 a 4
 // react: cuánto tiene que tenerlo en línea antes de disparar; burst y pause: ráfagas; dodge: probabilidad de esquivar una
 // bala que viene; think: cada cuánto revisa a quién perseguir
@@ -582,8 +583,8 @@ function explode(Gr) {
     if (!Q.alive || Q.ctrl === "off" || Q.invT > 0) continue;
     const cx = Q.x, cy = Q.y - BODY_H / 2, d = Math.hypot(cx - Gr.x, cy - Gr.y);
     if (d > R) continue;
-    const k = 1 - d / R, dmg = d < R * 0.3 ? 3 : d < R * 0.65 ? 2 : 1, dir = Math.sign(cx - Gr.x) || (Math.random() < 0.5 ? -1 : 1);
-    hitPlayer(Q, { vx: dir, x: cx, y: cy, power: dmg, owner: Gr.owner, glow: "255,170,60" }, { knock: GRENADE.knock * (0.45 + 0.55 * k), lift: GRENADE.lift * (0.45 + 0.55 * k) });
+    const k = 1 - d / R, dir = Math.sign(cx - Gr.x) || (Math.random() < 0.5 ? -1 : 1);   // adentro del radio, mata de una
+    hitPlayer(Q, { vx: dir, x: cx, y: cy, power: Math.max(1, Q.hp), owner: Gr.owner, glow: "255,170,60" }, { knock: GRENADE.knock * (0.45 + 0.55 * k), lift: GRENADE.lift * (0.45 + 0.55 * k) });
   }
   blasts.push({ x: Gr.x, y: Gr.y, t: 0 });
   burst(Gr.x, Gr.y, "#ffd23a", 26, 700, 0.55, 12); burst(Gr.x, Gr.y, "#ff7a1f", 26, 560, 0.7, 14); burst(Gr.x, Gr.y, "#2a2d38", 16, 420, 0.9, 12);
