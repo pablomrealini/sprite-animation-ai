@@ -1,0 +1,174 @@
+# Base de entrenamiento de noche, sci-fi, para el ranger: el arte que reemplaza los fondos dibujados por código
+# de prototypes/ranger/ (cielo violeta, planeta, ciudad, bloques metálicos con franjas de peligro).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/ranger_base/gen.toml --dry-run
+# Sin OPENAI_API_KEY ni FAL_KEY en el entorno es siempre un dry-run: muestra los pedidos, los prompts y el
+# costo, no manda nada. Con keys pide confirmación antes de gastar (o --yes) y no pasa de max_usd.
+# La comparación chica para elegir modelo (4 imágenes por modelo, 2026-10-16) se hizo con los 4 modelos de
+# abajo en style_frame, mid, platform_kit y props. Quedó elegido: Nano Banana 2.1 para el style frame y las
+# capas lejanas, GPT Image 2.5 Sunburst para la capa de juego (kit y props, por el alfa nativo). Cada asset
+# lo dice en `models`; compare.html sigue mostrando todo lo que se generó.
+# style_frame.png es el style frame elegido (raw/style_frame/nano-banana-2.1_1.png) y va de segunda
+# referencia en las capas.
+# Elegidas (2026-10-16): sky 3, far 2, mid 1 y near 2 de nano-banana-2.1; platform_kit y props de
+# gpt-image-2.5-sunburst-fal (todas `_<n>.png` en post/<asset>/).
+#
+# Sale a raw/ (lo que devolvió el modelo, con su .json de procedencia), post/ (key, costura y recorte) y
+# compare.html / compare.md. Ver "Fondos por API de imagen" en pipeline/README.md.
+#
+# Escala: el prototipo dibuja a 960×540 con el piso en y = 474 y el ranger a 128 px (1x). Las capas quedan a
+# la resolución del modelo; cuando se elija modelo, `height` las lleva al alto que use el juego.
+
+[gen]
+# Los cuatro de la comparación van por fal (alcanza con FAL_KEY). GPT Image 2.5 es el único con alfa nativo; los
+# demás dibujan sobre key_color y el post lo keyea. Con OPENAI_API_KEY, "gpt-image-2.5-sunburst" es el mismo
+# modelo directo en OpenAI. Los que hay: `MODELS` en pipeline/spritepipe/imageapi.py.
+models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1", "seedream-5-pro", "flux-3"]
+images_per_asset = 1
+max_usd = 8               # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+key_color = "#00FF00"     # los modelos sin alfa dibujan sobre este verde, que no aparece en la base
+quality = "high"          # OpenAI: low | medium | high | xhigh | max
+resolution = "2K"         # escala del tamaño en los modelos que la eligen
+seed = 7                  # en los modelos que lo aceptan; la imagen n usa seed + n - 1
+ref_bg = "#FFFFFF"        # las referencias con transparencia se aplanan sobre blanco antes de mandarlas
+
+[styles]
+game = """
+2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines \
+(thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, \
+no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.
+Setting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the \
+horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, \
+yellow-and-black hazard stripes, small cyan light strips, red warning lights.
+"""
+far = """
+This is a distant background layer: desaturated and low contrast compared to the gameplay layer, colors \
+pushed toward the violet of the night sky (atmospheric perspective), thinner dark-violet outlines instead \
+of black, simple shapes with little detail, so that a red, white and black character in front stands out.
+"""
+mid = """
+This is a middle background layer: a bit desaturated and lower contrast than the gameplay layer, colors \
+leaning toward violet, dark outlines thinner than in the gameplay layer, medium detail.
+"""
+no_text = "No text, letters, numbers, logos or user interface anywhere."
+
+[[asset]]
+name = "style_frame"      # la imagen guía: con qué se compara todo lo demás
+style = ["game", "no_text"]
+prompt = """
+A full-screen gameplay screenshot of a side-scrolling shooter level (no HUD). The ranger character from the \
+reference image stands on the ground in the left third of the screen, facing right, about one quarter of the \
+screen height tall. The floor is a steel walkway along the bottom eighth of the screen with a thin cyan light \
+strip. Gameplay layer: steel blocks of different heights and one floating steel platform, all with \
+yellow-and-black hazard stripes on their top edge, a sci-fi supply crate, a warning sign on a post and a round \
+red-and-white shooting target on a stand. Behind them, parallax layers: base structures at mid distance \
+(hangars, a control tower, radar dishes, fences, searchlight beams), a far futuristic city skyline, and a \
+violet night sky with stars and an orange ringed planet. The background layers are desaturated and low \
+contrast so the character and the gameplay layer stand out.
+"""
+refs = ["../../poses/ranger_concept.png"]
+ref_role = "character"
+aspect = "16:9"
+alpha = "opaque"
+models = ["nano-banana-2.1"]
+
+[[asset]]
+name = "sky"              # la capa más lenta: opaca, se repite en x
+style = ["game", "far", "no_text"]
+prompt = """
+Only the night sky, as a seamless horizontally tiling parallax background: a smooth vertical blend from dark \
+indigo at the top to violet and a pink-magenta haze at the bottom, sparse small stars, a few flat stylized \
+clouds, and an orange ringed planet near the center, away from the left and right edges. No ground, no \
+buildings, no characters.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["nano-banana-2.1"]
+n = 3                     # opciones para elegir
+aspect = "16:9"
+alpha = "opaque"
+tile = "x"
+seam = "crossfade"        # degradé y estrellas: el fundido no se nota
+
+[[asset]]
+name = "far"
+style = ["game", "far", "no_text"]
+prompt = """
+A seamless horizontally tiling parallax layer: a distant futuristic city skyline (towers, domes, antenna masts \
+with tiny red lights, small warm windows) occupying the lower half of the image, reaching the bottom edge and \
+continuing past the left and right edges. Nothing above the skyline.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["nano-banana-2.1"]
+n = 3                     # opciones para elegir
+aspect = "3:1"
+alpha = "layer"
+tile = "x"
+
+[[asset]]
+name = "mid"
+style = ["game", "mid", "no_text"]
+prompt = """
+A seamless horizontally tiling parallax layer: military training base structures at medium distance (hangars, \
+a control tower, radar dishes, fuel tanks, chain-link fences, searchlights) standing on a common ground line at \
+the bottom edge, in the lower 60% of the image, continuing past the left and right edges. Nothing above them.
+"""
+refs = ["../../poses/ranger_concept.png"]
+models = ["nano-banana-2.1"]
+aspect = "3:1"
+alpha = "layer"
+tile = "x"
+
+[[asset]]
+name = "near"             # justo detrás de la capa de juego
+style = ["game", "no_text"]
+prompt = """
+A seamless horizontally tiling parallax layer that sits right behind the gameplay: stacked cargo containers, \
+pipes, railings, low barrier walls with hazard stripes, cables and small cyan lights, in the lower third of the \
+image, reaching the bottom edge and continuing past the left and right edges. Slightly darker and less \
+saturated than the gameplay layer. Nothing in the upper two thirds.
+"""
+refs = ["../../poses/ranger_concept.png", "style_frame.png"]
+ref_role = "level"
+models = ["nano-banana-2.1"]
+n = 3                     # opciones para elegir
+aspect = "3:1"
+alpha = "layer"
+tile = "x"
+
+[[asset]]
+name = "platform_kit"     # hoja: el post la separa en piezas sueltas a la misma altura
+style = ["game", "no_text"]
+prompt = """
+A 2D platformer tileset sheet with five separate pieces, all exactly the same height, with wide empty space \
+between them, front orthographic view. Top row, left to right: the left end cap of a steel platform, a straight \
+middle segment of the platform top that tiles seamlessly left to right, the right end cap. Bottom row, left to \
+right: a body block segment that tiles seamlessly left to right below the platform top, and a small standalone \
+floating steel platform with a cyan light strip underneath. Gunmetal blue-grey riveted steel panels, a bright \
+top edge, yellow-and-black hazard stripes along the top lip. The pieces do not touch each other or the image \
+edges.
+"""
+refs = ["../../poses/ranger_concept.png"]
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["edge_left", "top", "edge_right", "body", "floating"]
+same_height = true        # las que empalman, a la misma altura; la flotante queda a escala, con aire abajo
+tile = { top = "x", body = "x" }
+
+[[asset]]
+name = "props"            # hoja: caja, cartel y blanco de tiro
+style = ["game", "no_text"]
+prompt = """
+Three separate game props in one row, same scale, side view, standing on an implied ground line, with wide \
+empty space between them, not touching the image edges. Left to right: a sci-fi steel supply crate with a red \
+stripe; a warning sign on a post with a yellow-and-black hazard border and a simple pictogram; a shooting \
+practice target, a round red-and-white bullseye on a steel stand.
+"""
+refs = ["../../poses/ranger_concept.png"]
+models = ["gpt-image-2.5-sunburst-fal"]
+aspect = "16:9"
+alpha = "cutout"
+split = ["crate", "sign", "target"]

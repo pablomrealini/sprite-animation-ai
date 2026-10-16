@@ -1,0 +1,196 @@
+{
+  "set": "ranger_base",
+  "asset": "platform_kit",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nA 2D platformer tileset sheet with five separate pieces, all exactly the same height, with wide empty space between them, front orthographic view. Top row, left to right: the left end cap of a steel platform, a straight middle segment of the platform top that tiles seamlessly left to right, the right end cap. Bottom row, left to right: a body block segment that tiles seamlessly left to right below the platform top, and a small standalone floating steel platform with a cyan light strip underneath. Gunmetal blue-grey riveted steel panels, a bright top edge, yellow-and-black hazard stripes along the top lip. The pieces do not touch each other or the image edges.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1139,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14509-12c7-7c73-870d-64a4e78e6f04",
+  "created": "2026-10-16T14:07:00+00:00",
+  "sha256": "faf1073925e301d1a5e4209a4e6cf1f252e7a8a321f9be17293b9995186e708a",
+  "post": {
+    "file": "backgrounds/ranger_base/post/platform_kit/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [
+      "body mide 302 px contra 355: queda a su escala, con aire abajo",
+      "floating mide 218 px contra 355: queda a su escala, con aire abajo"
+    ],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6793,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "height": {
+      "height": 355,
+      "scales": {
+        "edge_left": 1.0,
+        "top": 1.0,
+        "edge_right": 0.9972,
+        "body": 1.0,
+        "floating": 1.0
+      }
+    },
+    "pieces": {
+      "edge_left": [
+        194,
+        398,
+        795,
+        753
+      ],
+      "top": [
+        879,
+        398,
+        1696,
+        753
+      ],
+      "edge_right": [
+        1777,
+        398,
+        2368,
+        754
+      ],
+      "body": [
+        263,
+        892,
+        1390,
+        1194
+      ],
+      "floating": [
+        1545,
+        930,
+        2310,
+        1148
+      ]
+    },
+    "trim": {
+      "edge_left": [
+        0,
+        0,
+        601,
+        355
+      ],
+      "top": [
+        0,
+        0,
+        719,
+        355
+      ],
+      "edge_right": [
+        0,
+        0,
+        589,
+        355
+      ],
+      "body": [
+        0,
+        0,
+        1127,
+        355
+      ],
+      "floating": [
+        0,
+        0,
+        765,
+        355
+      ]
+    },
+    "files": {
+      "edge_left": {
+        "file": "edge_left.png",
+        "w": 601,
+        "h": 355
+      },
+      "top": {
+        "file": "top.png",
+        "w": 719,
+        "h": 355
+      },
+      "edge_right": {
+        "file": "edge_right.png",
+        "w": 589,
+        "h": 355
+      },
+      "body": {
+        "file": "body.png",
+        "w": 1127,
+        "h": 355
+      },
+      "floating": {
+        "file": "floating.png",
+        "w": 765,
+        "h": 355
+      }
+    },
+    "seam": {
+      "top:x": {
+        "before": {
+          "axis": "x",
+          "score": 6.54,
+          "peak": 16.03,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 98,
+          "cut_error": 0.00251,
+          "cut_x": [
+            20,
+            79
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.46,
+          "peak": 5.76,
+          "verdict": "ok"
+        }
+      },
+      "body:x": {
+        "before": {
+          "axis": "x",
+          "score": 0.85,
+          "peak": 5.73,
+          "verdict": "ok"
+        }
+      }
+    }
+  }
+}

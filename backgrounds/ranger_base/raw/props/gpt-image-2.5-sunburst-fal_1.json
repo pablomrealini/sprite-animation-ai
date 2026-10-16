@@ -1,0 +1,116 @@
+{
+  "set": "ranger_base",
+  "asset": "props",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "2D side-scrolling video game art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes. Orthographic side view, no perspective.\nSetting: a sci-fi military training base at night. Palette: deep violet night sky, pink-magenta haze on the horizon, an orange ringed planet, dark purple city silhouettes with warm windows, gunmetal blue-grey steel, yellow-and-black hazard stripes, small cyan light strips, red warning lights.\n\nNo text, letters, numbers, logos or user interface anywhere.\n\nThree separate game props in one row, same scale, side view, standing on an implied ground line, with wide empty space between them, not touching the image edges. Left to right: a sci-fi steel supply crate with a red stripe; a warning sign on a post with a yellow-and-black hazard border and a simple pictogram; a shooting practice target, a round red-and-white bullseye on a steel stand.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_base/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1136,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14509-121b-79e3-8c47-84693492bd57",
+  "created": "2026-10-16T14:07:00+00:00",
+  "sha256": "4b87c71df255b80c16f44a02b56f31ce8c8cd9e76ba49b841f092eeae66097d1",
+  "post": {
+    "file": "backgrounds/ranger_base/post/props/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7215,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "crate": [
+        120,
+        824,
+        906,
+        1256
+      ],
+      "sign": [
+        1042,
+        285,
+        1564,
+        1254
+      ],
+      "target": [
+        1815,
+        377,
+        2497,
+        1253
+      ]
+    },
+    "trim": {
+      "crate": [
+        0,
+        0,
+        786,
+        432
+      ],
+      "sign": [
+        0,
+        0,
+        522,
+        969
+      ],
+      "target": [
+        0,
+        0,
+        682,
+        876
+      ]
+    },
+    "files": {
+      "crate": {
+        "file": "crate.png",
+        "w": 786,
+        "h": 432
+      },
+      "sign": {
+        "file": "sign.png",
+        "w": 522,
+        "h": 969
+      },
+      "target": {
+        "file": "target.png",
+        "w": 682,
+        "h": 876
+      }
+    }
+  }
+}

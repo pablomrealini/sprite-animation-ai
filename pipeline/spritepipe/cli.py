@@ -7,6 +7,8 @@
   spritepipe clean raw.mp4 out.mp4 [--cut-muzzle]  limpieza previa de un clip (fondo, sombra, efectos), sin config
   spritepipe check clip.mp4 [...]                  QA + loop de uno o varios clips, sin config
   spritepipe bakeoff bakeoff.toml [--dry-run]      misma pose y prompt en varios modelos por API, con QA
+  spritepipe gen-images gen.toml [--dry-run]       fondos por API de imagen (varios modelos) y su post sin IA
+  spritepipe bg-post imagen.png salida.png         post de un fondo suelto: key, transparencia, costura, recorte
   spritepipe synth carpeta/                        clips sintéticos de prueba con su config
 """
 
@@ -23,7 +25,7 @@ from pathlib import Path
 
 import numpy as np
 
-from . import align, bakeoff, chroma, clean, concept, config, decimate, flash, imgio, key, pack, pose, preview, qa, reduce, select
+from . import align, bakeoff, bgpost, chroma, clean, concept, config, decimate, flash, imgio, key, pack, pose, preview, qa, reduce, select
 from .analysis import analyze
 
 ICON = {"ok": "✓", "warn": "!", "fail": "✗"}
@@ -363,6 +365,30 @@ def remove_flash(clip: Path, out: Path, params: config.FlashRemoval) -> int:
     return 0
 
 
+def bg_post(args) -> int:
+    """Post de un fondo suelto, por ejemplo después de retocarlo a mano."""
+    split = args.split.split(",") if args.split else []
+    spec = bgpost.PostSpec(expect=args.alpha, key=args.key, tile={"": args.tile} if args.tile and not split else
+                           {p: args.tile for p in split} if args.tile else {}, seam=args.seam, seam_px=args.seam_px,
+                           trim=not args.no_trim, split=split, same_height=args.same_height,
+                           height=args.height)
+    rep = bgpost.process(args.image, args.out, spec)
+    a = rep["alpha"]
+    print(f"{ICON[a['verdict']]} transparencia {a['verdict']}: {100 * a['transparent']:.1f}% transparente"
+          + (f", key {rep['key']['key_color']}" if "key" in rep else ""))
+    for f in a["flags"] + rep["notes"]:
+        print(f"  ! {f}")
+    for k, v in rep.get("seam", {}).items():
+        b = v["before"]
+        print(f"  costura {k}: {b['score']} ({b['verdict']}, pico {b['peak']})"
+              + (f" → {v['after']['score']} con {v['fix']['method']}, {v['fix']['overlap_px']} px menos"
+                 if "after" in v else "") + (f"; para editar: {', '.join(v['mask'])}" if "mask" in v else "")
+              + (" (el arreglo no mejoraba: descartado)" if "fix_discarded" in v else ""))
+    for name, f in rep["files"].items():
+        print(f"  ✓ {name}: {f['file']} ({f['w']}×{f['h']})")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="spritepipe", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -380,6 +406,26 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--yes", action="store_true", help="no pedir confirmación antes de gastar")
     b.add_argument("--models", help="sólo estos modelos de la config, separados por coma")
     b.add_argument("--skip-qa", action="store_true", help="bajar los clips sin correr el QA")
+    g = sub.add_parser("gen-images", help="gráficos de fondo por API de imagen, varios modelos, con post sin IA")
+    g.add_argument("config", type=Path, help="TOML del set (ver backgrounds/ranger_base/gen.toml)")
+    g.add_argument("--dry-run", action="store_true", help="mostrar pedidos, prompts y costo sin llamar a ninguna API")
+    g.add_argument("--yes", action="store_true", help="no pedir confirmación antes de gastar")
+    g.add_argument("--models", help="sólo estos modelos de la config, separados por coma")
+    g.add_argument("--assets", help="sólo estos assets de la config, separados por coma")
+    g.add_argument("--post-only", action="store_true", help="rehacer el post de lo ya bajado, sin llamar a ninguna API")
+    bp = sub.add_parser("bg-post", help="post de un fondo suelto: key, transparencia, piezas, costura y recorte")
+    bp.add_argument("image", type=Path)
+    bp.add_argument("out", type=Path, help="PNG de salida; con --split, una carpeta con el nombre de out sin .png")
+    bp.add_argument("--alpha", choices=["opaque", "layer", "cutout"], default="cutout",
+                    help="opaque: cielo o style frame; layer: capa con aire arriba; cutout: prop o pieza suelta")
+    bp.add_argument("--key", help="color plano del fondo a sacar, #RRGGBB (los modelos sin alfa)")
+    bp.add_argument("--tile", choices=["x", "y", "xy"], help="ejes en que la imagen se repite")
+    bp.add_argument("--seam", choices=["cut", "crossfade", "mask", "none"], default="cut")
+    bp.add_argument("--seam-px", type=float, default=0.12, help="franja de la costura: px, o fracción si es < 1")
+    bp.add_argument("--split", help="nombres de las piezas de una hoja, en orden de lectura, separados por coma")
+    bp.add_argument("--same-height", action="store_true", help="en una hoja: las piezas a una misma altura (un kit)")
+    bp.add_argument("--height", type=int, help="alto final en px (en una hoja, el de la pieza más alta o el común)")
+    bp.add_argument("--no-trim", action="store_true", help="no recortar al contenido")
     s = sub.add_parser("synth", help="generar clips sintéticos de prueba")
     s.add_argument("out", type=Path)
     k = sub.add_parser("clean-concepts", help="concepts sobre blanco a un plantel RGBA del mismo tamaño")
@@ -421,6 +467,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "bakeoff":
         return bakeoff.run(args.config, dry_run=args.dry_run, yes=args.yes, skip_qa=args.skip_qa,
                            models=args.models.split(",") if args.models else None)
+    if args.cmd == "gen-images":
+        from . import genimages
+        return genimages.run(args.config, dry_run=args.dry_run, yes=args.yes, post_only=args.post_only,
+                             models=args.models.split(",") if args.models else None,
+                             assets=args.assets.split(",") if args.assets else None)
+    if args.cmd == "bg-post":
+        return bg_post(args)
     if args.cmd == "clean-concepts":
         w, h = (int(v) for v in args.size.lower().split("x"))
         for info in concept.roster(args.concepts, args.out, (w, h), args.feet, magenta=not args.no_magenta):

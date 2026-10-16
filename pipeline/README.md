@@ -1,6 +1,6 @@
 # spritepipe
 
-Convierte clips de image-to-video (Veo, Seedance, Kling, Omni, etc.) en sprite sheets listos para el engine. Implementa los pasos 4 a 12 del reporte [Animación 2D con IA para sprites](../reports/Animación%202D%20con%20IA%20para%20sprites.md), salvo la limpieza humana (paso 11), que se hace a mano y se enchufa por la carpeta `cleanup/`. Generar el clip (paso 3) queda afuera: `pad-pose` prepara la imagen que se le pasa al modelo y el pipeline arranca en el `.mp4`. La excepción es el bake-off (paso 0): `bakeoff` manda la misma pose a varios modelos por API y compara los clips con el QA.
+Convierte clips de image-to-video (Veo, Seedance, Kling, Omni, etc.) en sprite sheets listos para el engine. Implementa los pasos 4 a 12 del reporte [Animación 2D con IA para sprites](../reports/Animación%202D%20con%20IA%20para%20sprites.md), salvo la limpieza humana (paso 11), que se hace a mano y se enchufa por la carpeta `cleanup/`. Generar el clip (paso 3) queda afuera: `pad-pose` prepara la imagen que se le pasa al modelo y el pipeline arranca en el `.mp4`. La excepción es el bake-off (paso 0): `bakeoff` manda la misma pose a varios modelos por API y compara los clips con el QA. Los fondos del escenario salen de `gen-images`, que los genera por API de imagen y les hace el post.
 
 Todo es local y determinístico: la misma config sobre el mismo clip da los mismos PNG. Cambiar tamaño, fps o paleta nunca obliga a regenerar video.
 
@@ -46,6 +46,12 @@ Para el bake-off de modelos por API (ver [Bake-off](#bake-off)). Sin keys en el 
 
 ```bash
 uv run --project pipeline spritepipe bakeoff characters/comando/bakeoff.toml --dry-run
+```
+
+Para generar fondos por API de imagen (style frame, capas de parallax, kit de plataformas y props) con el estilo del personaje, en varios modelos a la vez (ver [Fondos por API de imagen](#fondos-por-api-de-imagen)). Sin keys sólo muestra los pedidos, los prompts y el costo:
+
+```bash
+uv run --project pipeline spritepipe gen-images backgrounds/ranger_base/gen.toml --dry-run
 ```
 
 Para regenerar los clips sintéticos de prueba:
@@ -303,6 +309,106 @@ Veo por la Gemini API no cobra lo bloqueado. fal no lo aclara: su página de pre
 - **El seed no siempre aplica.** `seed` sólo llega a los modelos que lo aceptan: MiniMax, Wan y Veo en fal, y Omni (en `generation_config`, sin garantía de que lo respete). Seedance y Kling no tienen seed, y Veo por la Gemini API lo rechaza.
 - **Hay que calibrar los umbrales del QA con estos clips.** Un modelo con más `warn` no es necesariamente peor: mirá los clips.
 
+## Fondos por API de imagen
+
+`spritepipe gen-images` arma los gráficos de fondo de un escenario con un modelo de imagen y la misma dirección de arte que el personaje: un style frame de pantalla completa, las capas de parallax, el kit de plataformas y los props. Lee una config por set (`backgrounds/ranger_base/gen.toml` es el ejemplo), manda un pedido por asset, modelo e imagen, y a cada imagen bajada le corre un post sin IA: key del fondo plano, transparencia, piezas sueltas, costura y recorte. Con varios modelos en la config, la salida es la comparación para elegir uno, como el bake-off de video.
+
+```bash
+uv run --project pipeline spritepipe gen-images backgrounds/ranger_base/gen.toml --dry-run
+```
+
+```bash
+uv run --project pipeline spritepipe gen-images backgrounds/ranger_base/gen.toml --assets style_frame,mid,platform_kit,props
+```
+
+Las keys son las del bake-off: `FAL_KEY` y, para OpenAI directo, `OPENAI_API_KEY`, sólo desde el entorno (ver [Las keys](#las-keys)). Sin ninguna es siempre un dry-run, y no escribe nada: muestra por modelo y asset el tamaño que se va a pedir, si el fondo sale con alfa nativo, sobre el color de key u opaco, el costo y el total, más el prompt completo de cada asset y el cuerpo exacto de un pedido por modelo. Con keys muestra lo mismo y pide confirmación antes de gastar (`--yes` la saltea); si el total pasa `max_usd`, no manda nada. `--models` y `--assets` eligen un subconjunto. Lo ya bajado no se vuelve a pedir: para regenerar una imagen, borrala. `--post-only` rehace el post de lo bajado sin llamar a ninguna API (por ejemplo, después de cambiar `seam` o `height`).
+
+### La config
+
+```toml
+[gen]
+models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1", "seedream-5-pro", "flux-3"]
+images_per_asset = 1     # imágenes por asset y modelo (n en un [[asset]] lo pisa)
+max_usd = 8
+key_color = "#00FF00"    # fondo plano para los modelos sin alfa
+quality = "high"         # GPT Image: low | medium | high | xhigh | max
+resolution = "2K"        # 1K | 2K | 4K, en los modelos que la eligen
+seed = 7                 # en los que lo aceptan (Nano Banana, Kontext)
+ref_bg = "#FFFFFF"       # las referencias con transparencia se aplanan sobre este color
+
+[styles]                 # bloques de prompt que los assets combinan
+game = "..."             # contorno negro grueso y colores planos: la capa de juego
+far = "..."              # desaturado y con menos contraste: las capas lejanas
+
+[[asset]]
+name = "mid"
+style = ["game", "mid"]
+prompt = "..."
+refs = ["../../poses/ranger_concept.png"]
+ref_role = "style"       # "style": sólo como guía de estilo; "character": el personaje va en la imagen;
+                         # "level": el personaje y el style frame del nivel, para que la capa se le parezca
+models = ["nano-banana-2.1"]  # opcional: sólo estos modelos de [gen] generan este asset
+aspect = "3:1"           # cada modelo usa el tamaño permitido más parecido
+alpha = "layer"          # opaque (cielo, style frame) | layer (aire arriba) | cutout (prop, pieza)
+tile = "x"               # se repite en x: se revisa y arregla la costura
+seam = "cut"             # cut | crossfade | mask | none
+```
+
+La comparación del 2026-10-16 (los 4 modelos en `style_frame`, `mid`, `platform_kit` y `props`, US$1,13) quedó en `backgrounds/ranger_base/compare.html`. `compare.html` y `compare.md` muestran siempre todo lo que se generó en el set, aunque la corrida haya sido con `--models` o `--assets`, o un asset ya no elija ese modelo.
+
+Una hoja con varias piezas lleva `split` con sus nombres en orden de lectura (filas de arriba abajo, cada una de izquierda a derecha), y `tile` puede ser una tabla por pieza: `tile = { top = "x", body = "x" }`. Las piezas de una hoja quedan todas a una misma escala; con `same_height = true` (el kit), además, a una misma altura (ver el paso 3 del post). `height` lleva la imagen a ese alto en px; en una hoja, la altura común o la de la pieza más alta, con la misma escala para todas. El prompt final es: los `style`, el `prompt` del asset, cómo usar la referencia y cómo tiene que ser el fondo. Esto último cambia por modelo: a GPT Image se le pide "Transparent background" y `background = "transparent"`; a los demás, un fondo plano de `key_color` sin degradé ni sombra.
+
+### Salida
+
+En la carpeta del set (`backgrounds/<set>/`):
+
+- `raw/<asset>/<modelo>_<n>.png`: lo que devolvió el modelo, tal cual.
+- `raw/<asset>/<modelo>_<n>.json`: la procedencia. Incluye set, asset, modelo, endpoint y link a la doc, el prompt completo, las referencias (la original y la aplanada, con sha256), el tamaño pedido y el devuelto, seed, calidad, costo estimado y nota de precio, uso que informa el proveedor (tokens de OpenAI), id del pedido, sha256 de la imagen y el reporte del post.
+- `post/<asset>/<modelo>_<n>.png`: después del post. Con `split`: `post/<asset>/<modelo>_<n>/<pieza>.png`. Con `seam = "mask"`, además `<…>.seam_x.png` y `<…>.seam_x_mask.png`.
+- `refs/`: las referencias aplanadas que se mandaron.
+- `gen.json`: cada pedido con su estado, el id en el proveedor y el motivo de un bloqueo o error. No guarda keys ni imágenes. Un pedido de fal cortado a la mitad (Ctrl-C, la red) se retoma durante 24 h sin pagarlo de nuevo; uno de OpenAI no, porque es sincrónico.
+- `compare.html`: la grilla asset × modelo, con cada imagen sobre damero (o sobre el violeta de la base), el veredicto del post y el costo. `compare.md` es la misma tabla en texto.
+
+### El post, sin IA (`bgpost.py`)
+
+1. **Key.** Los modelos sin alfa dibujan sobre `key_color`. El color real es la mediana de lo que se le parece mucho (ningún modelo devuelve `#00FF00` exacto) y se saca con el mismo keyer de los personajes, en modo global: un hueco verde entre dos edificios también es fondo. Verde porque no aparece en la base (violeta, naranja, gris acero, amarillo, cian, rojo).
+2. **Transparencia.** El reporte dice qué fracción es transparente y por qué borde, y falla si no hay transparencia donde tiene que haber. Distingue cuando el modelo pintó el damero gris y blanco de "transparente" en lugar de devolver alfa. Además avisa si una capa tapa el borde de arriba, si un prop toca el borde (puede estar cortado) y si quedó color de key en lo opaco.
+3. **Piezas.** Una hoja se separa por componentes conexos del alfa, en orden de lectura; las manchas de menos del 2% del área de la pieza mayor se descartan. Si salen más o menos piezas que nombres, quedan numeradas y el reporte lo dice. Todas quedan a la escala en que las dibujó el modelo, así el contorno tiene el mismo grosor en todas (en los props, la caja más baja que el cartel). Con `same_height`, la altura común es la mediana: las piezas que difieren menos de un 15% se escalan a ella, porque tienen que empalmar y el modelo las dibujó apenas distintas. Las demás, como la plataforma flotante, quedan a su escala, con aire abajo para que el borde por donde se camina quede alineado, y el reporte lo dice.
+4. **Costura.** En lo que se repite en x (o en y), la diferencia entre la última columna y la primera se compara con la típica entre columnas vecinas: cerca de 1 no se ve, hasta 2 está bien, entre 2 y 4 se nota apenas, más de 4 es un corte. Calibrado a ojo con las capas `mid` de `ranger_base`: GPT 23,6 (corte claro), Seedream 5,3 (se nota), FLUX 3,4 (apenas) y Nano Banana 1,9 (no se ve). El reporte trae también el peor de 16 tramos (`peak`) como dato. No decide nada, porque un contorno vertical que cae justo en la vuelta lo dispara sin que haya costura. Si no está bien, una franja del final (`seam_px`, por defecto el 12% del ancho) se superpone al principio y la capa pierde ese ancho. Si el resultado no mejora, se descarta y queda en el reporte como `fix_discarded`:
+   - `cut`: corte de error mínimo (image quilting, Efros y Freeman 2001). Es un camino de arriba abajo por donde las dos franjas más se parecen, con 2 px de fundido. No duplica contornos y, en una capa con transparencia, pasa por el aire entre las siluetas.
+   - `crossfade`: fundido lineal en toda la franja. Va para cielos y degradés; en dibujo de línea deja contornos dobles.
+   - `mask`: no toca la capa. Escribe la capa corrida medio ancho, con la costura en el centro, y una máscara de la franja (transparente = lo que se edita, la convención de OpenAI). Sirve para retocarla a mano o con un modelo de edición con máscara.
+5. **Recorte.** Al bbox del alfa con 2 px de aire, salvo en los ejes que se repiten. A una capa se le recorta el aire de arriba y conserva el ancho; el recorte queda en el reporte (`trim`) para alinearla en el engine.
+
+`spritepipe bg-post imagen.png salida.png` hace lo mismo con una imagen suelta, por ejemplo después de retocarla a mano: `--alpha`, `--key`, `--tile`, `--seam`, `--seam-px`, `--split`, `--same-height`, `--height` y `--no-trim`.
+
+### Los modelos
+
+Los IDs, parámetros, tamaños y precios salen de la documentación de cada proveedor leída el 2026-10-16 (los schemas OpenAPI de fal y la referencia de la Image API). Viven en `MODELS`, en `spritepipe/imageapi.py`, con el link a la doc en cada uno. Los precios son de lista y estimados; lo que se cobra de verdad está en el dashboard de cada proveedor.
+
+| Nombre en la config | Endpoint (con referencias) | Fondo | US$ por imagen | Notas |
+|---|---|---|---|---|
+| `gpt-image-2.5-sunburst` | OpenAI `POST /v1/images/edits` (JSON, referencias como data URL) | alfa nativo | ~0,11 a 2560×1440 `high` | Por tokens: US$30/M de imagen de salida, con la fórmula de la calculadora de la guía; más texto (US$5/M) y referencias (US$8/M). Lo de las referencias es una estimación: la doc no da cuántos tokens usan en 2.5. Tamaño libre (lados múltiplos de 16, hasta 3:1); con `2K` se queda dentro de 2560×1440, el límite de lo no experimental. Sin seed. |
+| `gpt-image-2.5-flare`, `gpt-image-2` | ídem | alfa nativo (en 2, "in preview") | ídem | Flare es el rápido de la 2.5. |
+| `gpt-image-2.5-sunburst-fal`, `…-flare-fal` | fal `openai/gpt-image-2.5/sunburst/edit` | alfa nativo | ídem | El mismo modelo y los mismos tokens, pagados con `FAL_KEY`. |
+| `nano-banana-2.1` | fal `google/nano-banana-2.1/edit` | key | ~0,059 a 2K (0,040 a 1K, 0,134 a 4K), más ~0,002 por referencia | Gemini por tokens. Proporciones fijas, incluidas 21:9 y 4:1. Hasta 14 referencias. |
+| `nano-banana-pro` | fal `fal-ai/nano-banana-pro/edit` | key | 0,15 (el doble a 4K) | Gemini 3 Pro Image. |
+| `seedream-5-pro` | fal `bytedance/seedream/v5/pro/edit` | key | 0,0675 hasta 1536² px, 0,135 hasta 2048², más 0,0045 por referencia desde la segunda | Precio "tentativo". Tamaño libre: con `2K` se queda en el escalón barato. Sin seed. |
+| `flux-3` | fal `blackforestlabs/flux-3/edit-image` | key | 0,048 a 1k | fal no publica el precio de 2k ni de 4k, así que se pide siempre 1k. Hasta 10 referencias. Sin seed. |
+| `flux-kontext-pro` | fal `fal-ai/flux-pro/kontext` (una referencia) o `…/kontext/multi` | key | 0,04 | El FLUX anterior; lo reemplazaron FLUX.2 y FLUX 3. |
+
+Con la config de `ranger_base`, los 7 assets en los 4 modelos dan US$1,94 estimados; la comparación chica (`--assets style_frame,mid,platform_kit,props`) da US$1,13.
+
+### Lo que hay que saber
+
+- **Sólo GPT Image devuelve alfa.** Ni Nano Banana ni Seedream ni FLUX tienen opción de fondo. Por eso dibujan sobre verde y el post lo keyea. fal tiene modelos que separan una imagen en capas transparentes (Seedream 5 `layerize`, Qwen-Image-Layered) y removedores de fondo, pero son otro pedido pago y no están integrados.
+- **OpenAI directo puede pedir verificar la organización.** La guía de generación de imágenes avisa que puede hacer falta la [verificación de la organización](https://help.openai.com/en/articles/10910291-api-organization-verification) para usar GPT Image, pero ninguna doc oficial dice para qué modelos ni qué error devuelve. Si la API responde 403 hablando de verificación, el error lo dice. Por fal no hace falta.
+- **Los GPT Image viejos se apagan.** `gpt-image-1` se apaga el 2026-10-23; `gpt-image-1.5`, `gpt-image-1-mini` y `chatgpt-image-latest`, el 2026-12-01. Por eso no están en `MODELS`.
+- **Moderación.** En OpenAI, un bloqueo es un 400 con `code = "moderation_blocked"` y la etapa (input u output). En fal es un 422 `content_policy_violation`, o `has_nsfw_concepts` en la salida de Kontext, que devuelve la imagen en negro. Las dos aparecen como `bloqueado` en la tabla. Ninguno de los dos aclara si cobra lo bloqueado, así que se cuenta como cobrado.
+- **Las referencias se aplanan.** El concept del ranger es RGBA con el fondo en negro transparente, y varios modelos lo ven negro. Se manda aplanado sobre `ref_bg` (blanco), como quedó en `refs/`. A fal se sube al CDN con expiración de 24 h, como la pose del bake-off; a OpenAI va en base64 dentro del pedido.
+- **El costo de GPT Image es una estimación.** La calculadora de la guía modela la 2.5, pero la página del modelo dice que no la estima. El uso real (tokens de entrada y salida) queda en el `.json` de cada imagen.
+- **La costura se arregla, pero el modelo tiene que ayudar.** El prompt pide que la capa se repita en x y continúe por los dos bordes. `cut` encuentra el mejor corte dentro de la franja, pero si el principio y el final no se parecen en nada, el corte se nota igual. Ahí conviene `mask` y retocarla.
+
 ## Piloto
 
 El número que decide si la ruta de IA conviene es el tiempo de limpieza por animación. Registralo en [`pilot/cleanup_log.csv`](../pilot/cleanup_log.csv), junto con los clips generados y los usables, para reemplazar los supuestos del reporte (5 intentos por clip, 1–4 h por animación) por datos propios.
@@ -316,6 +422,7 @@ El número que decide si la ruta de IA conviene es el tiempo de limpieza por ani
 - La limpieza previa supone un personaje que mira a la derecha y efectos cian (los del ranger); las constantes están calibradas con sus clips de 1280×720, y las distancias en px se escalan con el alto del clip. Una fila tapada en los dos bordes por algo que no cruza el cuadro entero (dos rayos, uno de cada lado) se interpola igual que una barra. `cut_muzzle` necesita que los primeros 5 frames tengan el brazo bajo.
 - `remove_flash` supone un personaje que mira y dispara a la derecha, con el cañón como lo más a la derecha del frame 0 y el frame 0 sin fogonazo; si no, fijá la geometría en la config. El halo tiene que ser suave (sobre magenta lo es): si es opaco y toca el cañón, cuenta como cañón y sobrevive. Si el arma avanza más de 3 px respecto del frame 0, la mira entra en la zona del halo y se borra.
 - No hay matting por IA (BiRefNet o ToonOut) para fondos que no son planos; tampoco frames puente con RIFE.
+- `gen-images` se probó con clientes falsos y el dry-run real; el key, las piezas y la costura, con imágenes sintéticas. Las piezas suponen que el modelo las dejó separadas por fondo: si se tocan, salen juntas.
 - `clean-concepts` supone personajes con contorno negro, de pie y con las dos botas en el piso. El blanco entre las piernas sólo se borra si toca el piso, cae en el centro de las botas y es del color del fondo; otros huecos de fondo encerrados (un brazo contra el torso) quedan blancos. Lo que el original corta en el borde de la imagen (la katana del ninja) queda cortado.
 - El key por distancia (fondos blancos) puede dejar un hilo claro de 1 px a resolución de video, que desaparece al reducir.
 - En pixel art, la grilla se alinea entre frames pero no se detecta la grilla original del clip; si el video trae "falso pixel art", pasalo antes por Proper Pixel Art.
