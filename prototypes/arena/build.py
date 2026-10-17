@@ -36,13 +36,13 @@ KIT = {
     "small_props": (2, "crate_x_s", "h", 75),
 }
 SCREEN_LAYERS = {"sky": 1, "far": 1, "mid": 2, "near": 1}
-# la granada y su explosión (backgrounds/ranger_grenade): la opción elegida de cada hoja y la medida en px del juego de
+# la granada y su explosión (backgrounds/lowpoly_grenade): la opción elegida de cada hoja y la medida en px del juego de
 # la pieza que da la escala. None mientras no se eligió: el juego las dibuja por código
-GRENADE_SET = ROOT / "backgrounds" / "ranger_grenade"
-GRENADE_ART = {   # elegidas el 2026-10-16: la opción 1 de las dos hojas
-    "grenade": (1, "off", "h", 24),           # la granada, ~24 px de alto con la tapa
-    "explosion": (1, "pieza_3", "w", 300),    # el dibujo más grande, 300 px de ancho (el radio del daño es 150). El post
-}                                             # sacó 7 piezas (el humo del final vino en dos): el juego usa las 6 primeras
+GRENADE_SET = ROOT / "backgrounds" / "lowpoly_grenade"   # antes ranger_grenade (cel 2D); el 2026-10-17 pasó a low-poly
+GRENADE_ART = {   # elegidas el 2026-10-17: la 2 de las dos hojas (la granada 1 venía cortada abajo)
+    "grenade": (2, "off", "h", 24),           # la granada, ~24 px de alto con la tapa
+    "explosion": (2, "e3", "w", 300),         # el dibujo más grande, 300 px de ancho (el radio del daño es 150)
+}
 # el retrato del HUD (backgrounds/ranger_hud): la hoja elegida (modelo_n), la pieza que da la escala, el eje y su medida
 # en px del archivo exportado. None mientras no se eligió: el juego usa la cabeza del atlas
 HUD_SET = ROOT / "backgrounds" / "ranger_hud"
@@ -66,6 +66,13 @@ CHARACTERS = {
 PICKUP_SET = ROOT / "backgrounds" / "lowpoly_pickups"
 PICKUP_ART = {   # elegida el 2026-10-17: la 1 de GPT Image (la cruz grande y las luces se leen a 42 px)
     "pickups": ("gpt-image-2.5-sunburst-fal_1", "hp", "h", 96),
+}
+# el fogonazo y el impacto low-poly (backgrounds/lowpoly_fx), en rojo con el centro blanco: el juego los recolorea por
+# equipo. La medida es la del cuadro más grande, en px del archivo (el doble de lo que miden en el juego)
+LOWFX_SET = ROOT / "backgrounds" / "lowpoly_fx"
+LOWFX_ART = {   # elegidas el 2026-10-17: la 2 de cada hoja (el impacto 1 salió partido en cinco piezas)
+    "muzzle": ("gpt-image-2.5-sunburst-fal_2", "m1", "w", 128),
+    "impact": ("gpt-image-2.5-sunburst-fal_2", "i2", "w", 128),
 }
 EXPORT = 1         # px de las piezas por px del juego: con la cámara al 50% y pantalla 2x, uno a uno
 VIEW_H = 540       # alto de la pantalla del juego
@@ -200,6 +207,7 @@ def main() -> None:
     gren = export_grenade(pb, dist)
     hud = export_hud(pb, dist)
     pick = export_hud(pb, dist, PICKUP_SET, PICKUP_ART, "pick")
+    lowfx = export_hud(pb, dist, LOWFX_SET, LOWFX_ART, "lfx")
     arenas = {p.stem: json.loads(p.read_text()) for p in sorted((HERE / "arenas").glob("*.json"))}
     # las arenas pintadas: su lámina y sus piezas pintadas (`pieces`, pueden estar en una subcarpeta de arenas/) van al
     # lado de la página
@@ -212,7 +220,7 @@ def main() -> None:
     html = (HERE / "src.html").read_text(encoding="utf-8")
     # la graduación de color (color.js, la misma que usa el editor) va adentro de la página, con la paleta de Pablo
     html = html.replace("__COLOR_JS__", (HERE / "color.js").read_text(encoding="utf-8"))
-    for key, val in (("__CHAR_DATA__", chars), ("__KIT_DATA__", kit), ("__FX_DATA__", fx), ("__ARENA_DATA__", arenas), ("__GRENADE_DATA__", gren), ("__HUD_DATA__", hud), ("__PICKUP_DATA__", pick),
+    for key, val in (("__CHAR_DATA__", chars), ("__KIT_DATA__", kit), ("__FX_DATA__", fx), ("__ARENA_DATA__", arenas), ("__GRENADE_DATA__", gren), ("__HUD_DATA__", hud), ("__PICKUP_DATA__", pick), ("__LOWFX_DATA__", lowfx),
                      ("__COLOR_LUT__", color_lut())):
         html = html.replace(key, json.dumps(val, separators=(",", ":"), ensure_ascii=False))
     (dist / "index.html").write_text(html, encoding="utf-8")
