@@ -1,0 +1,109 @@
+{
+  "set": "lowpoly_grenade",
+  "asset": "grenade",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly game prop render in the exact style of the reference images: flat-shaded polygons with soft per-face lighting, clean faceted geometry, a few large facets rather than many small ones, saturated toy-like colors, soft studio light from the top left, no black outlines, no texture noise, no photographic detail.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nTwo separate game props in one row, same size, with wide empty space between them, not touching the image edges, seen from the side: one chunky low-poly hand grenade exactly like the grenades in the reference power-up (white and red faceted armor plates, a short dark steel cap and a ring on top), with a small round light in the middle of its body. Big simple shapes that still read at 24 pixels tall.\n1. The grenade with the light off: the light is a dark grey facet.\n2. The identical grenade with the light on: the light is a bright glowing red facet.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowpoly",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_grenade/refs/gren_249af12e_FFFFFF.png",
+      "sha256": "e1fe6ed08916168e174262f9393f1a8670df4b399a341010f9ada75f76e540aa"
+    },
+    {
+      "file": "backgrounds/lowpoly_grenade/refs/arma_vistas_alfa_43c24689_FFFFFF.png",
+      "sha256": "098a6276ced43e89fcc2719888218ceb7fdf16b06096fe6225afd8f2057555c3"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_pickups/post/pickups/gpt-image-2.5-sunburst-fal_1/gren.png",
+      "sha256": "249af12e291431b5943fe5b460979c975a4c87d69f8cd31cb487dd5f0efd3185"
+    },
+    {
+      "file": "characters/lowpoly/refs/arma_vistas_alfa.png",
+      "sha256": "43c246895b718959413a672a9bd9705bea44b1a7775ac54e0828da710d4e2855"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1701,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14c2e-24be-7ff3-9f76-5d08dfe02426",
+  "created": "2026-10-17T23:24:58+00:00",
+  "sha256": "39c0e6a2eb71ff024c7ca4138a29f5d0406f16b39c9f2de8d27cc860a79a644c",
+  "post": {
+    "file": "backgrounds/lowpoly_grenade/post/grenade/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.5864,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.911,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (bottom): puede estar cortado"
+      ]
+    },
+    "pieces": {
+      "off": [
+        225,
+        146,
+        1069,
+        1336
+      ],
+      "on": [
+        1427,
+        147,
+        2275,
+        1336
+      ]
+    },
+    "trim": {
+      "off": [
+        0,
+        0,
+        844,
+        1190
+      ],
+      "on": [
+        0,
+        0,
+        848,
+        1189
+      ]
+    },
+    "files": {
+      "off": {
+        "file": "off.png",
+        "w": 844,
+        "h": 1190
+      },
+      "on": {
+        "file": "on.png",
+        "w": 848,
+        "h": 1189
+      }
+    }
+  }
+}

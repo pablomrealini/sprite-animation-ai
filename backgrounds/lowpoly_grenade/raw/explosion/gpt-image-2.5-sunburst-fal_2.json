@@ -1,0 +1,175 @@
+{
+  "set": "lowpoly_grenade",
+  "asset": "explosion",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game explosion sprites in the style of the reference images: the fire and the smoke are made of big faceted polygons with flat per-face shading, like a chunky crystal fireball, clean geometric shapes, no black outlines, no soft airbrushed glow, no blur, no photographic fire. Palette from the inside out: a pure white hot core, bright yellow, orange, red-orange, then faceted dark charcoal grey smoke.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA sprite sheet of one low-poly grenade explosion animation in six frames, in two rows of three, each row left to right in time order, all centered on the same point and drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges. Each frame is one single connected shape: no detached sparks, fragments or debris.\nFrame 1: a small, very bright white and yellow faceted starburst flash.\nFrame 2: a round faceted fireball twice as big, white core, yellow and orange body with sharp polygon edges.\nFrame 3: the largest frame, a big billowing faceted fireball, orange and red-orange with a yellow core.\nFrame 4: the fireball breaking up, red-orange polygon flames mixed with dark charcoal faceted smoke puffs.\nFrame 5: mostly round dark charcoal faceted smoke puffs with a few small orange facets inside, a bit smaller.\nFrame 6: a few thin grey faceted smoke puffs, the last frame before it disappears.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowblast",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "backgrounds/lowpoly_grenade/refs/m1_d6312fda_FFFFFF.png",
+      "sha256": "eb640f17d4e8810f99d04ac12e4a16e66df19d28d8b17013478d9e3af88d2139"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "backgrounds/lowpoly_fx/post/muzzle/gpt-image-2.5-sunburst-fal_2/m1.png",
+      "sha256": "d6312fda5602cb8110def0c84fe9ca387deb3d7307103598f4eab4f4f18f4c8b"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1707,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14c2e-1d8f-7f02-a570-c66cc2a861b9",
+  "created": "2026-10-17T23:24:56+00:00",
+  "sha256": "bbdb68327827307c06d882183c0ba8620f636dea49e576445edf3113b15a44f0",
+  "post": {
+    "file": "backgrounds/lowpoly_grenade/post/explosion/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6821,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.983,
+        "left": 0.985,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "e1": [
+        303,
+        287,
+        597,
+        613
+      ],
+      "e2": [
+        1003,
+        218,
+        1495,
+        683
+      ],
+      "e3": [
+        1714,
+        52,
+        2498,
+        791
+      ],
+      "e4": [
+        94,
+        785,
+        840,
+        1399
+      ],
+      "e5": [
+        1005,
+        858,
+        1564,
+        1383
+      ],
+      "e6": [
+        1885,
+        911,
+        2384,
+        1332
+      ]
+    },
+    "trim": {
+      "e1": [
+        0,
+        0,
+        294,
+        326
+      ],
+      "e2": [
+        0,
+        0,
+        492,
+        465
+      ],
+      "e3": [
+        0,
+        0,
+        784,
+        739
+      ],
+      "e4": [
+        0,
+        0,
+        746,
+        614
+      ],
+      "e5": [
+        0,
+        0,
+        559,
+        525
+      ],
+      "e6": [
+        0,
+        0,
+        499,
+        421
+      ]
+    },
+    "files": {
+      "e1": {
+        "file": "e1.png",
+        "w": 294,
+        "h": 326
+      },
+      "e2": {
+        "file": "e2.png",
+        "w": 492,
+        "h": 465
+      },
+      "e3": {
+        "file": "e3.png",
+        "w": 784,
+        "h": 739
+      },
+      "e4": {
+        "file": "e4.png",
+        "w": 746,
+        "h": 614
+      },
+      "e5": {
+        "file": "e5.png",
+        "w": 559,
+        "h": 525
+      },
+      "e6": {
+        "file": "e6.png",
+        "w": 499,
+        "h": 421
+      }
+    }
+  }
+}

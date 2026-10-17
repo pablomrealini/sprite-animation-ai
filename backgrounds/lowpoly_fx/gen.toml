@@ -1,0 +1,70 @@
+# El fogonazo y el impacto del disparo en el estilo low-poly (Pablo, 2026-10-17: el fogonazo dibujado por código no le
+# gustó). Reemplazan a los de backgrounds/ranger_fx, que son cian y en el estilo 2D con contorno.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/lowpoly_fx/gen.toml --dry-run
+#
+# Color: rojo con el centro blanco. El juego los recolorea por equipo como al personaje (cambia el tono del rojo), así
+# el fogonazo y el impacto salen del color de cada uno, igual que la bala.
+# Modelo: GPT Image 2.5 Sunburst, con alfa nativo (un brillo keyeado de un verde deja borde, como en ranger_fx).
+# Cada pieza tiene que salir de una sola mancha (el post separa la hoja por componentes conexos del alfa): nada de
+# chispas sueltas. Las esquirlas que vuelan las pone el código.
+# Escala en el juego: el fogonazo mide ~30 px de pantalla de largo y el impacto ~35 px de diámetro: formas grandes.
+#
+# Generadas el 2026-10-17 (US$0,68). Elegida la 2 de cada hoja (LOWFX_ART en prototypes/arena/build.py): el fogonazo
+# con el centro más limpio y los tres cuadros que achican parejo; el impacto 1 salió partido en cinco piezas. En el
+# juego, recoloreados por equipo: en_el_juego.png.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por asset para elegir
+max_usd = 2
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+lowfx = """
+3D low-poly video game visual effect sprites in the style of the reference images: crisp faceted polygons with flat \
+per-face shading, like a burst of sharp crystal shards, clean geometric shapes, no black outlines, no soft airbrushed \
+glow, no blur, no smoke, no texture noise. Orthographic side view. Palette from the inside out: a pure white hot \
+core, pale pink-white, bright saturated red, and deep crimson red on the outer facets.
+"""
+no_text = "No text, letters, numbers, logos, frames, grid lines or labels anywhere."
+
+[[asset]]
+name = "muzzle"           # el fogonazo en tres cuadros, en orden
+style = ["lowfx", "no_text"]
+prompt = """
+A sprite sheet of one low-poly muzzle flash animation for a small sci-fi blaster, in three frames in one row, left to \
+right in time order, with wide empty space between them, not touching each other or the image edges. Every frame \
+points to the right and starts at its left edge, where the gun barrel would be, and all three share the same \
+vertical center. Each frame is one single connected shape made of faceted triangular spikes radiating forward in a \
+cone, with a small faceted white-hot core at the left.
+Frame 1: the biggest, a sharp star of five to seven spikes, the middle one the longest.
+Frame 2: a bit smaller, the spikes shorter and thinner.
+Frame 3: the smallest, a few short spikes about to disappear.
+"""
+refs = ["../../prototypes/arena/refs/refineria_lowpoly.webp", "../../characters/lowpoly/refs/arma_vistas_alfa.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["m1", "m2", "m3"]
+
+[[asset]]
+name = "impact"           # el impacto de la bala en tres cuadros, en orden
+style = ["lowfx", "no_text"]
+prompt = """
+A sprite sheet of one low-poly bullet impact burst animation, in three frames in one row, left to right in time \
+order, with wide empty space between them, not touching each other or the image edges, all three centered on the same \
+point. Each frame is one single connected shape: a faceted crystal starburst of sharp triangular shards around a small \
+white-hot faceted core.
+Frame 1: a small bright burst, mostly white core with short red spikes.
+Frame 2: the biggest, a full star of eight sharp spikes of different lengths.
+Frame 3: the burst breaking up, thinner and shorter spikes, smaller core.
+"""
+refs = ["../../prototypes/arena/refs/refineria_lowpoly.webp", "../../characters/lowpoly/refs/arma_vistas_alfa.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["i1", "i2", "i3"]

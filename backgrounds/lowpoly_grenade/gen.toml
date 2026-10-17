@@ -1,0 +1,76 @@
+# La granada y su explosión en el estilo low-poly (Pablo, 2026-10-17), para la arena (prototypes/arena). Reemplazan a
+# las de backgrounds/ranger_grenade (cel 2D con contorno negro): la granada en dos estados (la luz apagada y prendida,
+# para que titile mientras cuenta; la apagada es también el ícono del HUD) y la explosión en seis dibujos.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/lowpoly_grenade/gen.toml --dry-run
+#
+# Modelo: GPT Image 2.5 Sunburst, con alfa nativo (el fuego keyeado de un verde deja borde). Referencias de estilo: la
+# Refinería low-poly, el arma low-poly y el power-up de granadas ya elegido (backgrounds/lowpoly_pickups), para que la
+# granada que se tira sea la misma que la del power-up.
+# Cada pieza tiene que salir de una sola mancha (el post separa la hoja por componentes conexos del alfa). Las chispas
+# y los escombros sueltos los pone el código. La explosión no se recolorea: fuego naranja para todos (mata de una).
+# Escala en el juego (cámara al 50%): la granada mide ~24 px del juego y la explosión, ~300 px en el dibujo más grande.
+#
+# Generadas el 2026-10-17 (US$0,68). Elegida la 2 de las dos hojas (GRENADE_ART en prototypes/arena/build.py): la
+# granada 1 venía cortada abajo; la explosión 2 hace los seis cuadros sin tocar el borde. En el juego: en_el_juego.png.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por asset para elegir
+max_usd = 2
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+lowpoly = """
+3D low-poly game prop render in the exact style of the reference images: flat-shaded polygons with soft per-face \
+lighting, clean faceted geometry, a few large facets rather than many small ones, saturated toy-like colors, soft \
+studio light from the top left, no black outlines, no texture noise, no photographic detail.
+"""
+lowblast = """
+3D low-poly video game explosion sprites in the style of the reference images: the fire and the smoke are made of \
+big faceted polygons with flat per-face shading, like a chunky crystal fireball, clean geometric shapes, no black \
+outlines, no soft airbrushed glow, no blur, no photographic fire. Palette from the inside out: a pure white hot \
+core, bright yellow, orange, red-orange, then faceted dark charcoal grey smoke.
+"""
+no_text = "No text, letters, numbers, logos, frames, grid lines or labels anywhere."
+
+[[asset]]
+name = "grenade"          # la granada: luz apagada y prendida (titila mientras cuenta)
+style = ["lowpoly", "no_text"]
+prompt = """
+Two separate game props in one row, same size, with wide empty space between them, not touching the image edges, \
+seen from the side: one chunky low-poly hand grenade exactly like the grenades in the reference power-up (white and \
+red faceted armor plates, a short dark steel cap and a ring on top), with a small round light in the middle of its \
+body. Big simple shapes that still read at 24 pixels tall.
+1. The grenade with the light off: the light is a dark grey facet.
+2. The identical grenade with the light on: the light is a bright glowing red facet.
+"""
+refs = ["../lowpoly_pickups/post/pickups/gpt-image-2.5-sunburst-fal_1/gren.png", "../../characters/lowpoly/refs/arma_vistas_alfa.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["off", "on"]
+
+[[asset]]
+name = "explosion"        # seis dibujos de la explosión, en orden
+style = ["lowblast", "no_text"]
+prompt = """
+A sprite sheet of one low-poly grenade explosion animation in six frames, in two rows of three, each row left to \
+right in time order, all centered on the same point and drawn at the same scale, with wide empty space between the \
+frames, not touching each other or the image edges. Each frame is one single connected shape: no detached sparks, \
+fragments or debris.
+Frame 1: a small, very bright white and yellow faceted starburst flash.
+Frame 2: a round faceted fireball twice as big, white core, yellow and orange body with sharp polygon edges.
+Frame 3: the largest frame, a big billowing faceted fireball, orange and red-orange with a yellow core.
+Frame 4: the fireball breaking up, red-orange polygon flames mixed with dark charcoal faceted smoke puffs.
+Frame 5: mostly round dark charcoal faceted smoke puffs with a few small orange facets inside, a bit smaller.
+Frame 6: a few thin grey faceted smoke puffs, the last frame before it disappears.
+"""
+refs = ["../../prototypes/arena/refs/refineria_lowpoly.webp", "../lowpoly_fx/post/muzzle/gpt-image-2.5-sunburst-fal_2/m1.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["e1", "e2", "e3", "e4", "e5", "e6"]

@@ -1,0 +1,126 @@
+{
+  "set": "lowpoly_fx",
+  "asset": "impact",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game visual effect sprites in the style of the reference images: crisp faceted polygons with flat per-face shading, like a burst of sharp crystal shards, clean geometric shapes, no black outlines, no soft airbrushed glow, no blur, no smoke, no texture noise. Orthographic side view. Palette from the inside out: a pure white hot core, pale pink-white, bright saturated red, and deep crimson red on the outer facets.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA sprite sheet of one low-poly bullet impact burst animation, in three frames in one row, left to right in time order, with wide empty space between them, not touching each other or the image edges, all three centered on the same point. Each frame is one single connected shape: a faceted crystal starburst of sharp triangular shards around a small white-hot faceted core.\nFrame 1: a small bright burst, mostly white core with short red spikes.\nFrame 2: the biggest, a full star of eight sharp spikes of different lengths.\nFrame 3: the burst breaking up, thinner and shorter spikes, smaller core.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowfx",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "backgrounds/lowpoly_fx/refs/arma_vistas_alfa_43c24689_FFFFFF.png",
+      "sha256": "098a6276ced43e89fcc2719888218ceb7fdf16b06096fe6225afd8f2057555c3"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "characters/lowpoly/refs/arma_vistas_alfa.png",
+      "sha256": "43c246895b718959413a672a9bd9705bea44b1a7775ac54e0828da710d4e2855"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1703,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14c24-1422-7d93-87be-c352d148bc50",
+  "created": "2026-10-17T23:13:54+00:00",
+  "sha256": "ca644e5d8e55d34fcd0744ebaef88f2def5d410f21ec0e0894383487969d512d",
+  "post": {
+    "file": "backgrounds/lowpoly_fx/post/impact/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [
+      "2 manchas chicas descartadas"
+    ],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.9181,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 0.997,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "i1": [
+        190,
+        483,
+        567,
+        921
+      ],
+      "i2": [
+        858,
+        262,
+        1690,
+        1138
+      ],
+      "i3": [
+        2009,
+        499,
+        2384,
+        957
+      ]
+    },
+    "trim": {
+      "i1": [
+        0,
+        0,
+        377,
+        438
+      ],
+      "i2": [
+        0,
+        0,
+        832,
+        876
+      ],
+      "i3": [
+        0,
+        0,
+        375,
+        458
+      ]
+    },
+    "files": {
+      "i1": {
+        "file": "i1.png",
+        "w": 377,
+        "h": 438
+      },
+      "i2": {
+        "file": "i2.png",
+        "w": 832,
+        "h": 876
+      },
+      "i3": {
+        "file": "i3.png",
+        "w": 375,
+        "h": 458
+      }
+    }
+  }
+}

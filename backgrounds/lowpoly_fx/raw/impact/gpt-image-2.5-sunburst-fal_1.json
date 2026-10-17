@@ -1,0 +1,161 @@
+{
+  "set": "lowpoly_fx",
+  "asset": "impact",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game visual effect sprites in the style of the reference images: crisp faceted polygons with flat per-face shading, like a burst of sharp crystal shards, clean geometric shapes, no black outlines, no soft airbrushed glow, no blur, no smoke, no texture noise. Orthographic side view. Palette from the inside out: a pure white hot core, pale pink-white, bright saturated red, and deep crimson red on the outer facets.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA sprite sheet of one low-poly bullet impact burst animation, in three frames in one row, left to right in time order, with wide empty space between them, not touching each other or the image edges, all three centered on the same point. Each frame is one single connected shape: a faceted crystal starburst of sharp triangular shards around a small white-hot faceted core.\nFrame 1: a small bright burst, mostly white core with short red spikes.\nFrame 2: the biggest, a full star of eight sharp spikes of different lengths.\nFrame 3: the burst breaking up, thinner and shorter spikes, smaller core.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowfx",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "backgrounds/lowpoly_fx/refs/arma_vistas_alfa_43c24689_FFFFFF.png",
+      "sha256": "098a6276ced43e89fcc2719888218ceb7fdf16b06096fe6225afd8f2057555c3"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "characters/lowpoly/refs/arma_vistas_alfa.png",
+      "sha256": "43c246895b718959413a672a9bd9705bea44b1a7775ac54e0828da710d4e2855"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1703,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14c24-1424-7831-8414-2511e2711cac",
+  "created": "2026-10-17T23:13:53+00:00",
+  "sha256": "c850032554adc0ceddc7237c533adf6a12d66b6288044c8a0c07de2b16f2db8a",
+  "post": {
+    "file": "backgrounds/lowpoly_fx/post/impact/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [
+      "8 manchas chicas descartadas",
+      "salieron 5 piezas y se esperaban 3 (i1, i2, i3): quedan numeradas"
+    ],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.9153,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "pieza_1": [
+        164,
+        551,
+        530,
+        909
+      ],
+      "pieza_2": [
+        835,
+        270,
+        1725,
+        1137
+      ],
+      "pieza_3": [
+        1376,
+        462,
+        1550,
+        623
+      ],
+      "pieza_4": [
+        2008,
+        480,
+        2398,
+        924
+      ],
+      "pieza_5": [
+        1406,
+        830,
+        1568,
+        985
+      ]
+    },
+    "trim": {
+      "pieza_1": [
+        0,
+        0,
+        366,
+        358
+      ],
+      "pieza_2": [
+        0,
+        0,
+        890,
+        867
+      ],
+      "pieza_3": [
+        0,
+        0,
+        174,
+        161
+      ],
+      "pieza_4": [
+        0,
+        0,
+        390,
+        444
+      ],
+      "pieza_5": [
+        0,
+        0,
+        162,
+        155
+      ]
+    },
+    "files": {
+      "pieza_1": {
+        "file": "pieza_1.png",
+        "w": 366,
+        "h": 358
+      },
+      "pieza_2": {
+        "file": "pieza_2.png",
+        "w": 890,
+        "h": 867
+      },
+      "pieza_3": {
+        "file": "pieza_3.png",
+        "w": 174,
+        "h": 161
+      },
+      "pieza_4": {
+        "file": "pieza_4.png",
+        "w": 390,
+        "h": 444
+      },
+      "pieza_5": {
+        "file": "pieza_5.png",
+        "w": 162,
+        "h": 155
+      }
+    }
+  }
+}
