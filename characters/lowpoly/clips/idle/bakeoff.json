@@ -1,0 +1,528 @@
+{
+  "attempts": [
+    {
+      "clip": "seedance-2.0_idle_a_1.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_a",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b06-e461-78e0-a081-e912ade375de",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14b06-e461-78e0-a081-e912ade375de/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14b06-e461-78e0-a081-e912ade375de"
+      },
+      "submitted": "2026-10-17T18:01:45+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:04:32+00:00"
+    },
+    {
+      "clip": "seedance-2.0_idle_a_2.mp4",
+      "model": "seedance-2.0",
+      "provider": "fal",
+      "endpoint": "bytedance/seedance-2.0/image-to-video",
+      "animation": "idle_a",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 1.517,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b06-e691-73a1-808e-b660a056f3b0",
+        "status_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14b06-e691-73a1-808e-b660a056f3b0/status",
+        "response_url": "https://queue.fal.run/bytedance/seedance-2.0/requests/01a14b06-e691-73a1-808e-b660a056f3b0"
+      },
+      "submitted": "2026-10-17T18:01:45+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:11:05+00:00"
+    },
+    {
+      "clip": "minimax-h3-max_idle_a_1.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/image-to-video",
+      "animation": "idle_a",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 0.26,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b06-e8bb-7980-a826-6959f6778da1",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b06-e8bb-7980-a826-6959f6778da1/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b06-e8bb-7980-a826-6959f6778da1"
+      },
+      "submitted": "2026-10-17T18:01:46+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:02:04+00:00"
+    },
+    {
+      "clip": "minimax-h3-max_idle_a_2.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/image-to-video",
+      "animation": "idle_a",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 0.26,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b06-eb34-7c53-905c-2c6bda09ec55",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b06-eb34-7c53-905c-2c6bda09ec55/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b06-eb34-7c53-905c-2c6bda09ec55"
+      },
+      "submitted": "2026-10-17T18:01:47+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:02:08+00:00"
+    },
+    {
+      "clip": "minimax-h3-max_idle_b_1.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/reference-to-video",
+      "animation": "idle_b",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 0.441,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "armado_tres_cuartos.png",
+        "arma_lateral.png",
+        "arma_frente.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b07-9c00-7310-9003-14030b715536",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b07-9c00-7310-9003-14030b715536/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b07-9c00-7310-9003-14030b715536"
+      },
+      "submitted": "2026-10-17T18:02:32+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:02:49+00:00"
+    },
+    {
+      "clip": "minimax-h3-max_idle_b_2.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/reference-to-video",
+      "animation": "idle_b",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 0.441,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "armado_tres_cuartos.png",
+        "arma_lateral.png",
+        "arma_frente.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b07-9e22-7a10-8fb8-6a8325a4edb5",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b07-9e22-7a10-8fb8-6a8325a4edb5/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b07-9e22-7a10-8fb8-6a8325a4edb5"
+      },
+      "submitted": "2026-10-17T18:02:32+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:02:54+00:00"
+    },
+    {
+      "clip": "minimax-h3-max_idle_b_tq_1.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/reference-to-video",
+      "animation": "idle_b_tq",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 0.441,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "armado_tres_cuartos.png",
+        "arma_lateral.png",
+        "arma_frente.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b08-2523-7860-a756-fb0171bd8cc3",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b08-2523-7860-a756-fb0171bd8cc3/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b08-2523-7860-a756-fb0171bd8cc3"
+      },
+      "submitted": "2026-10-17T18:03:07+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:03:26+00:00"
+    },
+    {
+      "clip": "minimax-h3-max_idle_b_tq_2.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/reference-to-video",
+      "animation": "idle_b_tq",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 0.441,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "armado_tres_cuartos.png",
+        "arma_lateral.png",
+        "arma_frente.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b08-2771-7772-8983-8aa342e14677",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b08-2771-7772-8983-8aa342e14677/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b08-2771-7772-8983-8aa342e14677"
+      },
+      "submitted": "2026-10-17T18:03:08+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:03:29+00:00"
+    },
+    {
+      "clip": "kling-o3-std_idle_a_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "idle_a",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b08-a663-70e0-aaa9-a0bf795c05ed",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b08-a663-70e0-aaa9-a0bf795c05ed/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b08-a663-70e0-aaa9-a0bf795c05ed"
+      },
+      "submitted": "2026-10-17T18:03:40+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:05:25+00:00"
+    },
+    {
+      "clip": "kling-o3-std_idle_a_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "idle_a",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b08-a885-7470-a3eb-fdf804e7fa47",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b08-a885-7470-a3eb-fdf804e7fa47/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b08-a885-7470-a3eb-fdf804e7fa47"
+      },
+      "submitted": "2026-10-17T18:03:41+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:05:29+00:00"
+    },
+    {
+      "clip": "kling-o3-std_idle_b_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/reference-to-video",
+      "animation": "idle_b",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "armado_tres_cuartos.png",
+        "arma_lateral.png",
+        "arma_frente.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b09-a254-71a2-a536-6674994041a3",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b09-a254-71a2-a536-6674994041a3/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b09-a254-71a2-a536-6674994041a3"
+      },
+      "submitted": "2026-10-17T18:04:45+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:09:02+00:00"
+    },
+    {
+      "clip": "kling-o3-std_idle_b_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/reference-to-video",
+      "animation": "idle_b",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "armado_tres_cuartos.png",
+        "arma_lateral.png",
+        "arma_frente.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b0a-7aca-7281-a3e4-5552bbb03a3f",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b0a-7aca-7281-a3e4-5552bbb03a3f/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b0a-7aca-7281-a3e4-5552bbb03a3f"
+      },
+      "submitted": "2026-10-17T18:05:40+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:09:06+00:00"
+    }
+  ],
+  "qa": {
+    "seedance-2.0_idle_a_1.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_a",
+      "n": 1,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.2,
+      "zoom_pct": 0.4,
+      "edge_frames": 0,
+      "pose_mad": 44.8,
+      "loop_score": 1.982,
+      "loop_quality": "costura visible",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 44.8): el modelo re-renderizó",
+        "fondo poco plano (desvío 8.7): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "seedance-2.0_idle_a_2.mp4": {
+      "model": "seedance-2.0",
+      "animation": "idle_a",
+      "n": 2,
+      "usd": 1.517,
+      "qa": "fail",
+      "drift_pct": 0.3,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 45.13,
+      "loop_score": 0.511,
+      "loop_quality": "buena",
+      "flags": [
+        "el frame 0 no respeta la pose (MAD 45.13): el modelo re-renderizó",
+        "fondo poco plano (desvío 8.69): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "minimax-h3-max_idle_a_1.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_a",
+      "n": 1,
+      "usd": 0.26,
+      "qa": "fail",
+      "drift_pct": 36.5,
+      "zoom_pct": 57.3,
+      "edge_frames": 30,
+      "pose_mad": 8.19,
+      "loop_score": 0.172,
+      "loop_quality": "buena",
+      "flags": [
+        "deriva/paneo o el personaje se traslada: 36.5% del alto",
+        "zoom o cambio de escala: 57.3% del alto",
+        "el personaje toca el borde del cuadro en 30 frames (arma o capa cortada)",
+        "fondo poco plano (desvío 7.61): el key va a necesitar más tolerancia",
+        "el color del fondo cambia durante el clip (158.0/255)",
+        "posible corte de escena en los frames [64, 94]"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "minimax-h3-max_idle_a_2.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_a",
+      "n": 2,
+      "usd": 0.26,
+      "qa": "warn",
+      "drift_pct": 3.0,
+      "zoom_pct": 0.3,
+      "edge_frames": 0,
+      "pose_mad": 8.3,
+      "loop_score": 0.527,
+      "loop_quality": "buena",
+      "flags": [
+        "fondo poco plano (desvío 7.65): el key va a necesitar más tolerancia"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "minimax-h3-max_idle_b_1.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_b",
+      "n": 1,
+      "usd": 0.441,
+      "qa": "fail",
+      "drift_pct": 0.3,
+      "zoom_pct": 0.4,
+      "edge_frames": 0,
+      "pose_mad": 9.44,
+      "loop_score": 1.151,
+      "loop_quality": "costura visible",
+      "flags": [
+        "el fondo #B0B4BF no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano",
+        "el color del fondo cambia durante el clip (129.0/255)",
+        "posible corte de escena en los frames [1, 2, 3, 122]"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "minimax-h3-max_idle_b_2.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_b",
+      "n": 2,
+      "usd": 0.441,
+      "qa": "fail",
+      "drift_pct": 16.8,
+      "zoom_pct": 19.0,
+      "edge_frames": 79,
+      "pose_mad": 9.89,
+      "loop_score": 0.798,
+      "loop_quality": "aceptable",
+      "flags": [
+        "el fondo #B0B3BE no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano",
+        "deriva/paneo o el personaje se traslada: 16.8% del alto (la alineación saca la deriva lineal)",
+        "zoom o cambio de escala: 19.0% del alto",
+        "el personaje toca el borde del cuadro en 79 frames (arma o capa cortada)",
+        "el color del fondo cambia durante el clip (121.0/255)",
+        "posible corte de escena en los frames [2, 3, 4, 5, 9, 37, 86, 116]"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "minimax-h3-max_idle_b_tq_1.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_b_tq",
+      "n": 1,
+      "usd": 0.441,
+      "qa": "fail",
+      "drift_pct": 0.9,
+      "zoom_pct": 1.1,
+      "edge_frames": 0,
+      "pose_mad": 9.5,
+      "loop_score": 0.924,
+      "loop_quality": "aceptable",
+      "flags": [
+        "el fondo #B0B4BF no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano",
+        "el color del fondo cambia durante el clip (129.0/255)",
+        "posible corte de escena en los frames [1, 2, 3, 122]"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "minimax-h3-max_idle_b_tq_2.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_b_tq",
+      "n": 2,
+      "usd": 0.441,
+      "qa": "fail",
+      "drift_pct": 15.2,
+      "zoom_pct": 15.8,
+      "edge_frames": 77,
+      "pose_mad": 9.28,
+      "loop_score": 0.428,
+      "loop_quality": "buena",
+      "flags": [
+        "el fondo #AFB3BD no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano",
+        "deriva/paneo o el personaje se traslada: 15.2% del alto (la alineación saca la deriva lineal)",
+        "zoom o cambio de escala: 15.8% del alto",
+        "el personaje toca el borde del cuadro en 77 frames (arma o capa cortada)",
+        "el color del fondo cambia durante el clip (122.0/255)",
+        "posible corte de escena en los frames [6, 37, 111, 112, 113, 114, 115, 116, 117]"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "kling-o3-std_idle_a_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "idle_a",
+      "n": 1,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 1.8,
+      "zoom_pct": 1.5,
+      "edge_frames": 0,
+      "pose_mad": 1.77,
+      "loop_score": 1.682,
+      "loop_quality": "costura visible",
+      "flags": [
+        "fondo poco plano (desvío 7.69): el key va a necesitar más tolerancia",
+        "casi sin movimiento (mediana 0.76): típico de first==last"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_idle_a_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "idle_a",
+      "n": 2,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 0.0,
+      "zoom_pct": 0.6,
+      "edge_frames": 0,
+      "pose_mad": 1.8,
+      "loop_score": 0.949,
+      "loop_quality": "aceptable",
+      "flags": [
+        "fondo poco plano (desvío 7.7): el key va a necesitar más tolerancia",
+        "casi sin movimiento (mediana 0.58): típico de first==last"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_idle_b_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "idle_b",
+      "n": 1,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 2.0,
+      "zoom_pct": 2.6,
+      "edge_frames": 0,
+      "pose_mad": 1.98,
+      "loop_score": 0.168,
+      "loop_quality": "buena",
+      "flags": [
+        "el color del fondo cambia durante el clip (10.0/255)"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_idle_b_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "idle_b",
+      "n": 2,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 0.8,
+      "zoom_pct": 1.1,
+      "edge_frames": 0,
+      "pose_mad": 1.86,
+      "loop_score": 0.158,
+      "loop_quality": "buena",
+      "flags": [
+        "fondo poco plano (desvío 8.15): el key va a necesitar más tolerancia",
+        "el color del fondo cambia durante el clip (10.0/255)"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

@@ -138,6 +138,8 @@ remove_flash = true        # la geometría del arma se mide en el frame 0
 # halo_x0 = 538            # desde acá hasta la boca sólo hay cañón: ni mano ni mira
 ```
 
+Para personajes **sin contorno** (el low-poly), el contorno oscuro no marca la boca: la boca es una tapa con un disco cian y el rayo sale pegado al disco. Ahí va `remove_flash = { method = "shape" }`, que sigue el arma con su forma del frame 0 (sin la punta) y borra lo que está delante de la boca (±40% del alto del cuerpo, por la estrella del fogonazo) y el halo arriba y abajo del cañón. Si la coincidencia se pierde (el destello tapa el arma: más de ΔE 25 de error medio), busca el arma en todo el cuadro y, si tampoco aparece, la deja donde estaba; esos frames salen en el log. Con un personaje que gira o da vueltas no sirve: ahí conviene recortar los frames con rayo. Lo mejor, igual, es que el video no traiga fogonazo: ver "Prueba sin fogonazo" en `characters/lowpoly/reporte_idle.md` (con Kling, el video sólo apunta y el arma va apagada).
+
 Los frames sin fogonazo quedan en `work/<anim>/01_noflash/`, con la boca por frame en px del video en `muzzle.json`. No se re-encodea: el resto del pipeline lee esos PNG. `characters/comando` es el ejemplo real.
 
 ## Limpieza previa
@@ -267,6 +269,8 @@ Los clips quedan en `clips/bakeoff/<modelo>_<anim>_<n>.mp4`. Además:
 - `bakeoff.md`: la tabla por clip (estado, veredicto del QA, deriva, zoom, frames que tocan el borde, MAD del frame 0 contra la pose, costura del loop, costo) y un resumen por modelo.
 - `bakeoff.json`: cada pedido con su id en el proveedor, estado, motivo del bloqueo o del error y el QA. No guarda keys ni imágenes.
 
+`--anims idle_a,idle_b` corre sólo esas animaciones de la config, como `--models` con los modelos.
+
 Volver a correr el comando no regenera lo que ya está bajado: para regenerar un clip, borralo. Si el proceso se corta (Ctrl-C, la red), los pedidos ya enviados siguen en el proveedor y se retoman sin pagarlos de nuevo durante 48 h; Veo borra el video a los 2 días.
 
 ### Los modelos
@@ -282,9 +286,30 @@ Los IDs, parámetros y precios salen de la documentación de cada proveedor, le�
 | `wan-2.2` | fal `fal-ai/wan/v2.2-a14b/image-to-video` | 1–10 s (`num_frames` a 16 fps) | 0,08 | fal interpola a 32 fps por defecto. Sin audio. |
 | `veo-3.1-fast-fal` | fal `fal-ai/veo3.1/fast/image-to-video` | 4, 6, 8 s | 0,10 (0,15 con audio) | Con último frame usa `.../first-last-frame-to-video`. fal no expone `personGeneration`. |
 | `veo-3.1-fast-gemini` | Gemini API `veo-3.1-fast-generate-preview` | 4, 6, 8 s | 0,10 (con audio, que no se apaga) | `personGeneration = "allow_adult"`, el único valor que acepta image-to-video. 1080p sólo en 8 s. **Se apaga el 2026-10-22**. |
+| `minimax-h3-max` | fal `minimax/h3-max/image-to-video`; con referencias, `.../reference-to-video` | 1–15 s | 0,052 (promoción hasta el 2026-10-31, después 0,08); con referencias 0,08 | 720p se pide como 768P (sale 1344×768). Con referencias: primer frame (`image_url`, "opens exactly on this image"), último frame y hasta 9 referencias ("Image 1"…); 4.096 tokens de referencia incluidos por pedido (1.024 por imagen cuadrada), el excedente a US$0,02 cada 1.000. El audio no se apaga. |
+| `kling-o3-std` | fal `fal-ai/kling-video/o3/standard/image-to-video`; con referencias, `.../reference-to-video` | 3–15 s | 0,084 (0,112 con audio) | Con referencias: `start_image_url`, `end_image_url` y las referencias como *elements*: cada 4 imágenes en orden son uno (la frontal y 1–3 vistas; `@Element1`… en el prompt). Con primer frame acepta hasta 3 elements. Sin seed. |
 | `gemini-omni-1.1-flash` | Gemini API (Interactions API) `gemini-omni-1.1-flash` | 3–10 s | ~0,1014 (con audio, que no se apaga) | La pose va como primer frame con `task = "image_to_video"`; el último frame es la segunda imagen. Cobra por tokens: 5.792 tokens de video por segundo a 720p, más centavos de entrada y razonamiento. Sin `negative_prompt`. Sólo 720p tiene precio documentado. |
 
 Con la config del comando (8 modelos, idle y shoot, 2 clips de 5 s cada uno) el total estimado da US$27,42. Veo redondea a 6 s.
+
+### Referencias y una config con varias estrategias
+
+Una `[[animation]]` puede llevar `refs`: imágenes de referencia (hoja de vistas, el arma) que van además del primer y el último frame, sólo a los modelos que las aceptan (`max_refs` en `MODELS`; hoy `minimax-h3-max` y `kling-o3-std`). A los demás les va la animación sin ellas, y el plan lo avisa. Con referencias, el pedido puede ir a otro endpoint y costar otra cosa: el plan muestra el rango por clip.
+
+Para comparar estrategias en una sola config, cada animación puede elegir sus modelos (`models`) y llevar un prompt por modelo (`prompts`), porque cada uno nombra las referencias a su manera:
+
+```toml
+[[animation]]
+name = "idle_b"
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/idle_b_h3max.txt"                       # "Image 1 to Image 4 show..."
+prompts = { kling-o3-std = "prompts/idle_b_kling.txt" }   # "The character is @Element1..."
+models = ["minimax-h3-max", "kling-o3-std"]
+last_frame = true
+refs = ["refs/vistas/tpose_frente.png", "refs/vistas/tpose_tres_cuartos.png"]
+```
+
+Lo que dio la prueba del 2026-10-17 (`characters/lowpoly/reporte_idle.md`): con referencias, los dos modelos empeoraron la consistencia de un idle de costado. H3 Max abre en el primer frame, corta a otra toma armada con las referencias y vuelve recién en el último. Kling no corta, pero gira al personaje hacia cámara para mostrar las vistas de frente. Kling O3 con sólo el primer y el último frame fue lo más consistente.
 
 ### Bloqueos de moderación
 
@@ -307,6 +332,7 @@ Veo por la Gemini API no cobra lo bloqueado. fal no lo aclara: su página de pre
 - **La pose de fal se sube al CDN de fal**, con expiración de 24 h (`X-Fal-Object-Lifecycle-Preference`), porque fal desaconseja data URIs de más de unos KB. A la Gemini API (Veo y Omni) la imagen va en base64 dentro del pedido.
 - **Hay dos puntos dudosos en la doc de Veo de la Gemini API.** El ejemplo REST manda la imagen como `inlineData`, mientras que el SDK de Python usa `bytesBase64Encoded`. La doc escribe `durationSeconds` como texto y el SDK, como número. El bake-off sigue el ejemplo REST para la imagen y el SDK para la duración. Si Google rechaza el formato, el pedido vuelve con error (no con bloqueo) y no se cobra.
 - **El seed no siempre aplica.** `seed` sólo llega a los modelos que lo aceptan: MiniMax, Wan y Veo en fal, y Omni (en `generation_config`, sin garantía de que lo respete). Seedance y Kling no tienen seed, y Veo por la Gemini API lo rechaza.
+- **fal entrega los videos en BT.601 sin tag.** Pasa con Kling, MiniMax H3 y Seedance: decodificados como BT.709 (lo que se supone sin tag), el rojo se corre a naranja y el MAD del frame 0 contra la pose sube (en Kling O3, de 0,5 a 10,6 en los colores saturados). En `character.toml`, los clips de fal llevan `color_matrix = "bt601"`, como los de Davinci. El QA del bake-off lee con BT.709: su MAD de la pose vale para comparar modelos, no como medida absoluta.
 - **Hay que calibrar los umbrales del QA con estos clips.** Un modelo con más `warn` no es necesariamente peor: mirá los clips.
 
 ## Fondos por API de imagen

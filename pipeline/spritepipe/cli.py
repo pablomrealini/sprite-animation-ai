@@ -50,6 +50,13 @@ def _print_flash(res: dict, indent: str = "    ") -> None:
     g = res["geometry"]
     how = f"medida en el frame 0: {', '.join(res['measured'])}" if res["measured"] else "geometría de la config"
     xs, ys = res["muzzle_x"], res["muzzle_y"]
+    if g.get("method") == "shape":
+        print(f"{indent}fogonazo borrado siguiendo la forma del arma: boca en x {xs[0]}–{xs[1]}, y {ys[0]}–{ys[1]} "
+              f"px del video (limpia ±{g['band']} px delante de la boca y el halo del cañón; boca y arma medidas en el frame 0)")
+        if res.get("held_frames"):
+            print(f"{indent}! el arma no se encontró en {len(res['held_frames'])} frames (quedó en la posición anterior): "
+                  f"{res['held_frames'][:12]}")
+        return
     print(f"{indent}fogonazo borrado: boca en x {xs[0]}–{xs[1]}, y {ys[0]}–{ys[1]} px del video "
           f"(franja {g['band_y'][0]}–{g['band_y'][1]}, halo desde x {g['halo_x0']}; {how})" if xs else
           f"{indent}! no encontré la boca del cañón en ningún frame: revisá la geometría de remove_flash")
@@ -351,12 +358,12 @@ def clean_clip(clip: Path, out: Path, params: config.Clean, matrix: str | None) 
     return 0
 
 
-def remove_flash(clip: Path, out: Path, params: config.FlashRemoval) -> int:
+def remove_flash(clip: Path, out: Path, params: config.FlashRemoval, matrix: str | None = None) -> int:
     """Clip de disparo sin fogonazo (H.264 sin pérdida) más la boca por frame en <out>.muzzle.json."""
     tmp = Path(tempfile.mkdtemp(prefix="spritepipe_"))
     try:
         info = imgio.probe(clip)
-        imgio.extract(clip, tmp / "raw", info)
+        imgio.extract(clip, tmp / "raw", info, matrix)
         res = flash.run(tmp / "raw", tmp / "noflash", params)
         _print_flash(res, "")
         frames = imgio.frames(tmp / "noflash")
@@ -409,6 +416,7 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--dry-run", action="store_true", help="mostrar los pedidos y el costo sin llamar a ninguna API")
     b.add_argument("--yes", action="store_true", help="no pedir confirmación antes de gastar")
     b.add_argument("--models", help="sólo estos modelos de la config, separados por coma")
+    b.add_argument("--anims", help="sólo estas animaciones de la config, separadas por coma")
     b.add_argument("--skip-qa", action="store_true", help="bajar los clips sin correr el QA")
     g = sub.add_parser("gen-images", help="gráficos de fondo por API de imagen, varios modelos, con post sin IA")
     g.add_argument("config", type=Path, help="TOML del set (ver backgrounds/ranger_base/gen.toml)")
@@ -462,6 +470,9 @@ def main(argv: list[str] | None = None) -> int:
                         ("--flash-y", "filas que puede ocupar el fogonazo")):
         f.add_argument(name, type=int, nargs=2, metavar=("DESDE", "HASTA"), help=f"{help_} (px del clip)")
     f.add_argument("--halo-x0", type=int, help="desde qué columna hasta la boca sólo hay cañón (px del clip)")
+    f.add_argument("--method", choices=["outline", "shape"], default="outline",
+                   help="outline: la boca es el contorno oscuro; shape: se sigue la forma del arma (sin contorno)")
+    f.add_argument("--color-matrix", choices=config.COLOR_MATRICES, help="matriz de color del clip, si no la trae")
     args = ap.parse_args(argv)
 
     if args.cmd == "run":
@@ -470,7 +481,8 @@ def main(argv: list[str] | None = None) -> int:
         return check(args.clips, args.pose, args.kind, args.game_fps)
     if args.cmd == "bakeoff":
         return bakeoff.run(args.config, dry_run=args.dry_run, yes=args.yes, skip_qa=args.skip_qa,
-                           models=args.models.split(",") if args.models else None)
+                           models=args.models.split(",") if args.models else None,
+                           anims=args.anims.split(",") if args.anims else None)
     if args.cmd == "gen-images":
         from . import genimages
         return genimages.run(args.config, dry_run=args.dry_run, yes=args.yes, post_only=args.post_only,
@@ -497,8 +509,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "remove-flash":
         params = config.FlashRemoval(
             band_y=tuple(args.band_y) if args.band_y else None, search_x=tuple(args.search_x) if args.search_x else None,
-            flash_y=tuple(args.flash_y) if args.flash_y else None, halo_x0=args.halo_x0)
-        return remove_flash(args.clip, args.out, params)
+            flash_y=tuple(args.flash_y) if args.flash_y else None, halo_x0=args.halo_x0, method=args.method)
+        return remove_flash(args.clip, args.out, params, args.color_matrix)
     from . import synth
     synth.make(args.out)
     return 0

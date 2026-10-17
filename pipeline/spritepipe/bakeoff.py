@@ -35,6 +35,12 @@ class BakeAnim:
     prompt: Path
     kind: str  # "cycle" | "oneshot", para el QA y la búsqueda de loop
     last_frame: Path | None = None
+    refs: tuple[Path, ...] = ()  # referencias además del primer frame, en los modelos que las aceptan
+    models: tuple[str, ...] = ()  # si no está vacío, sólo estos modelos de [bakeoff] generan esta animación
+    prompts: dict[str, Path] = dataclasses.field(default_factory=dict)  # modelo -> prompt propio (pisa a prompt)
+
+    def prompt_for(self, model: str) -> Path:
+        return self.prompts.get(model, self.prompt)
 
 
 @dataclass
@@ -72,7 +78,7 @@ class Task:
 
 BAKEOFF_KEYS = {"out_dir", "models", "clips_per_model", "duration", "aspect_ratio", "resolution", "audio",
                 "negative_prompt", "seed", "max_usd", "max_parallel", "game_fps"}
-ANIM_KEYS = {"name", "pose", "prompt", "kind", "last_frame"}
+ANIM_KEYS = {"name", "pose", "prompt", "kind", "last_frame", "refs", "models", "prompts"}
 
 
 def load(path: str | Path) -> Bakeoff:
@@ -100,10 +106,18 @@ def load(path: str | Path) -> Bakeoff:
         pose, prompt = _path(root, a["pose"]), _path(root, a["prompt"])
         last = a.get("last_frame")
         last = pose if last is True else _path(root, last) if last else None
-        for what, p in (("pose", pose), ("prompt", prompt), ("last_frame", last)):
+        refs = tuple(_path(root, r) for r in a.get("refs", []))
+        only = tuple(a.get("models", []))
+        if unknown := [m for m in only if m not in models]:
+            raise ValueError(f"{a['name']}: models nombra {', '.join(unknown)}, que no está en [bakeoff] models")
+        prompts = {m: _path(root, v) for m, v in a.get("prompts", {}).items()}
+        if unknown := [m for m in prompts if m not in models]:
+            raise ValueError(f"{a['name']}: prompts nombra {', '.join(unknown)}, que no está en [bakeoff] models")
+        for what, p in (("pose", pose), ("prompt", prompt), ("last_frame", last), *(("refs", r) for r in refs),
+                        *(("prompts", v) for v in prompts.values())):
             if p is not None and not p.exists():
                 raise FileNotFoundError(f"{a['name']}: no existe {what} {p}")
-        anims.append(BakeAnim(a["name"], pose, prompt, kind, last))
+        anims.append(BakeAnim(a["name"], pose, prompt, kind, last, refs, only, prompts))
     if not anims:
         raise ValueError("el bake-off no tiene ninguna [[animation]]")
 
@@ -133,8 +147,10 @@ def plan(cfg: Bakeoff) -> list[Task]:
     for name in cfg.models:
         spec = videoapi.MODELS[name]
         dur = spec.pick_duration(cfg.duration, cfg.resolution)
-        usd = spec.price(dur, cfg.audio, cfg.resolution)
         for anim in cfg.animations:
+            if anim.models and name not in anim.models:
+                continue
+            usd = spec.price(dur, cfg.audio, cfg.resolution, refs=len(anim.refs[:spec.max_refs]))
             for n in range(1, cfg.clips_per_model + 1):
                 seed = cfg.seed + n - 1 if cfg.seed is not None else None
                 tasks.append(Task(spec, anim, n, cfg.out_dir / f"{name}_{anim.name}_{n}.mp4", dur, usd, seed))
@@ -142,11 +158,13 @@ def plan(cfg: Bakeoff) -> list[Task]:
 
 
 def request(cfg: Bakeoff, t: Task) -> videoapi.Request:
+    refs = t.anim.refs[:t.model.max_refs]
+    last_ok = t.model.last_frame and (t.model.refs_last_frame or not refs)
     return videoapi.Request(
-        prompt=t.anim.prompt.read_text(encoding="utf-8").strip(), image=t.anim.pose,
-        last_image=t.anim.last_frame if t.model.last_frame else None, duration=t.duration,
+        prompt=t.anim.prompt_for(t.model.name).read_text(encoding="utf-8").strip(), image=t.anim.pose,
+        last_image=t.anim.last_frame if last_ok else None, duration=t.duration,
         aspect_ratio=cfg.aspect_ratio, resolution=cfg.resolution, audio=cfg.audio,
-        negative_prompt=cfg.negative_prompt, seed=t.seed)
+        negative_prompt=cfg.negative_prompt, seed=t.seed, refs=refs)
 
 
 def _show(p: Path) -> str:
@@ -209,7 +227,8 @@ def print_plan(cfg: Bakeoff, tasks: list[Task], keys: dict, resumable: dict) -> 
           f"→ {_show(cfg.out_dir)}")
     for a in cfg.animations:
         print(f"  {a.name}: pose {a.pose.name}, prompt {a.prompt.name}"
-              + (f", último frame {a.last_frame.name}" if a.last_frame else ""))
+              + (f", último frame {a.last_frame.name}" if a.last_frame else "")
+              + (f", refs {', '.join(r.name for r in a.refs)}" if a.refs else ""))
     print(f"\n  {'modelo':22} {'proveedor':9} {'dur.':>5} {'US$/clip':>9} {'clips':>6} {'faltan':>7} {'US$':>7}")
     total = 0.0
     for name in cfg.models:
@@ -219,10 +238,18 @@ def print_plan(cfg: Bakeoff, tasks: list[Task], keys: dict, resumable: dict) -> 
         sub = sum(t.usd for t in todo)
         total += sub
         key = "" if keys.get(spec.provider) else f"  (sin {KEYS[spec.provider]})"
-        print(f"  {name:22} {spec.provider:9} {ts[0].duration:>4}s {_usd(ts[0].usd):>9} {len(ts):>6} {len(todo):>7} "
+        lo, hi = min(t.usd for t in ts), max(t.usd for t in ts)
+        per = _usd(lo) if lo == hi else f"{_usd(lo)}-{_usd(hi)}"  # con referencias el clip puede costar más
+        print(f"  {name:22} {spec.provider:9} {ts[0].duration:>4}s {per:>9} {len(ts):>6} {len(todo):>7} "
               f"{_usd(sub):>7}{key}")
         if any(a.last_frame for a in cfg.animations) and not spec.last_frame:
             print(f"  {'':22} ! no acepta último frame: va sólo el primero")
+        refs = max((len(a.refs) for a in cfg.animations), default=0)
+        if refs > spec.max_refs:
+            print(f"  {'':22} ! " + (f"acepta {spec.max_refs} referencias: van las primeras" if spec.max_refs
+                                     else "no acepta referencias: van sólo los frames"))
+        if spec.max_refs and not spec.refs_last_frame and any(a.refs and a.last_frame for a in cfg.animations):
+            print(f"  {'':22} ! con referencias no acepta último frame: va sólo el primero")
         if spec.sunset:
             left = (date.fromisoformat(spec.sunset) - date.today()).days
             print(f"  {'':22} " + (f"✗ {spec.endpoint} se apagó el {spec.sunset}" if left <= 0 else
@@ -235,11 +262,12 @@ def print_plan(cfg: Bakeoff, tasks: list[Task], keys: dict, resumable: dict) -> 
 def print_payloads(cfg: Bakeoff, tasks: list[Task]) -> None:
     seen = set()
     for t in tasks:
-        if t.model.name in seen:
-            continue
-        seen.add(t.model.name)
         req = request(cfg, t)
-        req = dataclasses.replace(req, prompt=f"<{_show(t.anim.prompt)}, {len(req.prompt)} caracteres>")
+        shape = (t.model.name, bool(req.refs))  # con referencias el pedido cambia de forma (y a veces de endpoint)
+        if shape in seen:
+            continue
+        seen.add(shape)
+        req = dataclasses.replace(req, prompt=f"<{_show(t.anim.prompt_for(t.model.name))}, {len(req.prompt)} caracteres>")
         body = t.model.build(req, _placeholder(t.model.provider))
         endpoint = t.model.endpoint_for(req)
         url = {"fal": f"{videoapi.FAL_QUEUE}/{endpoint}", "omni": videoapi.INTERACTIONS,
@@ -320,6 +348,7 @@ def execute(cfg: Bakeoff, tasks: list[Task], clients: dict, ledger: Ledger, resu
 def _record(t: Task, endpoint: str, handle: dict | None) -> dict:
     return {"clip": t.clip, "model": t.model.name, "provider": t.model.provider, "endpoint": endpoint,
             "animation": t.anim.name, "n": t.n, "seed": t.seed, "duration_s": t.duration, "usd_estimate": t.usd,
+            "refs": [r.name for r in t.anim.refs[:t.model.max_refs]],
             "status": "submitted", "handle": handle, "submitted": _now()}
 
 
@@ -431,7 +460,7 @@ def write_markdown(path: Path, cfg: Bakeoff, rows: list[dict]) -> None:
 
 
 def run(cfg_path: Path, dry_run: bool = False, yes: bool = False, models: list[str] | None = None,
-        skip_qa: bool = False, env: dict | None = None, http: videoapi.Http | None = None,
+        skip_qa: bool = False, env: dict | None = None, http: videoapi.Http | None = None, anims: list[str] | None = None,
         sleep: Callable[[float], None] = time.sleep, ask: Callable[[str], str] = input, poll_s: float = 10.0) -> int:
     cfg = load(cfg_path)
     if models:
@@ -439,6 +468,11 @@ def run(cfg_path: Path, dry_run: bool = False, yes: bool = False, models: list[s
             print(f"✗ {', '.join(unknown)} no está en models de la config")
             return 1
         cfg.models = [m for m in cfg.models if m in models]
+    if anims:
+        if unknown := [a for a in anims if a not in {x.name for x in cfg.animations}]:
+            print(f"✗ {', '.join(unknown)} no está entre las animaciones de la config")
+            return 1
+        cfg.animations = [a for a in cfg.animations if a.name in anims]
     env = os.environ if env is None else env
     keys = {p: bool(env.get(var)) for p, var in KEYS.items()}
     tasks = plan(cfg)

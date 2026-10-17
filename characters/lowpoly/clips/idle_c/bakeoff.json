@@ -1,0 +1,186 @@
+{
+  "attempts": [
+    {
+      "clip": "minimax-h3-max_idle_c_1.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/reference-to-video",
+      "animation": "idle_c",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 0.4,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "tpose_abajo.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b09-64e7-7351-abea-382ed0f243d0",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b09-64e7-7351-abea-382ed0f243d0/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b09-64e7-7351-abea-382ed0f243d0"
+      },
+      "submitted": "2026-10-17T18:04:29+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:04:46+00:00"
+    },
+    {
+      "clip": "minimax-h3-max_idle_c_2.mp4",
+      "model": "minimax-h3-max",
+      "provider": "fal",
+      "endpoint": "minimax/h3-max/reference-to-video",
+      "animation": "idle_c",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 0.4,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "tpose_abajo.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b09-6713-7190-a126-5678d10f1774",
+        "status_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b09-6713-7190-a126-5678d10f1774/status",
+        "response_url": "https://queue.fal.run/minimax/h3-max/requests/01a14b09-6713-7190-a126-5678d10f1774"
+      },
+      "submitted": "2026-10-17T18:04:29+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:04:49+00:00"
+    },
+    {
+      "clip": "kling-o3-std_idle_c_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/reference-to-video",
+      "animation": "idle_c",
+      "n": 1,
+      "seed": 7,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "tpose_abajo.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b09-6987-7b41-ad2a-2116639eb432",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b09-6987-7b41-ad2a-2116639eb432/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b09-6987-7b41-ad2a-2116639eb432"
+      },
+      "submitted": "2026-10-17T18:04:30+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:09:54+00:00"
+    },
+    {
+      "clip": "kling-o3-std_idle_c_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/reference-to-video",
+      "animation": "idle_c",
+      "n": 2,
+      "seed": 8,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [
+        "tpose_frente.png",
+        "tpose_tres_cuartos.png",
+        "tpose_espalda.png",
+        "tpose_abajo.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b09-6bb5-77a1-bdeb-ad36599fd32d",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b09-6bb5-77a1-bdeb-ad36599fd32d/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b09-6bb5-77a1-bdeb-ad36599fd32d"
+      },
+      "submitted": "2026-10-17T18:04:31+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:11:44+00:00"
+    }
+  ],
+  "qa": {
+    "minimax-h3-max_idle_c_1.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_c",
+      "n": 1,
+      "usd": 0.4,
+      "qa": "fail",
+      "drift_pct": 0.5,
+      "zoom_pct": 0.5,
+      "edge_frames": 0,
+      "pose_mad": 9.0,
+      "loop_score": 0.765,
+      "loop_quality": "aceptable",
+      "flags": [
+        "el fondo #ACB1BD no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano",
+        "el color del fondo cambia durante el clip (124.0/255)",
+        "posible corte de escena en los frames [2, 3, 4, 5, 120, 121, 122]"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "minimax-h3-max_idle_c_2.mp4": {
+      "model": "minimax-h3-max",
+      "animation": "idle_c",
+      "n": 2,
+      "usd": 0.4,
+      "qa": "fail",
+      "drift_pct": 1.8,
+      "zoom_pct": 3.8,
+      "edge_frames": 57,
+      "pose_mad": 7.98,
+      "loop_score": 1.29,
+      "loop_quality": "costura visible",
+      "flags": [
+        "el fondo #3D3B49 no es verde ni magenta: uso key por distancia en modo connected; funciona si el personaje tiene contorno y el fondo es plano",
+        "el personaje toca el borde del cuadro en 57 frames (arma o capa cortada)",
+        "el color del fondo cambia durante el clip (140.0/255)",
+        "posible corte de escena en los frames [9, 114, 115, 116]"
+      ],
+      "video": "1344×768 24 fps 124 fr"
+    },
+    "kling-o3-std_idle_c_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "idle_c",
+      "n": 1,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 4.5,
+      "zoom_pct": 0.2,
+      "edge_frames": 0,
+      "pose_mad": 1.69,
+      "loop_score": 1.096,
+      "loop_quality": "costura visible",
+      "flags": [
+        "deriva/paneo o el personaje se traslada: 4.5% del alto (la alineación saca la deriva lineal)",
+        "fondo poco plano (desvío 7.77): el key va a necesitar más tolerancia",
+        "el color del fondo cambia durante el clip (10.0/255)"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_idle_c_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "idle_c",
+      "n": 2,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 3.0,
+      "zoom_pct": 4.2,
+      "edge_frames": 0,
+      "pose_mad": 1.7,
+      "loop_score": 0.765,
+      "loop_quality": "aceptable",
+      "flags": [
+        "fondo poco plano (desvío 7.71): el key va a necesitar más tolerancia",
+        "el color del fondo cambia durante el clip (10.0/255)"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

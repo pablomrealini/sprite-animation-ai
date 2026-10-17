@@ -304,3 +304,44 @@ def test_http_transport_round_trips_json_bytes_and_errors(server, tmp_path):
     with pytest.raises(videoapi.HttpError) as e:
         http.json("POST", f"{base}/blocked", {}, {})
     assert e.value.status == 422 and videoapi.fal_error(e.value).state == "blocked"
+
+
+def _ref_req(refs=(), last=True):
+    from pathlib import Path
+    return videoapi.Request(prompt="idle", image=Path("pose.png"), last_image=Path("pose.png") if last else None,
+                            duration=5, aspect_ratio="16:9", resolution="720p", audio=False, negative_prompt=None,
+                            seed=3, refs=tuple(Path(r) for r in refs))
+
+
+def test_h3_max_sends_refs_to_reference_to_video_with_first_and_last_frame():
+    spec = videoapi.MODELS["minimax-h3-max"]
+    name = lambda p: p.name  # noqa: E731
+    plain, withrefs = _ref_req(), _ref_req(["a.png", "b.png"])
+    assert spec.endpoint_for(plain) == "minimax/h3-max/image-to-video"
+    assert "reference_image_urls" not in spec.build(plain, name)
+    body = spec.build(withrefs, name)
+    assert spec.endpoint_for(withrefs) == "minimax/h3-max/reference-to-video"
+    assert body["image_url"] == body["end_image_url"] == "pose.png"
+    assert body["reference_image_urls"] == ["a.png", "b.png"]
+    assert body["resolution"] == "768P" and body["prompt_expansion_mode"] == "disabled"
+    # 0,052/s sin referencias; 0,08/s con, más los tokens de lo que pasa de 4 imágenes cuadradas
+    assert spec.price(5, False, "720p") == 0.26
+    assert spec.price(5, False, "720p", refs=4) == 0.4
+    assert spec.price(5, False, "720p", refs=6) == round(0.4 + 2048 * 0.02 / 1000, 4)
+
+
+def test_kling_o3_groups_refs_into_elements():
+    spec = videoapi.MODELS["kling-o3-std"]
+    name = lambda p: p.name  # noqa: E731
+    plain = spec.build(_ref_req(), name)
+    assert plain["image_url"] == "pose.png" and "elements" not in plain and plain["generate_audio"] is False
+    req = _ref_req(["f.png", "q.png", "e.png", "x.png", "arma.png", "arma2.png"])
+    body = spec.build(req, name)
+    assert spec.endpoint_for(req) == "fal-ai/kling-video/o3/standard/reference-to-video"
+    assert body["start_image_url"] == body["end_image_url"] == "pose.png"
+    assert body["elements"] == [
+        {"frontal_image_url": "f.png", "reference_image_urls": ["q.png", "e.png", "x.png"]},
+        {"frontal_image_url": "arma.png", "reference_image_urls": ["arma2.png"]}]
+    with pytest.raises(ValueError, match="element"):
+        spec.build(_ref_req(["f.png", "q.png", "solo.png"][:1] + ["q.png", "e.png", "x.png", "suelta.png"]), name)
+    assert spec.price(5, False, "720p", refs=6) == spec.price(5, False, "720p") == 0.42

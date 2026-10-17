@@ -1,0 +1,174 @@
+{
+  "note": "Boca del cañón por frame de crouch_out, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+  "animation": "crouch_out",
+  "variants": {
+    "1x": {
+      "cell": {
+        "w": 499,
+        "h": 622
+      },
+      "pivot_px": {
+        "x": 249.5,
+        "y": 583.4
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "crouch_out/0000",
+          "native_frame": 95,
+          "x": 390.22,
+          "y": 465.02,
+          "dx": 140.72,
+          "dy": -118.38
+        },
+        {
+          "frame": 1,
+          "name": "crouch_out/0001",
+          "native_frame": 96,
+          "x": 390.22,
+          "y": 465.76,
+          "dx": 140.72,
+          "dy": -117.64
+        },
+        {
+          "frame": 2,
+          "name": "crouch_out/0002",
+          "native_frame": 99,
+          "x": 396.9,
+          "y": 482.09,
+          "dx": 147.4,
+          "dy": -101.31
+        },
+        {
+          "frame": 3,
+          "name": "crouch_out/0003",
+          "native_frame": 101,
+          "x": 399.13,
+          "y": 505.1,
+          "dx": 149.63,
+          "dy": -78.3
+        },
+        {
+          "frame": 4,
+          "name": "crouch_out/0004",
+          "native_frame": 103,
+          "x": 399.13,
+          "y": 505.1,
+          "dx": 149.63,
+          "dy": -78.3
+        },
+        {
+          "frame": 5,
+          "name": "crouch_out/0005",
+          "native_frame": 104,
+          "x": 399.13,
+          "y": 505.1,
+          "dx": 149.63,
+          "dy": -78.3
+        },
+        {
+          "frame": 6,
+          "name": "crouch_out/0006",
+          "native_frame": 107,
+          "x": 369.42,
+          "y": 484.31,
+          "dx": 119.92,
+          "dy": -99.09
+        },
+        {
+          "frame": 7,
+          "name": "crouch_out/0007",
+          "native_frame": 109,
+          "x": 356.06,
+          "y": 479.86,
+          "dx": 106.56,
+          "dy": -103.54
+        }
+      ]
+    },
+    "0.5x": {
+      "cell": {
+        "w": 249,
+        "h": 311
+      },
+      "pivot_px": {
+        "x": 124.5,
+        "y": 291.7
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "crouch_out/0000",
+          "native_frame": 95,
+          "x": 194.72,
+          "y": 232.51,
+          "dx": 70.22,
+          "dy": -59.19
+        },
+        {
+          "frame": 1,
+          "name": "crouch_out/0001",
+          "native_frame": 96,
+          "x": 194.72,
+          "y": 232.88,
+          "dx": 70.22,
+          "dy": -58.82
+        },
+        {
+          "frame": 2,
+          "name": "crouch_out/0002",
+          "native_frame": 99,
+          "x": 198.05,
+          "y": 241.04,
+          "dx": 73.55,
+          "dy": -50.66
+        },
+        {
+          "frame": 3,
+          "name": "crouch_out/0003",
+          "native_frame": 101,
+          "x": 199.16,
+          "y": 252.55,
+          "dx": 74.66,
+          "dy": -39.15
+        },
+        {
+          "frame": 4,
+          "name": "crouch_out/0004",
+          "native_frame": 103,
+          "x": 199.16,
+          "y": 252.55,
+          "dx": 74.66,
+          "dy": -39.15
+        },
+        {
+          "frame": 5,
+          "name": "crouch_out/0005",
+          "native_frame": 104,
+          "x": 199.16,
+          "y": 252.55,
+          "dx": 74.66,
+          "dy": -39.15
+        },
+        {
+          "frame": 6,
+          "name": "crouch_out/0006",
+          "native_frame": 107,
+          "x": 184.34,
+          "y": 242.16,
+          "dx": 59.84,
+          "dy": -49.54
+        },
+        {
+          "frame": 7,
+          "name": "crouch_out/0007",
+          "native_frame": 109,
+          "x": 177.67,
+          "y": 239.93,
+          "dx": 53.17,
+          "dy": -51.77
+        }
+      ]
+    }
+  }
+}

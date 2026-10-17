@@ -1,0 +1,59 @@
+{
+ "canvas": 1024,
+ "alto_frente_px": 766.4,
+ "escala_por_hoja": {
+  "tpose": 1.5297113752122242,
+  "armado": 1.323636267670681,
+  "arma": 1.149234693877551
+ },
+ "tama\u00f1os": {
+  "tpose_frente": [
+   901,
+   766
+  ],
+  "tpose_tres_cuartos": [
+   797,
+   768
+  ],
+  "tpose_espalda": [
+   893,
+   769
+  ],
+  "tpose_abajo": [
+   895,
+   760
+  ],
+  "armado_frente": [
+   484,
+   766
+  ],
+  "armado_tres_cuartos": [
+   568,
+   768
+  ],
+  "armado_espalda": [
+   626,
+   744
+  ],
+  "armado_abajo": [
+   635,
+   727
+  ],
+  "arma_frente": [
+   318,
+   545
+  ],
+  "arma_lateral": [
+   885,
+   564
+  ],
+  "arma_atras": [
+   319,
+   550
+  ],
+  "arma_tres_cuartos": [
+   901,
+   552
+  ]
+ }
+}

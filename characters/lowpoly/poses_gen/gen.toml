@@ -1,0 +1,74 @@
+# Pose de arranque sin arma para la estrategia C del bake-off del idle: el personaje con la mano en pose de agarre
+# (sin pistola) y el arma como sprite aparte, pegada a la mano en cada cuadro.
+# Se edita desde la vista de perfil con el cinturón rojo (poses/perfil_cinturon_rojo_concept.png: recortada de
+# refs/costado_con_arma.png y pintada con cinturon_rojo.py).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images characters/lowpoly/poses_gen/gen.toml --dry-run
+# La elegida se pasa por `spritepipe pad-pose ... --bg C42D7D` (magenta apagado) antes de mandarla al video.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1"]
+images_per_asset = 2
+max_usd = 1
+max_parallel = 2
+key_color = "#00FF00"     # para el modelo sin alfa (Nano Banana); sin arma, el personaje no tiene verde ni cian
+quality = "high"
+resolution = "2K"
+seed = 7
+ref_bg = "#C0C3CC"        # el gris de las hojas low-poly: sobre blanco, el casco se pierde
+
+[styles]
+same = """
+Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same \
+design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio \
+lighting. Full body, side view facing right, the same pose, size and framing as the reference.
+"""
+no_text = "No text, letters, numbers or logos."
+
+[[asset]]
+name = "sin_arma"         # primer cuadro de la estrategia C
+style = ["same", "no_text"]
+prompt = """
+Remove the laser pistol completely and change nothing else. The right arm stays exactly where it is, bent \
+forward at chest height, and the right glove keeps exactly the same closed gripping shape as if it were still \
+holding the pistol grip: the fingers curled into a loose fist around an empty space, the thumb resting on top, \
+the fist pointing forward to the right. The hand is empty: no gun, no object, no glow. The left arm, the body, \
+the helmet and the legs stay identical. Matte flat colors with no shine and no reflections.
+"""
+refs = ["../poses/perfil_cinturon_rojo_concept.png"]
+ref_role = "character"
+aspect = "2:3"
+alpha = "cutout"
+
+[[asset]]
+name = "correr"           # primer y último cuadro del run (correr en el lugar, loop cerrado)
+style = ["same", "no_text"]
+prompt = """
+Change only the pose into a running stride, mid-step, seen exactly from the side: the front leg reaching forward \
+with the heel touching the ground, the back leg pushed back with only the toe touching the ground, the legs \
+clearly separated, both boots pointing to the right, the torso leaning slightly forward. The right hand keeps \
+holding the same laser pistol forward at chest height, pointing straight to the right; the left hand is a fist \
+at chest height. Same helmet, same red belt, same proportions and the same size as the reference. Matte flat \
+colors with no shine and no reflections.
+"""
+refs = ["../poses/perfil_cinturon_rojo_concept.png"]
+ref_role = "character"
+aspect = "2:3"
+alpha = "cutout"
+
+[[asset]]
+name = "colgado_dos"      # primer cuadro de la subida y del colgado a dos manos (climb_frames.py arma los 16:9)
+style = ["same", "no_text"]
+prompt = """
+Change only the pose: he hangs from the top edge of an invisible ledge with both hands. Both arms are raised above \
+the helmet and both gloves grip the edge side by side, at the same height, the fingers curled over the top of the \
+edge. The laser pistol stays in his right hand, lying flat along the top of the edge and pointing to the right. \
+The body hangs straight down below the hands, close to an invisible wall in front of him: the chest, the knees and \
+the tips of both boots almost touch that wall, the legs together and relaxed, the boots pointing to the right. Same \
+helmet, same red belt, same proportions. Nothing is drawn: no ledge, no wall, no platform, no object and no shadow. \
+Matte flat colors with no shine and no reflections.
+"""
+refs = ["../poses/perfil_cinturon_rojo_concept.png"]
+ref_role = "character"
+aspect = "2:3"
+alpha = "cutout"

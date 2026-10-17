@@ -1,0 +1,82 @@
+{
+  "attempts": [
+    {
+      "clip": "kling-o3-std_correr_a_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "correr_a",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b21-eca8-7d00-be8b-ac7ffdff8023",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b21-eca8-7d00-be8b-ac7ffdff8023/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b21-eca8-7d00-be8b-ac7ffdff8023"
+      },
+      "submitted": "2026-10-17T18:31:16+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:33:23+00:00"
+    },
+    {
+      "clip": "kling-o3-std_correr_a_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "correr_a",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b21-eecc-7b80-992f-925d2dfaa515",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b21-eecc-7b80-992f-925d2dfaa515/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b21-eecc-7b80-992f-925d2dfaa515"
+      },
+      "submitted": "2026-10-17T18:31:17+00:00",
+      "detail": "",
+      "finished": "2026-10-17T18:33:37+00:00"
+    }
+  ],
+  "qa": {
+    "kling-o3-std_correr_a_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "correr_a",
+      "n": 1,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 0.5,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 2.06,
+      "loop_score": 0.307,
+      "loop_quality": "buena",
+      "flags": [
+        "fondo poco plano (desvío 9.08): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_correr_a_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "correr_a",
+      "n": 2,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 0.5,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 2.03,
+      "loop_score": 0.147,
+      "loop_quality": "buena",
+      "flags": [
+        "fondo poco plano (desvío 9.1): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "note": "Boca del cañón por frame de run_gun, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+  "animation": "run_gun",
+  "variants": {
+    "1x": {
+      "cell": {
+        "w": 499,
+        "h": 622
+      },
+      "pivot_px": {
+        "x": 249.5,
+        "y": 583.4
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "run_gun/0000",
+          "native_frame": 14,
+          "x": 355.31,
+          "y": 451.66,
+          "dx": 105.81,
+          "dy": -131.74
+        },
+        {
+          "frame": 1,
+          "name": "run_gun/0001",
+          "native_frame": 16,
+          "x": 354.57,
+          "y": 465.02,
+          "dx": 105.07,
+          "dy": -118.38
+        },
+        {
+          "frame": 2,
+          "name": "run_gun/0002",
+          "native_frame": 18,
+          "x": 352.34,
+          "y": 465.02,
+          "dx": 102.84,
+          "dy": -118.38
+        },
+        {
+          "frame": 3,
+          "name": "run_gun/0003",
+          "native_frame": 20,
+          "x": 352.34,
+          "y": 465.02,
+          "dx": 102.84,
+          "dy": -118.38
+        },
+        {
+          "frame": 4,
+          "name": "run_gun/0004",
+          "native_frame": 22,
+          "x": 347.89,
+          "y": 455.37,
+          "dx": 98.39,
+          "dy": -128.03
+        },
+        {
+          "frame": 5,
+          "name": "run_gun/0005",
+          "native_frame": 24,
+          "x": 352.34,
+          "y": 471.7,
+          "dx": 102.84,
+          "dy": -111.7
+        },
+        {
+          "frame": 6,
+          "name": "run_gun/0006",
+          "native_frame": 26,
+          "x": 356.06,
+          "y": 453.14,
+          "dx": 106.56,
+          "dy": -130.26
+        },
+        {
+          "frame": 7,
+          "name": "run_gun/0007",
+          "native_frame": 28,
+          "x": 356.06,
+          "y": 453.88,
+          "dx": 106.56,
+          "dy": -129.52
+        },
+        {
+          "frame": 8,
+          "name": "run_gun/0008",
+          "native_frame": 30,
+          "x": 353.83,
+          "y": 464.27,
+          "dx": 104.33,
+          "dy": -119.13
+        },
+        {
+          "frame": 9,
+          "name": "run_gun/0009",
+          "native_frame": 32,
+          "x": 352.34,
+          "y": 462.05,
+          "dx": 102.84,
+          "dy": -121.35
+        },
+        {
+          "frame": 10,
+          "name": "run_gun/0010",
+          "native_frame": 34,
+          "x": 352.34,
+          "y": 462.05,
+          "dx": 102.84,
+          "dy": -121.35
+        },
+        {
+          "frame": 11,
+          "name": "run_gun/0011",
+          "native_frame": 36,
+          "x": 347.89,
+          "y": 457.59,
+          "dx": 98.39,
+          "dy": -125.81
+        },
+        {
+          "frame": 12,
+          "name": "run_gun/0012",
+          "native_frame": 38,
+          "x": 351.6,
+          "y": 469.47,
+          "dx": 102.1,
+          "dy": -113.93
+        },
+        {
+          "frame": 13,
+          "name": "run_gun/0013",
+          "native_frame": 40,
+          "x": 356.06,
+          "y": 450.17,
+          "dx": 106.56,
+          "dy": -133.23
+        }
+      ]
+    },
+    "0.5x": {
+      "cell": {
+        "w": 249,
+        "h": 311
+      },
+      "pivot_px": {
+        "x": 124.5,
+        "y": 291.7
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "run_gun/0000",
+          "native_frame": 14,
+          "x": 177.3,
+          "y": 225.83,
+          "dx": 52.8,
+          "dy": -65.87
+        },
+        {
+          "frame": 1,
+          "name": "run_gun/0001",
+          "native_frame": 16,
+          "x": 176.93,
+          "y": 232.51,
+          "dx": 52.43,
+          "dy": -59.19
+        },
+        {
+          "frame": 2,
+          "name": "run_gun/0002",
+          "native_frame": 18,
+          "x": 175.82,
+          "y": 232.51,
+          "dx": 51.32,
+          "dy": -59.19
+        },
+        {
+          "frame": 3,
+          "name": "run_gun/0003",
+          "native_frame": 20,
+          "x": 175.82,
+          "y": 232.51,
+          "dx": 51.32,
+          "dy": -59.19
+        },
+        {
+          "frame": 4,
+          "name": "run_gun/0004",
+          "native_frame": 22,
+          "x": 173.6,
+          "y": 227.68,
+          "dx": 49.1,
+          "dy": -64.02
+        },
+        {
+          "frame": 5,
+          "name": "run_gun/0005",
+          "native_frame": 24,
+          "x": 175.82,
+          "y": 235.85,
+          "dx": 51.32,
+          "dy": -55.85
+        },
+        {
+          "frame": 6,
+          "name": "run_gun/0006",
+          "native_frame": 26,
+          "x": 177.67,
+          "y": 226.57,
+          "dx": 53.17,
+          "dy": -65.13
+        },
+        {
+          "frame": 7,
+          "name": "run_gun/0007",
+          "native_frame": 28,
+          "x": 177.67,
+          "y": 226.94,
+          "dx": 53.17,
+          "dy": -64.76
+        },
+        {
+          "frame": 8,
+          "name": "run_gun/0008",
+          "native_frame": 30,
+          "x": 176.56,
+          "y": 232.14,
+          "dx": 52.06,
+          "dy": -59.56
+        },
+        {
+          "frame": 9,
+          "name": "run_gun/0009",
+          "native_frame": 32,
+          "x": 175.82,
+          "y": 231.02,
+          "dx": 51.32,
+          "dy": -60.68
+        },
+        {
+          "frame": 10,
+          "name": "run_gun/0010",
+          "native_frame": 34,
+          "x": 175.82,
+          "y": 231.02,
+          "dx": 51.32,
+          "dy": -60.68
+        },
+        {
+          "frame": 11,
+          "name": "run_gun/0011",
+          "native_frame": 36,
+          "x": 173.6,
+          "y": 228.8,
+          "dx": 49.1,
+          "dy": -62.9
+        },
+        {
+          "frame": 12,
+          "name": "run_gun/0012",
+          "native_frame": 38,
+          "x": 175.45,
+          "y": 234.73,
+          "dx": 50.95,
+          "dy": -56.97
+        },
+        {
+          "frame": 13,
+          "name": "run_gun/0013",
+          "native_frame": 40,
+          "x": 177.67,
+          "y": 225.09,
+          "dx": 53.17,
+          "dy": -66.61
+        }
+      ]
+    }
+  }
+}

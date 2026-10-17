@@ -1,0 +1,192 @@
+{
+  "note": "Boca del cañón por frame de shoot2h_in, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+  "animation": "shoot2h_in",
+  "variants": {
+    "1x": {
+      "cell": {
+        "w": 499,
+        "h": 622
+      },
+      "pivot_px": {
+        "x": 249.5,
+        "y": 583.4
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "shoot2h_in/0000",
+          "native_frame": 7,
+          "x": 358.28,
+          "y": 478.38,
+          "dx": 108.78,
+          "dy": -105.02
+        },
+        {
+          "frame": 1,
+          "name": "shoot2h_in/0001",
+          "native_frame": 8,
+          "x": 362.74,
+          "y": 476.15,
+          "dx": 113.24,
+          "dy": -107.25
+        },
+        {
+          "frame": 2,
+          "name": "shoot2h_in/0002",
+          "native_frame": 11,
+          "x": 373.88,
+          "y": 459.82,
+          "dx": 124.38,
+          "dy": -123.58
+        },
+        {
+          "frame": 3,
+          "name": "shoot2h_in/0003",
+          "native_frame": 13,
+          "x": 373.88,
+          "y": 452.4,
+          "dx": 124.38,
+          "dy": -131.0
+        },
+        {
+          "frame": 4,
+          "name": "shoot2h_in/0004",
+          "native_frame": 15,
+          "x": 373.14,
+          "y": 451.66,
+          "dx": 123.64,
+          "dy": -131.74
+        },
+        {
+          "frame": 5,
+          "name": "shoot2h_in/0005",
+          "native_frame": 17,
+          "x": 373.88,
+          "y": 451.66,
+          "dx": 124.38,
+          "dy": -131.74
+        },
+        {
+          "frame": 6,
+          "name": "shoot2h_in/0006",
+          "native_frame": 19,
+          "x": 373.88,
+          "y": 451.66,
+          "dx": 124.38,
+          "dy": -131.74
+        },
+        {
+          "frame": 7,
+          "name": "shoot2h_in/0007",
+          "native_frame": 20,
+          "x": 373.88,
+          "y": 451.66,
+          "dx": 124.38,
+          "dy": -131.74
+        },
+        {
+          "frame": 8,
+          "name": "shoot2h_in/0008",
+          "native_frame": 23,
+          "x": 375.36,
+          "y": 449.43,
+          "dx": 125.86,
+          "dy": -133.97
+        }
+      ]
+    },
+    "0.5x": {
+      "cell": {
+        "w": 249,
+        "h": 311
+      },
+      "pivot_px": {
+        "x": 124.5,
+        "y": 291.7
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "shoot2h_in/0000",
+          "native_frame": 7,
+          "x": 178.78,
+          "y": 239.19,
+          "dx": 54.28,
+          "dy": -52.51
+        },
+        {
+          "frame": 1,
+          "name": "shoot2h_in/0001",
+          "native_frame": 8,
+          "x": 181.01,
+          "y": 238.07,
+          "dx": 56.51,
+          "dy": -53.63
+        },
+        {
+          "frame": 2,
+          "name": "shoot2h_in/0002",
+          "native_frame": 11,
+          "x": 186.56,
+          "y": 229.91,
+          "dx": 62.06,
+          "dy": -61.79
+        },
+        {
+          "frame": 3,
+          "name": "shoot2h_in/0003",
+          "native_frame": 13,
+          "x": 186.56,
+          "y": 226.2,
+          "dx": 62.06,
+          "dy": -65.5
+        },
+        {
+          "frame": 4,
+          "name": "shoot2h_in/0004",
+          "native_frame": 15,
+          "x": 186.19,
+          "y": 225.83,
+          "dx": 61.69,
+          "dy": -65.87
+        },
+        {
+          "frame": 5,
+          "name": "shoot2h_in/0005",
+          "native_frame": 17,
+          "x": 186.56,
+          "y": 225.83,
+          "dx": 62.06,
+          "dy": -65.87
+        },
+        {
+          "frame": 6,
+          "name": "shoot2h_in/0006",
+          "native_frame": 19,
+          "x": 186.56,
+          "y": 225.83,
+          "dx": 62.06,
+          "dy": -65.87
+        },
+        {
+          "frame": 7,
+          "name": "shoot2h_in/0007",
+          "native_frame": 20,
+          "x": 186.56,
+          "y": 225.83,
+          "dx": 62.06,
+          "dy": -65.87
+        },
+        {
+          "frame": 8,
+          "name": "shoot2h_in/0008",
+          "native_frame": 23,
+          "x": 187.31,
+          "y": 224.71,
+          "dx": 62.81,
+          "dy": -66.99
+        }
+      ]
+    }
+  }
+}

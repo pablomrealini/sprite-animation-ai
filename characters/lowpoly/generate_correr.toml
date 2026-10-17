@@ -1,0 +1,25 @@
+# Correr del personaje low-poly, con la receta que ganó en el idle (generate_idle.toml): Kling O3 standard con sólo
+# el primer cuadro (sin referencias), y el último cuadro igual al primero para que el loop cierre (correr en el lugar).
+# La pose de zancada sale de poses_gen/ (gen-images, asset correr) y se pasa a 16:9 con el casco del mismo tamaño
+# que en la pose del idle (el personaje no cambia de tamaño entre animaciones).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_correr.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 5
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 2
+max_parallel = 2
+game_fps = 12
+out_dir = "clips/correr"
+
+[[animation]]
+name = "correr_a"
+pose = "poses/correr_dullmagenta_16x9.png"
+prompt = "prompts/correr_a.txt"
+kind = "cycle"
+last_frame = true

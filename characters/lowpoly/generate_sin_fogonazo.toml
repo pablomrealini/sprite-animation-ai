@@ -1,0 +1,49 @@
+# Prueba: que Kling anime el disparo sin dibujar fogonazo ni rayo (el fogonazo lo pone el juego). En el set, Kling
+# disparó en casi todos los clips con arma, aunque el prompt dijera que no, y limpiarlo después deja restos.
+# Dos variantes, con las dos animaciones donde más se nota (disparo y salto disparando), dos tomas cada una:
+#   P   el prompt sin "fire" ni "shot": describe el retroceso de apretar el gatillo y que el arma es una utilería
+#       apagada que nunca se ilumina ni suelta nada (prompts/*_sin_fogonazo.txt)
+#   P+D lo mismo, con el disco cian de la boca pintado del gris del arma en la pose (poses/*_apagada_*): el disco
+#       brillante puede ser lo que le dice al modelo "esto es un láser"
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_sin_fogonazo.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 5
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 4
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/sin_fogonazo"
+
+[[animation]]
+name = "shoot_p"
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/shoot_sin_fogonazo.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "shoot_pd"
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+prompt = "prompts/shoot_sin_fogonazo.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "jump_shoot_p"
+pose = "poses/salto_dullmagenta_16x9.png"
+prompt = "prompts/jump_shoot_sin_fogonazo.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "jump_shoot_pd"
+pose = "poses/salto_apagada_dullmagenta_16x9.png"
+prompt = "prompts/jump_shoot_sin_fogonazo.txt"
+kind = "oneshot"
+last_frame = true

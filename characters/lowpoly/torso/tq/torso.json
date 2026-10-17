@@ -1,0 +1,2084 @@
+{
+ "pose": "poses/tq_dullmagenta_16x9.png",
+ "box": [
+  785,
+  478,
+  1005,
+  645
+ ],
+ "hoja": "refs/vistas_tpose_cinturon_rojo_alfa.png",
+ "clips": [
+  {
+   "clip": "clips/idle/minimax-h3-max_idle_b_tq_1.mp4",
+   "frames": 124,
+   "size": [
+    1344,
+    768
+   ],
+   "box_px": [
+    550,
+    340,
+    704,
+    459
+   ],
+   "frame0_mad": 7.7,
+   "de_median": 26.1,
+   "de_p95": 26.4,
+   "changed_median": 0.4634,
+   "changed_p95": 0.4763,
+   "max_shift_px": 34,
+   "move_p95": 48.6,
+   "move_max": 49.3,
+   "alien_pose": 0.0018,
+   "alien_median": 0.0,
+   "alien_p95": 0.0,
+   "per_frame": [
+    {
+     "frame": 0,
+     "dx": 0,
+     "dy": 0,
+     "de": 0.0,
+     "changed": 0.0,
+     "alien": 0.001
+    },
+    {
+     "frame": 1,
+     "dx": -14,
+     "dy": 6,
+     "de": 20.219,
+     "changed": 0.357,
+     "alien": 0.003
+    },
+    {
+     "frame": 2,
+     "dx": -24,
+     "dy": 11,
+     "de": 25.325,
+     "changed": 0.46,
+     "alien": 0.008
+    },
+    {
+     "frame": 3,
+     "dx": -26,
+     "dy": 12,
+     "de": 25.838,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 4,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.101,
+     "changed": 0.469,
+     "alien": 0.0
+    },
+    {
+     "frame": 5,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.199,
+     "changed": 0.467,
+     "alien": 0.0
+    },
+    {
+     "frame": 6,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.201,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 7,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.203,
+     "changed": 0.467,
+     "alien": 0.0
+    },
+    {
+     "frame": 8,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.228,
+     "changed": 0.467,
+     "alien": 0.0
+    },
+    {
+     "frame": 9,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.183,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 10,
+     "dx": -28,
+     "dy": 13,
+     "de": 26.19,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 11,
+     "dx": -28,
+     "dy": 13,
+     "de": 26.209,
+     "changed": 0.467,
+     "alien": 0.0
+    },
+    {
+     "frame": 12,
+     "dx": -28,
+     "dy": 13,
+     "de": 26.17,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 13,
+     "dx": -28,
+     "dy": 13,
+     "de": 26.141,
+     "changed": 0.461,
+     "alien": 0.0
+    },
+    {
+     "frame": 14,
+     "dx": -28,
+     "dy": 13,
+     "de": 26.164,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 15,
+     "dx": -28,
+     "dy": 13,
+     "de": 26.171,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 16,
+     "dx": -28,
+     "dy": 13,
+     "de": 26.176,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 17,
+     "dx": -28,
+     "dy": 12,
+     "de": 26.047,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 18,
+     "dx": -29,
+     "dy": 10,
+     "de": 26.035,
+     "changed": 0.468,
+     "alien": 0.0
+    },
+    {
+     "frame": 19,
+     "dx": -30,
+     "dy": 10,
+     "de": 25.885,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 20,
+     "dx": -29,
+     "dy": 9,
+     "de": 25.901,
+     "changed": 0.471,
+     "alien": 0.0
+    },
+    {
+     "frame": 21,
+     "dx": -28,
+     "dy": 10,
+     "de": 25.844,
+     "changed": 0.469,
+     "alien": 0.0
+    },
+    {
+     "frame": 22,
+     "dx": -25,
+     "dy": 11,
+     "de": 26.105,
+     "changed": 0.477,
+     "alien": 0.0
+    },
+    {
+     "frame": 23,
+     "dx": -24,
+     "dy": 13,
+     "de": 26.247,
+     "changed": 0.477,
+     "alien": 0.0
+    },
+    {
+     "frame": 24,
+     "dx": -23,
+     "dy": 15,
+     "de": 26.552,
+     "changed": 0.478,
+     "alien": 0.0
+    },
+    {
+     "frame": 25,
+     "dx": -22,
+     "dy": 17,
+     "de": 26.808,
+     "changed": 0.484,
+     "alien": 0.0
+    },
+    {
+     "frame": 26,
+     "dx": -22,
+     "dy": 20,
+     "de": 26.974,
+     "changed": 0.485,
+     "alien": 0.0
+    },
+    {
+     "frame": 27,
+     "dx": -22,
+     "dy": 22,
+     "de": 26.925,
+     "changed": 0.483,
+     "alien": 0.0
+    },
+    {
+     "frame": 28,
+     "dx": -22,
+     "dy": 23,
+     "de": 26.868,
+     "changed": 0.481,
+     "alien": 0.0
+    },
+    {
+     "frame": 29,
+     "dx": -23,
+     "dy": 23,
+     "de": 26.607,
+     "changed": 0.472,
+     "alien": 0.0
+    },
+    {
+     "frame": 30,
+     "dx": -23,
+     "dy": 23,
+     "de": 26.403,
+     "changed": 0.461,
+     "alien": 0.0
+    },
+    {
+     "frame": 31,
+     "dx": -23,
+     "dy": 22,
+     "de": 26.354,
+     "changed": 0.457,
+     "alien": 0.0
+    },
+    {
+     "frame": 32,
+     "dx": -24,
+     "dy": 20,
+     "de": 26.314,
+     "changed": 0.457,
+     "alien": 0.0
+    },
+    {
+     "frame": 33,
+     "dx": -25,
+     "dy": 18,
+     "de": 26.161,
+     "changed": 0.457,
+     "alien": 0.0
+    },
+    {
+     "frame": 34,
+     "dx": -26,
+     "dy": 15,
+     "de": 26.001,
+     "changed": 0.457,
+     "alien": 0.0
+    },
+    {
+     "frame": 35,
+     "dx": -27,
+     "dy": 13,
+     "de": 25.798,
+     "changed": 0.449,
+     "alien": 0.0
+    },
+    {
+     "frame": 36,
+     "dx": -29,
+     "dy": 11,
+     "de": 25.498,
+     "changed": 0.446,
+     "alien": 0.0
+    },
+    {
+     "frame": 37,
+     "dx": -30,
+     "dy": 8,
+     "de": 25.325,
+     "changed": 0.444,
+     "alien": 0.0
+    },
+    {
+     "frame": 38,
+     "dx": -32,
+     "dy": 5,
+     "de": 25.154,
+     "changed": 0.441,
+     "alien": 0.0
+    },
+    {
+     "frame": 39,
+     "dx": -33,
+     "dy": 3,
+     "de": 25.146,
+     "changed": 0.441,
+     "alien": 0.0
+    },
+    {
+     "frame": 40,
+     "dx": -33,
+     "dy": 2,
+     "de": 25.323,
+     "changed": 0.451,
+     "alien": 0.0
+    },
+    {
+     "frame": 41,
+     "dx": -34,
+     "dy": 1,
+     "de": 25.5,
+     "changed": 0.457,
+     "alien": 0.0
+    },
+    {
+     "frame": 42,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.531,
+     "changed": 0.454,
+     "alien": 0.0
+    },
+    {
+     "frame": 43,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.473,
+     "changed": 0.453,
+     "alien": 0.0
+    },
+    {
+     "frame": 44,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.51,
+     "changed": 0.452,
+     "alien": 0.0
+    },
+    {
+     "frame": 45,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.529,
+     "changed": 0.452,
+     "alien": 0.0
+    },
+    {
+     "frame": 46,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.546,
+     "changed": 0.453,
+     "alien": 0.0
+    },
+    {
+     "frame": 47,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.563,
+     "changed": 0.454,
+     "alien": 0.0
+    },
+    {
+     "frame": 48,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.507,
+     "changed": 0.455,
+     "alien": 0.0
+    },
+    {
+     "frame": 49,
+     "dx": -34,
+     "dy": 0,
+     "de": 25.504,
+     "changed": 0.456,
+     "alien": 0.0
+    },
+    {
+     "frame": 50,
+     "dx": -34,
+     "dy": 1,
+     "de": 25.509,
+     "changed": 0.458,
+     "alien": 0.0
+    },
+    {
+     "frame": 51,
+     "dx": -34,
+     "dy": 2,
+     "de": 25.614,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 52,
+     "dx": -33,
+     "dy": 3,
+     "de": 25.668,
+     "changed": 0.468,
+     "alien": 0.0
+    },
+    {
+     "frame": 53,
+     "dx": -33,
+     "dy": 4,
+     "de": 25.78,
+     "changed": 0.469,
+     "alien": 0.0
+    },
+    {
+     "frame": 54,
+     "dx": -32,
+     "dy": 7,
+     "de": 25.83,
+     "changed": 0.47,
+     "alien": 0.0
+    },
+    {
+     "frame": 55,
+     "dx": -32,
+     "dy": 8,
+     "de": 25.98,
+     "changed": 0.474,
+     "alien": 0.0
+    },
+    {
+     "frame": 56,
+     "dx": -31,
+     "dy": 10,
+     "de": 26.013,
+     "changed": 0.471,
+     "alien": 0.0
+    },
+    {
+     "frame": 57,
+     "dx": -31,
+     "dy": 12,
+     "de": 26.125,
+     "changed": 0.473,
+     "alien": 0.0
+    },
+    {
+     "frame": 58,
+     "dx": -30,
+     "dy": 14,
+     "de": 26.226,
+     "changed": 0.473,
+     "alien": 0.0
+    },
+    {
+     "frame": 59,
+     "dx": -30,
+     "dy": 16,
+     "de": 26.179,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 60,
+     "dx": -30,
+     "dy": 17,
+     "de": 26.136,
+     "changed": 0.465,
+     "alien": 0.0
+    },
+    {
+     "frame": 61,
+     "dx": -29,
+     "dy": 18,
+     "de": 26.16,
+     "changed": 0.465,
+     "alien": 0.0
+    },
+    {
+     "frame": 62,
+     "dx": -29,
+     "dy": 18,
+     "de": 26.232,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 63,
+     "dx": -29,
+     "dy": 19,
+     "de": 26.19,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 64,
+     "dx": -28,
+     "dy": 19,
+     "de": 26.196,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 65,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.253,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 66,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.221,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 67,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.198,
+     "changed": 0.46,
+     "alien": 0.0
+    },
+    {
+     "frame": 68,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.153,
+     "changed": 0.458,
+     "alien": 0.0
+    },
+    {
+     "frame": 69,
+     "dx": -27,
+     "dy": 17,
+     "de": 26.102,
+     "changed": 0.457,
+     "alien": 0.0
+    },
+    {
+     "frame": 70,
+     "dx": -27,
+     "dy": 16,
+     "de": 26.063,
+     "changed": 0.456,
+     "alien": 0.0
+    },
+    {
+     "frame": 71,
+     "dx": -27,
+     "dy": 15,
+     "de": 26.086,
+     "changed": 0.454,
+     "alien": 0.0
+    },
+    {
+     "frame": 72,
+     "dx": -27,
+     "dy": 14,
+     "de": 26.085,
+     "changed": 0.455,
+     "alien": 0.0
+    },
+    {
+     "frame": 73,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.108,
+     "changed": 0.454,
+     "alien": 0.0
+    },
+    {
+     "frame": 74,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.087,
+     "changed": 0.455,
+     "alien": 0.0
+    },
+    {
+     "frame": 75,
+     "dx": -27,
+     "dy": 12,
+     "de": 26.073,
+     "changed": 0.458,
+     "alien": 0.0
+    },
+    {
+     "frame": 76,
+     "dx": -27,
+     "dy": 11,
+     "de": 26.04,
+     "changed": 0.456,
+     "alien": 0.0
+    },
+    {
+     "frame": 77,
+     "dx": -27,
+     "dy": 10,
+     "de": 26.043,
+     "changed": 0.456,
+     "alien": 0.0
+    },
+    {
+     "frame": 78,
+     "dx": -28,
+     "dy": 10,
+     "de": 25.988,
+     "changed": 0.458,
+     "alien": 0.0
+    },
+    {
+     "frame": 79,
+     "dx": -28,
+     "dy": 9,
+     "de": 26.03,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 80,
+     "dx": -28,
+     "dy": 9,
+     "de": 25.945,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 81,
+     "dx": -28,
+     "dy": 9,
+     "de": 25.967,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 82,
+     "dx": -28,
+     "dy": 8,
+     "de": 25.965,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 83,
+     "dx": -28,
+     "dy": 8,
+     "de": 25.927,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 84,
+     "dx": -28,
+     "dy": 8,
+     "de": 25.923,
+     "changed": 0.461,
+     "alien": 0.0
+    },
+    {
+     "frame": 85,
+     "dx": -28,
+     "dy": 9,
+     "de": 25.941,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 86,
+     "dx": -29,
+     "dy": 9,
+     "de": 25.964,
+     "changed": 0.47,
+     "alien": 0.0
+    },
+    {
+     "frame": 87,
+     "dx": -29,
+     "dy": 10,
+     "de": 25.956,
+     "changed": 0.468,
+     "alien": 0.0
+    },
+    {
+     "frame": 88,
+     "dx": -29,
+     "dy": 11,
+     "de": 25.965,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 89,
+     "dx": -29,
+     "dy": 11,
+     "de": 26.094,
+     "changed": 0.471,
+     "alien": 0.0
+    },
+    {
+     "frame": 90,
+     "dx": -29,
+     "dy": 12,
+     "de": 26.154,
+     "changed": 0.474,
+     "alien": 0.0
+    },
+    {
+     "frame": 91,
+     "dx": -29,
+     "dy": 13,
+     "de": 26.174,
+     "changed": 0.473,
+     "alien": 0.0
+    },
+    {
+     "frame": 92,
+     "dx": -29,
+     "dy": 14,
+     "de": 26.172,
+     "changed": 0.473,
+     "alien": 0.0
+    },
+    {
+     "frame": 93,
+     "dx": -29,
+     "dy": 15,
+     "de": 26.165,
+     "changed": 0.472,
+     "alien": 0.0
+    },
+    {
+     "frame": 94,
+     "dx": -29,
+     "dy": 16,
+     "de": 26.147,
+     "changed": 0.469,
+     "alien": 0.0
+    },
+    {
+     "frame": 95,
+     "dx": -29,
+     "dy": 17,
+     "de": 26.154,
+     "changed": 0.469,
+     "alien": 0.0
+    },
+    {
+     "frame": 96,
+     "dx": -29,
+     "dy": 17,
+     "de": 26.18,
+     "changed": 0.47,
+     "alien": 0.0
+    },
+    {
+     "frame": 97,
+     "dx": -29,
+     "dy": 18,
+     "de": 26.204,
+     "changed": 0.467,
+     "alien": 0.0
+    },
+    {
+     "frame": 98,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.271,
+     "changed": 0.471,
+     "alien": 0.0
+    },
+    {
+     "frame": 99,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.281,
+     "changed": 0.472,
+     "alien": 0.0
+    },
+    {
+     "frame": 100,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.341,
+     "changed": 0.472,
+     "alien": 0.0
+    },
+    {
+     "frame": 101,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.324,
+     "changed": 0.47,
+     "alien": 0.0
+    },
+    {
+     "frame": 102,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.283,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 103,
+     "dx": -28,
+     "dy": 18,
+     "de": 26.225,
+     "changed": 0.461,
+     "alien": 0.0
+    },
+    {
+     "frame": 104,
+     "dx": -28,
+     "dy": 17,
+     "de": 26.207,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 105,
+     "dx": -28,
+     "dy": 17,
+     "de": 26.195,
+     "changed": 0.46,
+     "alien": 0.0
+    },
+    {
+     "frame": 106,
+     "dx": -28,
+     "dy": 16,
+     "de": 26.18,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 107,
+     "dx": -27,
+     "dy": 15,
+     "de": 26.113,
+     "changed": 0.46,
+     "alien": 0.0
+    },
+    {
+     "frame": 108,
+     "dx": -27,
+     "dy": 14,
+     "de": 26.14,
+     "changed": 0.46,
+     "alien": 0.0
+    },
+    {
+     "frame": 109,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.197,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 110,
+     "dx": -27,
+     "dy": 12,
+     "de": 26.183,
+     "changed": 0.464,
+     "alien": 0.0
+    },
+    {
+     "frame": 111,
+     "dx": -27,
+     "dy": 12,
+     "de": 26.112,
+     "changed": 0.459,
+     "alien": 0.0
+    },
+    {
+     "frame": 112,
+     "dx": -27,
+     "dy": 11,
+     "de": 26.126,
+     "changed": 0.461,
+     "alien": 0.0
+    },
+    {
+     "frame": 113,
+     "dx": -27,
+     "dy": 11,
+     "de": 26.1,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 114,
+     "dx": -27,
+     "dy": 10,
+     "de": 26.104,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 115,
+     "dx": -27,
+     "dy": 10,
+     "de": 26.104,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 116,
+     "dx": -27,
+     "dy": 10,
+     "de": 26.074,
+     "changed": 0.463,
+     "alien": 0.0
+    },
+    {
+     "frame": 117,
+     "dx": -28,
+     "dy": 10,
+     "de": 26.043,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 118,
+     "dx": -28,
+     "dy": 10,
+     "de": 26.005,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 119,
+     "dx": -28,
+     "dy": 10,
+     "de": 26.09,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 120,
+     "dx": -28,
+     "dy": 11,
+     "de": 26.144,
+     "changed": 0.469,
+     "alien": 0.0
+    },
+    {
+     "frame": 121,
+     "dx": -28,
+     "dy": 11,
+     "de": 26.214,
+     "changed": 0.472,
+     "alien": 0.0
+    },
+    {
+     "frame": 122,
+     "dx": 0,
+     "dy": 0,
+     "de": 4.52,
+     "changed": 0.014,
+     "alien": 0.001
+    },
+    {
+     "frame": 123,
+     "dx": 0,
+     "dy": 0,
+     "de": 4.481,
+     "changed": 0.015,
+     "alien": 0.001
+    }
+   ],
+   "name": "minimax-h3-max_idle_b_tq_1",
+   "strip": "torso/tq/minimax-h3-max_idle_b_tq_1_torso.png",
+   "strip_frames": [
+    0,
+    15,
+    31,
+    46,
+    62,
+    77,
+    92,
+    108,
+    123
+   ]
+  },
+  {
+   "clip": "clips/idle/minimax-h3-max_idle_b_tq_2.mp4",
+   "frames": 124,
+   "size": [
+    1344,
+    768
+   ],
+   "box_px": [
+    550,
+    340,
+    704,
+    459
+   ],
+   "frame0_mad": 7.14,
+   "de_median": 39.63,
+   "de_p95": 45.77,
+   "changed_median": 0.6205,
+   "changed_p95": 0.7167,
+   "max_shift_px": 46,
+   "move_p95": 91.2,
+   "move_max": 92.2,
+   "alien_pose": 0.001,
+   "alien_median": 0.0,
+   "alien_p95": 0.0014,
+   "per_frame": [
+    {
+     "frame": 0,
+     "dx": 0,
+     "dy": 0,
+     "de": 0.0,
+     "changed": 0.0,
+     "alien": 0.001
+    },
+    {
+     "frame": 1,
+     "dx": 0,
+     "dy": 0,
+     "de": 1.812,
+     "changed": 0.003,
+     "alien": 0.001
+    },
+    {
+     "frame": 2,
+     "dx": 0,
+     "dy": 0,
+     "de": 2.969,
+     "changed": 0.011,
+     "alien": 0.003
+    },
+    {
+     "frame": 3,
+     "dx": 0,
+     "dy": 1,
+     "de": 9.139,
+     "changed": 0.131,
+     "alien": 0.129
+    },
+    {
+     "frame": 4,
+     "dx": 0,
+     "dy": 2,
+     "de": 10.139,
+     "changed": 0.149,
+     "alien": 0.132
+    },
+    {
+     "frame": 5,
+     "dx": -2,
+     "dy": 3,
+     "de": 13.057,
+     "changed": 0.207,
+     "alien": 0.007
+    },
+    {
+     "frame": 6,
+     "dx": -6,
+     "dy": 6,
+     "de": 18.008,
+     "changed": 0.315,
+     "alien": 0.001
+    },
+    {
+     "frame": 7,
+     "dx": -13,
+     "dy": 8,
+     "de": 21.842,
+     "changed": 0.38,
+     "alien": 0.0
+    },
+    {
+     "frame": 8,
+     "dx": -19,
+     "dy": 11,
+     "de": 23.927,
+     "changed": 0.42,
+     "alien": 0.0
+    },
+    {
+     "frame": 9,
+     "dx": -25,
+     "dy": 13,
+     "de": 25.911,
+     "changed": 0.454,
+     "alien": 0.0
+    },
+    {
+     "frame": 10,
+     "dx": -26,
+     "dy": 12,
+     "de": 25.995,
+     "changed": 0.458,
+     "alien": 0.0
+    },
+    {
+     "frame": 11,
+     "dx": -26,
+     "dy": 11,
+     "de": 25.959,
+     "changed": 0.46,
+     "alien": 0.0
+    },
+    {
+     "frame": 12,
+     "dx": -26,
+     "dy": 10,
+     "de": 25.948,
+     "changed": 0.461,
+     "alien": 0.0
+    },
+    {
+     "frame": 13,
+     "dx": -27,
+     "dy": 8,
+     "de": 25.97,
+     "changed": 0.459,
+     "alien": 0.0
+    },
+    {
+     "frame": 14,
+     "dx": -27,
+     "dy": 7,
+     "de": 25.978,
+     "changed": 0.459,
+     "alien": 0.0
+    },
+    {
+     "frame": 15,
+     "dx": -27,
+     "dy": 6,
+     "de": 25.936,
+     "changed": 0.459,
+     "alien": 0.0
+    },
+    {
+     "frame": 16,
+     "dx": -27,
+     "dy": 5,
+     "de": 25.974,
+     "changed": 0.461,
+     "alien": 0.0
+    },
+    {
+     "frame": 17,
+     "dx": -28,
+     "dy": 5,
+     "de": 25.974,
+     "changed": 0.459,
+     "alien": 0.0
+    },
+    {
+     "frame": 18,
+     "dx": -28,
+     "dy": 5,
+     "de": 25.998,
+     "changed": 0.459,
+     "alien": 0.0
+    },
+    {
+     "frame": 19,
+     "dx": -28,
+     "dy": 5,
+     "de": 26.019,
+     "changed": 0.462,
+     "alien": 0.0
+    },
+    {
+     "frame": 20,
+     "dx": -28,
+     "dy": 5,
+     "de": 26.096,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 21,
+     "dx": -28,
+     "dy": 6,
+     "de": 26.145,
+     "changed": 0.47,
+     "alien": 0.0
+    },
+    {
+     "frame": 22,
+     "dx": -28,
+     "dy": 9,
+     "de": 26.081,
+     "changed": 0.469,
+     "alien": 0.0
+    },
+    {
+     "frame": 23,
+     "dx": -28,
+     "dy": 10,
+     "de": 26.173,
+     "changed": 0.473,
+     "alien": 0.0
+    },
+    {
+     "frame": 24,
+     "dx": -28,
+     "dy": 12,
+     "de": 26.184,
+     "changed": 0.471,
+     "alien": 0.0
+    },
+    {
+     "frame": 25,
+     "dx": -28,
+     "dy": 14,
+     "de": 26.252,
+     "changed": 0.468,
+     "alien": 0.0
+    },
+    {
+     "frame": 26,
+     "dx": -27,
+     "dy": 15,
+     "de": 26.281,
+     "changed": 0.468,
+     "alien": 0.0
+    },
+    {
+     "frame": 27,
+     "dx": -27,
+     "dy": 16,
+     "de": 26.327,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 28,
+     "dx": -27,
+     "dy": 16,
+     "de": 26.346,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 29,
+     "dx": -27,
+     "dy": 16,
+     "de": 26.388,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 30,
+     "dx": -27,
+     "dy": 16,
+     "de": 26.395,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 31,
+     "dx": -27,
+     "dy": 16,
+     "de": 26.388,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 32,
+     "dx": -27,
+     "dy": 16,
+     "de": 26.403,
+     "changed": 0.466,
+     "alien": 0.0
+    },
+    {
+     "frame": 33,
+     "dx": -27,
+     "dy": 15,
+     "de": 26.435,
+     "changed": 0.467,
+     "alien": 0.0
+    },
+    {
+     "frame": 34,
+     "dx": -27,
+     "dy": 14,
+     "de": 26.434,
+     "changed": 0.467,
+     "alien": 0.0
+    },
+    {
+     "frame": 35,
+     "dx": -27,
+     "dy": 13,
+     "de": 26.461,
+     "changed": 0.465,
+     "alien": 0.0
+    },
+    {
+     "frame": 36,
+     "dx": -27,
+     "dy": 12,
+     "de": 26.432,
+     "changed": 0.465,
+     "alien": 0.0
+    },
+    {
+     "frame": 37,
+     "dx": -46,
+     "dy": -15,
+     "de": 39.598,
+     "changed": 0.611,
+     "alien": 0.0
+    },
+    {
+     "frame": 38,
+     "dx": -46,
+     "dy": -15,
+     "de": 39.498,
+     "changed": 0.61,
+     "alien": 0.0
+    },
+    {
+     "frame": 39,
+     "dx": -46,
+     "dy": -15,
+     "de": 39.414,
+     "changed": 0.614,
+     "alien": 0.0
+    },
+    {
+     "frame": 40,
+     "dx": -46,
+     "dy": -16,
+     "de": 39.333,
+     "changed": 0.616,
+     "alien": 0.0
+    },
+    {
+     "frame": 41,
+     "dx": -46,
+     "dy": -18,
+     "de": 39.435,
+     "changed": 0.621,
+     "alien": 0.0
+    },
+    {
+     "frame": 42,
+     "dx": -46,
+     "dy": -21,
+     "de": 39.631,
+     "changed": 0.627,
+     "alien": 0.0
+    },
+    {
+     "frame": 43,
+     "dx": -46,
+     "dy": -24,
+     "de": 39.926,
+     "changed": 0.636,
+     "alien": 0.0
+    },
+    {
+     "frame": 44,
+     "dx": -46,
+     "dy": -27,
+     "de": 40.51,
+     "changed": 0.645,
+     "alien": 0.0
+    },
+    {
+     "frame": 45,
+     "dx": -46,
+     "dy": -31,
+     "de": 41.322,
+     "changed": 0.657,
+     "alien": 0.0
+    },
+    {
+     "frame": 46,
+     "dx": -46,
+     "dy": -35,
+     "de": 42.135,
+     "changed": 0.669,
+     "alien": 0.0
+    },
+    {
+     "frame": 47,
+     "dx": -46,
+     "dy": -38,
+     "de": 42.861,
+     "changed": 0.682,
+     "alien": 0.0
+    },
+    {
+     "frame": 48,
+     "dx": -46,
+     "dy": -40,
+     "de": 43.548,
+     "changed": 0.691,
+     "alien": 0.0
+    },
+    {
+     "frame": 49,
+     "dx": -46,
+     "dy": -42,
+     "de": 44.175,
+     "changed": 0.698,
+     "alien": 0.0
+    },
+    {
+     "frame": 50,
+     "dx": -46,
+     "dy": -44,
+     "de": 44.744,
+     "changed": 0.704,
+     "alien": 0.0
+    },
+    {
+     "frame": 51,
+     "dx": -46,
+     "dy": -45,
+     "de": 45.154,
+     "changed": 0.709,
+     "alien": 0.0
+    },
+    {
+     "frame": 52,
+     "dx": -46,
+     "dy": -45,
+     "de": 45.441,
+     "changed": 0.714,
+     "alien": 0.0
+    },
+    {
+     "frame": 53,
+     "dx": -46,
+     "dy": -46,
+     "de": 45.741,
+     "changed": 0.717,
+     "alien": 0.0
+    },
+    {
+     "frame": 54,
+     "dx": -46,
+     "dy": -46,
+     "de": 45.882,
+     "changed": 0.719,
+     "alien": 0.0
+    },
+    {
+     "frame": 55,
+     "dx": -46,
+     "dy": -46,
+     "de": 46.013,
+     "changed": 0.719,
+     "alien": 0.0
+    },
+    {
+     "frame": 56,
+     "dx": -46,
+     "dy": -46,
+     "de": 46.094,
+     "changed": 0.719,
+     "alien": 0.0
+    },
+    {
+     "frame": 57,
+     "dx": -46,
+     "dy": -46,
+     "de": 46.043,
+     "changed": 0.718,
+     "alien": 0.0
+    },
+    {
+     "frame": 58,
+     "dx": -46,
+     "dy": -45,
+     "de": 45.957,
+     "changed": 0.717,
+     "alien": 0.0
+    },
+    {
+     "frame": 59,
+     "dx": -46,
+     "dy": -42,
+     "de": 45.869,
+     "changed": 0.715,
+     "alien": 0.0
+    },
+    {
+     "frame": 60,
+     "dx": -46,
+     "dy": -39,
+     "de": 45.584,
+     "changed": 0.713,
+     "alien": 0.0
+    },
+    {
+     "frame": 61,
+     "dx": -46,
+     "dy": -35,
+     "de": 45.312,
+     "changed": 0.707,
+     "alien": 0.0
+    },
+    {
+     "frame": 62,
+     "dx": -46,
+     "dy": -30,
+     "de": 44.658,
+     "changed": 0.698,
+     "alien": 0.0
+    },
+    {
+     "frame": 63,
+     "dx": -46,
+     "dy": -26,
+     "de": 43.969,
+     "changed": 0.686,
+     "alien": 0.0
+    },
+    {
+     "frame": 64,
+     "dx": -46,
+     "dy": -20,
+     "de": 42.491,
+     "changed": 0.666,
+     "alien": 0.0
+    },
+    {
+     "frame": 65,
+     "dx": -46,
+     "dy": -18,
+     "de": 41.782,
+     "changed": 0.654,
+     "alien": 0.0
+    },
+    {
+     "frame": 66,
+     "dx": -46,
+     "dy": -16,
+     "de": 41.099,
+     "changed": 0.645,
+     "alien": 0.0
+    },
+    {
+     "frame": 67,
+     "dx": -46,
+     "dy": -15,
+     "de": 40.584,
+     "changed": 0.639,
+     "alien": 0.0
+    },
+    {
+     "frame": 68,
+     "dx": -46,
+     "dy": -15,
+     "de": 40.313,
+     "changed": 0.629,
+     "alien": 0.0
+    },
+    {
+     "frame": 69,
+     "dx": -46,
+     "dy": -14,
+     "de": 39.952,
+     "changed": 0.625,
+     "alien": 0.0
+    },
+    {
+     "frame": 70,
+     "dx": -46,
+     "dy": -14,
+     "de": 39.71,
+     "changed": 0.623,
+     "alien": 0.0
+    },
+    {
+     "frame": 71,
+     "dx": -46,
+     "dy": -14,
+     "de": 39.532,
+     "changed": 0.62,
+     "alien": 0.0
+    },
+    {
+     "frame": 72,
+     "dx": -46,
+     "dy": -15,
+     "de": 39.432,
+     "changed": 0.62,
+     "alien": 0.0
+    },
+    {
+     "frame": 73,
+     "dx": -46,
+     "dy": -17,
+     "de": 39.429,
+     "changed": 0.62,
+     "alien": 0.0
+    },
+    {
+     "frame": 74,
+     "dx": -46,
+     "dy": -19,
+     "de": 39.56,
+     "changed": 0.625,
+     "alien": 0.0
+    },
+    {
+     "frame": 75,
+     "dx": -46,
+     "dy": -22,
+     "de": 39.884,
+     "changed": 0.631,
+     "alien": 0.0
+    },
+    {
+     "frame": 76,
+     "dx": -46,
+     "dy": -25,
+     "de": 40.249,
+     "changed": 0.64,
+     "alien": 0.0
+    },
+    {
+     "frame": 77,
+     "dx": -46,
+     "dy": -29,
+     "de": 40.839,
+     "changed": 0.65,
+     "alien": 0.0
+    },
+    {
+     "frame": 78,
+     "dx": -46,
+     "dy": -33,
+     "de": 41.643,
+     "changed": 0.661,
+     "alien": 0.0
+    },
+    {
+     "frame": 79,
+     "dx": -46,
+     "dy": -36,
+     "de": 42.276,
+     "changed": 0.671,
+     "alien": 0.0
+    },
+    {
+     "frame": 80,
+     "dx": -46,
+     "dy": -38,
+     "de": 43.029,
+     "changed": 0.682,
+     "alien": 0.0
+    },
+    {
+     "frame": 81,
+     "dx": -46,
+     "dy": -40,
+     "de": 43.811,
+     "changed": 0.695,
+     "alien": 0.0
+    },
+    {
+     "frame": 82,
+     "dx": -46,
+     "dy": -42,
+     "de": 44.348,
+     "changed": 0.702,
+     "alien": 0.0
+    },
+    {
+     "frame": 83,
+     "dx": -46,
+     "dy": -43,
+     "de": 44.777,
+     "changed": 0.707,
+     "alien": 0.0
+    },
+    {
+     "frame": 84,
+     "dx": -46,
+     "dy": -44,
+     "de": 45.075,
+     "changed": 0.712,
+     "alien": 0.0
+    },
+    {
+     "frame": 85,
+     "dx": -46,
+     "dy": -45,
+     "de": 45.383,
+     "changed": 0.714,
+     "alien": 0.0
+    },
+    {
+     "frame": 86,
+     "dx": -46,
+     "dy": -45,
+     "de": 45.521,
+     "changed": 0.716,
+     "alien": 0.0
+    },
+    {
+     "frame": 87,
+     "dx": -46,
+     "dy": -45,
+     "de": 45.667,
+     "changed": 0.717,
+     "alien": 0.0
+    },
+    {
+     "frame": 88,
+     "dx": -46,
+     "dy": -44,
+     "de": 45.7,
+     "changed": 0.717,
+     "alien": 0.0
+    },
+    {
+     "frame": 89,
+     "dx": -46,
+     "dy": -41,
+     "de": 45.77,
+     "changed": 0.716,
+     "alien": 0.0
+    },
+    {
+     "frame": 90,
+     "dx": -46,
+     "dy": -38,
+     "de": 45.398,
+     "changed": 0.712,
+     "alien": 0.0
+    },
+    {
+     "frame": 91,
+     "dx": -46,
+     "dy": -34,
+     "de": 45.091,
+     "changed": 0.706,
+     "alien": 0.0
+    },
+    {
+     "frame": 92,
+     "dx": -46,
+     "dy": -31,
+     "de": 44.613,
+     "changed": 0.699,
+     "alien": 0.0
+    },
+    {
+     "frame": 93,
+     "dx": -46,
+     "dy": -26,
+     "de": 44.027,
+     "changed": 0.688,
+     "alien": 0.0
+    },
+    {
+     "frame": 94,
+     "dx": -46,
+     "dy": -22,
+     "de": 43.237,
+     "changed": 0.678,
+     "alien": 0.0
+    },
+    {
+     "frame": 95,
+     "dx": -46,
+     "dy": -19,
+     "de": 42.572,
+     "changed": 0.668,
+     "alien": 0.0
+    },
+    {
+     "frame": 96,
+     "dx": -46,
+     "dy": -17,
+     "de": 41.869,
+     "changed": 0.656,
+     "alien": 0.0
+    },
+    {
+     "frame": 97,
+     "dx": -46,
+     "dy": -15,
+     "de": 41.057,
+     "changed": 0.643,
+     "alien": 0.0
+    },
+    {
+     "frame": 98,
+     "dx": -46,
+     "dy": -14,
+     "de": 40.449,
+     "changed": 0.628,
+     "alien": 0.0
+    },
+    {
+     "frame": 99,
+     "dx": -46,
+     "dy": -13,
+     "de": 40.126,
+     "changed": 0.624,
+     "alien": 0.0
+    },
+    {
+     "frame": 100,
+     "dx": -46,
+     "dy": -13,
+     "de": 39.859,
+     "changed": 0.62,
+     "alien": 0.0
+    },
+    {
+     "frame": 101,
+     "dx": -46,
+     "dy": -13,
+     "de": 39.638,
+     "changed": 0.618,
+     "alien": 0.0
+    },
+    {
+     "frame": 102,
+     "dx": -46,
+     "dy": -13,
+     "de": 39.486,
+     "changed": 0.617,
+     "alien": 0.0
+    },
+    {
+     "frame": 103,
+     "dx": -46,
+     "dy": -13,
+     "de": 39.418,
+     "changed": 0.617,
+     "alien": 0.0
+    },
+    {
+     "frame": 104,
+     "dx": -46,
+     "dy": -14,
+     "de": 39.356,
+     "changed": 0.618,
+     "alien": 0.0
+    },
+    {
+     "frame": 105,
+     "dx": -46,
+     "dy": -16,
+     "de": 39.471,
+     "changed": 0.62,
+     "alien": 0.0
+    },
+    {
+     "frame": 106,
+     "dx": -46,
+     "dy": -18,
+     "de": 39.66,
+     "changed": 0.623,
+     "alien": 0.0
+    },
+    {
+     "frame": 107,
+     "dx": -46,
+     "dy": -20,
+     "de": 40.0,
+     "changed": 0.633,
+     "alien": 0.0
+    },
+    {
+     "frame": 108,
+     "dx": -46,
+     "dy": -22,
+     "de": 40.455,
+     "changed": 0.641,
+     "alien": 0.0
+    },
+    {
+     "frame": 109,
+     "dx": -46,
+     "dy": -25,
+     "de": 40.93,
+     "changed": 0.65,
+     "alien": 0.0
+    },
+    {
+     "frame": 110,
+     "dx": -46,
+     "dy": -27,
+     "de": 41.454,
+     "changed": 0.659,
+     "alien": 0.0
+    },
+    {
+     "frame": 111,
+     "dx": -46,
+     "dy": -27,
+     "de": 41.444,
+     "changed": 0.653,
+     "alien": 0.0
+    },
+    {
+     "frame": 112,
+     "dx": -46,
+     "dy": -7,
+     "de": 32.6,
+     "changed": 0.547,
+     "alien": 0.0
+    },
+    {
+     "frame": 113,
+     "dx": -16,
+     "dy": -3,
+     "de": 37.058,
+     "changed": 0.612,
+     "alien": 0.0
+    },
+    {
+     "frame": 114,
+     "dx": -46,
+     "dy": -3,
+     "de": 32.985,
+     "changed": 0.547,
+     "alien": 0.0
+    },
+    {
+     "frame": 115,
+     "dx": -32,
+     "dy": -2,
+     "de": 26.211,
+     "changed": 0.46,
+     "alien": 0.029
+    },
+    {
+     "frame": 116,
+     "dx": -13,
+     "dy": -2,
+     "de": 19.734,
+     "changed": 0.344,
+     "alien": 0.058
+    },
+    {
+     "frame": 117,
+     "dx": -2,
+     "dy": -1,
+     "de": 7.322,
+     "changed": 0.077,
+     "alien": 0.002
+    },
+    {
+     "frame": 118,
+     "dx": 0,
+     "dy": 0,
+     "de": 4.642,
+     "changed": 0.012,
+     "alien": 0.0
+    },
+    {
+     "frame": 119,
+     "dx": 0,
+     "dy": 0,
+     "de": 3.691,
+     "changed": 0.005,
+     "alien": 0.0
+    },
+    {
+     "frame": 120,
+     "dx": 0,
+     "dy": 0,
+     "de": 3.574,
+     "changed": 0.004,
+     "alien": 0.0
+    },
+    {
+     "frame": 121,
+     "dx": 0,
+     "dy": 0,
+     "de": 3.532,
+     "changed": 0.004,
+     "alien": 0.0
+    },
+    {
+     "frame": 122,
+     "dx": 0,
+     "dy": 0,
+     "de": 3.532,
+     "changed": 0.005,
+     "alien": 0.0
+    },
+    {
+     "frame": 123,
+     "dx": 0,
+     "dy": 0,
+     "de": 3.518,
+     "changed": 0.004,
+     "alien": 0.001
+    }
+   ],
+   "name": "minimax-h3-max_idle_b_tq_2",
+   "strip": "torso/tq/minimax-h3-max_idle_b_tq_2_torso.png",
+   "strip_frames": [
+    0,
+    15,
+    31,
+    46,
+    62,
+    77,
+    92,
+    108,
+    123
+   ]
+  }
+ ],
+ "between": {
+  "minimax-h3-max_idle_b_tq_1": {
+   "minimax-h3-max_idle_b_tq_2": 25.3
+  },
+  "minimax-h3-max_idle_b_tq_2": {
+   "minimax-h3-max_idle_b_tq_1": 25.3
+  }
+ }
+}

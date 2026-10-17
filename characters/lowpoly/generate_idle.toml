@@ -1,0 +1,58 @@
+# Bake-off del idle del personaje low-poly: cómo sacar animaciones consistentes (que el modelo no invente lo que no
+# ve). Tres estrategias, dos tomas cada una, todas con el último cuadro igual al primero para que el loop cierre:
+#   A  sólo el primer cuadro (como hoy)
+#   B  el primer cuadro más las vistas del personaje y del arma como referencia
+#   C  el personaje sin arma (la mano en pose de agarre) + vistas del personaje; el arma se pega después como
+#      sprite (pegar_arma.py). Va en generate_idle_c.toml porque su pose sale de poses_gen/ (gen-images).
+# A en tres modelos (Seedance 2.0, el de hoy, y los dos que aceptan primer cuadro + referencias), B en los dos con
+# referencias y, en H3 Max, B también con la pose de tres cuartos leve.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_idle.toml --dry-run
+# Las referencias son las vistas sueltas de refs/vistas/: 1024×1024 sobre gris, cortadas de las hojas transparentes
+# con una sola escala (el personaje mide 766 px de frente en todas; ver refs/vistas/escala.json). El cinturón es rojo
+# en todas, también en las poses de costado (pintado con cinturon_rojo.py).
+
+[bakeoff]
+models = ["seedance-2.0", "minimax-h3-max", "kling-o3-std"]
+clips_per_model = 2       # tomas por estrategia
+duration = 5              # s
+aspect_ratio = "16:9"
+resolution = "720p"       # H3 Max lo pide como 768P; Kling standard no la elige
+audio = false             # H3 Max no lo apaga (no cambia el precio)
+seed = 7                  # sólo H3 Max lo acepta; la toma n usa seed + n - 1
+max_usd = 12              # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/idle"
+
+# A: sólo el primer cuadro, en los tres modelos
+[[animation]]
+name = "idle_a"
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/idle_a.txt"
+kind = "cycle"
+last_frame = true
+
+# B: primer cuadro + vistas. En Kling, cada 4 refs son un element (frontal + vistas): @Element1 el personaje
+# (frente en T-pose + tres cuartos + espalda + tres cuartos con el arma), @Element2 el arma (lateral + frente).
+[[animation]]
+name = "idle_b"
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/idle_b_h3max.txt"
+prompts = { kling-o3-std = "prompts/idle_b_kling.txt" }
+models = ["minimax-h3-max", "kling-o3-std"]
+kind = "cycle"
+last_frame = true
+refs = ["refs/vistas/tpose_frente.png", "refs/vistas/tpose_tres_cuartos.png", "refs/vistas/tpose_espalda.png",
+        "refs/vistas/armado_tres_cuartos.png", "refs/vistas/arma_lateral.png", "refs/vistas/arma_frente.png"]
+
+# B con la vista de tres cuartos leve (sólo H3 Max, el más barato)
+[[animation]]
+name = "idle_b_tq"
+pose = "poses/tq_dullmagenta_16x9.png"
+prompt = "prompts/idle_b_tq_h3max.txt"
+models = ["minimax-h3-max"]
+kind = "cycle"
+last_frame = true
+refs = ["refs/vistas/tpose_frente.png", "refs/vistas/tpose_tres_cuartos.png", "refs/vistas/tpose_espalda.png",
+        "refs/vistas/armado_tres_cuartos.png", "refs/vistas/arma_lateral.png", "refs/vistas/arma_frente.png"]

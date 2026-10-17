@@ -1,0 +1,102 @@
+{
+  "note": "Boca del cañón por frame de shoot, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+  "animation": "shoot",
+  "variants": {
+    "1x": {
+      "cell": {
+        "w": 499,
+        "h": 622
+      },
+      "pivot_px": {
+        "x": 249.5,
+        "y": 583.4
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "shoot/0000",
+          "native_frame": 45,
+          "x": 396.16,
+          "y": 431.61,
+          "dx": 146.66,
+          "dy": -151.79
+        },
+        {
+          "frame": 1,
+          "name": "shoot/0001",
+          "native_frame": 47,
+          "x": 397.64,
+          "y": 439.04,
+          "dx": 148.14,
+          "dy": -144.36
+        },
+        {
+          "frame": 2,
+          "name": "shoot/0002",
+          "native_frame": 49,
+          "x": 396.9,
+          "y": 431.61,
+          "dx": 147.4,
+          "dy": -151.79
+        },
+        {
+          "frame": 3,
+          "name": "shoot/0003",
+          "native_frame": 51,
+          "x": 398.38,
+          "y": 438.29,
+          "dx": 148.88,
+          "dy": -145.11
+        }
+      ]
+    },
+    "0.5x": {
+      "cell": {
+        "w": 249,
+        "h": 311
+      },
+      "pivot_px": {
+        "x": 124.5,
+        "y": 291.7
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "shoot/0000",
+          "native_frame": 45,
+          "x": 197.68,
+          "y": 215.81,
+          "dx": 73.18,
+          "dy": -75.89
+        },
+        {
+          "frame": 1,
+          "name": "shoot/0001",
+          "native_frame": 47,
+          "x": 198.42,
+          "y": 219.52,
+          "dx": 73.92,
+          "dy": -72.18
+        },
+        {
+          "frame": 2,
+          "name": "shoot/0002",
+          "native_frame": 49,
+          "x": 198.05,
+          "y": 215.81,
+          "dx": 73.55,
+          "dy": -75.89
+        },
+        {
+          "frame": 3,
+          "name": "shoot/0003",
+          "native_frame": 51,
+          "x": 198.79,
+          "y": 219.15,
+          "dx": 74.29,
+          "dy": -72.55
+        }
+      ]
+    }
+  }
+}

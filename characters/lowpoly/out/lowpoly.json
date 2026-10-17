@@ -1,0 +1,3339 @@
+{
+  "character": "lowpoly",
+  "style": "hd",
+  "fps": 12,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.93795
+  },
+  "variants": {
+    "1x": {
+      "canvas": {
+        "w": 499,
+        "h": 622
+      },
+      "pivot_px": {
+        "x": 249.5,
+        "y": 583.4
+      },
+      "atlas": [
+        {
+          "image": "lowpoly_1x-0.png",
+          "data": "lowpoly_1x-0.json",
+          "w": 2045,
+          "h": 2048
+        },
+        {
+          "image": "lowpoly_1x-1.png",
+          "data": "lowpoly_1x-1.json",
+          "w": 2048,
+          "h": 2048
+        },
+        {
+          "image": "lowpoly_1x-2.png",
+          "data": "lowpoly_1x-2.json",
+          "w": 2039,
+          "h": 2038
+        },
+        {
+          "image": "lowpoly_1x-3.png",
+          "data": "lowpoly_1x-3.json",
+          "w": 2047,
+          "h": 2046
+        },
+        {
+          "image": "lowpoly_1x-4.png",
+          "data": "lowpoly_1x-4.json",
+          "w": 1232,
+          "h": 1180
+        }
+      ],
+      "animations": {
+        "idle_combat": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle_combat/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "idle_combat/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "idle_combat/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "idle_combat/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "idle_combat/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0027",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0028",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0029",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0030",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0031",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0032",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0033",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0034",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0035",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0036",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0037",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0038",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0039",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0040",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0041",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0042",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0043",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0044",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0045",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0046",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0047",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0048",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0049",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0050",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0051",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0052",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0053",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0054",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0055",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0056",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0057",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0058",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle_combat/0059",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/idle_combat.png"
+        },
+        "run_gun": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 3,
+              "name": "run_gun/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "run_gun/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "run_gun/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "run_gun/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "run_gun/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "run_gun/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "run_gun/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "run_gun/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "run_gun/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "run_gun/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "run_gun/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "run_gun/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "run_gun/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "run_gun/0013",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/run_gun.png"
+        },
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "idle/0002",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/idle.png"
+        },
+        "shoot_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 2,
+              "name": "shoot_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot_in/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot_in.png"
+        },
+        "shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 2,
+              "name": "shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot.png"
+        },
+        "shoot2h_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "shoot2h_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "shoot2h_in/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot2h_in.png"
+        },
+        "shoot2h": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 2,
+              "name": "shoot2h/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot2h/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot2h/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot2h/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot2h/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot2h/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "shoot2h/0006",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/shoot2h.png"
+        },
+        "crouch_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "crouch_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "crouch_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "crouch_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "crouch_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "crouch_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "crouch_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_in/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/crouch_in.png"
+        },
+        "crouch_shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 3,
+              "name": "crouch_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_shoot/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/crouch_shoot.png"
+        },
+        "crouch_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "crouch_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_out/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_out/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "crouch_out/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_out/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "crouch_out/0007",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/crouch_out.png"
+        },
+        "jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "jump/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/jump.png"
+        },
+        "jump_shoot": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 4,
+              "name": "jump_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "jump_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump_shoot/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump_shoot/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump_shoot/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "jump_shoot/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "jump_shoot/0014",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/jump_shoot.png"
+        },
+        "double_jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "double_jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "double_jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "double_jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "double_jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "double_jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump/0010",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/double_jump.png"
+        },
+        "hang_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 4,
+              "name": "hang_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "hang_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_in/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_in/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/hang_in.png"
+        },
+        "hang": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang/0016",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/hang.png"
+        },
+        "climb": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "climb/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0027",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0028",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "climb/0029",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0030",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0031",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "climb/0032",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0033",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0034",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "climb/0035",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0036",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0037",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/climb.png"
+        },
+        "hang_two": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang_two/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0027",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0028",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0029",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0030",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0031",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0032",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0033",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0034",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0035",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_two/0036",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0037",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0038",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0039",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0040",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0041",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0042",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0043",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0044",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0045",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0046",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0047",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/hang_two.png"
+        },
+        "throw": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "throw/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw/0024",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/throw.png"
+        }
+      }
+    },
+    "0.5x": {
+      "canvas": {
+        "w": 249,
+        "h": 311
+      },
+      "pivot_px": {
+        "x": 124.5,
+        "y": 291.7
+      },
+      "atlas": [
+        {
+          "image": "lowpoly_0.5x-0.png",
+          "data": "lowpoly_0.5x-0.json",
+          "w": 2046,
+          "h": 2048
+        },
+        {
+          "image": "lowpoly_0.5x-1.png",
+          "data": "lowpoly_0.5x-1.json",
+          "w": 624,
+          "h": 600
+        }
+      ],
+      "animations": {
+        "idle_combat": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle_combat/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0027",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0028",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0029",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0030",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0031",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0032",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0033",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0034",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0035",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0036",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0037",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0038",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0039",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0040",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0041",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0042",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0043",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0044",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0045",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0046",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0047",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0048",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0049",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0050",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0051",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0052",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0053",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0054",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0055",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0056",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0057",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0058",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle_combat/0059",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/idle_combat.png"
+        },
+        "run_gun": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "run_gun/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "run_gun/0013",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/run_gun.png"
+        },
+        "idle": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "idle/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "idle/0002",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/idle.png"
+        },
+        "shoot_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot_in/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot_in.png"
+        },
+        "shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot.png"
+        },
+        "shoot2h_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h_in/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot2h_in.png"
+        },
+        "shoot2h": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "shoot2h/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "shoot2h/0006",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/shoot2h.png"
+        },
+        "crouch_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "crouch_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "crouch_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_in/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/crouch_in.png"
+        },
+        "crouch_shoot": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "crouch_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_shoot/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/crouch_shoot.png"
+        },
+        "crouch_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "crouch_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "crouch_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "crouch_out/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "crouch_out/0007",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/crouch_out.png"
+        },
+        "jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/jump.png"
+        },
+        "jump_shoot": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "jump_shoot/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "jump_shoot/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "jump_shoot/0014",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/jump_shoot.png"
+        },
+        "double_jump": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "double_jump/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump/0010",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/double_jump.png"
+        },
+        "hang_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "hang_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "hang_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_in/0009",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/hang_in.png"
+        },
+        "hang": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang/0016",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/hang.png"
+        },
+        "climb": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "climb/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0027",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0028",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0029",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0030",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0031",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "climb/0032",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0033",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0034",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0035",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0036",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "climb/0037",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/climb.png"
+        },
+        "hang_two": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "hang_two/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0024",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0025",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0026",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0027",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0028",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0029",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0030",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0031",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0032",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0033",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0034",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0035",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0036",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0037",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0038",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0039",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0040",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0041",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0042",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0043",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0044",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0045",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0046",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "hang_two/0047",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/hang_two.png"
+        },
+        "throw": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "throw/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0017",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw/0018",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw/0019",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw/0020",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw/0021",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0022",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0023",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw/0024",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/throw.png"
+        }
+      }
+    }
+  },
+  "fx": {
+    "run_gun": {
+      "muzzle": "fx/run_gun_muzzle.json"
+    },
+    "shoot_in": {
+      "muzzle": "fx/shoot_in_muzzle.json"
+    },
+    "shoot": {
+      "muzzle": "fx/shoot_muzzle.json"
+    },
+    "shoot2h_in": {
+      "muzzle": "fx/shoot2h_in_muzzle.json"
+    },
+    "shoot2h": {
+      "muzzle": "fx/shoot2h_muzzle.json"
+    },
+    "crouch_in": {
+      "muzzle": "fx/crouch_in_muzzle.json"
+    },
+    "crouch_shoot": {
+      "muzzle": "fx/crouch_shoot_muzzle.json"
+    },
+    "crouch_out": {
+      "muzzle": "fx/crouch_out_muzzle.json"
+    },
+    "jump": {
+      "muzzle": "fx/jump_muzzle.json"
+    },
+    "jump_shoot": {
+      "muzzle": "fx/jump_shoot_muzzle.json"
+    }
+  }
+}

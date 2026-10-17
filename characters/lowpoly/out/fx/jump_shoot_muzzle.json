@@ -1,0 +1,300 @@
+{
+  "note": "Boca del cañón por frame de jump_shoot, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+  "animation": "jump_shoot",
+  "variants": {
+    "1x": {
+      "cell": {
+        "w": 499,
+        "h": 622
+      },
+      "pivot_px": {
+        "x": 249.5,
+        "y": 583.4
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "jump_shoot/0000",
+          "native_frame": 15,
+          "x": 354.57,
+          "y": 502.13,
+          "dx": 105.07,
+          "dy": -81.27
+        },
+        {
+          "frame": 1,
+          "name": "jump_shoot/0001",
+          "native_frame": 16,
+          "x": 354.57,
+          "y": 502.13,
+          "dx": 105.07,
+          "dy": -81.27
+        },
+        {
+          "frame": 2,
+          "name": "jump_shoot/0002",
+          "native_frame": 19,
+          "x": 354.57,
+          "y": 502.13,
+          "dx": 105.07,
+          "dy": -81.27
+        },
+        {
+          "frame": 3,
+          "name": "jump_shoot/0003",
+          "native_frame": 21,
+          "x": 379.82,
+          "y": 326.22,
+          "dx": 130.32,
+          "dy": -257.18
+        },
+        {
+          "frame": 4,
+          "name": "jump_shoot/0004",
+          "native_frame": 23,
+          "x": 382.05,
+          "y": 292.07,
+          "dx": 132.55,
+          "dy": -291.33
+        },
+        {
+          "frame": 5,
+          "name": "jump_shoot/0005",
+          "native_frame": 24,
+          "x": 382.05,
+          "y": 283.17,
+          "dx": 132.55,
+          "dy": -300.23
+        },
+        {
+          "frame": 6,
+          "name": "jump_shoot/0006",
+          "native_frame": 27,
+          "x": 382.79,
+          "y": 277.23,
+          "dx": 133.29,
+          "dy": -306.17
+        },
+        {
+          "frame": 7,
+          "name": "jump_shoot/0007",
+          "native_frame": 28,
+          "x": 382.79,
+          "y": 277.23,
+          "dx": 133.29,
+          "dy": -306.17
+        },
+        {
+          "frame": 8,
+          "name": "jump_shoot/0008",
+          "native_frame": 31,
+          "x": 382.79,
+          "y": 277.23,
+          "dx": 133.29,
+          "dy": -306.17
+        },
+        {
+          "frame": 9,
+          "name": "jump_shoot/0009",
+          "native_frame": 32,
+          "x": 382.79,
+          "y": 277.23,
+          "dx": 133.29,
+          "dy": -306.17
+        },
+        {
+          "frame": 10,
+          "name": "jump_shoot/0010",
+          "native_frame": 35,
+          "x": 382.79,
+          "y": 277.23,
+          "dx": 133.29,
+          "dy": -306.17
+        },
+        {
+          "frame": 11,
+          "name": "jump_shoot/0011",
+          "native_frame": 37,
+          "x": 357.54,
+          "y": 493.96,
+          "dx": 108.04,
+          "dy": -89.44
+        },
+        {
+          "frame": 12,
+          "name": "jump_shoot/0012",
+          "native_frame": 39,
+          "x": 357.54,
+          "y": 493.96,
+          "dx": 108.04,
+          "dy": -89.44
+        },
+        {
+          "frame": 13,
+          "name": "jump_shoot/0013",
+          "native_frame": 40,
+          "x": 357.54,
+          "y": 493.96,
+          "dx": 108.04,
+          "dy": -89.44
+        },
+        {
+          "frame": 14,
+          "name": "jump_shoot/0014",
+          "native_frame": 43,
+          "x": 357.54,
+          "y": 493.96,
+          "dx": 108.04,
+          "dy": -89.44
+        }
+      ]
+    },
+    "0.5x": {
+      "cell": {
+        "w": 249,
+        "h": 311
+      },
+      "pivot_px": {
+        "x": 124.5,
+        "y": 291.7
+      },
+      "frames": [
+        {
+          "frame": 0,
+          "name": "jump_shoot/0000",
+          "native_frame": 15,
+          "x": 176.93,
+          "y": 251.06,
+          "dx": 52.43,
+          "dy": -40.64
+        },
+        {
+          "frame": 1,
+          "name": "jump_shoot/0001",
+          "native_frame": 16,
+          "x": 176.93,
+          "y": 251.06,
+          "dx": 52.43,
+          "dy": -40.64
+        },
+        {
+          "frame": 2,
+          "name": "jump_shoot/0002",
+          "native_frame": 19,
+          "x": 176.93,
+          "y": 251.06,
+          "dx": 52.43,
+          "dy": -40.64
+        },
+        {
+          "frame": 3,
+          "name": "jump_shoot/0003",
+          "native_frame": 21,
+          "x": 189.53,
+          "y": 163.11,
+          "dx": 65.03,
+          "dy": -128.59
+        },
+        {
+          "frame": 4,
+          "name": "jump_shoot/0004",
+          "native_frame": 23,
+          "x": 190.64,
+          "y": 146.04,
+          "dx": 66.14,
+          "dy": -145.66
+        },
+        {
+          "frame": 5,
+          "name": "jump_shoot/0005",
+          "native_frame": 24,
+          "x": 190.64,
+          "y": 141.58,
+          "dx": 66.14,
+          "dy": -150.12
+        },
+        {
+          "frame": 6,
+          "name": "jump_shoot/0006",
+          "native_frame": 27,
+          "x": 191.01,
+          "y": 138.61,
+          "dx": 66.51,
+          "dy": -153.09
+        },
+        {
+          "frame": 7,
+          "name": "jump_shoot/0007",
+          "native_frame": 28,
+          "x": 191.01,
+          "y": 138.61,
+          "dx": 66.51,
+          "dy": -153.09
+        },
+        {
+          "frame": 8,
+          "name": "jump_shoot/0008",
+          "native_frame": 31,
+          "x": 191.01,
+          "y": 138.61,
+          "dx": 66.51,
+          "dy": -153.09
+        },
+        {
+          "frame": 9,
+          "name": "jump_shoot/0009",
+          "native_frame": 32,
+          "x": 191.01,
+          "y": 138.61,
+          "dx": 66.51,
+          "dy": -153.09
+        },
+        {
+          "frame": 10,
+          "name": "jump_shoot/0010",
+          "native_frame": 35,
+          "x": 191.01,
+          "y": 138.61,
+          "dx": 66.51,
+          "dy": -153.09
+        },
+        {
+          "frame": 11,
+          "name": "jump_shoot/0011",
+          "native_frame": 37,
+          "x": 178.41,
+          "y": 246.98,
+          "dx": 53.91,
+          "dy": -44.72
+        },
+        {
+          "frame": 12,
+          "name": "jump_shoot/0012",
+          "native_frame": 39,
+          "x": 178.41,
+          "y": 246.98,
+          "dx": 53.91,
+          "dy": -44.72
+        },
+        {
+          "frame": 13,
+          "name": "jump_shoot/0013",
+          "native_frame": 40,
+          "x": 178.41,
+          "y": 246.98,
+          "dx": 53.91,
+          "dy": -44.72
+        },
+        {
+          "frame": 14,
+          "name": "jump_shoot/0014",
+          "native_frame": 43,
+          "x": 178.41,
+          "y": 246.98,
+          "dx": 53.91,
+          "dy": -44.72
+        }
+      ]
+    }
+  }
+}

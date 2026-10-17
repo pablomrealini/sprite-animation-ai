@@ -29,3 +29,13 @@ backgrounds/*/raw/**/*.png
 backgrounds/*/post/**
 characters/*/poses_gen/raw/**/*.png
 characters/*/poses_gen/post/**
+
+# low-poly: las tomas de los bake-offs y de las pruebas quedan en disco; al repo van las elegidas (git add -f), los
+# bakeoff.md/.json, las poses elegidas (poses/) y la config. compare/, cuadros/ y las tiras de torso se rearman con
+# comparar.py, cuadros.py y medir_torso.py.
+characters/lowpoly/clips/*/*.mp4
+characters/lowpoly/compare/
+characters/lowpoly/cuadros/
+characters/lowpoly/torso/**/*.png
+characters/lowpoly/poses_gen/post/**
+

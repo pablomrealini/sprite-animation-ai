@@ -1,0 +1,26 @@
+{
+  "hang": "characters/lowpoly/poses/colgado_dos_concept.png",
+  "stand": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_cinturon_rojo_concept.png",
+  "size": [
+    1920,
+    1080
+  ],
+  "stand_height_px": 331.1,
+  "hang_height_px": 432.0,
+  "ledge_y": 609.1,
+  "wall_x": 843.0,
+  "hang_bbox": [
+    683,
+    594,
+    930,
+    1026
+  ],
+  "stand_bbox": [
+    865,
+    278,
+    1084,
+    609
+  ],
+  "rise_px": 416.9,
+  "forward_px": 135.9
+}

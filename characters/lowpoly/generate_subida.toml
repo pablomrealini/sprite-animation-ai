@@ -1,0 +1,33 @@
+# Subida a la cornisa y colgado a dos manos del low-poly (ver generate_set.toml para el resto del set). Las dos arrancan
+# en la pose colgada a dos manos (poses_gen, asset colgado_dos); la subida termina en la pose de perfil parada sobre el
+# canto, a la misma escala (por el ancho del blanco del casco). Los dos 16:9 los arma climb_frames.py del ranger:
+#   uv run --project pipeline python characters/ranger/poses_gen/climb_frames.py <colgado_dos elegido> \
+#       --stand characters/lowpoly/poses/perfil_cinturon_rojo_concept.png --out characters/lowpoly/poses --name climb
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_subida.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2       # tomas
+duration = 4              # s: la subida dura ~1 s; el resto queda quieto
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_parallel = 4
+game_fps = 12
+max_usd = 3
+out_dir = "clips/subida"
+
+[[animation]]
+name = "climb"            # colgado a dos manos → sube → parado sobre el canto
+pose = "poses/climb_first_dullmagenta_16x9.png"
+prompt = "prompts/climb.txt"
+kind = "oneshot"
+last_frame = "poses/climb_last_dullmagenta_16x9.png"
+
+[[animation]]
+name = "hang_two"         # el colgado a dos manos en loop, desde la misma pose: empalma con la subida
+pose = "poses/climb_first_dullmagenta_16x9.png"
+prompt = "prompts/hang_two.txt"
+kind = "cycle"
+last_frame = true

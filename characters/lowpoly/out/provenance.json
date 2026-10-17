@@ -1,0 +1,3924 @@
+{
+  "character": "lowpoly",
+  "created": "2026-10-17T20:18:52+00:00",
+  "tool": "spritepipe 0.1",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "config": "# Personaje low-poly (prueba de estilo 3D): las animaciones con los nombres que usa la arena, para compararlas con el\n# ranger (planilla.html) y, más adelante, para el selector 2D / low-poly del juego. Las tomas descartadas y las otras\n# estrategias del bake-off están en compare.html.\n# Desde la raíz del repo:\n#   uv run --project pipeline spritepipe run characters/lowpoly/character.toml\n#\n# Todo sale de Kling O3 standard con sólo el primer cuadro (ver reporte_idle.md), por fal: los clips vienen en BT.601\n# sin tag, así que cada uno declara color_matrix = \"bt601\" (con BT.709 el rojo se corre a naranja). Kling dispara rayos\n# aunque nadie se lo pida: remove_flash con method = \"shape\" los borra siguiendo la forma del arma (sin contorno no\n# sirve el método de siempre, que se comía la boca) y deja la boca por cuadro en out/fx/<anim>_muzzle.json.\n\n[character]\nname = \"lowpoly\"\nstyle = \"hd\"\ngame_fps = 12\ntarget_height = 256       # la arena dibuja al personaje a ~205 px en 1080p (128 × 0,8 × 2); la variante 0,5× da 128 como el ranger\nscale_reference = \"idle_combat\"\nmargin_px = 8\nanchor = \"clip\"           # como el ranger: las animaciones de un clip comparten el ancla de su frame 0 (entrada, ciclo y salida empalman)\nsharpen = 0.3             # unsharp después de reducir: el render de Kling (720p) es blando\n\n[key]\ncolor = \"auto\"\nmethod = \"distance\"       # fondo magenta apagado y personaje rojo: con chroma se va el rojo\n\n[output]\nextra_scales = [0.5]\n\n# idle_combat: Kling O3, toma 2 del idle A (generate_idle.toml). Último cuadro = primero: el loop es el clip entero.\n[[animation]]\nname = \"idle_combat\"\nclip = \"clips/idle/kling-o3-std_idle_a_2.mp4\"\ncolor_matrix = \"bt601\"\nkind = \"cycle\"\nloop_start = 0\nloop_length = 120\nmodel = \"kling-o3-std\"\nprompt = \"prompts/idle_a.txt\"\npose = \"poses/perfil_dullmagenta_16x9.png\"\n\n# run_gun: Kling O3, toma 2 de correr (generate_correr.toml), desde la zancada con el casco a la misma escala que el\n# idle (505 px de alto; parado mediría 518, como el idle).\n[[animation]]\nname = \"run_gun\"\nclip = \"clips/correr/kling-o3-std_correr_a_2.mp4\"\ncolor_matrix = \"bt601\"\nremove_flash = { method = \"shape\" }\nkind = \"cycle\"\nloop_seconds = [0.5, 2.0]\nmodel = \"kling-o3-std\"\nprompt = \"prompts/correr_a.txt\"\npose = \"poses/correr_dullmagenta_16x9.png\"\npose_body_height_px = 518\n\n# idle: el cuadro quieto del arranque (la arena lo usa para el retrato), como en el ranger\n[[animation]]\nname = \"idle\"\nclip = \"clips/idle/kling-o3-std_idle_a_2.mp4\"\ncolor_matrix = \"bt601\"\nkind = \"oneshot\"\nloop = true\ntrim = [0, 4]\ntrim_static_tail = false\npick = \"first\"\nmodel = \"kling-o3-std\"\nprompt = \"prompts/idle_a.txt\"\npose = \"poses/perfil_dullmagenta_16x9.png\"\n\n# --- el resto del set (generate_set.toml y generate_subida.toml, revisadas las dos tomas de cada uno) ------------------\n# Los cuadros son del clip nativo (24 fps). Kling dispara en todos los clips con arma aunque el prompt diga que no:\n# remove_flash shape borra lo que está delante de la boca, salvo en los que giran o dan vueltas (ahí el recorte evita\n# los cuadros con rayo).\n\n# disparo: toma 1 (la 2 tiene un fogonazo naranja grande). Sube el brazo en 16-28 y dispara de 32 a 92.\n[[clip]]\nname = \"shoot\"\nfile = \"clips/set/kling-o3-std_shoot_1.mp4\"\ncolor_matrix = \"bt601\"\nmodel = \"kling-o3-std\"\nprompt = \"prompts/shoot.txt\"\npose = \"poses/perfil_dullmagenta_16x9.png\"\n\n[[animation]]\nname = \"shoot_in\"\nclip = \"shoot\"\nremove_flash = { method = \"shape\" }\nkind = \"oneshot\"\ntrim = [14, 32]\ntrim_static_tail = false\n\n[[animation]]\nname = \"shoot\"\nclip = \"shoot\"\nremove_flash = { method = \"shape\" }\nkind = \"cycle\"\nskip_seconds = 1.4\nloop_seconds = [0.3, 1.0]\n\n# a dos manos: toma 2 (en la 1 el pantalón se vuelve azul mientras dispara). Junta las manos en 8-20, dispara 24-104.\n[[clip]]\nname = \"shoot2h\"\nfile = \"clips/set/kling-o3-std_shoot2h_2.mp4\"\ncolor_matrix = \"bt601\"\nmodel = \"kling-o3-std\"\nprompt = \"prompts/shoot2h.txt\"\npose = \"poses/perfil_dullmagenta_16x9.png\"\n\n[[animation]]\nname = \"shoot2h_in\"\nclip = \"shoot2h\"\nremove_flash = { method = \"shape\" }\nkind = \"oneshot\"\ntrim = [6, 24]\ntrim_static_tail = false\n\n[[animation]]\nname = \"shoot2h\"\nclip = \"shoot2h\"\nremove_flash = { method = \"shape\" }\nkind = \"cycle\"\nskip_seconds = 1.2\nloop_seconds = [0.3, 1.0]\n\n# agachado: toma 2 (la 1 casi no se agacha). Baja en 14-28, dispara agachado 32-92, se para en 96-108.\n[[clip]]\nname = \"crouch\"\nfile = \"clips/set/kling-o3-std_crouch_shoot_2.mp4\"\ncolor_matrix = \"bt601\"\nmodel = \"kling-o3-std\"\nprompt = \"prompts/crouch_shoot.txt\"\npose = \"poses/perfil_dullmagenta_16x9.png\"\n\n[[animation]]\nname = \"crouch_in\"\nclip = \"crouch\"\nremove_flash = { method = \"shape\" }\nkind = \"oneshot\"\ntrim = [12, 30]\ntrim_static_tail = false\n\n[[animation]]\nname = \"crouch_shoot\"\nclip = \"crouch\"\nremove_flash = { method = \"shape\" }\nkind = \"cycle\"\nskip_seconds = 1.35\nloop_seconds = [0.3, 1.0]\n\n[[animation]]\nname = \"crouch_out\"\nclip = \"crouch\"\nremove_flash = { method = \"shape\" }\nkind = \"oneshot\"\ntrim = [94, 110]\ntrim_static_tail = false\n\n# salto: toma 1 (la 2 dispara rayos en casi todos los saltos). Un salto entero: despega en 8, aterriza en 24; en 26\n# arranca el segundo, que dispara.\n[[animation]]\nname = \"jump\"\nclip = \"clips/set/kling-o3-std_jump_1.mp4\"\ncolor_matrix = \"bt601\"\nremove_flash = { method = \"shape\" }\nkind = \"oneshot\"\ntrim = [4, 24]\nmodel = \"kling-o3-std\"\nprompt = \"prompts/jump.txt\"\npose = \"poses/salto_dullmagenta_16x9.png\"\n\n# salto disparando: toma 1. Salta en 16, dispara arriba en 28, aterriza en 36-40.\n[[animation]]\nname = \"jump_shoot\"\nclip = \"clips/set/kling-o3-std_jump_shoot_1.mp4\"\ncolor_matrix = \"bt601\"\nremove_flash = { method = \"shape\" }\nkind = \"oneshot\"\ntrim = [14, 44]\nmodel = \"kling-o3-std\"\nprompt = \"prompts/jump_shoot.txt\"\npose = \"poses/salto_dullmagenta_16x9.png\"\n\n# doble salto: toma 2. Trae dos mortales seguidos (24-40 y 44-60) y después dispara: va el primero. Sin remove_flash: con la vuelta\n# entera el seguimiento del arma se pierde y borraría el cuerpo.\n[[animation]]\nname = \"double_jump\"\nclip = \"clips/set/kling-o3-std_double_jump_2.mp4\"\ncolor_matrix = \"bt601\"\nkind = \"oneshot\"\ntrim = [22, 42]\nmodel = \"kling-o3-std\"\nprompt = \"prompts/double_jump.txt\"\npose = \"poses/salto_dullmagenta_16x9.png\"\n\n# colgado de una mano: toma 2. Un primer salto fallido en 16-26, vuelve a saltar en 44, se agarra en 48 y queda\n# colgado. Kling dibuja la cornisa (una barra oscura arriba): la limpieza previa con prop_rows la borra casi toda, como en\n# el ranger; quedan restos chicos arriba de la mano y en el cuadro del agarre.\n[[clip]]\nname = \"hang\"\nfile = \"clips/set/kling-o3-std_hang_2.mp4\"\ncolor_matrix = \"bt601\"\nclean = { prop_rows = true }\nmodel = \"kling-o3-std\"\nprompt = \"prompts/hang.txt\"\npose = \"poses/salto_dullmagenta_16x9.png\"\n\n[[animation]]\nname = \"hang_in\"\nclip = \"hang\"\nkind = \"oneshot\"\ntrim = [40, 58]\n\n[[animation]]\nname = \"hang\"\nclip = \"hang\"\nkind = \"cycle\"\nskip_seconds = 2.4\nloop_seconds = [0.5, 2.0]\n\n# subida: toma 1 (la 2 da una vuelta de cabeza sobre el canto). Dispara en 4-12 (fuera del recorte), sube en 16-72 y\n# queda parado sobre el canto. La pose arranca colgada: parado mide 331 px en la pose (climb_frames.json).\n[[animation]]\nname = \"climb\"\nclip = \"clips/subida/kling-o3-std_climb_1.mp4\"\ncolor_matrix = \"bt601\"\nkind = \"oneshot\"\ntrim = [14, 90]\nmodel = \"kling-o3-std\"\nprompt = \"prompts/climb.txt\"\npose = \"poses/climb_first_dullmagenta_16x9.png\"\npose_body_height_px = 331\n\n# colgado a dos manos: toma 2 (la 1 dispara). Último cuadro = primero: el loop es el clip entero menos el último.\n[[animation]]\nname = \"hang_two\"\nclip = \"clips/subida/kling-o3-std_hang_two_2.mp4\"\ncolor_matrix = \"bt601\"\nkind = \"cycle\"\nloop_start = 0\nloop_length = 96          # el clip es de 4 s (97 cuadros); el último es igual al primero\nmodel = \"kling-o3-std\"\nprompt = \"prompts/hang_two.txt\"\npose = \"poses/climb_first_dullmagenta_16x9.png\"\npose_body_height_px = 331\n\n# granada: toma 2 (en la 1 dispara en vez de tirar). Lleva el brazo atrás en 32-48, tira en 52-68 y vuelve; desde 80\n# dispara un rayo (fuera del recorte).\n[[animation]]\nname = \"throw\"\nclip = \"clips/set/kling-o3-std_throw_2.mp4\"\ncolor_matrix = \"bt601\"\nkind = \"oneshot\"\ntrim = [30, 78]\ntrim_static_tail = false\nmodel = \"kling-o3-std\"\nprompt = \"prompts/throw.txt\"\npose = \"poses/perfil_dullmagenta_16x9.png\"\n",
+  "align": {
+    "canvas": {
+      "w": 672,
+      "h": 838
+    },
+    "pivot_px": {
+      "x": 336,
+      "y": 786
+    },
+    "scale": 0.7420289855072464,
+    "pixel_factor": null,
+    "reference_height_px": 345.0
+  },
+  "variants": {
+    "1x": {
+      "w": 499,
+      "h": 622,
+      "scale": 0.7420289855072464
+    },
+    "0.5x": {
+      "w": 249,
+      "h": 311,
+      "scale": 0.3710144927536232
+    }
+  },
+  "cleanup_frames_overridden": 0,
+  "animations": {
+    "idle_combat": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/idle/kling-o3-std_idle_a_2.mp4",
+      "clip_sha256": "3d4eee448e68e23be2c7a3226213b0f7f6526221607386cddef1d2727386243b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement. Use the input image as the first frame and the last frame. The character stands in place facing right in a calm alert idle, holding the laser pistol forward in his right hand: slow breathing, the chest and shoulders rise and fall slightly, the helmet bobs a little with each breath, the pistol moves only slightly with the shoulders. The feet stay planted: no stepping, no turning. The body stays in exact side view the whole time and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections; the only light on the character is the cyan glow at the pistol muzzle. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.74): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32D7D",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 341.3,
+          "char_height_pct": 47.4,
+          "pose_mad_global": 0.44,
+          "pose_mad_region": 1.87,
+          "drift_pct": 0.0,
+          "drift_px_per_s": [
+            -0.03,
+            0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.68,
+          "bg_drift": 1.0,
+          "scene_cuts_at": [],
+          "motion": 0.74,
+          "static_tail_frames": 2
+        }
+      },
+      "selection": {
+        "start": 0,
+        "length": 120,
+        "manual": true,
+        "camera_drift_px_per_native_frame": [
+          -0.0006,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82,
+          84,
+          86,
+          88,
+          90,
+          92,
+          94,
+          96,
+          98,
+          100,
+          102,
+          104,
+          106,
+          108,
+          110,
+          112,
+          114,
+          116,
+          118
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32D7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 345.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2095,
+        "native_indices": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82,
+          84,
+          86,
+          88,
+          90,
+          92,
+          94,
+          96,
+          98,
+          100,
+          102,
+          104,
+          106,
+          108,
+          110,
+          112,
+          114,
+          116,
+          118
+        ],
+        "camera_drift_x": -0.0006,
+        "scale": 1.0,
+        "same_pose_as": [
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "reference_body_px": 345.0,
+        "final_body_px": 256.0
+      }
+    },
+    "run_gun": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/correr/kling-o3-std_correr_a_2.mp4",
+      "clip_sha256": "ec9801336f9673e652856e209967cc754623240e2e322d22dc537dd143faeec9",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement. Use the input image as the first frame and the last frame. The character runs in place like on a treadmill, facing right, with no forward travel: a fast arcade run with big strides, the knees lift, the body bounces on every step. The right hand keeps holding the laser pistol forward at chest height, pointing to the right the whole time; the left hand is a fist at chest height; the arms pump only a little and never swing down to the hips. The body stays in exact side view the whole time and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections; the only light on the character is the cyan glow at the pistol muzzle. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/correr_dullmagenta_16x9.png",
+      "pose_sha256": "5e160b8df27e81da82abc39ad55ae6ce047f55bbfaaaa865a97f66b3633e1bdc",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7E",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 346.7,
+          "char_height_pct": 48.1,
+          "pose_mad_global": 0.55,
+          "pose_mad_region": 2.16,
+          "drift_pct": 0.3,
+          "drift_px_per_s": [
+            -0.03,
+            -0.18
+          ],
+          "zoom_pct": 0.1,
+          "frames_touching_edge": 0,
+          "bg_std": 1.01,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 34.06,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 14,
+        "length": 28,
+        "score": 0.274,
+        "seam": 1.93,
+        "motion": 7.05,
+        "seconds": 1.167,
+        "candidates": [
+          {
+            "start": 14,
+            "length": 28,
+            "score": 0.274
+          },
+          {
+            "start": 23,
+            "length": 28,
+            "score": 0.292
+          },
+          {
+            "start": 51,
+            "length": 28,
+            "score": 0.301
+          },
+          {
+            "start": 8,
+            "length": 28,
+            "score": 0.306
+          },
+          {
+            "start": 28,
+            "length": 28,
+            "score": 0.313
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          0.0036,
+          0.0066
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32E7F",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 775,
+          "disk_y": [
+            356,
+            372
+          ],
+          "template": [
+            681,
+            324,
+            743,
+            388
+          ],
+          "band": 134,
+          "halo": [
+            743,
+            342,
+            383
+          ],
+          "step": 40
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          5,
+          19,
+          20,
+          33,
+          34,
+          48,
+          49,
+          61,
+          62,
+          75,
+          76,
+          77,
+          96,
+          97
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          765,
+          778
+        ],
+        "muzzle_y": [
+          357.0,
+          388.0
+        ]
+      },
+      "scale": {
+        "source": "pose_body_height_px",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 338.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 505.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 634.143,
+        "native_indices": [
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40
+        ],
+        "camera_drift_x": 0.0036,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 346.701,
+        "final_body_px": 256.0
+      }
+    },
+    "idle": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/idle/kling-o3-std_idle_a_2.mp4",
+      "clip_sha256": "3d4eee448e68e23be2c7a3226213b0f7f6526221607386cddef1d2727386243b",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement. Use the input image as the first frame and the last frame. The character stands in place facing right in a calm alert idle, holding the laser pistol forward in his right hand: slow breathing, the chest and shoulders rise and fall slightly, the helmet bobs a little with each breath, the pistol moves only slightly with the shoulders. The feet stay planted: no stepping, no turning. The body stays in exact side view the whole time and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections; the only light on the character is the cyan glow at the pistol muzzle. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "casi sin movimiento (mediana 0.74): típico de first==last"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32D7D",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 341.3,
+          "char_height_pct": 47.4,
+          "pose_mad_global": 0.44,
+          "pose_mad_region": 1.87,
+          "drift_pct": 0.0,
+          "drift_px_per_s": [
+            -0.03,
+            0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.68,
+          "bg_drift": 1.0,
+          "scene_cuts_at": [],
+          "motion": 0.74,
+          "static_tail_frames": 2
+        }
+      },
+      "selection": {
+        "start": 0,
+        "length": 4,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          0,
+          2,
+          3
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C42D7D",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 345.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2095,
+        "native_indices": [
+          0,
+          2,
+          3
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "final_body_px": 256.0
+      }
+    },
+    "shoot_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_shoot_1.mp4",
+      "clip_sha256": "052d7ac9d32265ec793140aa0b25ee1c549f68460716352e1d2b9c0e0d3b2024",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "source": "shoot",
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stands in place facing right, feet planted in a firm stance. He raises the laser pistol with his arm fully extended, perfectly horizontal at shoulder height, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back and jolts his body, then the arm snaps back to horizontal. Then he lowers the arm back to the starting pose. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7E",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 341.3,
+          "char_height_pct": 47.4,
+          "pose_mad_global": 0.44,
+          "pose_mad_region": 1.87,
+          "drift_pct": 1.2,
+          "drift_px_per_s": [
+            0.83,
+            0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.89,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 5.49,
+          "static_tail_frames": 8
+        }
+      },
+      "selection": {
+        "start": 14,
+        "length": 18,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          15,
+          17,
+          19,
+          20,
+          23,
+          25,
+          27,
+          29,
+          31
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C42E7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            362,
+            380
+          ],
+          "template": [
+            657,
+            326,
+            717,
+            398
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            347,
+            390
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          753,
+          810
+        ],
+        "muzzle_y": [
+          314.0,
+          376.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.1785,
+        "native_indices": [
+          15,
+          17,
+          19,
+          20,
+          23,
+          25,
+          27,
+          29,
+          31
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "shoot": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_shoot_1.mp4",
+      "clip_sha256": "052d7ac9d32265ec793140aa0b25ee1c549f68460716352e1d2b9c0e0d3b2024",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "source": "shoot",
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stands in place facing right, feet planted in a firm stance. He raises the laser pistol with his arm fully extended, perfectly horizontal at shoulder height, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back and jolts his body, then the arm snaps back to horizontal. Then he lowers the arm back to the starting pose. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7E",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 341.3,
+          "char_height_pct": 47.4,
+          "pose_mad_global": 0.44,
+          "pose_mad_region": 1.87,
+          "drift_pct": 1.2,
+          "drift_px_per_s": [
+            0.83,
+            0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.89,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 5.49,
+          "static_tail_frames": 8
+        }
+      },
+      "selection": {
+        "start": 45,
+        "length": 8,
+        "score": 0.461,
+        "seam": 1.16,
+        "motion": 2.51,
+        "seconds": 0.333,
+        "candidates": [
+          {
+            "start": 41,
+            "length": 16,
+            "score": 0.403
+          },
+          {
+            "start": 61,
+            "length": 24,
+            "score": 0.405
+          },
+          {
+            "start": 43,
+            "length": 20,
+            "score": 0.438
+          },
+          {
+            "start": 46,
+            "length": 24,
+            "score": 0.453
+          },
+          {
+            "start": 45,
+            "length": 8,
+            "score": 0.461
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          -0.1571,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          45,
+          47,
+          49,
+          51
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32E7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            362,
+            380
+          ],
+          "template": [
+            657,
+            326,
+            717,
+            398
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            347,
+            390
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          753,
+          810
+        ],
+        "muzzle_y": [
+          314.0,
+          376.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.1785,
+        "native_indices": [
+          45,
+          47,
+          49,
+          51
+        ],
+        "camera_drift_x": -0.1571,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "shoot2h_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_shoot2h_2.mp4",
+      "clip_sha256": "d23656536da7afed20470509a038f52b9851ddb0a07dddd4771f10b1b1d3b54a",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "source": "shoot2h",
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stands in place facing right, feet planted in a firm stance. He brings his free hand to the laser pistol and holds it with both hands, the support hand cupped under the gun hand, both arms fully extended forward, the pistol perfectly horizontal at shoulder height, pointing straight right. He fires in a fast steady rhythm: each shot kicks both arms back and slightly up together, the shoulders absorb it, then the arms snap back to horizontal. Then he lets go with the support hand and returns to the starting pose. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7E",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 341.3,
+          "char_height_pct": 47.4,
+          "pose_mad_global": 0.43,
+          "pose_mad_region": 1.87,
+          "drift_pct": 0.0,
+          "drift_px_per_s": [
+            -0.03,
+            0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.95,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 2.61,
+          "static_tail_frames": 1
+        }
+      },
+      "selection": {
+        "start": 6,
+        "length": 18,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          7,
+          8,
+          11,
+          13,
+          15,
+          17,
+          19,
+          20,
+          23
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32E7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            362,
+            380
+          ],
+          "template": [
+            657,
+            326,
+            717,
+            398
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            347,
+            390
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [],
+        "missed_frames": [],
+        "muzzle_x": [
+          753,
+          787
+        ],
+        "muzzle_y": [
+          332.0,
+          376.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2012,
+        "native_indices": [
+          7,
+          8,
+          11,
+          13,
+          15,
+          17,
+          19,
+          20,
+          23
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "shoot2h": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_shoot2h_2.mp4",
+      "clip_sha256": "d23656536da7afed20470509a038f52b9851ddb0a07dddd4771f10b1b1d3b54a",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "source": "shoot2h",
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stands in place facing right, feet planted in a firm stance. He brings his free hand to the laser pistol and holds it with both hands, the support hand cupped under the gun hand, both arms fully extended forward, the pistol perfectly horizontal at shoulder height, pointing straight right. He fires in a fast steady rhythm: each shot kicks both arms back and slightly up together, the shoulders absorb it, then the arms snap back to horizontal. Then he lets go with the support hand and returns to the starting pose. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7E",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 341.3,
+          "char_height_pct": 47.4,
+          "pose_mad_global": 0.43,
+          "pose_mad_region": 1.87,
+          "drift_pct": 0.0,
+          "drift_px_per_s": [
+            -0.03,
+            0.0
+          ],
+          "zoom_pct": 0.0,
+          "frames_touching_edge": 0,
+          "bg_std": 0.95,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 2.61,
+          "static_tail_frames": 1
+        }
+      },
+      "selection": {
+        "start": 88,
+        "length": 14,
+        "score": 0.661,
+        "seam": 0.99,
+        "motion": 1.49,
+        "seconds": 0.583,
+        "candidates": [
+          {
+            "start": 48,
+            "length": 16,
+            "score": 0.641
+          },
+          {
+            "start": 88,
+            "length": 14,
+            "score": 0.661
+          },
+          {
+            "start": 61,
+            "length": 18,
+            "score": 0.683
+          },
+          {
+            "start": 62,
+            "length": 18,
+            "score": 0.701
+          },
+          {
+            "start": 60,
+            "length": 18,
+            "score": 0.708
+          }
+        ],
+        "quality": "aceptable",
+        "camera_drift_px_per_native_frame": [
+          -0.1038,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          88,
+          90,
+          92,
+          94,
+          96,
+          98,
+          100
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32E7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            362,
+            380
+          ],
+          "template": [
+            657,
+            326,
+            717,
+            398
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            347,
+            390
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [],
+        "missed_frames": [],
+        "muzzle_x": [
+          753,
+          787
+        ],
+        "muzzle_y": [
+          332.0,
+          376.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2012,
+        "native_indices": [
+          88,
+          90,
+          92,
+          94,
+          96,
+          98,
+          100
+        ],
+        "camera_drift_x": -0.1038,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "crouch_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_crouch_shoot_2.mp4",
+      "clip_sha256": "0b4820cf7fb11f59e7cbbbf9f0f4842d8327c8f3600abd7c21c40544a257378f",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "source": "crouch",
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stays in place facing right. He drops quickly into a low crouch: knees deeply bent, feet planted, body compact, about two thirds of his standing height. Staying crouched, he holds the laser pistol with his arm fully extended, perfectly horizontal, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back, then the arm snaps back to horizontal. Then he stands back up into the starting pose. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7F",
+          "key_strength": 0.318,
+          "key_method": "chroma",
+          "char_height_px": 293.3,
+          "char_height_pct": 40.7,
+          "pose_mad_global": 0.46,
+          "pose_mad_region": 1.87,
+          "drift_pct": 1.5,
+          "drift_px_per_s": [
+            0.87,
+            -0.12
+          ],
+          "zoom_pct": 0.7,
+          "frames_touching_edge": 0,
+          "bg_std": 1.52,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 4.32,
+          "static_tail_frames": 5
+        }
+      },
+      "selection": {
+        "start": 12,
+        "length": 18,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          13,
+          15,
+          16,
+          19,
+          21,
+          23,
+          25,
+          26,
+          29
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32D7F",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            362,
+            380
+          ],
+          "template": [
+            657,
+            326,
+            717,
+            398
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            347,
+            390
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          17,
+          18,
+          19,
+          20,
+          31,
+          32,
+          36,
+          37,
+          39,
+          40,
+          43,
+          44,
+          47,
+          48,
+          52,
+          53,
+          55,
+          56,
+          58,
+          59,
+          61,
+          62,
+          63,
+          64,
+          67,
+          69,
+          71,
+          72,
+          76,
+          77,
+          78,
+          79,
+          80,
+          82,
+          83,
+          85,
+          86,
+          88,
+          90,
+          91,
+          102,
+          103,
+          104,
+          105,
+          106
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          752,
+          819
+        ],
+        "muzzle_y": [
+          352.0,
+          407.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.1919,
+        "native_indices": [
+          13,
+          15,
+          16,
+          19,
+          21,
+          23,
+          25,
+          26,
+          29
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "crouch_shoot": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_crouch_shoot_2.mp4",
+      "clip_sha256": "0b4820cf7fb11f59e7cbbbf9f0f4842d8327c8f3600abd7c21c40544a257378f",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "source": "crouch",
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stays in place facing right. He drops quickly into a low crouch: knees deeply bent, feet planted, body compact, about two thirds of his standing height. Staying crouched, he holds the laser pistol with his arm fully extended, perfectly horizontal, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back, then the arm snaps back to horizontal. Then he stands back up into the starting pose. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7F",
+          "key_strength": 0.318,
+          "key_method": "chroma",
+          "char_height_px": 293.3,
+          "char_height_pct": 40.7,
+          "pose_mad_global": 0.46,
+          "pose_mad_region": 1.87,
+          "drift_pct": 1.5,
+          "drift_px_per_s": [
+            0.87,
+            -0.12
+          ],
+          "zoom_pct": 0.7,
+          "frames_touching_edge": 0,
+          "bg_std": 1.52,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 4.32,
+          "static_tail_frames": 5
+        }
+      },
+      "selection": {
+        "start": 42,
+        "length": 8,
+        "score": 0.753,
+        "seam": 1.22,
+        "motion": 1.61,
+        "seconds": 0.333,
+        "candidates": [
+          {
+            "start": 39,
+            "length": 16,
+            "score": 0.736
+          },
+          {
+            "start": 42,
+            "length": 8,
+            "score": 0.753
+          },
+          {
+            "start": 85,
+            "length": 8,
+            "score": 0.758
+          },
+          {
+            "start": 37,
+            "length": 8,
+            "score": 0.783
+          },
+          {
+            "start": 78,
+            "length": 8,
+            "score": 0.787
+          }
+        ],
+        "quality": "aceptable",
+        "camera_drift_px_per_native_frame": [
+          -0.0855,
+          0.0658
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          42,
+          44,
+          46,
+          48
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32E7F",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            362,
+            380
+          ],
+          "template": [
+            657,
+            326,
+            717,
+            398
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            347,
+            390
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          17,
+          18,
+          19,
+          20,
+          31,
+          32,
+          36,
+          37,
+          39,
+          40,
+          43,
+          44,
+          47,
+          48,
+          52,
+          53,
+          55,
+          56,
+          58,
+          59,
+          61,
+          62,
+          63,
+          64,
+          67,
+          69,
+          71,
+          72,
+          76,
+          77,
+          78,
+          79,
+          80,
+          82,
+          83,
+          85,
+          86,
+          88,
+          90,
+          91,
+          102,
+          103,
+          104,
+          105,
+          106
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          752,
+          819
+        ],
+        "muzzle_y": [
+          352.0,
+          407.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.1919,
+        "native_indices": [
+          42,
+          44,
+          46,
+          48
+        ],
+        "camera_drift_x": -0.0855,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "crouch_out": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_crouch_shoot_2.mp4",
+      "clip_sha256": "0b4820cf7fb11f59e7cbbbf9f0f4842d8327c8f3600abd7c21c40544a257378f",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "source": "crouch",
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stays in place facing right. He drops quickly into a low crouch: knees deeply bent, feet planted, body compact, about two thirds of his standing height. Staying crouched, he holds the laser pistol with his arm fully extended, perfectly horizontal, pointing straight right, and fires in a fast steady rhythm: each shot kicks his arm and shoulder back, then the arm snaps back to horizontal. Then he stands back up into the starting pose. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7F",
+          "key_strength": 0.318,
+          "key_method": "chroma",
+          "char_height_px": 293.3,
+          "char_height_pct": 40.7,
+          "pose_mad_global": 0.46,
+          "pose_mad_region": 1.87,
+          "drift_pct": 1.5,
+          "drift_px_per_s": [
+            0.87,
+            -0.12
+          ],
+          "zoom_pct": 0.7,
+          "frames_touching_edge": 0,
+          "bg_std": 1.52,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 4.32,
+          "static_tail_frames": 5
+        }
+      },
+      "selection": {
+        "start": 94,
+        "length": 16,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          95,
+          96,
+          99,
+          101,
+          103,
+          104,
+          107,
+          109
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C22E7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            362,
+            380
+          ],
+          "template": [
+            657,
+            326,
+            717,
+            398
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            347,
+            390
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          17,
+          18,
+          19,
+          20,
+          31,
+          32,
+          36,
+          37,
+          39,
+          40,
+          43,
+          44,
+          47,
+          48,
+          52,
+          53,
+          55,
+          56,
+          58,
+          59,
+          61,
+          62,
+          63,
+          64,
+          67,
+          69,
+          71,
+          72,
+          76,
+          77,
+          78,
+          79,
+          80,
+          82,
+          83,
+          85,
+          86,
+          88,
+          90,
+          91,
+          102,
+          103,
+          104,
+          105,
+          106
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          752,
+          819
+        ],
+        "muzzle_y": [
+          352.0,
+          407.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.1919,
+        "native_indices": [
+          95,
+          96,
+          99,
+          101,
+          103,
+          104,
+          107,
+          109
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "jump": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_jump_1.mp4",
+      "clip_sha256": "efe54db821571e3679ba53de85729f29aac8754a06466e4d96584d4668a8a447",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character does three fast jumps in a row, straight up in place, facing right, no forward travel. Arcade timing, very snappy: he leaves the ground instantly with an explosive push off, the body stretches on the way up, the knees tuck at the top for a split second, he drops fast and lands with a strong squash, knees bent and body compressed, springs back to standing and immediately jumps again. The laser pistol stays in his hand pointing right. He never shoots: no beam, no laser, no flash and no projectile ever comes out of the pistol. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/salto_dullmagenta_16x9.png",
+      "pose_sha256": "9328c8e62980a719488ec57362dde6197d6503afff39a7754b1a7beb62cb38c3",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C22F7E",
+          "key_strength": 0.31,
+          "key_method": "chroma",
+          "char_height_px": 320.0,
+          "char_height_pct": 44.4,
+          "pose_mad_global": 0.56,
+          "pose_mad_region": 1.92,
+          "drift_pct": 6.9,
+          "drift_px_per_s": [
+            -0.36,
+            -4.38
+          ],
+          "zoom_pct": 0.8,
+          "frames_touching_edge": 0,
+          "bg_std": 0.96,
+          "bg_drift": 3.0,
+          "scene_cuts_at": [],
+          "motion": 54.12,
+          "static_tail_frames": 4
+        }
+      },
+      "selection": {
+        "start": 4,
+        "length": 20,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          5,
+          7,
+          8,
+          11,
+          13,
+          15,
+          17,
+          19,
+          21,
+          23
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32E7F",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            506,
+            524
+          ],
+          "template": [
+            657,
+            470,
+            717,
+            542
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            491,
+            534
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          7,
+          8,
+          9,
+          10,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          41,
+          43,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          62,
+          65,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          74,
+          75,
+          77,
+          78,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          93,
+          94,
+          97,
+          98,
+          99,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          751,
+          780
+        ],
+        "muzzle_y": [
+          249.0,
+          575.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2117,
+        "native_indices": [
+          5,
+          7,
+          8,
+          11,
+          13,
+          15,
+          17,
+          19,
+          21,
+          23
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "jump_shoot": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_jump_shoot_1.mp4",
+      "clip_sha256": "3fe04a38a39e90aaeb83195351408aaa16715e6bef63f851186ae81d038c9e91",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character jumps straight up in place, facing right, no forward travel. At the top of the jump he snaps the pistol arm out, perfectly horizontal, pointing straight right, fires two quick shots with a small recoil, then drops fast and lands with a squash. He does it three times in a row. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/salto_dullmagenta_16x9.png",
+      "pose_sha256": "9328c8e62980a719488ec57362dde6197d6503afff39a7754b1a7beb62cb38c3",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el personaje toca el borde del cuadro en 3 frames (arma o capa cortada)"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7E",
+          "key_strength": 0.314,
+          "key_method": "chroma",
+          "char_height_px": 352.0,
+          "char_height_pct": 48.9,
+          "pose_mad_global": 0.72,
+          "pose_mad_region": 1.88,
+          "drift_pct": 8.5,
+          "drift_px_per_s": [
+            4.45,
+            -4.03
+          ],
+          "zoom_pct": 1.4,
+          "frames_touching_edge": 3,
+          "bg_std": 1.0,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 31.84,
+          "static_tail_frames": 4
+        }
+      },
+      "selection": {
+        "start": 14,
+        "length": 30,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          15,
+          16,
+          19,
+          21,
+          23,
+          24,
+          27,
+          28,
+          31,
+          32,
+          35,
+          37,
+          39,
+          40,
+          43
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C32E7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "remove_flash": {
+        "geometry": {
+          "method": "shape",
+          "front": 753,
+          "disk_y": [
+            506,
+            524
+          ],
+          "template": [
+            657,
+            470,
+            717,
+            542
+          ],
+          "band": 137,
+          "halo": [
+            717,
+            491,
+            534
+          ],
+          "step": 41
+        },
+        "measured": [
+          "shape"
+        ],
+        "held_frames": [
+          15,
+          16,
+          17,
+          18,
+          19,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          95,
+          96,
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109
+        ],
+        "missed_frames": [],
+        "muzzle_x": [
+          753,
+          796
+        ],
+        "muzzle_y": [
+          249.0,
+          552.0
+        ]
+      },
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2148,
+        "native_indices": [
+          15,
+          16,
+          19,
+          21,
+          23,
+          24,
+          27,
+          28,
+          31,
+          32,
+          35,
+          37,
+          39,
+          40,
+          43
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "double_jump",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    },
+    "double_jump": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_double_jump_2.mp4",
+      "clip_sha256": "24f337b44f28c2b3de72a8f69c6806a9ef780d6f088265f4f64f5bbc47ed2d55",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character jumps straight up in place, facing right, no forward travel. At the top of the jump he does one fast forward somersault: tucks into a tight ball, spins one full turn, opens up into a falling pose and lands with a squash. Very fast and snappy. The laser pistol stays in his hand. He does it twice in a row. He never shoots: no beam, no laser, no flash and no projectile ever comes out of the pistol. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/salto_dullmagenta_16x9.png",
+      "pose_sha256": "9328c8e62980a719488ec57362dde6197d6503afff39a7754b1a7beb62cb38c3",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el personaje toca el borde del cuadro en 8 frames (arma o capa cortada)"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C32E7F",
+          "key_strength": 0.318,
+          "key_method": "chroma",
+          "char_height_px": 330.7,
+          "char_height_pct": 45.9,
+          "pose_mad_global": 0.49,
+          "pose_mad_region": 1.85,
+          "drift_pct": 13.1,
+          "drift_px_per_s": [
+            8.43,
+            2.06
+          ],
+          "zoom_pct": 2.5,
+          "frames_touching_edge": 8,
+          "bg_std": 0.98,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 46.71,
+          "static_tail_frames": 8
+        }
+      },
+      "selection": {
+        "start": 22,
+        "length": 20,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          23,
+          24,
+          27,
+          29,
+          31,
+          33,
+          35,
+          37,
+          39,
+          40,
+          41
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C22E7F",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 345.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2194,
+        "native_indices": [
+          23,
+          24,
+          27,
+          29,
+          31,
+          33,
+          35,
+          37,
+          39,
+          40,
+          41
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "hang_in",
+          "hang",
+          "throw"
+        ],
+        "final_body_px": 256.0
+      }
+    },
+    "hang_in": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_hang_2.mp4",
+      "clip_sha256": "6f68193b99f0b87f6ea2f0f5400ac3abd229dc3861dfa1ca7a6eb7e7308f7233",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "hang",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/work/00_clean/hang-0b04a905.mp4",
+        "key": "0b04a9057a8dfd4f9ff12148a84077128a74cc025d018c5ca6740d027b14ae1b",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_hang_2.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": true,
+          "muzzle_steady": false
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#C02D7B",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 568626
+      },
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame. The character jumps straight up in place, facing right, and grabs the edge of an invisible ledge above his helmet with his free hand, then hangs from that one arm: the legs dangle, the body swings slightly back and forth and settles, the laser pistol in his other hand pointing down. Nothing is drawn where he grabs: no ledge, no platform, no wall, no object and no shadow. He never shoots: no beam, no laser, no flash and no projectile ever comes out of the pistol. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/salto_dullmagenta_16x9.png",
+      "pose_sha256": "9328c8e62980a719488ec57362dde6197d6503afff39a7754b1a7beb62cb38c3",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el personaje toca el borde del cuadro en 1 frames (arma o capa cortada)"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#BF2D7A",
+          "key_strength": 0.302,
+          "key_method": "chroma",
+          "char_height_px": 416.0,
+          "char_height_pct": 57.8,
+          "pose_mad_global": 2.64,
+          "pose_mad_region": 2.08,
+          "drift_pct": 16.9,
+          "drift_px_per_s": [
+            -0.77,
+            -14.03
+          ],
+          "zoom_pct": 34.7,
+          "frames_touching_edge": 1,
+          "bg_std": 0.08,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 21.86,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 40,
+        "length": 18,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          41,
+          42,
+          45,
+          46,
+          49,
+          51,
+          53,
+          55,
+          56,
+          57
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#BF2D7A",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 345.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.193,
+        "native_indices": [
+          41,
+          42,
+          45,
+          46,
+          49,
+          51,
+          53,
+          55,
+          56,
+          57
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang",
+          "throw"
+        ],
+        "final_body_px": 256.0
+      }
+    },
+    "hang": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_hang_2.mp4",
+      "clip_sha256": "6f68193b99f0b87f6ea2f0f5400ac3abd229dc3861dfa1ca7a6eb7e7308f7233",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv444p",
+        "color_space": "bt709",
+        "color_range": "tv"
+      },
+      "source": "hang",
+      "color_matrix": "bt601",
+      "clean": {
+        "file": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/work/00_clean/hang-0b04a905.mp4",
+        "key": "0b04a9057a8dfd4f9ff12148a84077128a74cc025d018c5ca6740d027b14ae1b",
+        "source": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_hang_2.mp4",
+        "params": {
+          "cut_muzzle": false,
+          "cut_left": false,
+          "prop_rows": true,
+          "muzzle_steady": false
+        },
+        "color_matrix": "bt601",
+        "frames": 121,
+        "bg": "#C02D7B",
+        "muzzle_x": null,
+        "cut_left_x": null,
+        "removed_px": 568626
+      },
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame. The character jumps straight up in place, facing right, and grabs the edge of an invisible ledge above his helmet with his free hand, then hangs from that one arm: the legs dangle, the body swings slightly back and forth and settles, the laser pistol in his other hand pointing down. Nothing is drawn where he grabs: no ledge, no platform, no wall, no object and no shadow. He never shoots: no beam, no laser, no flash and no projectile ever comes out of the pistol. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/salto_dullmagenta_16x9.png",
+      "pose_sha256": "9328c8e62980a719488ec57362dde6197d6503afff39a7754b1a7beb62cb38c3",
+      "qa": {
+        "verdict": "fail",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "deriva/paneo o el personaje se traslada: 16.9% del alto (la alineación saca la deriva lineal)"
+          },
+          {
+            "level": "fail",
+            "msg": "zoom o cambio de escala: 34.7% del alto"
+          },
+          {
+            "level": "warn",
+            "msg": "el personaje toca el borde del cuadro en 1 frames (arma o capa cortada)"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#BF2D7A",
+          "key_strength": 0.302,
+          "key_method": "chroma",
+          "char_height_px": 416.0,
+          "char_height_pct": 57.8,
+          "pose_mad_global": 2.64,
+          "pose_mad_region": 2.08,
+          "drift_pct": 16.9,
+          "drift_px_per_s": [
+            -0.77,
+            -14.03
+          ],
+          "zoom_pct": 34.7,
+          "frames_touching_edge": 1,
+          "bg_std": 0.08,
+          "bg_drift": 0.0,
+          "scene_cuts_at": [],
+          "motion": 21.86,
+          "static_tail_frames": 0
+        }
+      },
+      "selection": {
+        "start": 79,
+        "length": 34,
+        "score": 0.524,
+        "seam": 2.22,
+        "motion": 4.24,
+        "seconds": 1.417,
+        "candidates": [
+          {
+            "start": 79,
+            "length": 34,
+            "score": 0.524
+          },
+          {
+            "start": 78,
+            "length": 34,
+            "score": 0.528
+          },
+          {
+            "start": 77,
+            "length": 34,
+            "score": 0.544
+          },
+          {
+            "start": 75,
+            "length": 34,
+            "score": 0.558
+          },
+          {
+            "start": 76,
+            "length": 34,
+            "score": 0.56
+          }
+        ],
+        "quality": "buena",
+        "camera_drift_px_per_native_frame": [
+          0.0109,
+          0.0649
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          79,
+          81,
+          83,
+          85,
+          87,
+          89,
+          91,
+          93,
+          95,
+          97,
+          99,
+          101,
+          103,
+          105,
+          107,
+          109,
+          111
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#BF2D7A",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 345.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.193,
+        "native_indices": [
+          79,
+          81,
+          83,
+          85,
+          87,
+          89,
+          91,
+          93,
+          95,
+          97,
+          99,
+          101,
+          103,
+          105,
+          107,
+          109,
+          111
+        ],
+        "camera_drift_x": 0.0109,
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "throw"
+        ],
+        "final_body_px": 256.0
+      }
+    },
+    "climb": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/subida/kling-o3-std_climb_1.mp4",
+      "clip_sha256": "f55b211a8f68c442cc890f572b9505ae7b070261bbd8b418a0cb268511e31836",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the end image as the last frame. The character hangs from the edge of an invisible ledge with both hands, then right away climbs up onto it in one quick, strong move: he pulls himself up with both arms until his chest is above the edge, swings one knee up onto the top of the ledge, pushes up and stands up on top of the ledge, facing right, in the standing pose of the end image, and then stays still. The laser pistol stays in his right hand the whole time. The ledge and the wall are invisible: nothing is drawn where he grabs or where he stands, no ledge, no platform, no wall, no floor, no object and no shadow. Empty space above him. He never shoots: no beam, no laser, no flash and no projectile ever comes out of the pistol. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/climb_first_dullmagenta_16x9.png",
+      "pose_sha256": "b1ffa051201841f7d31b7a9278b1aa25765edaafdcb09c3f5035b59ab56a08b4",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#C32F7E",
+          "key_strength": 0.31,
+          "key_method": "chroma",
+          "char_height_px": 261.3,
+          "char_height_pct": 36.3,
+          "pose_mad_global": 0.39,
+          "pose_mad_region": 2.37,
+          "drift_pct": 148.0,
+          "drift_px_per_s": [
+            33.99,
+            -90.54
+          ],
+          "zoom_pct": 54.1,
+          "frames_touching_edge": 0,
+          "bg_std": 0.66,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 18.79,
+          "static_tail_frames": 8
+        }
+      },
+      "selection": {
+        "start": 14,
+        "length": 75,
+        "static_tail_trimmed": 1
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          15,
+          16,
+          19,
+          20,
+          23,
+          24,
+          27,
+          28,
+          31,
+          32,
+          35,
+          36,
+          39,
+          40,
+          42,
+          44,
+          47,
+          49,
+          51,
+          53,
+          55,
+          56,
+          58,
+          61,
+          63,
+          65,
+          67,
+          68,
+          71,
+          73,
+          75,
+          76,
+          79,
+          80,
+          83,
+          84,
+          87,
+          88
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C22F7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose_body_height_px",
+        "body_px": 221.1787,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 288.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 431.0,
+        "standing_pose_px": 331.0,
+        "frame0_anchor_x": 521.3369,
+        "native_indices": [
+          15,
+          16,
+          19,
+          20,
+          23,
+          24,
+          27,
+          28,
+          31,
+          32,
+          35,
+          36,
+          39,
+          40,
+          42,
+          44,
+          47,
+          49,
+          51,
+          53,
+          55,
+          56,
+          58,
+          61,
+          63,
+          65,
+          67,
+          68,
+          71,
+          73,
+          75,
+          76,
+          79,
+          80,
+          83,
+          84,
+          87,
+          88
+        ],
+        "scale": 1.5598,
+        "same_pose_as": [
+          "hang_two"
+        ],
+        "final_body_px": 256.0,
+        "scale_xy": [
+          1.56016,
+          1.55972
+        ]
+      }
+    },
+    "hang_two": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/subida/kling-o3-std_hang_two_2.mp4",
+      "clip_sha256": "6576e1aad08a4d47a796c61766704b75f5f92c2311fb46ca029a97c178a55772",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 97,
+        "duration": 4.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character hangs from the edge of an invisible ledge with both hands, waiting: he breathes, his body sways very slightly and his legs dangle a little and settle. Both hands stay exactly in the same place the whole time, gripping the same spot, and the laser pistol stays in his right hand. Nothing is drawn where he grabs: no ledge, no platform, no wall, no object and no shadow. He never shoots: no beam, no laser, no flash and no projectile ever comes out of the pistol. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/climb_first_dullmagenta_16x9.png",
+      "pose_sha256": "b1ffa051201841f7d31b7a9278b1aa25765edaafdcb09c3f5035b59ab56a08b4",
+      "qa": {
+        "verdict": "ok",
+        "flags": [],
+        "metrics": {
+          "frames": 97,
+          "fps": 24.0,
+          "seconds": 4.04,
+          "bg_color": "#C22F7E",
+          "key_strength": 0.31,
+          "key_method": "chroma",
+          "char_height_px": 288.0,
+          "char_height_pct": 40.0,
+          "pose_mad_global": 0.39,
+          "pose_mad_region": 2.31,
+          "drift_pct": 0.3,
+          "drift_px_per_s": [
+            -0.01,
+            0.21
+          ],
+          "zoom_pct": 0.3,
+          "frames_touching_edge": 0,
+          "bg_std": 0.52,
+          "bg_drift": 2.0,
+          "scene_cuts_at": [],
+          "motion": 3.28,
+          "static_tail_frames": 3
+        }
+      },
+      "selection": {
+        "start": 0,
+        "length": 96,
+        "manual": true,
+        "camera_drift_px_per_native_frame": [
+          0.0,
+          0.0
+        ]
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82,
+          84,
+          86,
+          88,
+          90,
+          92,
+          94
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C22E7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": true,
+      "scale": {
+        "source": "pose_body_height_px",
+        "body_px": 221.1787,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 288.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 431.0,
+        "standing_pose_px": 331.0,
+        "frame0_anchor_x": 521.3077,
+        "native_indices": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82,
+          84,
+          86,
+          88,
+          90,
+          92,
+          94
+        ],
+        "camera_drift_x": 0.0,
+        "scale": 1.5598,
+        "same_pose_as": [
+          "climb"
+        ],
+        "final_body_px": 256.0,
+        "scale_xy": [
+          1.56016,
+          1.55972
+        ]
+      }
+    },
+    "throw": {
+      "clip": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/clips/set/kling-o3-std_throw_2.mp4",
+      "clip_sha256": "d3052ded6f249901c8822d65aab1ce9f27541fc635cf9debee246be18da98740",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "fps": 24.0,
+        "nb_frames": 121,
+        "duration": 5.041667,
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "color_space": null,
+        "color_range": null
+      },
+      "color_matrix": "bt601",
+      "model": "kling-o3-std",
+      "prompt": "Stylized 3D low-poly video game character animation, like a real-time game model: chunky faceted polygons with flat shading, solid colors and soft even studio lighting. Static locked camera, fixed framing, pure side view, no zoom and no camera movement: the camera never follows the character. Use the input image as the first frame and the last frame. The character stands in place facing right, feet planted, keeping the laser pistol in his right hand close to his chest the whole time. With his free left hand he makes one quick, strong overhand throw toward the right, like throwing a small grenade: the left arm swings back behind the helmet, then whips forward and up, the torso twists into the throw and the front shoulder drops, the arm follows through pointing forward and up at about 45 degrees, then he settles back into the starting pose and stays completely still for the rest of the clip. The throwing hand is empty: no grenade, no object, no projectile is visible at any moment. He never shoots: no beam, no laser, no flash and no projectile ever comes out of the pistol. The body stays in side view and never turns toward the camera. Keep exactly the same design, proportions, colors and polygon facets in every frame. Matte surfaces, no shine and no reflections. Solid flat background, the same color as in the input image, unchanged, with no shadow and no floor.\n",
+      "pose": "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses/perfil_dullmagenta_16x9.png",
+      "pose_sha256": "ac7d53cf72d6714396c0081dae03b2a803840fb6afb52be165b45be985915b07",
+      "qa": {
+        "verdict": "warn",
+        "flags": [
+          {
+            "level": "warn",
+            "msg": "el personaje toca el borde del cuadro en 2 frames (arma o capa cortada)"
+          }
+        ],
+        "metrics": {
+          "frames": 121,
+          "fps": 24.0,
+          "seconds": 5.04,
+          "bg_color": "#C22F7E",
+          "key_strength": 0.31,
+          "key_method": "chroma",
+          "char_height_px": 336.0,
+          "char_height_pct": 46.7,
+          "pose_mad_global": 0.44,
+          "pose_mad_region": 1.85,
+          "drift_pct": 10.3,
+          "drift_px_per_s": [
+            6.93,
+            -0.6
+          ],
+          "zoom_pct": 1.2,
+          "frames_touching_edge": 2,
+          "bg_std": 0.71,
+          "bg_drift": 3.0,
+          "scene_cuts_at": [],
+          "motion": 14.24,
+          "static_tail_frames": 15
+        }
+      },
+      "selection": {
+        "start": 30,
+        "length": 48,
+        "static_tail_trimmed": 0
+      },
+      "timing": {
+        "K": 2,
+        "effective_fps": 12.0,
+        "native_indices": [
+          31,
+          33,
+          35,
+          37,
+          39,
+          41,
+          43,
+          44,
+          47,
+          48,
+          50,
+          53,
+          55,
+          57,
+          59,
+          60,
+          63,
+          64,
+          67,
+          68,
+          71,
+          72,
+          75,
+          76,
+          77
+        ],
+        "durations_ms": [
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3,
+          83.3
+        ]
+      },
+      "key": {
+        "key_color": "#C22F7E",
+        "method": [
+          [
+            "distance",
+            "connected"
+          ]
+        ],
+        "tolerance": [
+          0.12,
+          0.8
+        ],
+        "despill": 1.0
+      },
+      "loop": false,
+      "scale": {
+        "source": "pose",
+        "body_px": 345.0,
+        "video": [
+          1280,
+          720
+        ],
+        "frame0_px": 344.0,
+        "pose_size": [
+          1920,
+          1080
+        ],
+        "pose_px": 518.0,
+        "standing_pose_px": 518.0,
+        "frame0_anchor_x": 617.2097,
+        "native_indices": [
+          31,
+          33,
+          35,
+          37,
+          39,
+          41,
+          43,
+          44,
+          47,
+          48,
+          50,
+          53,
+          55,
+          57,
+          59,
+          60,
+          63,
+          64,
+          67,
+          68,
+          71,
+          72,
+          75,
+          76,
+          77
+        ],
+        "scale": 1.0,
+        "same_pose_as": [
+          "idle_combat",
+          "run_gun",
+          "idle",
+          "shoot_in",
+          "shoot",
+          "shoot2h_in",
+          "shoot2h",
+          "crouch_in",
+          "crouch_shoot",
+          "crouch_out",
+          "jump",
+          "jump_shoot",
+          "double_jump",
+          "hang_in",
+          "hang"
+        ],
+        "measured_body_px": 344.0,
+        "final_body_px": 256.0
+      }
+    }
+  },
+  "human_cleanup": "registrar en pilot/cleanup_log.csv quién limpió qué y cuánto tardó"
+}

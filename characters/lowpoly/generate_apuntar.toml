@@ -1,0 +1,47 @@
+# Segunda prueba para que el video no traiga fogonazo. La primera (generate_sin_fogonazo.toml) mostró que Kling dibuja
+# el fogonazo siempre que la acción es disparar, aunque el prompt lo prohíba y aunque el arma esté apagada. Acá el video
+# no dispara: el retroceso y el fogonazo los hace el juego.
+#   apuntar     sube el brazo, lo deja quieto apuntando y lo baja; arma apagada (disco gris) y sin "gatillo" ni "retroceso"
+#   sin_arma    lo mismo con la mano vacía cerrada: el arma es un sprite que el juego pega a la mano (pegar_arma.py / out/fx)
+# En las dos, el disparo y el salto disparando. Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_apuntar.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 5
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 4
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/apuntar"
+
+[[animation]]
+name = "apuntar"
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+prompt = "prompts/apuntar.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "salto_apuntando"
+pose = "poses/salto_apagada_dullmagenta_16x9.png"
+prompt = "prompts/salto_apuntando.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "apuntar_sin_arma"
+pose = "poses/sin_arma_dullmagenta_16x9.png"
+prompt = "prompts/apuntar_sin_arma.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "salto_apuntando_sin_arma"
+pose = "poses/sin_arma_salto_dullmagenta_16x9.png"
+prompt = "prompts/salto_apuntando_sin_arma.txt"
+kind = "oneshot"
+last_frame = true

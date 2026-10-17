@@ -1,0 +1,30 @@
+# Estrategia C del bake-off del idle (ver generate_idle.toml): el personaje sin arma, con la mano en pose de agarre,
+# más las vistas del personaje (sin arma) como referencia. El arma se pega después como sprite, detrás del puño:
+#   uv run --project pipeline python characters/lowpoly/pegar_arma.py <clip> <clip_con_arma> --pose <pose> ...
+# La pose sale de poses_gen/ (gen-images, asset sin_arma) pasada por `spritepipe pad-pose --bg C42D7D`.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_idle_c.toml --dry-run
+
+[bakeoff]
+models = ["minimax-h3-max", "kling-o3-std"]
+clips_per_model = 2
+duration = 5
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+seed = 7
+max_usd = 3
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/idle_c"  # aparte de clips/idle: cada bake-off lleva su bakeoff.json
+
+# En Kling las 4 vistas son @Element1 (frente en T-pose + tres cuartos + espalda + desde abajo).
+[[animation]]
+name = "idle_c"
+pose = "poses/sin_arma_dullmagenta_16x9.png"
+prompt = "prompts/idle_c_h3max.txt"
+prompts = { kling-o3-std = "prompts/idle_c_kling.txt" }
+kind = "cycle"
+last_frame = true
+refs = ["refs/vistas/tpose_frente.png", "refs/vistas/tpose_tres_cuartos.png", "refs/vistas/tpose_espalda.png",
+        "refs/vistas/tpose_abajo.png"]

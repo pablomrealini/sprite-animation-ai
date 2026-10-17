@@ -18,12 +18,22 @@ sin disparar: la boca es el contorno oscuro más a la derecha del personaje (que
 las franjas salen del alto del personaje y `halo_x0` es donde empieza el tramo del cañón que no
 tiene ni mano ni mira arriba o abajo. Supone que el arma no avanza más allá de donde está en el
 frame 0; el retroceso la lleva para atrás, lejos del halo.
+
+`method = "shape"` es para personajes sin contorno (el low-poly): la boca es una tapa con un disco
+cian y, cuando el rayo sale pegado al disco, el contorno oscuro termina antes de la boca y el corte
+se lleva la tapa. Ahí la boca se sigue con la forma del arma: el cuerpo del arma del frame 0 (sin la
+punta, donde pega el brillo del rayo) se busca en cada frame alrededor de donde estaba en el anterior,
+y la boca está siempre a la misma distancia de ese cuerpo. Se pinta con el color de fondo lo que
+queda delante de la boca, en una franja alta alrededor de la altura del arma (la estrella del
+fogonazo), y el anillo arriba y abajo del tramo del cañón junto a la boca. El frame 0 tiene que tener
+el arma entera y sin rayo, con el disco cian a la vista.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
+import cv2
 import numpy as np
 
 from . import imgio
@@ -40,6 +50,12 @@ AUTO_FLASH = 0.28  # media altura del fogonazo
 HALO_MARGIN = 3  # px entre el inicio del tramo limpio del cañón y halo_x0
 
 GEOMETRY = ("band_y", "search_x", "flash_y", "halo_x0")
+# method = "shape", en fracciones del alto del personaje en el frame 0 (calibrada con el low-poly de Kling O3)
+SHAPE_GUN = 0.28  # largo del arma, de la empuñadura a la boca
+SHAPE_STEP = 0.12  # cuánto puede moverse el arma de un frame al siguiente
+SHAPE_REACH = 0.40  # media altura de la zona que se limpia delante de la boca (la estrella del fogonazo es alta)
+SHAPE_HALO = 2  # el anillo alrededor de la boca: se limpia arriba y abajo del cañón, hasta tantos discos atrás
+SHAPE_LOST = 25.0  # ΔE medio por píxel (Lab) a partir del cual el arma se da por perdida (bien: 2–18; perdida: 30+)
 
 
 def bg_color(img: np.ndarray) -> np.ndarray:
@@ -101,10 +117,82 @@ def remove(img: np.ndarray, geo: dict) -> tuple[np.ndarray, dict | None]:
     return a, {"x": tip, "y": round((top + bot) / 2, 1)}
 
 
+def _lab(rgb: np.ndarray) -> np.ndarray:
+    return cv2.cvtColor(np.ascontiguousarray(rgb, np.float32) / 255.0, cv2.COLOR_RGB2LAB)
+
+
+def shape_geometry(img: np.ndarray) -> dict:
+    """method = "shape": la boca en el frame 0 (el disco cian más a la derecha) y el cuerpo del arma que se sigue."""
+    a = img[..., :3].astype(np.int16)
+    solid = np.abs(a - bg_color(img).astype(np.int16)).sum(2) > SOLID_DIFF
+    ys = np.nonzero(solid.any(1))[0]
+    cyan = (a[..., 1] > 140) & (a[..., 2] > 140) & (a[..., 0] < 140)
+    n, _, st, _ = cv2.connectedComponentsWithStats(cyan.astype(np.uint8))
+    if not len(ys) or n < 2:
+        raise ValueError("method shape: no encontré el disco cian de la boca en el frame 0")
+    i = 1 + max(range(n - 1), key=lambda k: st[k + 1, 0] + st[k + 1, 2])
+    x, y, w, dh = (int(v) for v in st[i, :4])
+    front = max(int(np.nonzero(r)[0].max()) for r in solid[y:y + dh] if r.any())
+    h = int(ys.max() - ys.min() + 1)
+    gun = round(SHAPE_GUN * h)
+    hx0 = front - SHAPE_HALO * dh  # el tramo del cañón junto a la boca: arriba y abajo sólo puede haber halo
+    near = np.nonzero(solid[max(0, y - 3 * dh):y + 4 * dh, hx0:front + 1].any(1))[0] + max(0, y - 3 * dh)
+    return {"front": front, "disk_y": [y, y + dh], "template": [front - gun, y - 2 * dh, front - 2 * dh, y + 2 * dh],
+            "band": round(SHAPE_REACH * h), "halo": [hx0, int(near.min()), int(near.max())],
+            "step": max(4, round(SHAPE_STEP * h))}
+
+
+def _run_shape(paths: list[Path], out_dir: Path) -> dict:
+    first = imgio.load(paths[0])
+    geo = shape_geometry(first)
+    tx0, ty0, tx1, ty1 = geo["template"]
+    tmpl = _lab(first[ty0:ty1, tx0:tx1, :3])
+    H, W = first.shape[:2]
+    step, band, (y0, y1) = geo["step"], geo["band"], geo["disk_y"]
+    px, py, muzzle = tx0, ty0, []
+    n_tmpl = tmpl.shape[0] * tmpl.shape[1]
+    for i, p in enumerate(paths):
+        a = imgio.load(p)[..., :3].copy()
+        sx0, sy0 = max(0, px - step), max(0, py - step)
+        sx1, sy1 = min(W, px + (tx1 - tx0) + step), min(H, py + (ty1 - ty0) + step)
+        v, _, (mx, my), _ = cv2.minMaxLoc(cv2.matchTemplate(_lab(a[sy0:sy1, sx0:sx1]), tmpl, cv2.TM_SQDIFF))
+        cand, held = (sx0 + mx, sy0 + my), False
+        # el fogonazo ilumina el arma, o el arma gira, y la coincidencia empeora: si el error medio por píxel pasa
+        # SHAPE_LOST (ΔE), se busca en todo el cuadro, y si tampoco aparece, el arma queda donde estaba (no se va a la
+        # deriva hacia las botas)
+        if (v / n_tmpl) ** 0.5 > SHAPE_LOST:
+            vg, _, (gx, gy), _ = cv2.minMaxLoc(cv2.matchTemplate(_lab(a), tmpl, cv2.TM_SQDIFF))
+            if (vg / n_tmpl) ** 0.5 <= SHAPE_LOST:
+                cand = (gx, gy)
+            else:
+                cand, held = (px, py), True
+        px, py = cand
+        dx, dy = px - tx0, py - ty0
+        tip, yc = geo["front"] + dx, (y0 + y1) / 2 + dy
+        r0, r1 = max(0, round(yc - band)), min(H, round(yc + band))
+        bg = bg_color(a)
+        a[r0:r1, tip + 1:] = bg  # lo que está delante de la boca
+        hx0, gtop, gbot = geo["halo"]
+        a[r0:max(r0, gtop + dy - 1), hx0 + dx:tip + 1] = bg  # el halo arriba del cañón, junto a la boca
+        a[min(r1, gbot + dy + 2):r1, hx0 + dx:tip + 1] = bg  # y abajo
+        imgio.save(out_dir / p.name, a)
+        muzzle.append({"frame": i, "x": int(tip), "y": round(float(yc), 1), **({"held": True} if held else {})})
+    xs, ys = [m["x"] for m in muzzle], [m["y"] for m in muzzle]
+    return {"geometry": {"method": "shape", **geo}, "measured": ["shape"],
+            "held_frames": [m["frame"] for m in muzzle if m.get("held")], "missed_frames": [],
+            "muzzle_x": [min(xs), max(xs)], "muzzle_y": [min(ys), max(ys)], "muzzle": muzzle}
+
+
 def run(in_dir: Path, out_dir: Path, params: FlashRemoval) -> dict:
     """Saca el fogonazo de todos los frames de in_dir y guarda muzzle.json junto a los frames."""
     paths = imgio.frames(in_dir)
     imgio.reset_dir(out_dir)
+    if params.method == "shape":
+        res = _run_shape(paths, out_dir)
+        imgio.write_json(out_dir / "muzzle.json", {**{k: v for k, v in res.items() if k != "muzzle"},
+                                                   "note": "boca del cañón por frame nativo, en px del video",
+                                                   "muzzle": res["muzzle"]})
+        return res
     fixed = {k: getattr(params, k) for k in GEOMETRY if getattr(params, k) is not None}
     auto = detect_geometry(imgio.load(paths[0])) if len(fixed) < len(GEOMETRY) else {}
     geo = {k: fixed.get(k, auto.get(k)) for k in GEOMETRY}

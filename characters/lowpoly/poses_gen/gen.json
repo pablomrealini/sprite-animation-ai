@@ -1,0 +1,293 @@
+{
+  "attempts": [
+    {
+      "id": "sin_arma/gpt-image-2.5-sunburst-fal_2",
+      "asset": "sin_arma",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1440×2160",
+      "usd_estimate": 0.1169,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b06-e468-7812-8fb3-8a2b4171c184",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b06-e468-7812-8fb3-8a2b4171c184/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b06-e468-7812-8fb3-8a2b4171c184"
+      },
+      "submitted": "2026-10-17T18:01:44+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:02:21+00:00"
+    },
+    {
+      "id": "sin_arma/gpt-image-2.5-sunburst-fal_1",
+      "asset": "sin_arma",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1440×2160",
+      "usd_estimate": 0.1169,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b06-e466-7c22-837f-cad34725cf7f",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b06-e466-7c22-837f-cad34725cf7f/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b06-e466-7c22-837f-cad34725cf7f"
+      },
+      "submitted": "2026-10-17T18:01:44+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:02:21+00:00"
+    },
+    {
+      "id": "sin_arma/nano-banana-2.1_1",
+      "asset": "sin_arma",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b07-73cd-7693-986a-2b24e51a9e38",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b07-73cd-7693-986a-2b24e51a9e38/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b07-73cd-7693-986a-2b24e51a9e38"
+      },
+      "submitted": "2026-10-17T18:02:21+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:02:43+00:00"
+    },
+    {
+      "id": "sin_arma/nano-banana-2.1_2",
+      "asset": "sin_arma",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b07-73ed-7871-9ad7-4beb9920e01d",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b07-73ed-7871-9ad7-4beb9920e01d/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b07-73ed-7871-9ad7-4beb9920e01d"
+      },
+      "submitted": "2026-10-17T18:02:21+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:02:47+00:00"
+    },
+    {
+      "id": "correr/gpt-image-2.5-sunburst-fal_1",
+      "asset": "correr",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1440×2160",
+      "usd_estimate": 0.117,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b1f-c657-7673-9b74-98561135cb45",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b1f-c657-7673-9b74-98561135cb45/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b1f-c657-7673-9b74-98561135cb45"
+      },
+      "submitted": "2026-10-17T18:28:55+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:29:31+00:00"
+    },
+    {
+      "id": "correr/gpt-image-2.5-sunburst-fal_2",
+      "asset": "correr",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1440×2160",
+      "usd_estimate": 0.117,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b1f-c658-72e0-8dce-076613c11814",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b1f-c658-72e0-8dce-076613c11814/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b1f-c658-72e0-8dce-076613c11814"
+      },
+      "submitted": "2026-10-17T18:28:55+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:29:34+00:00"
+    },
+    {
+      "id": "correr/nano-banana-2.1_1",
+      "asset": "correr",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b20-5302-7f41-8999-2fbd5395c357",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b20-5302-7f41-8999-2fbd5395c357/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b20-5302-7f41-8999-2fbd5395c357"
+      },
+      "submitted": "2026-10-17T18:29:31+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:30:11+00:00"
+    },
+    {
+      "id": "correr/nano-banana-2.1_2",
+      "asset": "correr",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b20-615b-7602-b0e8-b5b59e6faa49",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b20-615b-7602-b0e8-b5b59e6faa49/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b20-615b-7602-b0e8-b5b59e6faa49"
+      },
+      "submitted": "2026-10-17T18:29:35+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T18:30:04+00:00"
+    },
+    {
+      "id": "colgado_dos/gpt-image-2.5-sunburst-fal_2",
+      "asset": "colgado_dos",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1440×2160",
+      "usd_estimate": 0.1172,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4c-f6f2-72b1-92b5-e61fbf6dcf8d",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b4c-f6f2-72b1-92b5-e61fbf6dcf8d/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b4c-f6f2-72b1-92b5-e61fbf6dcf8d"
+      },
+      "submitted": "2026-10-17T19:18:17+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T19:19:00+00:00"
+    },
+    {
+      "id": "colgado_dos/gpt-image-2.5-sunburst-fal_1",
+      "asset": "colgado_dos",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1440×2160",
+      "usd_estimate": 0.1172,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4c-f6f3-7da2-b3f6-d6c503cd3111",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b4c-f6f3-7da2-b3f6-d6c503cd3111/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14b4c-f6f3-7da2-b3f6-d6c503cd3111"
+      },
+      "submitted": "2026-10-17T19:18:17+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T19:18:50+00:00"
+    },
+    {
+      "id": "colgado_dos/nano-banana-2.1_1",
+      "asset": "colgado_dos",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4d-79f9-7481-9646-0b228dffcd6b",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b4d-79f9-7481-9646-0b228dffcd6b/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b4d-79f9-7481-9646-0b228dffcd6b"
+      },
+      "submitted": "2026-10-17T19:18:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T19:19:27+00:00"
+    },
+    {
+      "id": "colgado_dos/nano-banana-2.1_2",
+      "asset": "colgado_dos",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4d-a0e7-77d3-9efd-2b6c855b1a39",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b4d-a0e7-77d3-9efd-2b6c855b1a39/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14b4d-a0e7-77d3-9efd-2b6c855b1a39"
+      },
+      "submitted": "2026-10-17T19:19:00+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T19:19:36+00:00"
+    }
+  ],
+  "qa": {}
+}

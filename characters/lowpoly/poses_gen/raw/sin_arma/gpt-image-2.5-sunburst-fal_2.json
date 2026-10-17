@@ -1,0 +1,76 @@
+{
+  "set": "poses_gen",
+  "asset": "sin_arma",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nRemove the laser pistol completely and change nothing else. The right arm stays exactly where it is, bent forward at chest height, and the right glove keeps exactly the same closed gripping shape as if it were still holding the pistol grip: the fingers curled into a loose fist around an empty space, the thumb resting on top, the fist pointing forward to the right. The hand is empty: no gun, no object, no glow. The left arm, the body, the helmet and the legs stay identical. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png",
+      "sha256": "6e3c5db071d8c2b344d60776435b36c7d12249d29d9b3f72c04a443ac30f8ad6"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_cinturon_rojo_concept.png",
+      "sha256": "07bf668bcec555f6169c341b12a0afad2dbd5e3486d0b8ecd7819f422ed90234"
+    }
+  ],
+  "background": "native",
+  "size_requested": "1440×2160",
+  "size": [
+    1440,
+    2160
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.1169,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14b06-e468-7812-8fb3-8a2b4171c184",
+  "created": "2026-10-17T18:02:21+00:00",
+  "sha256": "0f759fa597dfc001ff70b35e7e6b93800ebf90107d25dc7c702850bfec27d0ad",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/sin_arma/gpt-image-2.5-sunburst-fal_2.png",
+    "source": {
+      "w": 1440,
+      "h": 2160
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.6364,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.782,
+        "left": 0.985,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (bottom): puede estar cortado"
+      ]
+    },
+    "trim": {
+      "image": [
+        54,
+        152,
+        948,
+        1971
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_2.png",
+        "w": 894,
+        "h": 1819
+      }
+    }
+  }
+}

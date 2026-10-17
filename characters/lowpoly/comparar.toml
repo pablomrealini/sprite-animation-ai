@@ -1,0 +1,62 @@
+# Página de comparación del bake-off del idle low-poly (compare.html). Se arma con:
+#   uv run --project pipeline python characters/lowpoly/comparar.py characters/lowpoly/comparar.toml
+# Los números del torso salen de medir_torso.py (torso/<pose>/torso.json).
+
+title = "Low-poly: bake-off del idle y correr"
+out_dir = "compare"
+page = "compare.html"
+intro = [
+  "Tres estrategias para que el modelo de video no invente lo que no ve. A: sólo el primer cuadro. B: el primer cuadro más las vistas del personaje y del arma como referencia. C: el personaje sin arma, más las vistas, y el arma pegada después como sprite detrás del puño. En todas, el último cuadro es igual al primero.",
+  "Torso: ΔE (CIE76) contra el cuadro 0 alineado, mediana y p95 sobre los cuadros. 'Cambiado' es la fracción del torso con ΔE > 20, o sea, lo que a ojo es otra cosa. 'Colores ajenos' es la fracción del torso con colores que no están en la hoja de vistas. 'Contra la otra toma' es el ΔE entre el torso medio de las dos tomas de la misma estrategia y modelo: si inventan lo mismo, da bajo. 'Movimiento' es cuánto se traslada el torso (px de la pose): un idle quieto da un torso consistente sin mérito. Más bajo es más consistente. Línea de base, con los idles del ranger 2D de hoy (Seedance): ΔE mediano 6–17, cambiado 6–30 %, movimiento 3–22 px.",
+]
+refs = ["refs/vistas/tpose_frente.png", "refs/vistas/tpose_tres_cuartos.png", "refs/vistas/tpose_espalda.png",
+        "refs/vistas/armado_tres_cuartos.png", "refs/vistas/arma_lateral.png", "poses/perfil_dullmagenta_16x9.png",
+        "poses/tq_dullmagenta_16x9.png"]
+torso = ["torso/perfil/torso.json", "torso/tq/torso.json", "torso/sin_arma/torso.json", "torso/correr/torso.json"]
+
+[[group]]
+title = "A · sólo el primer cuadro"
+clips = [
+  { file = "clips/idle/seedance-2.0_idle_a_1.mp4", note = "De perfil, gira un poco hacia cámara a mitad. Re-renderiza el cuadro 0 (pose MAD 45: fondo y colores más claros): el pipeline no puede sacar la escala de la pose." },
+  { file = "clips/idle/seedance-2.0_idle_a_2.mp4", note = "De perfil y estable. El mismo re-render del cuadro 0 (MAD 45)." },
+  { file = "clips/idle/minimax-h3-max_idle_a_1.mp4", note = "Corta a un primer plano sobre verde agua cerca del cuadro 72 y vuelve (zoom 57 %): no sirve." },
+  { file = "clips/idle/minimax-h3-max_idle_a_2.mp4", note = "De perfil, sin cortes, pero dispara un rayo cian que nadie pidió (cuadros 15–45). Deriva 3 %." },
+  { file = "clips/idle/kling-o3-std_idle_a_1.mp4", note = "De perfil todo el clip y el cuadro 0 exacto (pose MAD 1,8). Parpadea." },
+  { file = "clips/idle/kling-o3-std_idle_a_2.mp4", note = "De perfil todo el clip y el cuadro 0 exacto (pose MAD 1,8). La toma más limpia." },
+]
+
+[[group]]
+title = "B · primer cuadro + vistas del personaje y del arma"
+clips = [
+  { file = "clips/idle/minimax-h3-max_idle_b_1.mp4", note = "Abre en el cuadro 0 y corta a otra toma: más cerca, de tres cuartos, sobre el gris de las referencias. Vuelve recién al final." },
+  { file = "clips/idle/minimax-h3-max_idle_b_2.mp4", note = "Igual que B1, con primeros planos de la cara y del arma." },
+  { file = "clips/idle/kling-o3-std_idle_b_1.mp4", note = "No corta, pero gira a tres cuartos de frente y apunta a cámara; vuelve al perfil al final." },
+  { file = "clips/idle/kling-o3-std_idle_b_2.mp4", note = "Gira a tres cuartos de frente casi todo el clip, dispara (fogonazo) y cambia de gesto." },
+]
+
+[[group]]
+title = "B · tres cuartos leve"
+desc = "La misma estrategia B con la pose de tres cuartos leve: se ve más el pecho desde el cuadro 0."
+clips = [
+  { file = "clips/idle/minimax-h3-max_idle_b_tq_1.mp4", note = "El mismo corte a la toma de las referencias que B." },
+  { file = "clips/idle/minimax-h3-max_idle_b_tq_2.mp4", note = "El mismo corte, con primeros planos." },
+]
+
+[[group]]
+title = "C · sin arma + vistas, arma pegada como sprite"
+desc = "Los números del torso son del clip sin arma (la caja del torso no toca el arma)."
+clips = [
+  { file = "clips/idle_c/minimax-h3-max_idle_c_1.mp4", note = "Corta a otra toma sobre gris y vuelve al final. Sin arma pegada: en la otra toma no hay puño que seguir." },
+  { file = "clips/idle_c/minimax-h3-max_idle_c_2.mp4", note = "Corta a otra toma sobre fondo oscuro, con chispas y corazones. Sin arma pegada." },
+  { file = "clips/idle_c/kling-o3-std_idle_c_1_arma.mp4", note = "Estira los dos brazos y gira un poco hacia cámara; el arma sigue al puño cuadro a cuadro." },
+  { file = "clips/idle_c/kling-o3-std_idle_c_2_arma.mp4", note = "Estira el brazo, abre la mano y señala con el índice: el arma pegada queda flotando arriba del dedo. C no sirve con estos clips." },
+]
+
+[[group]]
+title = "Correr · la receta que ganó (Kling O3, sólo primer cuadro)"
+desc = "Desde la pose de zancada con el casco a la misma escala que el idle. Kling dispara rayos aunque nadie se lo pida: los videos de acá ya están sin rayos (sacar_rayos.py). Referencia sin invento: el correr de la vía 3D da ΔE 15,1 y 21 % cambiado con 25 px de movimiento (characters/lowpoly/3d/)."
+clips = [
+  { file = "clips/correr/kling-o3-std_correr_a_1_sin_rayos.mp4", note = "Zancada de perfil y estable, loop de 48 cuadros (costura 0,26). El modelo dispara rayos en 106 de 121 cuadros; sacar_rayos.py los borra sin tocar la boca del arma (remove_flash se llevaba la tapa y el disco cian). Números del torso: del clip original." },
+  { file = "clips/correr/kling-o3-std_correr_a_2_sin_rayos.mp4", note = "Igual de estable, loop de 28 cuadros (costura 0,29). Dispara en 73 de 121 cuadros; sin rayos queda el arma entera. La mejor." },
+]
+

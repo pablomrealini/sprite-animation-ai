@@ -20,6 +20,7 @@ class FlashRemoval:
     search_x: tuple[int, int] | None = None  # columnas donde puede estar la boca
     flash_y: tuple[int, int] | None = None  # filas que puede ocupar el fogonazo
     halo_x0: int | None = None  # desde acá hasta la boca sólo hay cañón (ni mano ni mira)
+    method: str = "outline"  # "outline": la boca es el contorno oscuro; "shape": se sigue la forma del arma (sin contorno)
 
 
 @dataclass(frozen=True)
@@ -134,15 +135,20 @@ def _flash(anim: str, value) -> FlashRemoval | None:
         return FlashRemoval()
     if not isinstance(value, dict):
         raise ValueError(f"{anim}: remove_flash tiene que ser true o una tabla")
-    unknown = set(value) - {"band_y", "search_x", "flash_y", "halo_x0"}
+    unknown = set(value) - {"band_y", "search_x", "flash_y", "halo_x0", "method"}
     if unknown:
         raise ValueError(f"{anim}: remove_flash no conoce {', '.join(sorted(unknown))}")
+    method = value.get("method", "outline")
+    if method not in ("outline", "shape"):
+        raise ValueError(f"{anim}: remove_flash.method tiene que ser 'outline' o 'shape'")
+    if method == "shape" and set(value) - {"method"}:
+        raise ValueError(f"{anim}: con method = 'shape' la geometría se mide sola; sacá {', '.join(sorted(set(value) - {'method'}))}")
 
     def pair(k):
         return tuple(int(v) for v in value[k]) if k in value else None
 
     return FlashRemoval(band_y=pair("band_y"), search_x=pair("search_x"), flash_y=pair("flash_y"),
-                        halo_x0=int(value["halo_x0"]) if "halo_x0" in value else None)
+                        halo_x0=int(value["halo_x0"]) if "halo_x0" in value else None, method=method)
 
 
 def _clean(anim: str, value) -> Clean | None:

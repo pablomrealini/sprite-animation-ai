@@ -1,0 +1,74 @@
+# El set de la arena para el low-poly (ver planilla.toml), con la receta que ganó en el idle y en correr: Kling O3
+# standard, sólo el primer cuadro (sin referencias), sobre magenta apagado y a la escala del idle. Estos 8 clips salen de
+# poses que ya existen: la de perfil (disparos, agachado, granada) y la de perfil con aire arriba (saltos y colgado).
+# La subida y el colgado a dos manos van en generate_subida.toml, porque esperan la pose colgada (poses_gen, colgado_dos).
+# Las animaciones que no disparan lo dicen explícitamente en el prompt: en correr, Kling disparaba sin que se lo pidieran.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_set.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2       # tomas
+duration = 5              # s
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_parallel = 4
+game_fps = 12
+max_usd = 8
+out_dir = "clips/set"
+
+[[animation]]
+name = "shoot"            # shoot_in, shoot, shoot_out: sube el brazo, dispara, lo baja
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/shoot.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "shoot2h"          # shoot2h_in, shoot2h (y shoot2h_out): a dos manos
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/shoot2h.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "crouch_shoot"     # crouch_in, crouch_shoot, crouch_out
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/crouch_shoot.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "throw"            # la granada: el juego la dibuja y la suelta cuando el brazo pasa adelante
+pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/throw.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "jump"
+pose = "poses/salto_dullmagenta_16x9.png"
+prompt = "prompts/jump.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "jump_shoot"
+pose = "poses/salto_dullmagenta_16x9.png"
+prompt = "prompts/jump_shoot.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "double_jump"
+pose = "poses/salto_dullmagenta_16x9.png"
+prompt = "prompts/double_jump.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "hang"             # hang_in y hang: salta, se agarra con una mano y queda colgado (termina colgado)
+pose = "poses/salto_dullmagenta_16x9.png"
+prompt = "prompts/hang.txt"
+kind = "oneshot"

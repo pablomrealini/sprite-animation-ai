@@ -323,6 +323,7 @@ class Request:
     audio: bool
     negative_prompt: str | None
     seed: int | None
+    refs: tuple[Path, ...] = ()  # imágenes de referencia (hoja de vistas, arma), aparte del primer frame
 
 
 @dataclass(frozen=True)
@@ -342,6 +343,11 @@ class ModelSpec:
     billed_seconds: Callable[[int], float] = float  # duración -> segundos que se cobran
     sunset: str | None = None  # fecha en que el proveedor lo apaga
     longest_only: tuple[str, ...] = ()  # resoluciones que sólo salen con la duración más larga
+    max_refs: int = 0  # cuántas imágenes de referencia acepta además del primer frame (0: ninguna)
+    refs_endpoint: str | None = None  # si con referencias el pedido va a otro endpoint
+    refs_last_frame: bool = True  # si con referencias sigue aceptando último frame
+    ref_rates: dict[str, float] | None = None  # US$/s con referencias, si cambia (otro endpoint)
+    ref_extra: Callable[[int], float] | None = None  # US$ por pedido según cuántas referencias van
 
     def pick_duration(self, wanted: float, resolution: str = "720p") -> int:
         """La duración permitida más corta que alcanza; si ninguna alcanza, la más larga."""
@@ -349,13 +355,18 @@ class ModelSpec:
             return max(self.durations)
         return min((d for d in self.durations if d >= wanted), default=max(self.durations))
 
-    def price(self, duration: int, audio: bool, resolution: str) -> float:
+    def price(self, duration: int, audio: bool, resolution: str, refs: int = 0) -> float:
         rates = self.audio_rates if audio and self.audio_rates else self.rates
+        if refs and self.ref_rates:
+            rates = self.ref_rates
         if resolution not in rates:
             raise ValueError(f"{self.name} no acepta {resolution}: {', '.join(rates)}")
-        return round(self.billed_seconds(duration) * rates[resolution], 4)
+        extra = self.ref_extra(refs) if refs and self.ref_extra else 0.0
+        return round(self.billed_seconds(duration) * rates[resolution] + extra, 4)
 
     def endpoint_for(self, req: Request) -> str:
+        if req.refs and self.refs_endpoint:
+            return self.refs_endpoint
         return self.last_frame_endpoint if req.last_image and self.last_frame_endpoint else self.endpoint
 
 
@@ -406,6 +417,49 @@ def _wan_22(req: Request, img) -> dict:
         "num_frames": WAN_FPS * req.duration + 1, "frames_per_second": WAN_FPS,
         "resolution": req.resolution, "aspect_ratio": req.aspect_ratio,
         "negative_prompt": req.negative_prompt, "seed": req.seed})
+
+
+def _h3_max(req: Request, img) -> dict:
+    # Con referencias va a reference-to-video: "The video opens exactly on this image while the references keep
+    # the subjects consistent" (image_url) y "ends exactly on this image" (end_image_url). Las referencias se
+    # nombran en el prompt como Image 1, Image 2... Sin campo de audio; el lienzo sigue al primer frame.
+    # prompt_expansion_mode es obligatorio: "disabled" para que no reescriba el prompt.
+    return _drop_none({
+        "prompt": req.prompt, "image_url": img(req.image),
+        "end_image_url": img(req.last_image) if req.last_image else None,
+        "reference_image_urls": [img(r) for r in req.refs] or None,
+        "duration": req.duration, "resolution": H3_RESOLUTION[req.resolution],
+        "prompt_expansion_mode": "disabled", "seed": req.seed})
+
+
+def h3_max_ref_extra(n: int) -> float:
+    """4.096 tokens de referencias incluidos por pedido; una imagen cuadrada son 1.024 y el excedente cuesta
+    US$0,02 cada 1.000 tokens (supone referencias cuadradas, como las de characters/lowpoly/refs/vistas)."""
+    return round(max(0, n * 1024 - 4096) * 0.02 / 1000, 4)
+
+
+KLING_ELEMENT = 4  # un element de Kling: la vista frontal más 1-3 vistas
+
+
+def _kling_o3(req: Request, img) -> dict:
+    # Sin referencias, image-to-video (image_url). Con referencias, reference-to-video (start_image_url) y las
+    # referencias como elements: cada 4 imágenes en orden son un element, la primera es la frontal y las otras
+    # sus vistas (@Element1, @Element2 en el prompt). Un element necesita al menos una vista además de la frontal.
+    # Sin seed, resolution ni negative_prompt en el schema; generate_audio viene en false.
+    if not req.refs:
+        return _drop_none({
+            "prompt": req.prompt, "image_url": img(req.image),
+            "end_image_url": img(req.last_image) if req.last_image else None,
+            "duration": str(req.duration), "generate_audio": req.audio})
+    groups = [req.refs[i:i + KLING_ELEMENT] for i in range(0, len(req.refs), KLING_ELEMENT)]
+    if any(len(g) < 2 for g in groups):
+        raise ValueError("kling: cada element necesita la frontal y al menos una vista (grupos de 2 a 4 refs)")
+    return _drop_none({
+        "prompt": req.prompt, "start_image_url": img(req.image),
+        "end_image_url": img(req.last_image) if req.last_image else None,
+        "elements": [{"frontal_image_url": img(g[0]), "reference_image_urls": [img(r) for r in g[1:]]}
+                     for g in groups],
+        "duration": str(req.duration), "aspect_ratio": req.aspect_ratio, "generate_audio": req.audio})
 
 
 def _veo_fal(req: Request, img) -> dict:
@@ -492,6 +546,24 @@ MODELS: dict[str, ModelSpec] = {m.name: m for m in [
         build=_minimax_h3, last_frame=True, bills_blocked=True,
         price_note="US$0,06/s a 768P (lo que se pide por 720p), 0,13 a 2K. El audio no se puede apagar",
         docs=_fal_docs("minimax/h3/image-to-video")),
+    ModelSpec(
+        name="minimax-h3-max", provider="fal", endpoint="minimax/h3-max/image-to-video",
+        refs_endpoint="minimax/h3-max/reference-to-video", max_refs=9,
+        durations=tuple(range(1, 16)), rates={"480p": 0.0325, "720p": 0.052, "1080p": 0.104},
+        ref_rates={"480p": 0.05, "720p": 0.08, "1080p": 0.16}, ref_extra=h3_max_ref_extra,
+        build=_h3_max, last_frame=True, bills_blocked=True,
+        price_note="image-to-video US$0,052/s a 768P (promoción hasta el 2026-10-31, después 0,08); con "
+                   "referencias (reference-to-video) 0,08/s más US$0,02 cada 1.000 tokens de referencia arriba de "
+                   "4.096 por pedido (1.024 por imagen cuadrada). El audio no se apaga ni cambia el precio",
+        docs=_fal_docs("minimax/h3-max/reference-to-video")),
+    ModelSpec(
+        name="kling-o3-std", provider="fal", endpoint="fal-ai/kling-video/o3/standard/image-to-video",
+        refs_endpoint="fal-ai/kling-video/o3/standard/reference-to-video", max_refs=3 * KLING_ELEMENT,
+        durations=tuple(range(3, 16)), rates={"720p": 0.084}, audio_rates={"720p": 0.112},
+        build=_kling_o3, last_frame=True, bills_blocked=True,
+        price_note="US$0,084/s sin audio, 0,112 con audio, con o sin referencias. La resolución no se elige "
+                   "(standard). Con primer frame acepta hasta 3 elements",
+        docs=_fal_docs("fal-ai/kling-video/o3/standard/reference-to-video")),
     ModelSpec(
         name="wan-2.2", provider="fal", endpoint="fal-ai/wan/v2.2-a14b/image-to-video",
         durations=tuple(range(1, 11)), rates={"480p": 0.04, "580p": 0.06, "720p": 0.08},

@@ -1,0 +1,78 @@
+{
+  "set": "poses_gen",
+  "asset": "sin_arma",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nRemove the laser pistol completely and change nothing else. The right arm stays exactly where it is, bent forward at chest height, and the right glove keeps exactly the same closed gripping shape as if it were still holding the pistol grip: the fingers curled into a loose fist around an empty space, the thumb resting on top, the fist pointing forward to the right. The hand is empty: no gun, no object, no glow. The left arm, the body, the helmet and the legs stay identical. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_cinturon_rojo_concept_07bf668b_C0C3CC.png",
+      "sha256": "6e3c5db071d8c2b344d60776435b36c7d12249d29d9b3f72c04a443ac30f8ad6"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_cinturon_rojo_concept.png",
+      "sha256": "07bf668bcec555f6169c341b12a0afad2dbd5e3486d0b8ecd7819f422ed90234"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2:3 2K",
+  "size": [
+    1696,
+    2528
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14b07-73ed-7871-9ad7-4beb9920e01d",
+  "created": "2026-10-17T18:02:47+00:00",
+  "sha256": "f317dc941afdd1520a7597ac2ca4e82989c5e91acb75dfe4ff2ada1a2d1149db",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/sin_arma/nano-banana-2.1_2.png",
+    "source": {
+      "w": 1696,
+      "h": 2528
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#04FC03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6493,
+      "opaque": 0.3474,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        34,
+        223,
+        1082,
+        2351
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 1048,
+        "h": 2128
+      }
+    }
+  }
+}

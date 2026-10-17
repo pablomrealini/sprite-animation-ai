@@ -1,0 +1,149 @@
+# Planilla del set de la arena: el ranger del juego y el low-poly, clip por clip. planilla.py arma planilla.html con
+# los dos animados lado a lado (las previews de out/ de cada personaje), la pose de arranque y el estado.
+#   uv run --project pipeline python characters/lowpoly/planilla.py
+# Se ve servida por http, como compare.html (config sprite-previews de .claude/launch.json):
+#   http://localhost:8765/lowpoly/planilla.html
+#
+# estado: "hecho" (en el atlas low-poly) · "a rehacer" (revisión de Pablo) · "listo" (pose y config listas, falta generar) · "falta pose" ·
+# "descartado". tomas y usd son lo generado hasta ahora (precio de lista). Las animaciones son las que usa la arena,
+# con los mismos nombres en los dos atlas.
+
+[[clip]]
+name = "Idle de combate"
+ranger = "g07 · Seedance 2.0 por fal"
+anims = ["idle_combat"]
+pose = "poses/perfil_dullmagenta_16x9.png"
+config = "generate_idle.toml"
+estado = "hecho"
+tomas = 2
+usd = 0.84
+nota = "Toma 2 del idle A de Kling. El bake-off de estrategias (A, B, C) está en compare.html."
+
+[[clip]]
+name = "Correr con arma"
+ranger = "g08 · Seedance 2.0 por fal"
+anims = ["run_gun"]
+pose = "poses/correr_dullmagenta_16x9.png"
+config = "generate_correr.toml"
+estado = "hecho"
+tomas = 2
+usd = 1.20
+nota = "Toma 2. Kling dispara sin pedirlo: remove_flash con method = shape borra los rayos sin comerse la boca."
+
+[[clip]]
+name = "Disparo"
+ranger = "r04 · Seedance 2.0 por Davinci"
+anims = ["shoot_in", "shoot"]
+pose = "poses/perfil_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 1. Kling dispara un rayo azul con estrella: remove_flash shape lo borra entero (boca, estrella y anillo). El destello aclara un poco la cara."
+revision = "El fogonazo no tiene que venir en el video: lo pone el juego. Se rehace con la prueba sin fogonazo."
+
+[[clip]]
+name = "Disparo a dos manos"
+ranger = "r02 · Seedance 2.0 por Davinci"
+anims = ["shoot2h_in", "shoot2h"]
+pose = "poses/perfil_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 2 (en la 1 el pantalón se vuelve azul mientras dispara). El fogonazo naranja ilumina la cara de amarillo: queda en el sprite."
+revision = "Ídem: sin fogonazo en el video (además, la luz del fogonazo le pinta la cara)."
+
+[[clip]]
+name = "Agachado disparando"
+ranger = "r06 · Seedance 2.0 por Davinci"
+anims = ["crouch_in", "crouch_shoot", "crouch_out"]
+pose = "poses/perfil_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 2 (la 1 casi no se agacha). crouch_out incluido."
+revision = "Ídem: sin fogonazo en el video."
+
+[[clip]]
+name = "Salto"
+ranger = "r08 · Seedance 2.0 por Davinci"
+anims = ["jump"]
+pose = "poses/salto_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "hecho"
+tomas = 2
+usd = 0.84
+nota = "Toma 1, un salto entero (cuadros 4–24); el segundo salto dispara y quedó afuera."
+
+[[clip]]
+name = "Salto disparando"
+ranger = "r05 · Seedance 2.0 por Davinci"
+anims = ["jump_shoot"]
+pose = "poses/salto_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 1. Dispara arriba del salto; queda un brillo chico en la boca en 2 cuadros."
+revision = "Muy sucio por el fogonazo."
+
+[[clip]]
+name = "Doble salto"
+ranger = "g06 · Seedance 2.0 por fal"
+anims = ["double_jump"]
+pose = "poses/salto_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 2, el primer mortal (22–42). El cuadro del medio de la vuelta sale borroso desde el video (motion blur de Kling)."
+revision = "Glitches: en los cuadros 3, 5 y 10 Kling deforma al personaje mientras gira (una mancha, no un mortal)."
+
+[[clip]]
+name = "Colgado de una mano"
+ranger = "r07 · Seedance 2.0 por Davinci"
+anims = ["hang_in", "hang"]
+pose = "poses/salto_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 2. Kling dibuja la cornisa: prop_rows la borra casi toda; quedan restos chicos arriba de la mano y en el cuadro del agarre."
+revision = "Mucha basura de la cornisa donde se cuelga."
+
+[[clip]]
+name = "Subida a la cornisa"
+ranger = "g09 · Seedance 2.0 por fal"
+anims = ["climb"]
+pose = "poses/climb_first_dullmagenta_16x9.png"
+config = "generate_subida.toml"
+estado = "hecho"
+tomas = 2
+usd = 1.03
+nota = "Toma 1 (la 2 da una vuelta de cabeza). Incluye la pose colgada (US$0,36, GPT Image 2.5 #2) y subida_frames.py."
+
+[[clip]]
+name = "Colgado a dos manos"
+ranger = "g10 · Seedance 2.0 por fal"
+anims = ["hang_two"]
+pose = "poses/climb_first_dullmagenta_16x9.png"
+config = "generate_subida.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 2 (la 1 dispara). Loop cerrado: el clip entero."
+revision = "El arma queda apoyada arriba de las manos: en el juego se ve sobre la cornisa."
+
+[[clip]]
+name = "Granada"
+ranger = "g11 · Seedance 2.0 por fal"
+anims = ["throw"]
+pose = "poses/perfil_dullmagenta_16x9.png"
+config = "generate_set.toml"
+estado = "a rehacer"
+tomas = 2
+usd = 0.84
+nota = "Toma 2 (en la 1 dispara en vez de tirar). Se lee el tiro, pero gira hacia cámara mientras tira."
+revision = "No parece que tire nada."

@@ -317,6 +317,79 @@ def test_last_frame_true_reuses_the_pose_only_where_supported(char):
     assert reqs["fake-fal"].last_image is None
 
 
+def _with_refs(char, monkeypatch, refs_last_frame=True):
+    """fake-ref acepta dos referencias por otro endpoint; las refs van a la config del idle."""
+    for name in ("vistas.png", "arma.png", "extra.png"):
+        Image.fromarray(_frame(3)).save(char / name)
+    spec = videoapi.ModelSpec("fake-ref", "fal", "fal-ai/fake/v1/image-to-video", (5, 10), {"720p": 0.10},
+                              _fal_build, True, False, "US$0,10/s", "doc", max_refs=2,
+                              refs_endpoint="fal-ai/fake/v1/reference-to-video", refs_last_frame=refs_last_frame)
+    monkeypatch.setitem(videoapi.MODELS, "fake-ref", spec)
+    cfg = _toml(char, models=("fake-fal", "fake-ref"))
+    cfg.write_text(cfg.read_text() + 'last_frame = true\nrefs = ["vistas.png", "arma.png", "extra.png"]\n')
+    return bakeoff.load(cfg)
+
+
+def test_refs_go_only_to_models_that_accept_them(char, monkeypatch, capsys):
+    c = _with_refs(char, monkeypatch)
+    assert [r.name for r in c.animations[0].refs] == ["vistas.png", "arma.png", "extra.png"]
+    reqs = {t.model.name: bakeoff.request(c, t) for t in bakeoff.plan(c)}
+    assert [r.name for r in reqs["fake-ref"].refs] == ["vistas.png", "arma.png"]  # hasta max_refs
+    assert reqs["fake-ref"].last_image == c.animations[0].pose
+    assert reqs["fake-fal"].refs == ()
+    assert videoapi.MODELS["fake-ref"].endpoint_for(reqs["fake-ref"]) == "fal-ai/fake/v1/reference-to-video"
+    assert videoapi.MODELS["fake-fal"].endpoint_for(reqs["fake-fal"]) == "fal-ai/fake/v1/image-to-video"
+    bakeoff.print_plan(c, bakeoff.plan(c), {}, {})
+    out = capsys.readouterr().out
+    assert "refs vistas.png, arma.png, extra.png" in out
+    assert "no acepta referencias" in out and "acepta 2 referencias" in out
+
+
+def test_refs_drop_the_last_frame_where_the_endpoint_cannot_take_both(char, monkeypatch):
+    c = _with_refs(char, monkeypatch, refs_last_frame=False)
+    req = next(bakeoff.request(c, t) for t in bakeoff.plan(c) if t.model.name == "fake-ref")
+    assert len(req.refs) == 2 and req.last_image is None
+
+
+def test_missing_ref_is_an_error(char):
+    cfg = _toml(char)
+    cfg.write_text(cfg.read_text() + 'refs = ["no_existe.png"]\n')
+    with pytest.raises(FileNotFoundError, match="refs"):
+        bakeoff.load(cfg)
+
+
+def test_animation_models_and_prompts_pick_per_model(char):
+    (char / "prompts" / "idle_veo.txt").write_text("Prompt para Veo.\n", encoding="utf-8")
+    cfg = _toml(char)
+    cfg.write_text(cfg.read_text() + """
+[[animation]]
+name = "idle_veo"
+pose = "pose.png"
+prompt = "prompts/idle.txt"
+models = ["fake-veo"]
+prompts = { fake-veo = "prompts/idle_veo.txt" }
+""")
+    c = bakeoff.load(cfg)
+    tasks = bakeoff.plan(c)
+    assert sorted({(t.model.name, t.anim.name) for t in tasks}) == [
+        ("fake-fal", "idle"), ("fake-veo", "idle"), ("fake-veo", "idle_veo")]
+    req = next(bakeoff.request(c, t) for t in tasks if t.anim.name == "idle_veo")
+    assert req.prompt == "Prompt para Veo."
+    bad = cfg.read_text().replace('models = ["fake-veo"]', 'models = ["fake-omni"]')
+    cfg.write_text(bad)
+    with pytest.raises(ValueError, match="fake-omni"):
+        bakeoff.load(cfg)
+
+
+def test_anims_flag_runs_only_those_animations(char, capsys):
+    cfg = _toml(char)
+    cfg.write_text(cfg.read_text() + '\n[[animation]]\nname = "otra"\npose = "pose.png"\nprompt = "prompts/idle.txt"\n')
+    assert bakeoff.run(cfg, dry_run=True, anims=["otra"]) == 0
+    out = capsys.readouterr().out
+    assert "× 1 animaciones" in out and "  otra: pose" in out and "  idle: pose" not in out
+    assert bakeoff.run(cfg, dry_run=True, anims=["nope"]) == 1
+
+
 def test_pick_duration_rounds_up_to_an_allowed_value():
     spec = videoapi.MODELS["fake-veo"]
     assert [spec.pick_duration(d) for d in (3, 4, 5, 8, 12)] == [4, 4, 6, 8, 8]

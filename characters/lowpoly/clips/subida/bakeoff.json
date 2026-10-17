@@ -1,0 +1,152 @@
+{
+  "attempts": [
+    {
+      "clip": "kling-o3-std_climb_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "climb",
+      "n": 1,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4f-b355-7cf2-b94f-37ee4d01e4c6",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-b355-7cf2-b94f-37ee4d01e4c6/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-b355-7cf2-b94f-37ee4d01e4c6"
+      },
+      "submitted": "2026-10-17T19:21:16+00:00",
+      "detail": "",
+      "finished": "2026-10-17T19:23:24+00:00"
+    },
+    {
+      "clip": "kling-o3-std_climb_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "climb",
+      "n": 2,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4f-b578-7e52-9b13-f09ae1204037",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-b578-7e52-9b13-f09ae1204037/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-b578-7e52-9b13-f09ae1204037"
+      },
+      "submitted": "2026-10-17T19:21:17+00:00",
+      "detail": "",
+      "finished": "2026-10-17T19:23:27+00:00"
+    },
+    {
+      "clip": "kling-o3-std_hang_two_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "hang_two",
+      "n": 1,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4f-b7a4-78d2-b1cc-545ab58cacc5",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-b7a4-78d2-b1cc-545ab58cacc5/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-b7a4-78d2-b1cc-545ab58cacc5"
+      },
+      "submitted": "2026-10-17T19:21:18+00:00",
+      "detail": "",
+      "finished": "2026-10-17T19:23:30+00:00"
+    },
+    {
+      "clip": "kling-o3-std_hang_two_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "hang_two",
+      "n": 2,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14b4f-ba1d-7303-ba20-548ae31e984e",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-ba1d-7303-ba20-548ae31e984e/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a14b4f-ba1d-7303-ba20-548ae31e984e"
+      },
+      "submitted": "2026-10-17T19:21:18+00:00",
+      "detail": "",
+      "finished": "2026-10-17T19:23:33+00:00"
+    }
+  ],
+  "qa": {
+    "kling-o3-std_climb_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "climb",
+      "n": 1,
+      "usd": 0.336,
+      "qa": "ok",
+      "drift_pct": 163.4,
+      "zoom_pct": 61.1,
+      "edge_frames": 0,
+      "pose_mad": 2.44,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [],
+      "video": "1280×720 24 fps 97 fr"
+    },
+    "kling-o3-std_climb_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "climb",
+      "n": 2,
+      "usd": 0.336,
+      "qa": "ok",
+      "drift_pct": 231.3,
+      "zoom_pct": 53.6,
+      "edge_frames": 0,
+      "pose_mad": 2.37,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [],
+      "video": "1280×720 24 fps 97 fr"
+    },
+    "kling-o3-std_hang_two_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "hang_two",
+      "n": 1,
+      "usd": 0.336,
+      "qa": "warn",
+      "drift_pct": 5.5,
+      "zoom_pct": 2.6,
+      "edge_frames": 0,
+      "pose_mad": 2.4,
+      "loop_score": 0.278,
+      "loop_quality": "buena",
+      "flags": [
+        "deriva/paneo o el personaje se traslada: 5.5% del alto (la alineación saca la deriva lineal)"
+      ],
+      "video": "1280×720 24 fps 97 fr"
+    },
+    "kling-o3-std_hang_two_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "hang_two",
+      "n": 2,
+      "usd": 0.336,
+      "qa": "ok",
+      "drift_pct": 0.2,
+      "zoom_pct": 0.0,
+      "edge_frames": 0,
+      "pose_mad": 2.43,
+      "loop_score": 1.136,
+      "loop_quality": "costura visible",
+      "flags": [],
+      "video": "1280×720 24 fps 97 fr"
+    }
+  }
+}
