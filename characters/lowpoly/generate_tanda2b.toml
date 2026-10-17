@@ -1,0 +1,50 @@
+# Tanda 2, etapa 2: colgarse y subir a cuerpo completo, "como el Prince of Persia" (nada dibujado donde se agarra), y
+# tirar la granada con la granada en la mano. Todo con el arma apagada y sin disparar (ver generate_tanda2.toml).
+#   colgarse        parado → salta y se agarra con una mano: primer y último cuadro fijos (colgarse_frames.py)
+#   colgado_una     colgado de una mano en loop, desde el último cuadro de colgarse (empalman)
+#   colgado_dos     colgado a dos manos en loop, con el arma en el cinturón (nada arriba de las manos)
+#   subir           desde el colgado a dos manos hasta parado sobre el canto, sacando el arma del cinturón
+#                   (subida_frames.py: parado mide 307 px en la pose)
+# La granada va en generate_tanda2c.toml: espera la pose con la granada en la mano (poses_gen, con_granada).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_tanda2b.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 5
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 4
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/tanda2"
+
+[[animation]]
+name = "colgarse"
+pose = "poses/colgarse_first_dullmagenta_16x9.png"
+prompt = "prompts/colgarse.txt"
+kind = "oneshot"
+last_frame = "poses/colgado_una_dullmagenta_16x9.png"
+
+[[animation]]
+name = "colgado_una"
+pose = "poses/colgado_una_dullmagenta_16x9.png"
+prompt = "prompts/colgado_una.txt"
+kind = "cycle"
+last_frame = true
+
+[[animation]]
+name = "colgado_dos"
+pose = "poses/subir_first_dullmagenta_16x9.png"
+prompt = "prompts/colgado_dos_cinturon.txt"
+kind = "cycle"
+last_frame = true
+
+[[animation]]
+name = "subir"
+pose = "poses/subir_first_dullmagenta_16x9.png"
+prompt = "prompts/subir_cinturon.txt"
+kind = "oneshot"
+last_frame = "poses/subir_last_dullmagenta_16x9.png"

@@ -1,0 +1,24 @@
+{
+ "endpoint": "fal-ai/hunyuan-3d/v3.1/pro/image-to-3d",
+ "request_id": "01a14b0c-e044-7c61-9ee4-2df2a2ef6086",
+ "imagenes": {
+  "input_image_url": "arma_lateral",
+  "back_image_url": "arma_lateral~espejo"
+ },
+ "payload": {
+  "generate_type": "Normal",
+  "enable_pbr": false
+ },
+ "costo_usd": 0.525,
+ "costo": [
+  [
+   "generación",
+   0.375
+  ],
+  [
+   "multivista",
+   0.15
+  ]
+ ],
+ "fecha": "2026-10-17 15:10:57"
+}

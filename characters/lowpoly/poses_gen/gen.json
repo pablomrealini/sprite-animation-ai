@@ -287,6 +287,390 @@
       "detail": "",
       "usage": null,
       "finished": "2026-10-17T19:19:36+00:00"
+    },
+    {
+      "id": "colgado_una/gpt-image-2.5-sunburst-fal_1",
+      "asset": "colgado_una",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1440×2160",
+      "usd_estimate": 0.1171,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14baf-849e-7d23-a4c5-ae421b7d4306",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14baf-849e-7d23-a4c5-ae421b7d4306/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14baf-849e-7d23-a4c5-ae421b7d4306"
+      },
+      "submitted": "2026-10-17T21:05:54+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:06:35+00:00"
+    },
+    {
+      "id": "colgado_una/gpt-image-2.5-sunburst-fal_2",
+      "asset": "colgado_una",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1440×2160",
+      "usd_estimate": 0.1171,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14baf-84a4-7cb3-9d1d-61ce9aca8654",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14baf-84a4-7cb3-9d1d-61ce9aca8654/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14baf-84a4-7cb3-9d1d-61ce9aca8654"
+      },
+      "submitted": "2026-10-17T21:05:54+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:06:34+00:00"
+    },
+    {
+      "id": "colgado_dos_cinturon/gpt-image-2.5-sunburst-fal_1",
+      "asset": "colgado_dos_cinturon",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1440×2160",
+      "usd_estimate": 0.1171,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb0-1f7a-77b1-ae93-c5a8c8d3d0b8",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-1f7a-77b1-ae93-c5a8c8d3d0b8/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-1f7a-77b1-ae93-c5a8c8d3d0b8"
+      },
+      "submitted": "2026-10-17T21:06:35+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:07:18+00:00"
+    },
+    {
+      "id": "colgado_dos_cinturon/gpt-image-2.5-sunburst-fal_2",
+      "asset": "colgado_dos_cinturon",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1440×2160",
+      "usd_estimate": 0.1171,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb0-1f80-71b0-a826-ccb7699f5246",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-1f80-71b0-a826-ccb7699f5246/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-1f80-71b0-a826-ccb7699f5246"
+      },
+      "submitted": "2026-10-17T21:06:35+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:07:13+00:00"
+    },
+    {
+      "id": "bolita/gpt-image-2.5-sunburst-fal_1",
+      "asset": "bolita",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1440×1440",
+      "usd_estimate": 0.1283,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb0-b9e4-7813-8ac8-c1ccbb051480",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-b9e4-7813-8ac8-c1ccbb051480/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-b9e4-7813-8ac8-c1ccbb051480"
+      },
+      "submitted": "2026-10-17T21:07:14+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:07:58+00:00"
+    },
+    {
+      "id": "bolita/gpt-image-2.5-sunburst-fal_2",
+      "asset": "bolita",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1440×1440",
+      "usd_estimate": 0.1283,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb0-ce85-7fa1-abff-73beca92bd11",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-ce85-7fa1-abff-73beca92bd11/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb0-ce85-7fa1-abff-73beca92bd11"
+      },
+      "submitted": "2026-10-17T21:07:18+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:08:07+00:00"
+    },
+    {
+      "id": "granada/gpt-image-2.5-sunburst-fal_1",
+      "asset": "granada",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1440×1440",
+      "usd_estimate": 0.1279,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb1-66ec-7ab2-87eb-34629408a691",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb1-66ec-7ab2-87eb-34629408a691/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb1-66ec-7ab2-87eb-34629408a691"
+      },
+      "submitted": "2026-10-17T21:07:58+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:08:41+00:00"
+    },
+    {
+      "id": "granada/gpt-image-2.5-sunburst-fal_2",
+      "asset": "granada",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1440×1440",
+      "usd_estimate": 0.1279,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb1-8f7d-7540-af7a-96434737c327",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb1-8f7d-7540-af7a-96434737c327/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14bb1-8f7d-7540-af7a-96434737c327"
+      },
+      "submitted": "2026-10-17T21:08:07+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:08:52+00:00"
+    },
+    {
+      "id": "colgado_una/nano-banana-2.1_1",
+      "asset": "colgado_una",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb2-11fa-78f2-94fb-8a30004c05fd",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-11fa-78f2-94fb-8a30004c05fd/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-11fa-78f2-94fb-8a30004c05fd"
+      },
+      "submitted": "2026-10-17T21:08:41+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:09:18+00:00"
+    },
+    {
+      "id": "colgado_una/nano-banana-2.1_2",
+      "asset": "colgado_una",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb2-3d1e-7131-83c5-f3893b4d7ec0",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-3d1e-7131-83c5-f3893b4d7ec0/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-3d1e-7131-83c5-f3893b4d7ec0"
+      },
+      "submitted": "2026-10-17T21:08:52+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:09:30+00:00"
+    },
+    {
+      "id": "colgado_dos_cinturon/nano-banana-2.1_1",
+      "asset": "colgado_dos_cinturon",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb2-a1cc-7511-abe2-24abf6b9ede8",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-a1cc-7511-abe2-24abf6b9ede8/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-a1cc-7511-abe2-24abf6b9ede8"
+      },
+      "submitted": "2026-10-17T21:09:18+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:09:47+00:00"
+    },
+    {
+      "id": "colgado_dos_cinturon/nano-banana-2.1_2",
+      "asset": "colgado_dos_cinturon",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "2:3 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb2-d241-7520-b35a-7a08f7608cb2",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-d241-7520-b35a-7a08f7608cb2/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb2-d241-7520-b35a-7a08f7608cb2"
+      },
+      "submitted": "2026-10-17T21:09:31+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:10:02+00:00"
+    },
+    {
+      "id": "bolita/nano-banana-2.1_1",
+      "asset": "bolita",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1:1 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb3-13cb-78a1-85d0-13e019c6c79b",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-13cb-78a1-85d0-13e019c6c79b/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-13cb-78a1-85d0-13e019c6c79b"
+      },
+      "submitted": "2026-10-17T21:09:47+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:10:18+00:00"
+    },
+    {
+      "id": "bolita/nano-banana-2.1_2",
+      "asset": "bolita",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1:1 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb3-51a2-7fb1-ada9-403f7f6f2ff4",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-51a2-7fb1-ada9-403f7f6f2ff4/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-51a2-7fb1-ada9-403f7f6f2ff4"
+      },
+      "submitted": "2026-10-17T21:10:03+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:10:36+00:00"
+    },
+    {
+      "id": "granada/nano-banana-2.1_1",
+      "asset": "granada",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "1:1 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb3-8e12-7d03-872f-76a2772f75e4",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-8e12-7d03-872f-76a2772f75e4/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-8e12-7d03-872f-76a2772f75e4"
+      },
+      "submitted": "2026-10-17T21:10:18+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:10:48+00:00"
+    },
+    {
+      "id": "granada/nano-banana-2.1_2",
+      "asset": "granada",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "1:1 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bb3-d3a0-78f1-8d63-520e11fe6229",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-d3a0-78f1-8d63-520e11fe6229/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bb3-d3a0-78f1-8d63-520e11fe6229"
+      },
+      "submitted": "2026-10-17T21:10:37+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:11:07+00:00"
     }
   ],
   "qa": {}

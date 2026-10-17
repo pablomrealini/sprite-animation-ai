@@ -1,0 +1,75 @@
+{
+  "set": "poses_gen",
+  "asset": "granada",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "No text, letters, numbers or logos.\n\nA single small hand grenade for this game, alone, seen from the side: a chunky low-poly 3D model made of a few big faceted polygons with flat shading, like the character in the reference. A rounded dark gray body with a red band around the middle, a short gray fuse cap on top with a small ring pull on the side. Soft even studio lighting, matte surfaces, no shine and no reflections. Centered, filling most of the image.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "native",
+  "size_requested": "1440×1440",
+  "size": [
+    1440,
+    1440
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.1279,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14bb1-8f7d-7540-af7a-96434737c327",
+  "created": "2026-10-17T21:08:52+00:00",
+  "sha256": "99b98f15403d16bcdfc36f86e168933b1734bbd316a526b84e1414faa481acb1",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/granada/gpt-image-2.5-sunburst-fal_2.png",
+    "source": {
+      "w": 1440,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.5516,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.946,
+        "left": 0.98,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (bottom): puede estar cortado"
+      ]
+    },
+    "trim": {
+      "image": [
+        187,
+        104,
+        1374,
+        1352
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_2.png",
+        "w": 1187,
+        "h": 1248
+      }
+    }
+  }
+}

@@ -10,11 +10,27 @@ Modelos: gpt-image-2.5-sunburst-fal, nano-banana-2.1. Abrí `compare.html` para 
 | correr | gpt-image-2.5-sunburst-fal #2 | ok | 1440×2160 | warn | el contenido toca el borde (left): puede estar cortado | 0,12 |
 | colgado_dos | gpt-image-2.5-sunburst-fal #1 | ok | 1440×2160 | warn | el contenido toca el borde (bottom): puede estar cortado | 0,12 |
 | colgado_dos | gpt-image-2.5-sunburst-fal #2 | ok | 1440×2160 | ok |  | 0,12 |
+| colgado_una | gpt-image-2.5-sunburst-fal #1 | ok | 1440×2160 | ok |  | 0,12 |
+| colgado_una | gpt-image-2.5-sunburst-fal #2 | ok | 1440×2160 | ok |  | 0,12 |
+| colgado_dos_cinturon | gpt-image-2.5-sunburst-fal #1 | ok | 1440×2160 | ok |  | 0,12 |
+| colgado_dos_cinturon | gpt-image-2.5-sunburst-fal #2 | ok | 1440×2160 | ok |  | 0,12 |
+| bolita | gpt-image-2.5-sunburst-fal #1 | ok | 1440×1440 | ok |  | 0,13 |
+| bolita | gpt-image-2.5-sunburst-fal #2 | ok | 1440×1440 | warn | el contenido toca el borde (bottom): puede estar cortado | 0,13 |
+| granada | gpt-image-2.5-sunburst-fal #1 | ok | 1440×1440 | ok |  | 0,13 |
+| granada | gpt-image-2.5-sunburst-fal #2 | ok | 1440×1440 | warn | el contenido toca el borde (bottom): puede estar cortado | 0,13 |
 | sin_arma | nano-banana-2.1 #1 | ok | 1696×2528 | ok |  | 0,06 |
 | sin_arma | nano-banana-2.1 #2 | ok | 1696×2528 | ok |  | 0,06 |
 | correr | nano-banana-2.1 #1 | ok | 1696×2528 | ok |  | 0,06 |
 | correr | nano-banana-2.1 #2 | ok | 1696×2528 | ok |  | 0,06 |
 | colgado_dos | nano-banana-2.1 #1 | ok | 1696×2528 | ok |  | 0,06 |
 | colgado_dos | nano-banana-2.1 #2 | ok | 1696×2528 | ok |  | 0,06 |
+| colgado_una | nano-banana-2.1 #1 | ok | 1696×2528 | ok |  | 0,06 |
+| colgado_una | nano-banana-2.1 #2 | ok | 1696×2528 | ok |  | 0,06 |
+| colgado_dos_cinturon | nano-banana-2.1 #1 | ok | 1696×2528 | ok |  | 0,06 |
+| colgado_dos_cinturon | nano-banana-2.1 #2 | ok | 1696×2528 | ok |  | 0,06 |
+| bolita | nano-banana-2.1 #1 | ok | 2048×2048 | ok |  | 0,06 |
+| bolita | nano-banana-2.1 #2 | ok | 2048×2048 | ok |  | 0,06 |
+| granada | nano-banana-2.1 #1 | ok | 2048×2048 | ok |  | 0,06 |
+| granada | nano-banana-2.1 #2 | ok | 2048×2048 | ok |  | 0,06 |
 
-Gastado (estimado, a precio de lista): US$ 1,07.
+Gastado (estimado, a precio de lista): US$ 2,54.

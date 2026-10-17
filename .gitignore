@@ -39,3 +39,24 @@ characters/lowpoly/cuadros/
 characters/lowpoly/torso/**/*.png
 characters/lowpoly/poses_gen/post/**
 
+
+# vía 3D del low-poly (characters/lowpoly/3d): al repo van los scripts, las notas, los pedidos y respuestas de las APIs
+# (con sus imágenes de entrada y las medidas), el personaje riggeado con su textura, los tres GLB animados que usa
+# render.py y el GLB del arma. Los otros formatos (FBX, OBJ, STL, USDZ, los GLB repetidos) y los renders, no: se rehacen
+characters/lowpoly/3d/**
+!characters/lowpoly/3d/**/
+!characters/lowpoly/3d/*.py
+!characters/lowpoly/3d/*.md
+!characters/lowpoly/3d/*.html
+!characters/lowpoly/3d/*.json
+!characters/lowpoly/3d/out/*/pedido.json
+!characters/lowpoly/3d/out/*/respuesta.json
+!characters/lowpoly/3d/out/*/thumbnail.png
+!characters/lowpoly/3d/entradas/*
+!characters/lowpoly/3d/torso/torso.json
+!characters/lowpoly/3d/out/personaje/rigged_character_glb.glb
+!characters/lowpoly/3d/out/personaje/texture_urls__0__base_color.png
+!characters/lowpoly/3d/out/personaje/animation_glb.glb
+!characters/lowpoly/3d/out/personaje/basic_animations__running_glb.glb
+!characters/lowpoly/3d/out/personaje/basic_animations__walking_glb.glb
+!characters/lowpoly/3d/out/arma/model_glb.glb

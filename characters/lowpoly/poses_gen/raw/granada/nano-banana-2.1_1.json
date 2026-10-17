@@ -1,0 +1,77 @@
+{
+  "set": "poses_gen",
+  "asset": "granada",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No text, letters, numbers or logos.\n\nA single small hand grenade for this game, alone, seen from the side: a chunky low-poly 3D model made of a few big faceted polygons with flat shading, like the character in the reference. A rounded dark gray body with a red band around the middle, a short gray fuse cap on top with a small ring pull on the side. Soft even studio lighting, matte surfaces, no shine and no reflections. Centered, filling most of the image.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "key",
+  "size_requested": "1:1 2K",
+  "size": [
+    2048,
+    2048
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14bb3-8e12-7d03-872f-76a2772f75e4",
+  "created": "2026-10-17T21:10:48+00:00",
+  "sha256": "175dc8233e3c02c5deec0cb7f3252e8da8fa8202a40c3cf35c22f2d25cb52af7",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/granada/nano-banana-2.1_1.png",
+    "source": {
+      "w": 2048,
+      "h": 2048
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FC03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7248,
+      "opaque": 0.2728,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        511,
+        264,
+        1531,
+        1758
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 1020,
+        "h": 1494
+      }
+    }
+  }
+}

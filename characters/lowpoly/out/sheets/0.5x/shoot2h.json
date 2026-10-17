@@ -1,11 +1,11 @@
 {
   "cell": {
-    "w": 249,
+    "w": 250,
     "h": 311
   },
-  "cols": 7,
+  "cols": 4,
   "rows": 1,
-  "count": 7,
+  "count": 4,
   "oversize": false,
   "fps": 12,
   "loop": true,
@@ -14,9 +14,6 @@
     "y": 0.93795
   },
   "durations_ms": [
-    83.3,
-    83.3,
-    83.3,
     83.3,
     83.3,
     83.3,

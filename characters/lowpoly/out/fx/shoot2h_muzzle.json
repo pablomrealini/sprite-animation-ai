@@ -1,156 +1,94 @@
 {
-  "note": "Boca del cañón por frame de shoot2h, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
-  "animation": "shoot2h",
-  "variants": {
-    "1x": {
-      "cell": {
-        "w": 499,
-        "h": 622
-      },
-      "pivot_px": {
-        "x": 249.5,
-        "y": 583.4
-      },
-      "frames": [
-        {
-          "frame": 0,
-          "name": "shoot2h/0000",
-          "native_frame": 88,
-          "x": 382.05,
-          "y": 450.17,
-          "dx": 132.55,
-          "dy": -133.23
-        },
-        {
-          "frame": 1,
-          "name": "shoot2h/0001",
-          "native_frame": 90,
-          "x": 382.05,
-          "y": 447.94,
-          "dx": 132.55,
-          "dy": -135.46
-        },
-        {
-          "frame": 2,
-          "name": "shoot2h/0002",
-          "native_frame": 92,
-          "x": 382.05,
-          "y": 445.72,
-          "dx": 132.55,
-          "dy": -137.68
-        },
-        {
-          "frame": 3,
-          "name": "shoot2h/0003",
-          "native_frame": 94,
-          "x": 382.79,
-          "y": 447.94,
-          "dx": 133.29,
-          "dy": -135.46
-        },
-        {
-          "frame": 4,
-          "name": "shoot2h/0004",
-          "native_frame": 96,
-          "x": 382.79,
-          "y": 445.72,
-          "dx": 133.29,
-          "dy": -137.68
-        },
-        {
-          "frame": 5,
-          "name": "shoot2h/0005",
-          "native_frame": 98,
-          "x": 382.05,
-          "y": 447.94,
-          "dx": 132.55,
-          "dy": -135.46
-        },
-        {
-          "frame": 6,
-          "name": "shoot2h/0006",
-          "native_frame": 100,
-          "x": 382.05,
-          "y": 447.94,
-          "dx": 132.55,
-          "dy": -135.46
-        }
-      ]
+ "note": "Boca del arma por frame de shoot2h, medida por la franja roja del arma (boca_disparos.py): en los cuadros con el destello del video, lo más adelante es la punta del rayo. x,y en px de la celda; dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+ "animation": "shoot2h",
+ "variants": {
+  "1x": {
+   "cell": {
+    "w": 500,
+    "h": 622
+   },
+   "pivot_px": {
+    "x": 250.0,
+    "y": 583.4
+   },
+   "frames": [
+    {
+     "frame": 0,
+     "name": "shoot2h/0000",
+     "x": 378.5,
+     "y": 449.94,
+     "dx": 128.5,
+     "dy": -133.46
     },
-    "0.5x": {
-      "cell": {
-        "w": 249,
-        "h": 311
-      },
-      "pivot_px": {
-        "x": 124.5,
-        "y": 291.7
-      },
-      "frames": [
-        {
-          "frame": 0,
-          "name": "shoot2h/0000",
-          "native_frame": 88,
-          "x": 190.64,
-          "y": 225.09,
-          "dx": 66.14,
-          "dy": -66.61
-        },
-        {
-          "frame": 1,
-          "name": "shoot2h/0001",
-          "native_frame": 90,
-          "x": 190.64,
-          "y": 223.97,
-          "dx": 66.14,
-          "dy": -67.73
-        },
-        {
-          "frame": 2,
-          "name": "shoot2h/0002",
-          "native_frame": 92,
-          "x": 190.64,
-          "y": 222.86,
-          "dx": 66.14,
-          "dy": -68.84
-        },
-        {
-          "frame": 3,
-          "name": "shoot2h/0003",
-          "native_frame": 94,
-          "x": 191.01,
-          "y": 223.97,
-          "dx": 66.51,
-          "dy": -67.73
-        },
-        {
-          "frame": 4,
-          "name": "shoot2h/0004",
-          "native_frame": 96,
-          "x": 191.01,
-          "y": 222.86,
-          "dx": 66.51,
-          "dy": -68.84
-        },
-        {
-          "frame": 5,
-          "name": "shoot2h/0005",
-          "native_frame": 98,
-          "x": 190.64,
-          "y": 223.97,
-          "dx": 66.14,
-          "dy": -67.73
-        },
-        {
-          "frame": 6,
-          "name": "shoot2h/0006",
-          "native_frame": 100,
-          "x": 190.64,
-          "y": 223.97,
-          "dx": 66.14,
-          "dy": -67.73
-        }
-      ]
+    {
+     "frame": 1,
+     "name": "shoot2h/0001",
+     "x": 369.5,
+     "y": 454.69,
+     "dx": 119.5,
+     "dy": -128.71
+    },
+    {
+     "frame": 2,
+     "name": "shoot2h/0002",
+     "x": 374.5,
+     "y": 457.3,
+     "dx": 124.5,
+     "dy": -126.1
+    },
+    {
+     "frame": 3,
+     "name": "shoot2h/0003",
+     "x": 382.5,
+     "y": 445.5,
+     "dx": 132.5,
+     "dy": -137.9
     }
+   ]
+  },
+  "0.5x": {
+   "cell": {
+    "w": 250,
+    "h": 311
+   },
+   "pivot_px": {
+    "x": 125.0,
+    "y": 291.7
+   },
+   "frames": [
+    {
+     "frame": 0,
+     "name": "shoot2h/0000",
+     "x": 186.5,
+     "y": 232.0,
+     "dx": 61.5,
+     "dy": -59.7
+    },
+    {
+     "frame": 1,
+     "name": "shoot2h/0001",
+     "x": 183.5,
+     "y": 227.5,
+     "dx": 58.5,
+     "dy": -64.2
+    },
+    {
+     "frame": 2,
+     "name": "shoot2h/0002",
+     "x": 186.5,
+     "y": 229.0,
+     "dx": 61.5,
+     "dy": -62.7
+    },
+    {
+     "frame": 3,
+     "name": "shoot2h/0003",
+     "x": 190.5,
+     "y": 223.0,
+     "dx": 65.5,
+     "dy": -68.7
+    }
+   ]
   }
+ }
 }

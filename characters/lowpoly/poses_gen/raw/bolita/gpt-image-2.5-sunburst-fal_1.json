@@ -1,0 +1,74 @@
+{
+  "set": "poses_gen",
+  "asset": "bolita",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the pose into the middle of a forward somersault, seen exactly from the side: he is curled into a tight ball, knees pulled up to the chest, both arms hugging the shins, the helmet tucked forward over the knees, the same dark pistol held in the right hand against the shins. Compact and round, as if frozen while spinning. Same helmet, same red belt, same proportions. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "native",
+  "size_requested": "1440×1440",
+  "size": [
+    1440,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1283,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a14bb0-b9e4-7813-8ac8-c1ccbb051480",
+  "created": "2026-10-17T21:07:58+00:00",
+  "sha256": "677d58a674a43e57ad364c923289a318b11413f096562f93f7fa112d740b7330",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/bolita/gpt-image-2.5-sunburst-fal_1.png",
+    "source": {
+      "w": 1440,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.5862,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.999,
+        "left": 1.0,
+        "right": 0.999
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        272,
+        76,
+        1223,
+        1320
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_1.png",
+        "w": 951,
+        "h": 1244
+      }
+    }
+  }
+}

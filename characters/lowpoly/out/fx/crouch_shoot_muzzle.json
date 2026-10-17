@@ -1,102 +1,94 @@
 {
-  "note": "Boca del cañón por frame de crouch_shoot, para anclar el fogonazo. x,y en px de la celda (origen arriba a la izquierda); dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
-  "animation": "crouch_shoot",
-  "variants": {
-    "1x": {
-      "cell": {
-        "w": 499,
-        "h": 622
-      },
-      "pivot_px": {
-        "x": 249.5,
-        "y": 583.4
-      },
-      "frames": [
-        {
-          "frame": 0,
-          "name": "crouch_shoot/0000",
-          "native_frame": 42,
-          "x": 395.41,
-          "y": 467.24,
-          "dx": 145.91,
-          "dy": -116.16
-        },
-        {
-          "frame": 1,
-          "name": "crouch_shoot/0001",
-          "native_frame": 44,
-          "x": 396.16,
-          "y": 467.24,
-          "dx": 146.66,
-          "dy": -116.16
-        },
-        {
-          "frame": 2,
-          "name": "crouch_shoot/0002",
-          "native_frame": 46,
-          "x": 395.41,
-          "y": 467.24,
-          "dx": 145.91,
-          "dy": -116.16
-        },
-        {
-          "frame": 3,
-          "name": "crouch_shoot/0003",
-          "native_frame": 48,
-          "x": 395.41,
-          "y": 467.24,
-          "dx": 145.91,
-          "dy": -116.16
-        }
-      ]
+ "note": "Boca del arma por frame de crouch_shoot, medida por la franja roja del arma (boca_disparos.py): en los cuadros con el destello del video, lo más adelante es la punta del rayo. x,y en px de la celda; dx,dy relativos al pivot (y hacia abajo). Con flipX, invertí dx.",
+ "animation": "crouch_shoot",
+ "variants": {
+  "1x": {
+   "cell": {
+    "w": 500,
+    "h": 622
+   },
+   "pivot_px": {
+    "x": 250.0,
+    "y": 583.4
+   },
+   "frames": [
+    {
+     "frame": 0,
+     "name": "crouch_shoot/0000",
+     "x": 371.5,
+     "y": 490.0,
+     "dx": 121.5,
+     "dy": -93.4
     },
-    "0.5x": {
-      "cell": {
-        "w": 249,
-        "h": 311
-      },
-      "pivot_px": {
-        "x": 124.5,
-        "y": 291.7
-      },
-      "frames": [
-        {
-          "frame": 0,
-          "name": "crouch_shoot/0000",
-          "native_frame": 42,
-          "x": 197.31,
-          "y": 233.62,
-          "dx": 72.81,
-          "dy": -58.08
-        },
-        {
-          "frame": 1,
-          "name": "crouch_shoot/0001",
-          "native_frame": 44,
-          "x": 197.68,
-          "y": 233.62,
-          "dx": 73.18,
-          "dy": -58.08
-        },
-        {
-          "frame": 2,
-          "name": "crouch_shoot/0002",
-          "native_frame": 46,
-          "x": 197.31,
-          "y": 233.62,
-          "dx": 72.81,
-          "dy": -58.08
-        },
-        {
-          "frame": 3,
-          "name": "crouch_shoot/0003",
-          "native_frame": 48,
-          "x": 197.31,
-          "y": 233.62,
-          "dx": 72.81,
-          "dy": -58.08
-        }
-      ]
+    {
+     "frame": 1,
+     "name": "crouch_shoot/0001",
+     "x": 370.5,
+     "y": 487.38,
+     "dx": 120.5,
+     "dy": -96.03
+    },
+    {
+     "frame": 2,
+     "name": "crouch_shoot/0002",
+     "x": 369.5,
+     "y": 485.39,
+     "dx": 119.5,
+     "dy": -98.01
+    },
+    {
+     "frame": 3,
+     "name": "crouch_shoot/0003",
+     "x": 375.5,
+     "y": 468.0,
+     "dx": 125.5,
+     "dy": -115.4
     }
+   ]
+  },
+  "0.5x": {
+   "cell": {
+    "w": 250,
+    "h": 311
+   },
+   "pivot_px": {
+    "x": 125.0,
+    "y": 291.7
+   },
+   "frames": [
+    {
+     "frame": 0,
+     "name": "crouch_shoot/0000",
+     "x": 185.5,
+     "y": 244.9,
+     "dx": 60.5,
+     "dy": -46.8
+    },
+    {
+     "frame": 1,
+     "name": "crouch_shoot/0001",
+     "x": 184.5,
+     "y": 243.4,
+     "dx": 59.5,
+     "dy": -48.3
+    },
+    {
+     "frame": 2,
+     "name": "crouch_shoot/0002",
+     "x": 184.5,
+     "y": 242.4,
+     "dx": 59.5,
+     "dy": -49.3
+    },
+    {
+     "frame": 3,
+     "name": "crouch_shoot/0003",
+     "x": 187.5,
+     "y": 234.0,
+     "dx": 62.5,
+     "dy": -57.7
+    }
+   ]
   }
+ }
 }

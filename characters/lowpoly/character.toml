@@ -1,13 +1,19 @@
 # Personaje low-poly (prueba de estilo 3D): las animaciones con los nombres que usa la arena, para compararlas con el
-# ranger (planilla.html) y, más adelante, para el selector 2D / low-poly del juego. Las tomas descartadas y las otras
-# estrategias del bake-off están en compare.html.
-# Desde la raíz del repo:
+# ranger (planilla.html) y para el selector 2D / low-poly del juego. Las tomas descartadas y las otras estrategias del
+# bake-off están en compare.html; el plan, en plan_tanda3.md.
+# Desde la raíz del repo (el segundo paso, porque run vacía out/: escribe la boca del arma de los tiros en out/fx/):
 #   uv run --project pipeline spritepipe run characters/lowpoly/character.toml
+#   uv run --project pipeline python characters/lowpoly/boca_disparos.py
 #
-# Todo sale de Kling O3 standard con sólo el primer cuadro (ver reporte_idle.md), por fal: los clips vienen en BT.601
-# sin tag, así que cada uno declara color_matrix = "bt601" (con BT.709 el rojo se corre a naranja). Kling dispara rayos
-# aunque nadie se lo pida: remove_flash con method = "shape" los borra siguiendo la forma del arma (sin contorno no
-# sirve el método de siempre, que se comía la boca) y deja la boca por cuadro en out/fx/<anim>_muzzle.json.
+# Todo sale de Kling O3 standard con sólo el primer cuadro (ver reporte_idle.md), por fal. La regla (plan_tanda3.md):
+# el cañón se prende sólo al disparar. Los clips que no disparan pasan por apagar_video.py (clips/apagado/): el disco cian
+# de la boca queda gris, y en correr antes se borran los rayos que Kling dispara solo. Esos clips ya salen en BT.709 con
+# tag; los que se leen directo de fal (sin tag, BT.601) declaran color_matrix = "bt601".
+#
+# Los disparos: la arena usa shoot, shoot2h y crouch_shoot como "un tiro" (lo reproduce entero en cada disparo y en
+# reposo queda en el último cuadro). Por eso son cuadros a mano (frames): el tiro del video, con el cañón prendido, la
+# luz sobre el personaje y el retroceso, y al final un cuadro apuntando con el cañón apagado, del mismo clip. El
+# fogonazo y el rayo del video se borran (apagar_video.py --sin-fogonazo): el fogonazo lo dibuja el juego.
 
 [character]
 name = "lowpoly"
@@ -26,11 +32,12 @@ method = "distance"       # fondo magenta apagado y personaje rojo: con chroma s
 [output]
 extra_scales = [0.5]
 
+# --- sin disparo: el cañón apagado -------------------------------------------------------------------------------
+
 # idle_combat: Kling O3, toma 2 del idle A (generate_idle.toml). Último cuadro = primero: el loop es el clip entero.
 [[animation]]
 name = "idle_combat"
-clip = "clips/idle/kling-o3-std_idle_a_2.mp4"
-color_matrix = "bt601"
+clip = "clips/apagado/idle_a_2.mp4"
 kind = "cycle"
 loop_start = 0
 loop_length = 120
@@ -38,25 +45,10 @@ model = "kling-o3-std"
 prompt = "prompts/idle_a.txt"
 pose = "poses/perfil_dullmagenta_16x9.png"
 
-# run_gun: Kling O3, toma 2 de correr (generate_correr.toml), desde la zancada con el casco a la misma escala que el
-# idle (505 px de alto; parado mediría 518, como el idle).
-[[animation]]
-name = "run_gun"
-clip = "clips/correr/kling-o3-std_correr_a_2.mp4"
-color_matrix = "bt601"
-remove_flash = { method = "shape" }
-kind = "cycle"
-loop_seconds = [0.5, 2.0]
-model = "kling-o3-std"
-prompt = "prompts/correr_a.txt"
-pose = "poses/correr_dullmagenta_16x9.png"
-pose_body_height_px = 518
-
 # idle: el cuadro quieto del arranque (la arena lo usa para el retrato), como en el ranger
 [[animation]]
 name = "idle"
-clip = "clips/idle/kling-o3-std_idle_a_2.mp4"
-color_matrix = "bt601"
+clip = "clips/apagado/idle_a_2.mp4"
 kind = "oneshot"
 loop = true
 trim = [0, 4]
@@ -66,138 +58,44 @@ model = "kling-o3-std"
 prompt = "prompts/idle_a.txt"
 pose = "poses/perfil_dullmagenta_16x9.png"
 
-# --- el resto del set (generate_set.toml y generate_subida.toml, revisadas las dos tomas de cada uno) ------------------
-# Los cuadros son del clip nativo (24 fps). Kling dispara en todos los clips con arma aunque el prompt diga que no:
-# remove_flash shape borra lo que está delante de la boca, salvo en los que giran o dan vueltas (ahí el recorte evita
-# los cuadros con rayo).
-
-# disparo: toma 1 (la 2 tiene un fogonazo naranja grande). Sube el brazo en 16-28 y dispara de 32 a 92.
-[[clip]]
-name = "shoot"
-file = "clips/set/kling-o3-std_shoot_1.mp4"
-color_matrix = "bt601"
-model = "kling-o3-std"
-prompt = "prompts/shoot.txt"
-pose = "poses/perfil_dullmagenta_16x9.png"
-
+# run_gun: Kling O3, toma 2 de correr (generate_correr.toml), desde la zancada con el casco a la misma escala que el
+# idle (505 px de alto; parado mediría 518). Kling dispara corriendo sin que se lo pidan: apagar_video.py --sin-rayos.
 [[animation]]
-name = "shoot_in"
-clip = "shoot"
-remove_flash = { method = "shape" }
-kind = "oneshot"
-trim = [14, 32]
-trim_static_tail = false
-
-[[animation]]
-name = "shoot"
-clip = "shoot"
-remove_flash = { method = "shape" }
+name = "run_gun"
+clip = "clips/apagado/correr_a_2.mp4"
 kind = "cycle"
-skip_seconds = 1.4
-loop_seconds = [0.3, 1.0]
-
-# a dos manos: toma 2 (en la 1 el pantalón se vuelve azul mientras dispara). Junta las manos en 8-20, dispara 24-104.
-[[clip]]
-name = "shoot2h"
-file = "clips/set/kling-o3-std_shoot2h_2.mp4"
-color_matrix = "bt601"
+loop_seconds = [0.5, 2.0]
 model = "kling-o3-std"
-prompt = "prompts/shoot2h.txt"
-pose = "poses/perfil_dullmagenta_16x9.png"
+prompt = "prompts/correr_a.txt"
+pose = "poses/correr_dullmagenta_16x9.png"
+pose_body_height_px = 518
 
-[[animation]]
-name = "shoot2h_in"
-clip = "shoot2h"
-remove_flash = { method = "shape" }
-kind = "oneshot"
-trim = [6, 24]
-trim_static_tail = false
-
-[[animation]]
-name = "shoot2h"
-clip = "shoot2h"
-remove_flash = { method = "shape" }
-kind = "cycle"
-skip_seconds = 1.2
-loop_seconds = [0.3, 1.0]
-
-# agachado: toma 2 (la 1 casi no se agacha). Baja en 14-28, dispara agachado 32-92, se para en 96-108.
-[[clip]]
-name = "crouch"
-file = "clips/set/kling-o3-std_crouch_shoot_2.mp4"
-color_matrix = "bt601"
-model = "kling-o3-std"
-prompt = "prompts/crouch_shoot.txt"
-pose = "poses/perfil_dullmagenta_16x9.png"
-
-[[animation]]
-name = "crouch_in"
-clip = "crouch"
-remove_flash = { method = "shape" }
-kind = "oneshot"
-trim = [12, 30]
-trim_static_tail = false
-
-[[animation]]
-name = "crouch_shoot"
-clip = "crouch"
-remove_flash = { method = "shape" }
-kind = "cycle"
-skip_seconds = 1.35
-loop_seconds = [0.3, 1.0]
-
-[[animation]]
-name = "crouch_out"
-clip = "crouch"
-remove_flash = { method = "shape" }
-kind = "oneshot"
-trim = [94, 110]
-trim_static_tail = false
-
-# salto: toma 1 (la 2 dispara rayos en casi todos los saltos). Un salto entero: despega en 8, aterriza en 24; en 26
-# arranca el segundo, que dispara.
+# salto: set toma 1, un salto entero (cuadros 4-24); en 26 arranca el segundo, que dispara.
 [[animation]]
 name = "jump"
-clip = "clips/set/kling-o3-std_jump_1.mp4"
-color_matrix = "bt601"
-remove_flash = { method = "shape" }
+clip = "clips/apagado/jump_1.mp4"
 kind = "oneshot"
 trim = [4, 24]
 model = "kling-o3-std"
 prompt = "prompts/jump.txt"
 pose = "poses/salto_dullmagenta_16x9.png"
 
-# salto disparando: toma 1. Salta en 16, dispara arriba en 28, aterriza en 36-40.
-[[animation]]
-name = "jump_shoot"
-clip = "clips/set/kling-o3-std_jump_shoot_1.mp4"
-color_matrix = "bt601"
-remove_flash = { method = "shape" }
-kind = "oneshot"
-trim = [14, 44]
-model = "kling-o3-std"
-prompt = "prompts/jump_shoot.txt"
-pose = "poses/salto_dullmagenta_16x9.png"
-
-# doble salto: toma 2. Trae dos mortales seguidos (24-40 y 44-60) y después dispara: va el primero. Sin remove_flash: con la vuelta
-# entera el seguimiento del arma se pierde y borraría el cuerpo.
+# doble salto: set toma 2, el primer mortal (22-42). Provisorio: el plan es la bolita (poses/bolita.png) girada por la
+# arena, porque Kling deforma al personaje en el medio de la vuelta.
 [[animation]]
 name = "double_jump"
-clip = "clips/set/kling-o3-std_double_jump_2.mp4"
-color_matrix = "bt601"
+clip = "clips/apagado/double_jump_2.mp4"
 kind = "oneshot"
 trim = [22, 42]
 model = "kling-o3-std"
 prompt = "prompts/double_jump.txt"
 pose = "poses/salto_dullmagenta_16x9.png"
 
-# colgado de una mano: toma 2. Un primer salto fallido en 16-26, vuelve a saltar en 44, se agarra en 48 y queda
-# colgado. Kling dibuja la cornisa (una barra oscura arriba): la limpieza previa con prop_rows la borra casi toda, como en
-# el ranger; quedan restos chicos arriba de la mano y en el cuadro del agarre.
+# colgado de una mano: set toma 2. Provisorio: para el low-poly el plan es dejarlo y que se suba solo con climb. Kling
+# dibuja la cornisa (una barra oscura arriba): la limpieza previa con prop_rows la borra casi toda.
 [[clip]]
 name = "hang"
-file = "clips/set/kling-o3-std_hang_2.mp4"
-color_matrix = "bt601"
+file = "clips/apagado/hang_2.mp4"
 clean = { prop_rows = true }
 model = "kling-o3-std"
 prompt = "prompts/hang.txt"
@@ -216,12 +114,11 @@ kind = "cycle"
 skip_seconds = 2.4
 loop_seconds = [0.5, 2.0]
 
-# subida: toma 1 (la 2 da una vuelta de cabeza sobre el canto). Dispara en 4-12 (fuera del recorte), sube en 16-72 y
-# queda parado sobre el canto. La pose arranca colgada: parado mide 331 px en la pose (climb_frames.json).
+# subida: subida toma 1 (la 2 da una vuelta de cabeza sobre el canto). Dispara en 4-12 (afuera del recorte), sube en
+# 16-72 y queda parado sobre el canto. La pose arranca colgada: parado mide 331 px en la pose (climb_frames.json).
 [[animation]]
 name = "climb"
-clip = "clips/subida/kling-o3-std_climb_1.mp4"
-color_matrix = "bt601"
+clip = "clips/apagado/climb_1.mp4"
 kind = "oneshot"
 trim = [14, 90]
 model = "kling-o3-std"
@@ -229,11 +126,10 @@ prompt = "prompts/climb.txt"
 pose = "poses/climb_first_dullmagenta_16x9.png"
 pose_body_height_px = 331
 
-# colgado a dos manos: toma 2 (la 1 dispara). Último cuadro = primero: el loop es el clip entero menos el último.
+# colgado a dos manos: subida toma 2 (la 1 dispara). Último cuadro = primero: el loop es el clip entero menos el último.
 [[animation]]
 name = "hang_two"
-clip = "clips/subida/kling-o3-std_hang_two_2.mp4"
-color_matrix = "bt601"
+clip = "clips/apagado/hang_two_2.mp4"
 kind = "cycle"
 loop_start = 0
 loop_length = 96          # el clip es de 4 s (97 cuadros); el último es igual al primero
@@ -242,15 +138,105 @@ prompt = "prompts/hang_two.txt"
 pose = "poses/climb_first_dullmagenta_16x9.png"
 pose_body_height_px = 331
 
-# granada: toma 2 (en la 1 dispara en vez de tirar). Lleva el brazo atrás en 32-48, tira en 52-68 y vuelve; desde 80
-# dispara un rayo (fuera del recorte).
+# granada: set toma 2. Provisorio: el plan es una toma con la granada en la mano. Lleva el brazo atrás en 32-48, tira
+# en 52-68 y vuelve; desde 80 dispara un rayo (afuera del recorte).
 [[animation]]
 name = "throw"
-clip = "clips/set/kling-o3-std_throw_2.mp4"
-color_matrix = "bt601"
+clip = "clips/apagado/throw_2.mp4"
 kind = "oneshot"
 trim = [30, 78]
 trim_static_tail = false
 model = "kling-o3-std"
 prompt = "prompts/throw.txt"
 pose = "poses/perfil_dullmagenta_16x9.png"
+
+# --- disparos: el cañón se prende sólo en el tiro -------------------------------------------------------------------
+
+# parado: set toma 1, el clip que dispara con retroceso (10 px por tiro, uno cada ~4 cuadros) y el destello en todos.
+# apagar_video.py --cuadros 0-29 --sin-fogonazo 30-33 --ref 29: apaga el disco antes del primer tiro y borra el fogonazo
+# y el rayo del video en el tiro (el juego dibuja el suyo); quedan el cañón prendido y la luz sobre el personaje.
+# Sube el brazo en 14-29; el primer tiro es el 30.
+[[clip]]
+name = "shoot"
+file = "clips/apagado/shoot_1.mp4"
+model = "kling-o3-std"
+prompt = "prompts/shoot.txt"
+pose = "poses/perfil_dullmagenta_16x9.png"
+
+[[animation]]
+name = "shoot_in"
+clip = "shoot"
+kind = "oneshot"
+trim = [14, 30]
+trim_static_tail = false
+
+[[animation]]
+name = "shoot"            # un tiro: adelante con el cañón prendido (30), retroceso (31, 32) y apuntando apagado (29)
+clip = "shoot"
+kind = "oneshot"
+loop = true
+frames = [30, 31, 32, 29]
+
+# a dos manos: tanda2 toma 2. Junta las manos apagado (6-27) y dispara en 28-44 (retroceso de 5-7 px).
+[[clip]]
+name = "shoot2h"
+file = "clips/apagado/shoot2h_2.mp4"     # apagar_video.py --sin-fogonazo 28-31 --ref 27
+model = "kling-o3-std"
+prompt = "prompts/apuntar_dos_manos.txt"
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+
+[[animation]]
+name = "shoot2h_in"
+clip = "shoot2h"
+kind = "oneshot"
+trim = [4, 28]
+trim_static_tail = false
+
+[[animation]]
+name = "shoot2h"          # un tiro: cañón prendido (28), retroceso (29), vuelta (30) y apuntando apagado (27)
+clip = "shoot2h"
+kind = "oneshot"
+loop = true
+frames = [28, 29, 30, 27]
+
+# agachado: tanda2 toma 1. Se agacha y apunta apagado (12-44), dispara en 45-86 (el destello pulsa, sin retroceso) y se
+# para en 102-114. En reposo agachado queda en el último cuadro del tiro: apuntando apagado (44).
+[[clip]]
+name = "crouch"
+file = "clips/apagado/crouch_1.mp4"      # apagar_video.py --sin-fogonazo 45-51 --ref 44
+model = "kling-o3-std"
+prompt = "prompts/agacharse_apuntando.txt"
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+
+[[animation]]
+name = "crouch_in"
+clip = "crouch"
+kind = "oneshot"
+trim = [10, 30]
+trim_static_tail = false
+
+[[animation]]
+name = "crouch_shoot"     # un tiro: cañón prendido (47, 48), se apaga (50) y apuntando apagado (44)
+clip = "crouch"
+kind = "oneshot"
+loop = true
+frames = [47, 48, 50, 44]
+
+[[animation]]
+name = "crouch_out"
+clip = "crouch"
+kind = "oneshot"
+trim = [98, 118]
+trim_static_tail = false
+
+# salto disparando: tanda2 toma 2, salta con el brazo estirado y el arma apagada; en el aire dispara (24-33). La arena
+# usa un solo cuadro de esta animación (el más alto con el brazo adelante, sin fogonazo): van los de la subida, antes
+# del tiro.
+[[animation]]
+name = "jump_shoot"
+clip = "clips/apagado/jump_shoot_2.mp4"
+kind = "oneshot"
+frames = [8, 12, 16, 20]
+model = "kling-o3-std"
+prompt = "prompts/salto_apuntando_quieto.txt"
+pose = "poses/salto_apuntando_apagada_dullmagenta_16x9.png"

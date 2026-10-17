@@ -9,7 +9,7 @@
 [gen]
 models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1"]
 images_per_asset = 2
-max_usd = 1
+max_usd = 2
 max_parallel = 2
 key_color = "#00FF00"     # para el modelo sin alfa (Nano Banana); sin arma, el personaje no tiene verde ni cian
 quality = "high"
@@ -69,6 +69,87 @@ helmet, same red belt, same proportions. Nothing is drawn: no ledge, no wall, no
 Matte flat colors with no shine and no reflections.
 """
 refs = ["../poses/perfil_cinturon_rojo_concept.png"]
+ref_role = "character"
+aspect = "2:3"
+alpha = "cutout"
+
+# --- tanda 2 (revisión de Pablo): colgarse a cuerpo completo, la granada en la mano y la bolita del doble salto. ------
+# Todas desde la pose con el arma apagada (disco cian pintado de gris: apagar_arma.py), porque Kling dibuja fogonazo
+# cuando el disco brilla. Colgarse "como el Prince of Persia": el personaje entero con las manos arriba agarrando un
+# canto que no se dibuja, así funciona en cualquier plataforma.
+
+[[asset]]
+name = "colgado_una"      # primer y último cuadro del colgado de una mano (loop) y último de hang_in
+style = ["same", "no_text"]
+prompt = """
+Change only the pose: he hangs from the top edge of an invisible ledge with his left hand only. The left arm is \
+raised straight above the helmet and the left glove grips the edge, the fingers curled over the top of an edge that \
+is not drawn. The right arm hangs relaxed down along the body, the right hand holding the same dark pistol pointing \
+down. The whole body hangs straight down below the hand, fully visible from the hand to the boots, the legs together \
+and relaxed, the boots pointing to the right. Same helmet, same red belt, same proportions. Nothing is drawn: no \
+ledge, no wall, no platform, no object and no shadow. Matte flat colors with no shine and no reflections.
+"""
+refs = ["../poses/perfil_apagada_concept.png"]
+ref_role = "character"
+aspect = "2:3"
+alpha = "cutout"
+
+[[asset]]
+name = "colgado_dos_cinturon"  # primer cuadro de la subida y del colgado a dos manos: el arma en el cinturón
+style = ["same", "no_text"]
+prompt = """
+Change only the pose: he hangs from the top edge of an invisible ledge with both hands. Both arms are raised above \
+the helmet and both gloves grip the edge side by side, at the same height, the fingers curled over the top of an \
+edge that is not drawn. His hands are empty: the same dark pistol is tucked into his red belt at the right hip, \
+pointing down. The whole body hangs straight down below the hands, fully visible from the hands to the boots, close \
+to an invisible wall: the legs together and relaxed, the boots pointing to the right. Same helmet, same red belt, \
+same proportions. Nothing is drawn: no ledge, no wall, no platform, no object and no shadow. Matte flat colors with \
+no shine and no reflections.
+"""
+refs = ["../poses/perfil_apagada_concept.png"]
+ref_role = "character"
+aspect = "2:3"
+alpha = "cutout"
+
+[[asset]]
+name = "bolita"           # el doble salto: el juego hace girar esta pose (Kling deforma al personaje en el mortal)
+style = ["same", "no_text"]
+prompt = """
+Change only the pose into the middle of a forward somersault, seen exactly from the side: he is curled into a tight \
+ball, knees pulled up to the chest, both arms hugging the shins, the helmet tucked forward over the knees, the same \
+dark pistol held in the right hand against the shins. Compact and round, as if frozen while spinning. Same helmet, \
+same red belt, same proportions. Matte flat colors with no shine and no reflections.
+"""
+refs = ["../poses/perfil_apagada_concept.png"]
+ref_role = "character"
+aspect = "1:1"
+alpha = "cutout"
+
+[[asset]]
+name = "granada"          # la granada del low-poly: el juego la dibuja cuando sale de la mano
+style = ["no_text"]
+prompt = """
+A single small hand grenade for this game, alone, seen from the side: a chunky low-poly 3D model made of a few big \
+faceted polygons with flat shading, like the character in the reference. A rounded dark gray body with a red band \
+around the middle, a short gray fuse cap on top with a small ring pull on the side. Soft even studio lighting, matte \
+surfaces, no shine and no reflections. Centered, filling most of the image.
+"""
+refs = ["../poses/perfil_apagada_concept.png"]
+ref_role = "style"
+aspect = "1:1"
+alpha = "cutout"
+
+[[asset]]
+name = "con_granada"      # primer cuadro de tirar la granada: la granada de poses/granada.png en la mano libre
+style = ["same", "no_text"]
+prompt = """
+Change only the left hand: it now holds the hand grenade shown in the second reference image (the same grenade, same \
+shape and colors, small in the hand), at chest height in front of the body, the fingers wrapped around it and the red \
+ring pull visible. The right hand keeps holding the same dark pistol close to the chest, pointing forward. Everything \
+else stays identical: the helmet, the red belt, the legs and the stance. Matte flat colors with no shine and no \
+reflections.
+"""
+refs = ["../poses/perfil_apagada_concept.png", "../poses/granada.png"]
 ref_role = "character"
 aspect = "2:3"
 alpha = "cutout"

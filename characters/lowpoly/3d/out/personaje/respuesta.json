@@ -1,0 +1,124 @@
+{
+ "animation_glb": {
+  "url": "https://v3b.fal.media/files/b/0aaec5bc/gDFiuKcC6KloAaNItP1WH_animation.glb",
+  "content_type": "model/gltf-binary",
+  "file_name": "animation.glb",
+  "file_size": 2733620
+ },
+ "animation_fbx": {
+  "url": "https://v3b.fal.media/files/b/0aaec5bc/ZuIhOZRmfZYd_CL3z72fw_animation.fbx",
+  "content_type": "application/vnd.autodesk.fbx",
+  "file_name": "animation.fbx",
+  "file_size": 2537276
+ },
+ "model_glb": {
+  "url": "https://v3b.fal.media/files/b/0aaec5b7/8qs8auIhws4MgkeuINWQ1_model.glb",
+  "content_type": "model/gltf-binary",
+  "file_name": "model.glb",
+  "file_size": 2227992
+ },
+ "thumbnail": {
+  "url": "https://v3b.fal.media/files/b/0aaec5b8/Ov7f16GZt71_cnh26yDlW_preview.png",
+  "content_type": "image/png",
+  "file_name": "preview.png",
+  "file_size": 94185
+ },
+ "model_urls": {
+  "glb": {
+   "url": "https://v3b.fal.media/files/b/0aaec5b7/8qs8auIhws4MgkeuINWQ1_model.glb",
+   "content_type": "model/gltf-binary",
+   "file_name": "model.glb",
+   "file_size": 2227992
+  },
+  "fbx": {
+   "url": "https://v3b.fal.media/files/b/0aaec5b7/zq_CrLXvUm8X5fNkP-kok_model.fbx",
+   "content_type": "application/vnd.autodesk.fbx",
+   "file_name": "model.fbx",
+   "file_size": 2121676
+  },
+  "obj": {
+   "url": "https://v3b.fal.media/files/b/0aaec5b8/gLtp8i-_MoBflP6frofcG_model.obj",
+   "content_type": "model/obj",
+   "file_name": "model.obj",
+   "file_size": 843103
+  },
+  "usdz": {
+   "url": "https://v3b.fal.media/files/b/0aaec5b8/i9Su0juFnhqXPaYi0mB3W_model.usdz",
+   "content_type": "model/vnd.usdz+zip",
+   "file_name": "model.usdz",
+   "file_size": 2337892
+  },
+  "blend": null,
+  "stl": {
+   "url": "https://v3b.fal.media/files/b/0aaec5b8/z09kNIAUz6Etb0okgT-dj_model.stl",
+   "content_type": "model/stl",
+   "file_name": "model.stl",
+   "file_size": 463834
+  }
+ },
+ "texture_urls": [
+  {
+   "base_color": {
+    "url": "https://v3b.fal.media/files/b/0aaec5b9/22jaNhgNCwrgNvRi1qe9Q_texture_0.png",
+    "content_type": "image/png",
+    "file_name": "texture_0.png",
+    "file_size": 2895179
+   },
+   "metallic": null,
+   "normal": null,
+   "roughness": null
+  }
+ ],
+ "seed": 1594117722,
+ "rigged_character_glb": {
+  "url": "https://v3b.fal.media/files/b/0aaec5bb/gSA4WD0Qe_tTN3mYwkoex_rigged_character.glb",
+  "content_type": "model/gltf-binary",
+  "file_name": "rigged_character.glb",
+  "file_size": 2674680
+ },
+ "rigged_character_fbx": {
+  "url": "https://v3b.fal.media/files/b/0aaec5ba/FWntz-0oYA1wvTeNziAOw_rigged_character.fbx",
+  "content_type": "application/vnd.autodesk.fbx",
+  "file_name": "rigged_character.fbx",
+  "file_size": 2416764
+ },
+ "basic_animations": {
+  "walking_glb": {
+   "url": "https://v3b.fal.media/files/b/0aaec5ba/uSTB3lS4IaG_nBdE_OcgV_walking.glb",
+   "content_type": "model/gltf-binary",
+   "file_name": "walking.glb",
+   "file_size": 2654836
+  },
+  "walking_fbx": {
+   "url": "https://v3b.fal.media/files/b/0aaec5ba/0rSuUUGRhw-mdVehBQBD8_walking.fbx",
+   "content_type": "application/vnd.autodesk.fbx",
+   "file_name": "walking.fbx",
+   "file_size": 2454652
+  },
+  "walking_armature_glb": {
+   "url": "https://v3b.fal.media/files/b/0aaec5ba/YsUgzm3Y8biIUZv1a7omD_walking_armature.glb",
+   "content_type": "model/gltf-binary",
+   "file_name": "walking_armature.glb",
+   "file_size": 90144
+  },
+  "running_glb": {
+   "url": "https://v3b.fal.media/files/b/0aaec5ba/reHWY5lns5ojypZ7exV6e_running.glb",
+   "content_type": "model/gltf-binary",
+   "file_name": "running.glb",
+   "file_size": 2644224
+  },
+  "running_fbx": {
+   "url": "https://v3b.fal.media/files/b/0aaec5ba/KI-GzKV3Owy-NB8Hhd4yu_running.fbx",
+   "content_type": "application/vnd.autodesk.fbx",
+   "file_name": "running.fbx",
+   "file_size": 2437532
+  },
+  "running_armature_glb": {
+   "url": "https://v3b.fal.media/files/b/0aaec5ba/Q4cusnVjVRtT7NTkGqWYu_running_armature.glb",
+   "content_type": "model/gltf-binary",
+   "file_name": "running_armature.glb",
+   "file_size": 79520
+  }
+ },
+ "rig_task_id": "01a14b0b-8f07-754f-a2ea-f1aa0c10403d"
+}

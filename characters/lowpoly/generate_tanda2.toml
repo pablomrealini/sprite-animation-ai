@@ -1,0 +1,40 @@
+# Tanda 2 del set low-poly (revisión de Pablo del 2026-10-17): el video no dispara, sólo apunta, con el arma apagada
+# (el retroceso, el fogonazo y el disco cian los pone el juego). Así agacharse tampoco trae el resplandor de un disparo.
+# El disparo parado sale de la prueba (clips/apuntar/kling-o3-std_apuntar_1.mp4, sin fogonazo). El salto arranca con
+# el brazo ya estirado (un cuadro de esa toma): estirarlo de golpe en el aire es lo que Kling lee como disparar.
+# Los clips que necesitan poses nuevas (colgarse, subir, granada) van en generate_tanda2b.toml.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_tanda2.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 5
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 3
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/tanda2"
+
+[[animation]]
+name = "shoot2h"          # shoot2h_in y shoot2h: junta las manos y apunta
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+prompt = "prompts/apuntar_dos_manos.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "crouch"           # crouch_in, crouch_shoot (apuntando agachado, quieto) y crouch_out
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+prompt = "prompts/agacharse_apuntando.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "jump_shoot"       # salta con el brazo estirado apuntando, sin moverlo
+pose = "poses/salto_apuntando_apagada_dullmagenta_16x9.png"
+prompt = "prompts/salto_apuntando_quieto.txt"
+kind = "oneshot"
+last_frame = true

@@ -1,0 +1,78 @@
+{
+  "set": "poses_gen",
+  "asset": "bolita",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the pose into the middle of a forward somersault, seen exactly from the side: he is curled into a tight ball, knees pulled up to the chest, both arms hugging the shins, the helmet tucked forward over the knees, the same dark pistol held in the right hand against the shins. Compact and round, as if frozen while spinning. Same helmet, same red belt, same proportions. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "key",
+  "size_requested": "1:1 2K",
+  "size": [
+    2048,
+    2048
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14bb3-13cb-78a1-85d0-13e019c6c79b",
+  "created": "2026-10-17T21:10:18+00:00",
+  "sha256": "86f5f061531253621c375f3e4191e26950475987a4cfad80b5c42f5588c41c89",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/bolita/nano-banana-2.1_1.png",
+    "source": {
+      "w": 2048,
+      "h": 2048
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#05FC02",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7369,
+      "opaque": 0.2605,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        375,
+        236,
+        1653,
+        1584
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 1278,
+        "h": 1348
+      }
+    }
+  }
+}

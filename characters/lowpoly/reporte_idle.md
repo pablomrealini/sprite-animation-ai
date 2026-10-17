@@ -15,7 +15,7 @@ Todas las referencias y poses tienen el cinturón rojo (la hoja nueva de Pablo).
 
 ## Cuánto costó
 
-US$9,00 estimados a precio de lista para el idle, US$1,20 para correr, US$8,59 para el resto del set y US$6,72 para las dos pruebas sin fogonazo (lo cobrado de verdad está en el dashboard de fal). Ningún pedido bloqueado. Aparte, la vía 3D gastó US$2,05 (ver `3d/README.md`).
+US$9,00 estimados a precio de lista para el idle, US$1,20 para correr, US$8,59 para el resto del set US$6,72 para las dos pruebas sin fogonazo y US$3,99 para la etapa 1 de la tanda 2 (lo cobrado de verdad está en el dashboard de fal). Ningún pedido bloqueado. Aparte, la vía 3D gastó US$2,05 (ver `3d/README.md`).
 
 | Concepto | US$ |
 |---|---:|
@@ -89,12 +89,20 @@ Pablo pidió que el video no traiga fogonazo, porque lo pone el juego y limpiarl
 **Las 8 tomas traen fogonazo.** Con el arma apagada cambia de rayo cian a estrella blanca, pero sigue estando. Cuando la acción es disparar, Kling dibuja el fogonazo aunque el prompt lo prohíba. Configs: `generate_sin_fogonazo.toml` y `prompts/*_sin_fogonazo.txt`.
 
 **Segunda prueba, donde el video no dispara** (`generate_apuntar.toml`, US$3,36): sube el brazo, lo deja quieto y lo baja, sin gatillo ni retroceso.
-- **Con el arma apagada, de parado:** la toma 1 sale sin ningún fogonazo; la 2 trae un solo cuadro con fogonazo (el 24).
+- **Con el arma apagada, de parado:** la toma 1 tiene un fogonazo en 2 cuadros (14-15, cuando el brazo llega a su lugar), que se recortan; la 2 trae uno en el cuadro 24.
 - **Con el arma apagada, saltando:** sigue disparando en varios saltos. El gesto de estirar el brazo de golpe en el aire lo dispara.
 - **Sin arma, de parado:** el puño queda cerrado; sirve para pegar el arma por código.
 - **Sin arma, saltando:** apunta con el dedo índice ("pistolita").
 
 **Conclusión:** el video sólo apunta, con el arma apagada, y el retroceso, el fogonazo y el disco cian de la boca los pone el juego. Para los saltos hay que arrancar desde una pose con el brazo ya estirado, para que no haya gesto de disparar.
+
+## Tanda 2 (revisión de Pablo, 2026-10-17)
+
+Etapa 1 (US$3,99: 4 poses y 3 videos), todo con el arma apagada y sin disparar:
+- **A dos manos:** la toma 1 sale sin ningún fogonazo.
+- **Agachado:** la toma 1 se agacha, apunta quieto y se para limpio; dispara sólo en el medio, que queda afuera del recorte.
+- **Salto apuntando:** arrancando con el brazo ya estirado, Kling igual dispara en el aire en las dos tomas. El salto disparando sigue sin resolver.
+- **Poses** (GPT Image 2.5): colgado de una mano y colgado a dos manos con el arma en el cinturón, a cuerpo completo; la bolita del doble salto; la granada low-poly. Los cuadros de colgarse y subir los arman colgarse_frames.py y subida_frames.py, con el casco a la misma escala. Con las manos arriba, el brazo tapa el casco: la escala sale del mayor entre el ancho del casco y su alto / 0,9.
 
 ## Lo que se aprendió
 

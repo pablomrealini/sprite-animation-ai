@@ -1,0 +1,26 @@
+{
+  "hang": "characters/lowpoly/poses/colgado_dos_cinturon_concept.png",
+  "stand": "characters/lowpoly/poses/perfil_apagada_concept.png",
+  "size": [
+    1920,
+    1080
+  ],
+  "stand_height_px": 307.0,
+  "hang_height_px": 432.0,
+  "ledge_y": 609.1,
+  "wall_x": 882.9,
+  "hang_bbox": [
+    730,
+    594,
+    883,
+    1026
+  ],
+  "stand_bbox": [
+    903,
+    302,
+    1106,
+    609
+  ],
+  "rise_px": 416.9,
+  "forward_px": 168.5
+}

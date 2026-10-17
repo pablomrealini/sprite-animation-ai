@@ -1,0 +1,78 @@
+{
+  "set": "poses_gen",
+  "asset": "colgado_una",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the pose: he hangs from the top edge of an invisible ledge with his left hand only. The left arm is raised straight above the helmet and the left glove grips the edge, the fingers curled over the top of an edge that is not drawn. The right arm hangs relaxed down along the body, the right hand holding the same dark pistol pointing down. The whole body hangs straight down below the hand, fully visible from the hand to the boots, the legs together and relaxed, the boots pointing to the right. Same helmet, same red belt, same proportions. Nothing is drawn: no ledge, no wall, no platform, no object and no shadow. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2:3 2K",
+  "size": [
+    1696,
+    2528
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14bb2-11fa-78f2-94fb-8a30004c05fd",
+  "created": "2026-10-17T21:09:18+00:00",
+  "sha256": "bc12349a3f97060c023c6a2e25105c5fbc3a54a06da6fbba7fbd5c8df1ecd397",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/colgado_una/nano-banana-2.1_1.png",
+    "source": {
+      "w": 1696,
+      "h": 2528
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FD02",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6852,
+      "opaque": 0.312,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        245,
+        116,
+        1220,
+        2383
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 975,
+        "h": 2267
+      }
+    }
+  }
+}

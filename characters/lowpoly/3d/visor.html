@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vía 3D low-poly</title>
+<style>
+  :root { --bg: #f4f4f2; --fg: #1d1d1f; --sub: #6b6b70; --card: #ffffff; --line: #ddd; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #18181a; --fg: #ededee; --sub: #9a9aa0; --card: #232326; --line: #333; } }
+  body { margin: 0; padding: 20px 16px 40px; background: var(--bg); color: var(--fg);
+         font: 14px/1.45 -apple-system, system-ui, sans-serif; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { color: var(--sub); margin: 0 0 18px; max-width: 70ch; }
+  .barra { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .grilla { display: flex; flex-wrap: wrap; gap: 12px; }
+  figure { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+  figcaption { font-size: 12px; color: var(--sub); margin-top: 6px; max-width: 300px; }
+  figcaption b { color: var(--fg); }
+  /* recorte del personaje: x 660–1260, y 160–840 del 1920×1080, a la mitad */
+  .recorte { width: 300px; height: 340px; overflow: hidden; position: relative; border-radius: 4px; }
+  .recorte video, .recorte img { position: absolute; width: 960px; left: -330px; top: -80px; }
+  .recorte.verde { background: #00ff00; }
+  h2 { font-size: 15px; margin: 28px 0 10px; }
+  .tira { max-width: 100%; border: 1px solid var(--line); border-radius: 4px; display: block; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<h1>Vía 3D del personaje low-poly</h1>
+<p class="sub">Modelo de Meshy 7.1 desde las vistas en T-pose, auto-rig, arma de Hunyuan 3.1 y render de costado en
+Blender con el encuadre de la pose del video. Cada clip es un ciclo que se repite. Los "a mano" se hicieron en Blender
+por script, sobre el mismo rig.</p>
+
+<div class="barra">
+  <label>Velocidad
+    <select id="vel">
+      <option value="1">1×</option><option value="0.5">0,5×</option><option value="0.25">0,25×</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="doce"> a 12 fps (como en el juego)</label>
+</div>
+
+<div class="grilla">
+  <figure><div class="recorte"><img src="../poses/perfil_dullmagenta_16x9.png" alt="pose"></div>
+    <figcaption><b>La pose del video</b> (concept): lo que se quiere igualar.</figcaption></figure>
+  <figure><div class="recorte"><video src="clips/idle_mano_ciclo.mp4" muted loop autoplay playsinline></video></div>
+    <figcaption><b>idle a mano</b> · 48 cuadros: respira, rodillas, cabeza. Pies quietos.</figcaption></figure>
+  <figure><div class="recorte"><video src="clips/idle_ciclo.mp4" muted loop autoplay playsinline></video></div>
+    <figcaption><b>idle de la biblioteca</b> · 96 cuadros, sin el giro del cuerpo. Mira de reojo y da pasitos.</figcaption></figure>
+  <figure><div class="recorte"><video src="clips/correr_mano_ciclo.mp4" muted loop autoplay playsinline></video></div>
+    <figcaption><b>correr a mano</b> · 16 cuadros, pasos cortos de chibi, arma firme.</figcaption></figure>
+  <figure><div class="recorte"><video src="clips/correr_ciclo.mp4" muted loop autoplay playsinline></video></div>
+    <figcaption><b>correr de la biblioteca</b> · 15 cuadros, con la amplitud achicada.</figcaption></figure>
+  <figure><div class="recorte"><video src="clips/caminar_ciclo.mp4" muted loop autoplay playsinline></video></div>
+    <figcaption><b>caminar de la biblioteca</b> · 25 cuadros (vino gratis con el rig).</figcaption></figure>
+</div>
+
+<h2>Cuadro por cuadro sobre verde (a 12 fps)</h2>
+<p class="sub">idle a mano · correr a mano · correr de la biblioteca · caminar</p>
+<img class="tira" src="tiras/idle_mano_verde.png" alt="idle a mano">
+<img class="tira" src="tiras/correr_mano_verde.png" alt="correr a mano">
+<img class="tira" src="tiras/correr_verde.png" alt="correr">
+<img class="tira" src="tiras/caminar_verde.png" alt="caminar">
+
+<h2>Cuadro 0 contra la pose</h2>
+<img class="tira" src="tiras/idle_contra_pose.png" alt="pose, render y superpuestos">
+
+<script>
+  const vids = [...document.querySelectorAll('video')];
+  const vel = document.getElementById('vel');
+  const doce = document.getElementById('doce');
+  let timer = null;
+  function aplicar() {
+    clearInterval(timer);
+    const r = parseFloat(vel.value);
+    if (!doce.checked) {
+      vids.forEach(v => { v.playbackRate = r; v.play(); });
+      return;
+    }
+    // a 12 fps: se pausa y se avanza de a 2 cuadros de 24
+    vids.forEach(v => v.pause());
+    timer = setInterval(() => {
+      vids.forEach(v => {
+        if (!v.duration) return;
+        let t = v.currentTime + 2 / 24;
+        if (t >= v.duration - 1e-3) t = 0;
+        v.currentTime = t;
+      });
+    }, 1000 / (12 * r));
+  }
+  vel.addEventListener('change', aplicar);
+  doce.addEventListener('change', aplicar);
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+ "endpoint": "fal-ai/meshy/v7.1/multi-image-to-3d",
+ "request_id": "01a14b08-005c-7833-91f2-1314ae7a1155",
+ "imagenes": {
+  "image_urls": [
+   "tpose_frente",
+   "tpose_tres_cuartos",
+   "tpose_espalda",
+   "tpose_tres_cuartos~espejo"
+  ]
+ },
+ "payload": {
+  "topology": "triangle",
+  "target_polycount": 10000,
+  "should_remesh": true,
+  "should_texture": true,
+  "enable_pbr": false,
+  "pose_mode": "t-pose",
+  "enable_rigging": true,
+  "rigging_height_meters": 1.7,
+  "enable_animation": true,
+  "animation_action_id": 0
+ },
+ "costo_usd": 1.52,
+ "costo": [
+  [
+   "modelo con textura",
+   1.2
+  ],
+  [
+   "auto-rig",
+   0.2
+  ],
+  [
+   "animación (idle)",
+   0.12
+  ]
+ ],
+ "fecha": "2026-10-17 15:07:34"
+}

@@ -34,37 +34,34 @@ nota = "Toma 2. Kling dispara sin pedirlo: remove_flash con method = shape borra
 name = "Disparo"
 ranger = "r04 · Seedance 2.0 por Davinci"
 anims = ["shoot_in", "shoot"]
-pose = "poses/perfil_dullmagenta_16x9.png"
-config = "generate_set.toml"
-estado = "a rehacer"
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+config = "generate_apuntar.toml"
+estado = "hecho"
 tomas = 2
 usd = 0.84
-nota = "Toma 1. Kling dispara un rayo azul con estrella: remove_flash shape lo borra entero (boca, estrella y anillo). El destello aclara un poco la cara."
-revision = "El fogonazo no tiene que venir en el video: lo pone el juego. Se rehace con la prueba sin fogonazo."
+nota = "Tanda 2: el video sólo apunta, con el arma apagada; el retroceso, el fogonazo y el disco cian los pone el juego. Kling metió un fogonazo en 2 cuadros (14-15), que quedan afuera del recorte."
 
 [[clip]]
 name = "Disparo a dos manos"
 ranger = "r02 · Seedance 2.0 por Davinci"
 anims = ["shoot2h_in", "shoot2h"]
-pose = "poses/perfil_dullmagenta_16x9.png"
-config = "generate_set.toml"
-estado = "a rehacer"
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+config = "generate_tanda2.toml"
+estado = "hecho"
 tomas = 2
 usd = 0.84
-nota = "Toma 2 (en la 1 el pantalón se vuelve azul mientras dispara). El fogonazo naranja ilumina la cara de amarillo: queda en el sprite."
-revision = "Ídem: sin fogonazo en el video (además, la luz del fogonazo le pinta la cara)."
+nota = "Tanda 2: apunta con las dos manos, sin ningún fogonazo."
 
 [[clip]]
 name = "Agachado disparando"
 ranger = "r06 · Seedance 2.0 por Davinci"
 anims = ["crouch_in", "crouch_shoot", "crouch_out"]
-pose = "poses/perfil_dullmagenta_16x9.png"
-config = "generate_set.toml"
-estado = "a rehacer"
+pose = "poses/perfil_apagada_dullmagenta_16x9.png"
+config = "generate_tanda2.toml"
+estado = "hecho"
 tomas = 2
 usd = 0.84
-nota = "Toma 2 (la 1 casi no se agacha). crouch_out incluido."
-revision = "Ídem: sin fogonazo en el video."
+nota = "Tanda 2: se agacha, apunta quieto y se para, sin resplandor. Kling dispara en el medio (45-86): ese tramo queda afuera."
 
 [[clip]]
 name = "Salto"
@@ -87,7 +84,7 @@ estado = "a rehacer"
 tomas = 2
 usd = 0.84
 nota = "Toma 1. Dispara arriba del salto; queda un brillo chico en la boca en 2 cuadros."
-revision = "Muy sucio por el fogonazo."
+revision = "Muy sucio por el fogonazo. Tanda 2 (salto con el brazo ya estirado y el arma apagada): Kling igual dispara en el aire en las dos tomas."
 
 [[clip]]
 name = "Doble salto"

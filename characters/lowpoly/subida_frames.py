@@ -27,15 +27,25 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 BG = (0xC4, 0x2D, 0x7D)   # magenta apagado: con magenta puro Seedance pinta reflejos en el casco
+HELMET_H_OVER_W = 0.9     # alto / ancho de la cáscara del casco de perfil (perfil_apagada_concept: 355 / 395)
 
 
 def helmet_width(a: np.ndarray) -> int:
-    """Ancho de la cáscara del casco: el componente blanco más grande (los brillos sueltos no cuentan)."""
+    """Ancho de la cáscara del casco: las partes blancas grandes (más del 15% de la mayor) juntas. Los brillos sueltos
+    no cuentan, y un brazo que cruza el casco (colgado con las manos arriba) no lo achica."""
     rgb = a[..., :3].astype(int)
     white = ((a[..., 3] > 200) & (rgb.min(-1) > 170) & ((rgb.max(-1) - rgb.min(-1)) < 35)).astype(np.uint8)
     white = cv2.morphologyEx(white, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
     n, _, st, _ = cv2.connectedComponentsWithStats(white)
-    return int(st[1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA])), cv2.CC_STAT_WIDTH])
+    big = st[1:, cv2.CC_STAT_AREA].max()
+    parts = [st[i] for i in range(1, n) if st[i, cv2.CC_STAT_AREA] >= 0.15 * big]
+    x0 = min(p[cv2.CC_STAT_LEFT] for p in parts)
+    x1 = max(p[cv2.CC_STAT_LEFT] + p[cv2.CC_STAT_WIDTH] for p in parts)
+    y0 = min(p[cv2.CC_STAT_TOP] for p in parts)
+    y1 = max(p[cv2.CC_STAT_TOP] + p[cv2.CC_STAT_HEIGHT] for p in parts)
+    # con las manos arriba, el brazo de adelante tapa la parte de atrás del casco y el ancho visible se achica; el alto
+    # no lo tapa nada. De perfil el casco mide de alto 0,9 de su ancho: vale el mayor de los dos
+    return int(max(x1 - x0, (y1 - y0) / HELMET_H_OVER_W))
 
 
 def bbox(a: np.ndarray) -> tuple[int, int, int, int]:
