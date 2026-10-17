@@ -182,6 +182,8 @@ trim = [6, 14]
 reverse = true
 ```
 
+Con **`frames = [30, 31, 32, 29]`** (sólo oneshot, con `loop = true` si va en loop), la animación sale de esos frames nativos, en ese orden y uno por frame de salida, sin decimar. Sirve para armar una animación con tramos de partes distintas del clip: en el low-poly, cada disparo es el tiro del video (cañón prendido, destello y retroceso) y termina en un frame de antes del tiro, apuntando con el cañón apagado, que es donde la arena se queda en reposo. No va junto con `trim`.
+
 Con **`reverse = true`**, el tramo elegido (`trim` en oneshots, el loop en ciclos) se reproduce al revés. Los frames se numeran como en el clip original, así que el tramo es el mismo que se ve en el reproductor. En oneshots, la cola quieta que se recorta es la del final de la animación, o sea el principio del tramo. En ciclos, la deriva de cámara se invierte.
 
 ### La matriz de color

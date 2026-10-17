@@ -50,3 +50,14 @@ def test_clip_key_method_is_validated(tmp_path):
                    '[[animation]]\nname = "a"\nclip = "a.mp4"\nkey_method = "magic"\n', encoding="utf-8")
     with pytest.raises(ValueError, match="key_method"):
         config.load(cfg)
+
+
+def test_frames_picks_native_frames_by_hand(tmp_path):
+    one = 'kind = "oneshot"\n'
+    assert _load(tmp_path, one + "frames = [46, 48, 50, 44]\n").frames == (46, 48, 50, 44)
+    for extra, err in (("frames = [1, 2]\ntrim = [0, 4]\n", "trim"), ("frames = []\n", "lista"),
+                       ("frames = [-1]\n", "lista")):
+        with pytest.raises(ValueError, match=err):
+            _load(tmp_path, one + extra)
+    with pytest.raises(ValueError, match="oneshot"):
+        _load(tmp_path, 'kind = "cycle"\nframes = [1, 2]\n')

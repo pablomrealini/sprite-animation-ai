@@ -114,6 +114,10 @@ def _select(anim: config.Animation, an, fps: float, K: int) -> dict:
             sel = select.find_loop(an, fps, K, anim.loop_seconds, anim.skip_seconds)
         if sel["length"] % K:
             print(f"    ! el loop ({sel['length']} frames) no es múltiplo de K={K}: la costura va a tartamudear")
+    elif anim.frames:
+        if max(anim.frames) >= an.n:
+            raise ValueError(f"{anim.name}: frames pide el {max(anim.frames)} y el clip tiene {an.n}")
+        sel = {"start": anim.frames[0], "length": len(anim.frames), "frames": list(anim.frames)}
     else:
         sel = select.trim_oneshot(an, anim.trim, anim.trim_static_tail, anim.reverse)
     if anim.reverse:
@@ -185,13 +189,17 @@ def run_character(cfg_path: Path, strict: bool) -> int:
         if anim.kind == "cycle":
             how = "manual" if sel.get("manual") else f"score {sel['score']} ({sel['quality']})"
             print(f"    loop: frames {sel['start']}–{sel['start'] + sel['length'] - 1} ({sel['length']} nativos), {how}")
+        elif sel.get("frames"):
+            print(f"    cuadros a mano: {', '.join(map(str, sel['frames']))}")
         else:
             print(f"    acción: frames {sel['start']}–{sel['start'] + sel['length'] - 1}"
                   + (f", cola quieta recortada ({sel['static_tail_trimmed']})" if sel.get("static_tail_trimmed") else ""))
-        indices = list(range(sel["start"], sel["start"] + sel["length"]))
+        indices = sel.get("frames") or list(range(sel["start"], sel["start"] + sel["length"]))
         if anim.reverse:
             indices.reverse()
-        timing = decimate.run(raw_dir, w / "02_fps", indices, K, eff, anim.pick, anim.kind, anim.holds)
+        # con cuadros a mano, cada uno es un frame de salida: no se decima
+        timing = decimate.run(raw_dir, w / "02_fps", indices, 1 if sel.get("frames") else K, eff, anim.pick,
+                              anim.kind, anim.holds)
         bodies[anim.name]["native_indices"] = timing["native_indices"]
         if anim.kind == "cycle":
             dx, dy = select.periodic_drift(an, sel["length"], round(anim.skip_seconds * info["fps"]))

@@ -46,10 +46,29 @@ FX = {
 }
 
 
-def measure(out: Path, name: str) -> dict:
-    at = json.loads((out / f"{name}_1x-0.json").read_text())
-    idx = json.loads((out / f"{name}.json").read_text())["variants"]["1x"]
-    rgba = np.asarray(Image.open(out / f"{name}_1x-0.png").convert("RGBA")).astype(np.int16)
+def load_atlas(out: Path, name: str, variant: str = "1x") -> tuple[Image.Image, dict]:
+    """El atlas de una variante en una sola imagen: si viene en varias páginas, las apila una debajo de la otra y corre
+    los cuadros de cada una. Devuelve la imagen y los cuadros ({nombre: datos del JSON de la página})."""
+    pages = json.loads((out / f"{name}.json").read_text())["variants"][variant]["atlas"]
+    ims = [Image.open(out / p["image"]).convert("RGBA") for p in pages]
+    if len(ims) == 1:
+        return ims[0], json.loads((out / pages[0]["data"]).read_text())["frames"]
+    sheet, frames, y0 = Image.new("RGBA", (max(im.width for im in ims), sum(im.height for im in ims))), {}, 0
+    for p, im in zip(pages, ims):
+        sheet.paste(im, (0, y0))
+        for k, d in json.loads((out / p["data"]).read_text())["frames"].items():
+            frames[k] = {**d, "frame": {**d["frame"], "y": d["frame"]["y"] + y0}}
+        y0 += im.height
+    return sheet, frames
+
+
+def measure(out: Path, name: str, variant: str = "1x", atlas: tuple[Image.Image, dict] | None = None) -> dict:
+    """Las medidas por cuadro de una variante (la boca está calibrada para un cuerpo de 128 px). `atlas`: lo que devolvió
+    load_atlas, si ya se cargó."""
+    sheet, frames = atlas or load_atlas(out, name, variant)
+    at = {"frames": frames}
+    idx = json.loads((out / f"{name}.json").read_text())["variants"][variant]
+    rgba = np.asarray(sheet).astype(np.int16)
     img = rgba[..., 3]
     cw, ch = idx["canvas"]["w"], idx["canvas"]["h"]
     px, py = idx["pivot_px"]["x"], idx["pivot_px"]["y"]

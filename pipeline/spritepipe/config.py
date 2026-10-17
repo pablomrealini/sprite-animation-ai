@@ -62,6 +62,9 @@ class Animation:
     # Recorte manual (sólo oneshot), en frames nativos [inicio, fin)
     trim: tuple[int, int] | None = None
     trim_static_tail: bool = True
+    # Cuadros a mano (sólo oneshot): la lista de frames nativos que salen, en orden, uno por frame de salida (sin
+    # decimar). Para armar una animación con tramos de partes distintas del clip (un tiro que termina apuntando quieto)
+    frames: tuple[int, ...] | None = None
     # Decimación
     pick: str = "first"  # "first" | "sharpest" (el más nítido de cada grupo de K)
     holds: dict[int, float] = field(default_factory=dict)  # frame de salida -> multiplicador de duración
@@ -235,6 +238,14 @@ def load(path: str | Path) -> Character:
             raise ValueError(f"{a['name']}: key_method tiene que ser uno de {', '.join(KEY_METHODS)}")
         if not isinstance(a.get("reverse", False), bool):
             raise ValueError(f"{a['name']}: reverse tiene que ser true o false")
+        frames = a.get("frames")
+        if frames is not None:
+            if kind != "oneshot":
+                raise ValueError(f"{a['name']}: frames es sólo para kind = \"oneshot\" (con loop = true si va en loop)")
+            if trim:
+                raise ValueError(f"{a['name']}: frames y trim no van juntos")
+            if not frames or not all(isinstance(f, int) and not isinstance(f, bool) and f >= 0 for f in frames):
+                raise ValueError(f"{a['name']}: frames tiene que ser una lista de frames nativos (enteros desde 0)")
         anims.append(
             Animation(
                 name=a["name"],
@@ -252,6 +263,7 @@ def load(path: str | Path) -> Character:
                 loop_start=a.get("loop_start"),
                 loop_length=a.get("loop_length"),
                 trim=tuple(trim) if trim else None,
+                frames=tuple(frames) if frames else None,
                 trim_static_tail=a.get("trim_static_tail", True),
                 pick=a.get("pick", "sharpest" if kind == "oneshot" else "first"),
                 holds={int(k): float(v) for k, v in a.get("holds", {}).items()},
