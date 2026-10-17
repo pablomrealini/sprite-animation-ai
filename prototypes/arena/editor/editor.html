@@ -228,8 +228,17 @@ function def(name) {
   return { painted: false, plat: name.startsWith("platforms/"), w: k.w, h: k.h, top: k.top || 0, url: k.src };
 }
 const isPainted = o => !!def(o.piece)?.painted;
-const moving = o => !!(o.move && o.move.path && o.move.path.length > 1 && !isPainted(o));
+// con recorrido (move): las del kit y también las pintadas. En una pintada cada punto es su esquina de arriba a la
+// izquierda, como x, y; sus sólidos van con ella y no cuelgan (paintedMover en src.html)
+const moving = o => !!(o.move && o.move.path && o.move.path.length > 1);
 function objAt(o) { return moving(o) ? (anim ? pathPos(o, animT) : o.move.path[0]) : [o.x, o.y]; }
+// dónde se dibuja cada punto del recorrido: en las del kit, el punto (el centro de lo que se pisa); en las pintadas, el
+// centro de su sólido sobre la línea de los pies, no la esquina
+function pathOff(o) {
+  const d = def(o.piece); if (!d || !d.painted) return [0, 0];
+  const s = (d.p.solids || [])[0]; if (!s) return [d.w / 2, 0];
+  return [(o.flip ? d.w - s.x - s.w : s.x) + s.w / 2, s.y];
+}
 // las patas de una pintada: legs = [y0, y1] de la pieza (la franja de filas entre la losa y los pies) y stretch del
 // objeto, los px que se alarga esa franja: la pieza mide h + stretch, lo de arriba de y0 queda igual y lo de abajo de y1
 // baja stretch (negativo la acorta, hasta LEGS_MIN). legsGap: cuántos px por encima de lo de abajo terminan las patas
@@ -261,9 +270,9 @@ function objSolids(o, at = objAt(o)) {
   if (o.solid === false || o.layer === "back") return [];
   return [{ kind: "box", x: x - d.w / 2 + 2, y: y - d.h + 3, w: d.w - 4, h: d.h - 3, noLedge: true }];
 }
-function frontRects(o) {   // los recortes de una pieza pintada que van delante del colgado, en px del juego
+function frontRects(o, at = objAt(o)) {   // los recortes de una pieza pintada que van delante del colgado, en px del juego
   const d = def(o.piece); if (!d || !d.painted) return [];
-  return (d.p.front || []).map(([x, y, w, h]) => [o.x + (o.flip ? d.w - x - w : x), o.y + y, w, h]);
+  return (d.p.front || []).map(([x, y, w, h]) => [at[0] + (o.flip ? d.w - x - w : x), at[1] + y, w, h]);
 }
 // dónde están las patas: las columnas con algo pintado en las últimas filas de la pieza, en px de la pieza (sin el alfa,
 // abierta desde el disco, toda la pieza)
@@ -593,7 +602,7 @@ function drawReach() {
   // las plataformas que se mueven: su recorrido, verde o rojo según se llegue
   for (const [own, b] of R.byOwn) {
     const s = R.S[b.i]; if (!s.moving) continue;
-    const o = A.objects[s.ref.i], p = o.move.path, c = b.ok ? COL.ok : COL.bad;
+    const o = A.objects[s.ref.i], [ox, oy] = pathOff(o), p = o.move.path.map(([x, y]) => [x + ox, y + oy]), c = b.ok ? COL.ok : COL.bad;
     for (let i = 1; i < p.length; i++) line(p[i - 1][0], p[i - 1][1], p[i][0], p[i][1], rgba(c, 0.9), 3);
   }
   // lo que alcanza la selección: el salto simple y el doble, desde cada superficie de lo elegido
@@ -627,9 +636,9 @@ function envelope(s) {
 function drawPaths() {
   A.objects.forEach((o, i) => {
     if (!moving(o)) return;
-    const p = o.move.path, on = sel && (sel.i === i) && (sel.t === "obj" || sel.t === "pt");
+    const [ox, oy] = pathOff(o), p = o.move.path.map(([x, y]) => [x + ox, y + oy]), on = sel && (sel.i === i) && (sel.t === "obj" || sel.t === "pt");
     for (let j = 1; j < p.length; j++) line(p[j - 1][0], p[j - 1][1], p[j][0], p[j][1], rgba(COL.acc, on ? 0.95 : 0.6), on ? 2 : 1.5, [7, 5]);
-    for (let j = 1; j < p.length; j++) drawPiece(o, p[j], 0.32);
+    for (let j = 1; j < p.length; j++) drawPiece(o, o.move.path[j], 0.32);
     p.forEach(([x, y], j) => {
       g.beginPath(); g.arc(x, y, (on ? 6 : 4.5) / view.k, 0, Math.PI * 2);
       g.fillStyle = sel && sel.t === "pt" && sel.i === i && sel.j === j ? "#fff" : COL.acc; g.fill();
@@ -699,7 +708,7 @@ function hitObj(o, wx, wy) {
 function hit(wx, wy) {
   const tol = 8 / view.k;
   for (const h of handles()) if (Math.abs(wx - h.x) < tol && Math.abs(wy - h.y) < tol) return { t: "handle", k: h.k };
-  if (show.paths) for (let i = A.objects.length - 1; i >= 0; i--) { const o = A.objects[i]; if (moving(o)) for (let j = o.move.path.length - 1; j >= 0; j--) { const [x, y] = o.move.path[j]; if (Math.hypot(wx - x, wy - y) < tol + 2 / view.k) return { t: "pt", i, j }; } }
+  if (show.paths) for (let i = A.objects.length - 1; i >= 0; i--) { const o = A.objects[i]; if (moving(o)) { const [ox, oy] = pathOff(o); for (let j = o.move.path.length - 1; j >= 0; j--) { const [x, y] = o.move.path[j]; if (Math.hypot(wx - x - ox, wy - y - oy) < tol + 2 / view.k) return { t: "pt", i, j }; } } }
   if (show.spawns) for (let i = (A.spawns || []).length - 1; i >= 0; i--) { const [x, y] = A.spawns[i]; if (wx > x - 18 && wx < x + 18 && wy > y - 130 && wy < y + 4) return { t: "spawn", i }; }
   const order = A.objects.map((o, i) => i).reverse();
   const front = order.filter(i => !isPainted(A.objects[i]) && !(A.objects[i].layer === "back" || A.objects[i].solid === false));
@@ -856,7 +865,7 @@ function mirrorCopy() {
     if (sel.t === "obj" || sel.t === "pt") {
       const o = JSON.parse(JSON.stringify(A.objects[sel.i])), d = def(o.piece);
       o.x = d && d.painted ? AW - o.x - d.w : AW - o.x; o.flip = !o.flip; if (!o.flip) delete o.flip; if (o.ledge) o.ledge = flipLedge(o.ledge);
-      if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [AW - x, y]);
+      if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [AW - x - (d && d.painted ? d.w : 0), y]);
       A.objects.splice(sel.i + 1, 0, o); sel = { t: "obj", i: sel.i + 1 };
     } else if (sel.t === "spawn") { const [x, y] = A.spawns[sel.i]; A.spawns.push([AW - x, y]); sel = { t: "spawn", i: A.spawns.length - 1 }; }
     else if (sel.t === "solid") { const s = { ...A.solids[sel.i] }; s.x = AW - s.x - s.w; if (s.ledge) s.ledge = flipLedge(s.ledge); A.solids.push(s); sel = { t: "solid", i: A.solids.length - 1 }; }
@@ -971,13 +980,24 @@ function inspect() {
     else box.append(el("div", { class: "row" }, num("x", () => o.x, v => { const st = standing(); o.x = v; followLegs(sel.i, st); }), num("y", () => o.y, v => { const st = standing(); o.y = v; followLegs(sel.i, st); })),
       el("div", { class: "note" }, d && d.painted ? "x, y: la esquina de arriba a la izquierda de la pieza." : d && d.plat ? "x: el centro; y: lo que se pisa." : "x: el centro; y: la base."));
     box.append(el("div", { class: "row" }, btn(o.flip ? "Espejada ✓" : "Espejar", flip, "F"), btn("Atrás", () => reorder(-1), "se dibuja antes"), btn("Adelante", () => reorder(1), "se dibuja después")), actions);
+    // el recorrido (ida y vuelta, con pausa en las puntas): plataformas del kit y piezas pintadas
+    const route = () => {
+      box.append(el("h4", {}, "Recorrido"));
+      if (moving(o)) {
+        box.append(el("div", { class: "row" }, num("px/s", () => o.move.speed || 120, v => (o.move.speed = Math.max(10, v)), 5), num("pausa s", () => o.move.wait ?? 0.5, v => (o.move.wait = Math.max(0, v)), 0.1)));
+        o.move.path.forEach((p, j) => box.append(el("div", { class: "row" }, el("span", { class: "kv" }, `punto ${j + 1}`), num("x", () => p[0], v => { p[0] = v; if (j === 0) o.x = v; }), num("y", () => p[1], v => { p[1] = v; if (j === 0) o.y = v; }))));
+        box.append(el("div", { class: "row" }, btn("+ Punto", addPoint), btn("Quieta", () => edit(() => { delete o.move; sel = { t: "obj", i: sel.i }; }))));
+        if (d.painted) box.append(el("div", { class: "note" }, "Cada punto es la esquina de arriba a la izquierda de la pieza (en el lienzo se marca en su línea de los pies). Mientras se mueve no se cuelga de ella."));
+      } else box.append(el("div", { class: "row" }, btn("Que se mueva", addPoint, "agrega un recorrido de ida y vuelta")));
+    };
     if (d && d.painted) {
-      box.append(pick("Colgarse de", [["", "lo de la pieza"], ...LEDGES], () => o.ledge || "", v => { if (v) o.ledge = v; else delete o.ledge; }));
+      if (!moving(o)) box.append(pick("Colgarse de", [["", "lo de la pieza"], ...LEDGES], () => o.ledge || "", v => { if (v) o.ledge = v; else delete o.ledge; }));
       box.append(el("h4", {}, "Colisión de la pieza (cambia en todas las copias)"));
       (d.p.solids || []).forEach((s, j) => box.append(el("div", { class: "row" },
         pick("", [["bridge", "puente"], ["walk", "bloque"]], () => s.kind || "bridge", v => (s.kind = v)),
         num("x", () => s.x, v => (s.x = v)), num("pies", () => s.y, v => (s.y = v), 1, "la línea de los pies (el borde de atrás de la cara de arriba), desde arriba de la pieza"), num("ancho", () => s.w, v => (s.w = v)),
         pick("cuelga", LEDGES, () => s.ledge || "both", v => (s.ledge = v)))));
+      route();
       const L = legsOf(d);
       if (L) {
         const r = groundStretch(sel.i);
@@ -994,12 +1014,7 @@ function inspect() {
       } else box.append(el("div", { class: "row" }, btn("+ Patas", () => edit(() => { d.p.legs = [Math.round(d.h * 0.45), Math.round(d.h * 0.85)]; d.p.legsGap = 0; }), "marcar la franja de las patas de esta pieza, para estirarlas")));
     } else if (d && d.plat) {
       box.append(pick("Colgarse", [["both", "de los bordes"], ["none", "no"]], () => (o.ledge === "none" ? "none" : "both"), v => { if (v === "none") o.ledge = "none"; else delete o.ledge; }));
-      box.append(el("h4", {}, "Recorrido"));
-      if (moving(o)) {
-        box.append(el("div", { class: "row" }, num("px/s", () => o.move.speed || 120, v => (o.move.speed = Math.max(10, v)), 5), num("pausa s", () => o.move.wait ?? 0.5, v => (o.move.wait = Math.max(0, v)), 0.1)));
-        o.move.path.forEach((p, j) => box.append(el("div", { class: "row" }, el("span", { class: "kv" }, `punto ${j + 1}`), num("x", () => p[0], v => { p[0] = v; if (j === 0) o.x = v; }), num("y", () => p[1], v => { p[1] = v; if (j === 0) o.y = v; }))));
-        box.append(el("div", { class: "row" }, btn("+ Punto", addPoint), btn("Quieta", () => edit(() => { delete o.move; sel = { t: "obj", i: sel.i }; }))));
-      } else box.append(el("div", { class: "row" }, btn("Que se mueva", addPoint, "agrega un recorrido de ida y vuelta")));
+      route();
     } else if (d) {
       box.append(el("div", { class: "row" }, check("choca", () => o.solid !== false, v => { if (v) delete o.solid; else o.solid = false; }), check("atrás (oscura)", () => o.layer === "back", v => { if (v) o.layer = "back"; else delete o.layer; })));
     }

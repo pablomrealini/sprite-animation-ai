@@ -1,0 +1,50 @@
+{
+  "name": "Refinería low-poly",
+  "note": "Px del juego, y para abajo. Lámina en capas: la armó prototypes/arena/editor/capas.py desde arenas/refineria_lowpoly/entera.json (la lámina entera con la colisión calcada, y su historia). plate.src es el fondo sin las pasarelas y cada pasarela es una pieza pintada (pieces: PNG con alfa, 1 px = 1 px del juego) puesta como objeto (x, y: su esquina de arriba a la izquierda; flip la espeja), con su colisión y su recorte de adelante (front: delante del colgado) relativos a la pieza. Las patas: legs [y0, y1] es la franja de filas de la pieza entre la losa y los pies que se alarga cuando el objeto trae stretch (px de más hacia abajo): la pieza mide h + stretch, lo de arriba de y0 queda igual, la franja se estira a y1 - y0 + stretch y lo de abajo de y1 baja stretch (negativo la acorta). legsGap: cuántos px por encima de la línea de los pies de lo de abajo terminan las patas (lo usa el botón \"Que llegue abajo\" del editor). La y de cada sólido es la línea de los pies: el borde de atrás de la cara de arriba pintada. Se mueven con el editor (prototypes/arena/editor). La flotante del medio es una pintada con recorrido (move, como las del kit): flotante.png, la plataforma que el restyle le dibujó a la columna, recortada de la lámina con prototypes/arena/editor/flotante.py; cada punto del recorrido es su esquina de arriba a la izquierda (pies de 780 a 532, como la del kit que reemplaza) y su sólido va con ella, sin cornisa",
+  "size": [1920, 1080],
+  "seed": 11,
+  "plate": {
+    "src": "refineria_lowpoly/fondo.webp",
+    "solid": [
+      [931, 422, 58, 18]
+    ]
+  },
+  "pieces": {
+    "pasarela_abajo_izq": {"src": "refineria_lowpoly/pasarela_abajo_izq.png", "w": 719, "h": 225, "cut": [0, 706], "solids": [{"kind": "bridge", "x": 0, "y": 18, "w": 657, "ledge": "both"}], "front": [[0, 9, 659, 62]], "legs": [81, 161], "legsGap": 8},
+    "pasarela_abajo_der": {"src": "refineria_lowpoly/pasarela_abajo_der.png", "w": 718, "h": 225, "cut": [1202, 706], "solids": [{"kind": "bridge", "x": 63, "y": 18, "w": 655, "ledge": "both"}], "front": [[63, 9, 655, 62]], "legs": [81, 161], "legsGap": 8},
+    "pasarela_medio_izq": {"src": "refineria_lowpoly/pasarela_medio_izq.png", "w": 425, "h": 194, "cut": [370, 516], "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 422, "ledge": "both"}], "front": [[0, 8, 424, 58]], "legs": [69, 179], "legsGap": 15},
+    "pasarela_medio_der": {"src": "refineria_lowpoly/pasarela_medio_der.png", "w": 435, "h": 194, "cut": [1116, 516], "solids": [{"kind": "bridge", "x": 12, "y": 16, "w": 421, "ledge": "both"}], "front": [[10, 8, 425, 58]], "legs": [69, 179], "legsGap": 15},
+    "pasarela_arriba_izq": {"src": "refineria_lowpoly/pasarela_arriba_izq.png", "w": 522, "h": 192, "cut": [0, 328], "solids": [{"kind": "bridge", "x": 0, "y": 12, "w": 520, "ledge": "both"}], "front": [[0, 5, 522, 58]], "legs": [77, 175], "legsGap": 13},
+    "pasarela_arriba_der": {"src": "refineria_lowpoly/pasarela_arriba_der.png", "w": 521, "h": 192, "cut": [1399, 328], "solids": [{"kind": "bridge", "x": 1, "y": 12, "w": 520, "ledge": "both"}], "front": [[0, 5, 521, 58]], "legs": [77, 175], "legsGap": 13},
+    "flotante": {"src": "refineria_lowpoly/flotante.png", "w": 207, "h": 75, "cut": [857, 661], "solids": [{"kind": "bridge", "x": 0, "y": 6, "w": 206, "ledge": "none"}], "front": [[0, 0, 207, 49]]}
+  },
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 940, "w": 2000, "h": 200, "fill": "full"},
+    {"kind": "bridge", "x": 931, "y": 426, "w": 58, "ledge": "both"}
+  ],
+  "objects": [
+    {"piece": "pasarela_abajo_izq", "x": 0, "y": 706},
+    {"piece": "pasarela_abajo_der", "x": 1202, "y": 706},
+    {"piece": "pasarela_medio_izq", "x": 370, "y": 516},
+    {"piece": "pasarela_medio_der", "x": 1116, "y": 516},
+    {"piece": "pasarela_arriba_izq", "x": 0, "y": 328},
+    {"piece": "pasarela_arriba_der", "x": 1399, "y": 328},
+    {"piece": "flotante", "x": 857, "y": 774, "move": {"path": [[857, 774], [857, 526]], "speed": 80, "wait": 1.2}}
+  ],
+  "spawns": [
+    [385, 940],
+    [1607, 724],
+    [1250, 532],
+    [373, 340],
+    [1535, 940],
+    [313, 724],
+    [670, 532],
+    [1547, 340]
+  ],
+  "decor": [],
+  "pipes": [],
+  "color": {
+    "fondo": {"paleta": 0, "saturacion": 1, "contraste": 1, "brillo": 1, "bruma": 0},
+    "plataformas": {"paleta": 0, "saturacion": 1, "contraste": 1, "brillo": 1, "bruma": 0}
+  }
+}

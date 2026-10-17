@@ -28,6 +28,15 @@ h1 span { color: var(--red); }
 .eyebrow { font: 600 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .stage { position: relative; border: 2px solid var(--line); border-radius: 6px; overflow: hidden; background: #2a6fd0; aspect-ratio: 16 / 9; max-width: 100%; }
 .stage canvas { display: block; width: 100%; height: 100%; outline: none; }
+/* pantalla completa: el escenario entero (la arena y el menú encima), la arena en 16:9 con franjas negras */
+.stage:fullscreen { width: 100vw; height: 100vh; max-width: none; aspect-ratio: auto; border: 0; border-radius: 0; background: #000; display: grid; place-items: center; }
+.stage:fullscreen canvas { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); }
+.stage:-webkit-full-screen { width: 100vw; height: 100vh; max-width: none; aspect-ratio: auto; border: 0; border-radius: 0; background: #000; display: grid; place-items: center; }
+.stage:-webkit-full-screen canvas { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); }
+/* donde el navegador no da pantalla completa (el panel de la app de Claude no contesta el pedido), el escenario tapa la ventana */
+.stage.max { position: fixed; inset: 0; z-index: 50; width: 100vw; height: 100vh; max-width: none; aspect-ratio: auto; border: 0; border-radius: 0; background: #000; display: grid; place-items: center; }
+.stage.max canvas { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); }
+body.maxed { overflow: hidden; }
 .lobby[hidden] { display: none; }
 .lobby { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(8, 12, 24, 0.62); padding: 12px; overflow: auto; }
 .lobby .panel { display: grid; gap: 12px; width: min(760px, 100%); }
@@ -72,6 +81,12 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
 .copyBtn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
 .copyBtn:disabled { opacity: 0.55; cursor: default; }
 .mono { font: 500 12px/1.4 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; min-width: 0; }
+/* el panel del fogonazo: la vista del tiro a la izquierda y los controles a la derecha */
+.flashGrid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 12px 20px; align-items: start; }
+@media (max-width: 760px) { .flashGrid { grid-template-columns: minmax(0, 1fr); } }
+.flashPrev { display: grid; gap: 8px; min-width: 0; }
+.flashPrev canvas { display: block; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 6px; background: #22355a; }
+#flashTune { grid-template-columns: minmax(0, 1fr); }
 </style>
 
 <div class="wrap">
@@ -92,8 +107,9 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
           <div class="opt"><span id="lblHp">Golpes</span><div class="seg" role="group" aria-labelledby="lblHp" id="segHp"></div></div>
           <div class="opt"><span id="lblLives">Vidas</span><div class="seg" role="group" aria-labelledby="lblLives" id="segLives"></div></div>
           <div class="opt"><span id="lblBot">Bots</span><div class="seg" role="group" aria-labelledby="lblBot" id="segBot"></div></div>
+          <div class="opt"><span id="lblChar">Personaje</span><div class="seg" role="group" aria-labelledby="lblChar" id="segChar"></div></div>
         </div>
-        <div class="gos"><button class="go" id="goBtn" type="button">Empezar</button><button class="go alt" id="testBtn" type="button">Probar arena solo</button></div>
+        <div class="gos"><button class="go" id="goBtn" type="button">Empezar</button><button class="go alt" id="testBtn" type="button">Probar arena solo</button><button class="go alt" id="fsBtn" type="button">Pantalla completa</button></div>
         <p class="hint" id="lobbyMsg">Cargando sprites…</p>
         <p class="hint" id="padTest" aria-live="off"></p>
       </div>
@@ -107,6 +123,20 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
     <div class="row"><button class="copyBtn" id="tuneSave" type="button">Guardar valores</button><button class="copyBtn" id="tuneReset" type="button">Volver a los de fábrica</button><span class="mono" id="tuneOut"></span></div>
   </section>
 
+  <section class="box" aria-labelledby="hFlash">
+    <h2 id="hFlash">Ajustes del fogonazo</h2>
+    <p class="note">Un juego de valores por personaje y por tiro (parado, corriendo, a dos manos, agachado y en el aire): el tamaño del dibujo y del halo, y cuánto se corre de la boca del arma. La vista muestra el tiro elegido de cerca, disparando solo con el mismo dibujo del juego: Pausa y ◀ ▶ pasan cuadro por cuadro con el fogonazo quieto, ¼× es cámara lenta y la cruz es la boca medida. Los cambios valen en el acto también en el juego (en "Probar arena solo", el panel salta al último tiro que hiciste). Guardar valores deja todos en el artifact, como los de la granada.</p>
+    <div class="row"><div class="opt"><span id="lblFlashChar">Personaje</span><div class="seg" role="group" aria-labelledby="lblFlashChar" id="segFlashChar"></div></div><div class="opt"><span id="lblFlashKind">Tiro</span><div class="seg" role="group" aria-labelledby="lblFlashKind" id="segFlashKind"></div></div></div>
+    <div class="flashGrid">
+      <div class="flashPrev">
+        <canvas id="flashPrev" aria-label="Vista del tiro elegido: el personaje disparando, de cerca, con el fogonazo"></canvas>
+        <div class="row"><button class="copyBtn" id="fpPlay" type="button">Pausa</button><button class="copyBtn" id="fpPrev" type="button" aria-label="Cuadro anterior">◀</button><button class="copyBtn" id="fpNext" type="button" aria-label="Cuadro siguiente">▶</button><div class="seg" role="group" aria-label="Velocidad" id="segFpSpeed"></div><label class="opt"><input type="checkbox" id="fpMuzzle" checked><span>Boca medida</span></label><span class="mono" id="fpInfo"></span></div>
+      </div>
+      <div class="tune" id="flashTune"></div>
+    </div>
+    <div class="row"><button class="copyBtn" id="flashSave" type="button">Guardar valores</button><button class="copyBtn" id="flashReset" type="button">Volver a los de fábrica</button><span class="mono" id="flashOut"></span></div>
+  </section>
+
   <div class="cols">
     <section class="box" aria-labelledby="hControls">
       <h2 id="hControls">Controles</h2>
@@ -117,7 +147,9 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
         <dt><kbd>Abajo</kbd>+<kbd>saltar</kbd></dt><dd>Bajar atravesando el puente, las plataformas flotantes y las repisas</dd>
         <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 3 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y matan de una a cualquiera en el radio, también al que la tiró</dd>
         <dt><kbd>Golpe</kbd></dt><dd>Un puñetazo corto hacia adelante, a la altura del cuerpo, en el piso o en el aire: saca un golpe, empuja fuerte y aturde un momento. Sirve pegado al otro, donde la bala sale de largo y no le pega. Uno cada medio segundo</dd>
+        <dt><kbd>C</kbd></dt><dd>Cambiar de personaje: el ranger 2D o el low-poly (también se elige en el menú). Anda en medio de la partida, para compararlos jugando</dd>
         <dt><kbd>Esc</kbd></dt><dd>Volver al menú</dd>
+        <dt><kbd>Pantalla completa</kbd></dt><dd>El botón del menú pone la arena en toda la pantalla (el menú sale encima entre partidas). Esc sale de la pantalla completa. Donde el navegador no la da (el panel de la app de Claude, algunos visores), la arena tapa toda la ventana: se sale con el mismo botón o con Esc en el menú</dd>
         <dt><kbd>H</kbd></dt><dd>Mostrar las cajas de golpe, lo que se pisa y a quién persigue cada bot</dd>
       </dl>
       <p class="note">Los joysticks no se pueden leer desde la página publicada: para jugar con joystick, abrí el juego local en Chrome (está en <b>prototypes/README.md</b>).</p>
@@ -129,6 +161,7 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
       <p class="note"><b>Golpes.</b> El disparo de una mano saca un golpe y empuja; el de dos manos te planta, saca dos y empuja más. 7 disparos por segundo con una mano y 3,5 a dos manos (el polígono tenía 12 y 7). Agachado, el cuerpo es más bajo y las balas de alguien parado pasan cerca de la cabeza. El golpe de cerca llega unos 70 px delante del cuerpo, saca uno, empuja más que el disparo de dos manos y aturde 0,4 s; también le pega al que está agachado.</p>
       <p class="note"><b>Power-ups.</b> Cada 12 a 18 s (el primero a los 9) aparece uno apoyado en algo que se pisa, con un haz que avisa dónde: el amarillo con la granada recarga las 3, el blanco con la cruz suma 1 golpe de salud (2 si se juega a 5). Se agarran tocándolos; si no te sirve (lo tenés lleno), queda ahí. A los 12 s parpadean y se van. Hay como mucho 2 a la vez (1 con dos jugadores o en la prueba) y los bots a veces van a buscarlos.</p>
       <p class="note"><b>El ranger es el mismo del polígono</b>, con su feel, doble salto, colgado, subida y salto desde la cornisa. Los otros tres colores salen del mismo atlas al cargar la página: el rojo de la armadura cambia de tono.</p>
+      <p class="note"><b>Low-poly:</b> el personaje 3D de characters/lowpoly (Kling O3), con las mismas reglas, cajas y feel que el ranger; cambia sólo el dibujo. Se elige en el menú o con C en cualquier momento. Los fondos siguen siendo los 2D con contorno.</p>
       <p class="note"><b>Provisorio:</b> recibir un golpe y morir son efectos de código (destello, empujón y estallido), sin animación propia. El golpe de cerca usa cuadros del tiro de granada (el puño atrás y el brazo adelante) con un envión del cuerpo y un barrido dibujado. Los power-ups se dibujan por código. Los bots son simples: buscan al más cercano, suben por donde pueden, disparan cuando lo tienen en línea, golpean si lo tienen encima, a veces esquivan o van por un power-up que les sirve y, si pasan un rato sin nadie a tiro, van a buscar altura.</p>
       <p class="note"><b>Arena:</b> el kit industrial de backgrounds/ranger_industrial (GPT Image 2.5 y Nano Banana 2.1 por fal), armado desde prototypes/arena/arenas/fundicion.json.</p>
     </section>
@@ -140,13 +173,20 @@ __COLOR_JS__
 </script>
 <script>
 "use strict";
-const SPR = __SPRITE_DATA__;
+// los personajes del selector (CHARACTERS en build.py): el ranger 2D y el low-poly, cada uno con sus medidas (spr, las de
+// measure en prototypes/build.py) y su atlas en base64. useChar cambia de uno al otro (ver más abajo)
+const CHARS = __CHAR_DATA__;
+let CHAR_KEY = Object.keys(CHARS)[0], SPR = CHARS[CHAR_KEY].spr;
 // el kit industrial (prototypes/arena/build.py): cada pieza con su tamaño en px del juego y, las capas, en px de pantalla
 const KIT = __KIT_DATA__;
 // efectos de backgrounds/ranger_fx, los elegidos en prototypes/fx_lab (los mismos del polígono)
 const FX = __FX_DATA__;
 // la granada y su explosión dibujadas (backgrounds/ranger_grenade), si ya se eligieron; si no, {} y van por código
 const GREN = __GRENADE_DATA__;
+// el retrato del HUD (backgrounds/ranger_hud, HUD_ART en build.py): tres caras, normal, golpeado y fuera de combate
+const HUDART = __HUD_DATA__;
+// los power-ups low-poly (backgrounds/lowpoly_pickups, PICKUP_ART en build.py): hp y gren. Sin el dibujo, por código
+const PICKART = __PICKUP_DATA__;
 // la paleta de Pablo (prototypes/arena/paleta.py, de refs/refineria.webp a refs/refineria_paleta_pablo.webp) para color.js
 const COLOR_LUT = decodeLut(__COLOR_LUT__);
 const gradeCache = new Map();   // las imágenes graduadas de la arena de ahora (se vacía al cambiar de arena)
@@ -167,18 +207,34 @@ const FX_IMG = {};
 for (const [asset, A] of Object.entries(FX)) for (const [name, p] of Object.entries(A.pieces)) { const im = new Image(); im.src = p.src; FX_IMG[`${asset}/${name}`] = im; }
 const FXT = { flashA: 2 / 60, flashB: 3 / 60, impact: 2 / 60 };
 const FXK = 1.5;   // los efectos del disparo, más grandes que en el polígono: con la cámara al 50% se perdían
-const [CELL_W, CELL_H] = SPR.cell, [PIV_X, PIV_Y] = SPR.pivot;
+// el fogonazo de cada personaje y cada tiro (panel "Ajustes del fogonazo"): el tamaño del dibujo y del halo, y cuánto se
+// corre de la boca medida, adelante y arriba, en px del juego. El tiro sale de la animación que se ve (flashKind): parado
+// (una mano, quieto), corriendo, a dos manos, agachado o en el aire
+const FLASH_KINDS = [["parado", "Parado"], ["corriendo", "Corriendo"], ["dos", "A dos manos"], ["agachado", "Agachado"], ["aire", "En el aire"]];
+// los de fábrica: los que dejó Pablo el 2026-10-17 mirando la vista de cada tiro (un personaje nuevo arranca en 1, 0, 0)
+const FLASH_PABLO = {
+  ranger: { parado: { scale: 1.15, dx: 0, dy: -2 }, corriendo: { scale: 1.15, dx: -1, dy: 0 }, dos: { scale: 1.1, dx: -3, dy: 0 }, agachado: { scale: 1.2, dx: -5, dy: 0 }, aire: { scale: 1.25, dx: -4, dy: 0 } },
+  lowpoly: { parado: { scale: 1.5, dx: -2, dy: 5 }, corriendo: { scale: 1.5, dx: -3, dy: 0 }, dos: { scale: 1.5, dx: 0, dy: 9 }, agachado: { scale: 1.5, dx: -1, dy: 8 }, aire: { scale: 1.5, dx: -3, dy: 0 } },
+};
+const FLASH_DEFAULT = Object.fromEntries(Object.keys(CHARS).map(k => [k, Object.fromEntries(FLASH_KINDS.map(([t]) => [t, { scale: 1, dx: 0, dy: 0, ...FLASH_PABLO[k]?.[t] }]))]));
+const FLASH = structuredClone(FLASH_DEFAULT);
+const flashKind = Q => {
+  const n = Q.draw.name || "";
+  return n.startsWith("crouch") ? "agachado" : n.startsWith("jump") || n === "double_jump" ? "aire" : n.startsWith("shoot2h") ? "dos" : n.startsWith("run") ? "corriendo" : "parado";
+};
+let PIV_X, PIV_Y;   // el pivot de la celda del personaje de ahora (useChar)
 const CHAR = 0.8, HALF_W = 20 * CHAR, BODY_H = 112 * CHAR;
 const S = { char: CHAR, jumpFx: true, sound: true, debug: false };
 // el feel del polígono ("reporte"), con la cadencia de la arena: a 12 disparos por segundo, tres golpes duraban 0,17 s
 const FEEL = { run: 300, accel: 4500, decel: 6000, air: 3000, v0: 1067, gUp: 2963, gDown: 4898, cut: 480, term: 1400, coyote: 0.10, buffer: 0.10, corner: 12, rate1: 1 / 7, rate2: 1 / 3.5, kick: 0 };
 const RUN_SPEED = FEEL.run;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// el temblor de cámara (ver camShake): false lo apaga entero, sin tocar nada más
+const CAMERA_FX = true;
 const cv = document.getElementById("game"), ctx = cv.getContext("2d");
-const atlas = new Image();
 let ready = false;
 
-/* ---------- animaciones del ranger (las mismas cuentas que el polígono) ---------- */
+/* ---------- animaciones del personaje (las mismas cuentas que el polígono) ---------- */
 const anim = n => SPR.anims[n];
 const F = (n, i) => anim(n).f[Math.max(0, Math.min(anim(n).f.length - 1, i))];
 function phases(name) {
@@ -186,39 +242,86 @@ function phases(name) {
   const apex = air.reduce((b, i) => (f[i][8] > f[b][8] ? i : b), air[0]);
   return { prep: Math.max(0, air[0] - 1), rise: air.filter(i => i < apex), apex, fall: air.filter(i => i > apex), land: f.map((_, i) => i).filter(i => i > air[air.length - 1]) };
 }
-const JP = phases("jump");
-const JS = anim("jump_shoot").f;
-const AIR_SHOT = JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
 const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
 const noBaked = (n, i) => (anim(n).f[i][11] ? (i + anim(n).f.length - 1) % anim(n).f.length : i);
 const shotFrame = (n, t, per) => { const s = SHOT(n); return noBaked(n, t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]); };
 // colgado de una mano, detrás del canto (ver el polígono); la subida arranca en la pose de dos manos
-const HANG = "hang", HANG_HAND = anim(HANG).f[0];
+const HANG = "hang";
 const HANG_WALL = 28, HANG_GRIP = 8;
 const WALL_JUMP = { vx: 300, vy: 0.92, lock: 0.14, regrab: 0.3, late: 0.08 };
 const HANG_BUFFER = 0.15;
 const RUN = () => (SPR.anims.run_gun ? "run_gun" : "run");
 const IDLE = () => (SPR.anims.idle_combat ? "idle_combat" : "idle");
-const IDLE_SPEED = SPR.anims.idle_combat ? 1 : 1.4;
-const FLIP = (() => {
-  if (!SPR.anims.double_jump) return [];
-  const turned = anim("double_jump").f.map((f, i) => [i, f]).filter(([, f]) => f[2] / f[3] > 0.95 || f[3] < 100).map(([i]) => i);
-  return turned.length ? Array.from({ length: turned[turned.length - 1] - turned[0] + 1 }, (_, k) => turned[0] + k) : [];
-})();
 const FLIP_DUR = 0.32, DOUBLE_V = 0.9;
 const JFX = { micro: 0.3, hard: 2.8, takeoff: [0.87, 1.15], dbl: [0.84, 1.19], land: [0.18, 0.15], back: 0.8, bump: 9, bumpDecay: 0.85, vy: [-590, -180, 300, 840], dblScale: 1.05 };
-const FLIP_ANG = SPR.anims.double_jump && anim("double_jump").f.length > 8 ? [[1, 0], [2, 38], [3, 62], [4, 93], [5, 225], [6, 307], [7, 360]] : null;
-const GRAB_FRAMES = [6, 7, 8, 9], GRAB_T = GRAB_FRAMES.length * 0.05;
-const CLIMB_SEQ = [[0, 0, 0.02], [2, 0, 0.05], [3, 12, 0.05], [4, 22, 0.05], [13, 31, 0.06], [15, 31, 0.05], [17, 31, 0.05], [19, 8, 0.05], [20, 0, 0.05], [21, 0, 0.06]];
-const CLIMB = SPR.anims.climb && SPR.anims.hang_two ? (() => {
-  const f = anim("climb").f, last = f[f.length - 1], idle = anim(IDLE()).f[0], hang = anim("hang_two").f[0];
-  const cx = g => g[4] + g[2] / 2 - PIV_X, ox = cx(hang) - cx(f[0]);
-  return { ox, dx: ox + cx(last) - cx(idle), rise: last[8], dur: CLIMB_SEQ.reduce((a, s) => a + s[2], 0), exitRun: 0.7, wall: 20, grip: 6, hand: hang[10] };
-})() : null;
 // los pies se hunden en el contorno negro de arriba de la pasarela (si no, parece que flota)
 const FOOT_SINK = 3;
-// altura de la boca sobre los pies, parado y agachado: con eso los bots saben si el otro queda en la línea del disparo
-const MUZZLE_H = -anim("shoot").f[0][7] * CHAR - FOOT_SINK, CROUCH_MUZZLE = -anim("crouch_shoot").f[0][7] * CHAR - FOOT_SINK;
+// lo que no sale de medir: los cuadros de cada personaje, elegidos mirándolos sobre verde
+//   grab: los de hang_in mientras se agarra; grabAlign: corridos para que la mano quede donde la del colgado (en el clip
+//         del low-poly el cuerpo sube y baja al agarrarse)
+//   climb: la subida, [cuadro de climb, avance en px, duración]
+//   flip: el mortal del doble salto, [cuadro, ángulo en que está dibujado]; flipFall: el cuadro de la caída después
+//   airShot: el cuadro de jump_shoot del tiro en el aire; sin él, el de la boca más adelante de los que van en el aire
+//   throw: el tiro de la granada, [cuadro de throw, duración]: puño atrás, puño atrás, sale, el brazo adelante y la vuelta
+//   melee: el golpe de cerca, [animación, cuadro, duración, envión del cuerpo en px] (ver MELEE_SEQ)
+//   hud: el retrato del HUD es el dibujo de backgrounds/ranger_hud (true) o la cabeza del primer cuadro de idle (false),
+//        recortada con crop (x, y, ancho y alto, en fracciones del cuadro)
+const RIG = {
+  ranger: {
+    grab: [6, 7, 8, 9],
+    climb: [[0, 0, 0.02], [2, 0, 0.05], [3, 12, 0.05], [4, 22, 0.05], [13, 31, 0.06], [15, 31, 0.05], [17, 31, 0.05], [19, 8, 0.05], [20, 0, 0.05], [21, 0, 0.06]],
+    flip: [[1, 0], [2, 38], [3, 62], [4, 93], [5, 225], [6, 307], [7, 360]], flipFall: 8,
+    throw: [[0, 0.07], [1, 0.05], [2, 0.05], [3, 0.06], [6, 0.05], [16, 0.03], [17, 0.03], [18, 0.03]],
+    melee: [["throw", 1, 0.06, -4], ["throw", 3, 0.1, 10], ["throw", 16, 0.05, 7], ["throw", 17, 0.04, 4], ["throw", 18, 0.04, 1]],
+    hud: true, crop: [0.08, 0.0, 0.84, 0.44],
+  },
+  // low-poly (characters/lowpoly, revisado en sus hojas a 0,5x): el agarre salta el 4, que trae la cornisa que dibujó
+  // Kling; la subida va de colgado (0–9) a las piernas arriba (12–23), el salto al canto (24 sale borroso: se saltea) y
+  // de agachado a parado (25–37); el mortal salta el 5 (borroso); el tiro es la segunda vez que lleva el brazo atrás
+  // (18–19), suelta en 20 y vuelve en 24. Su jump_shoot (4 cuadros) va con los pies en el piso: el 1, el brazo estirado
+  lowpoly: {
+    grab: [5, 6, 7, 8], grabAlign: true, airShot: 1,
+    climb: [[0, 0, 0.02], [6, 0, 0.05], [9, 0, 0.05], [12, 0, 0.05], [16, 0, 0.04], [20, 4, 0.05], [23, 8, 0.05], [25, 8, 0.05], [28, 6, 0.04], [31, 4, 0.04], [34, 0, 0.05], [37, 0, 0.06]],
+    flip: [[1, 0], [2, 30], [3, 95], [4, 180], [6, 235], [7, 295], [8, 360]], flipFall: 8,
+    throw: [[18, 0.07], [19, 0.05], [20, 0.05], [21, 0.06], [22, 0.05], [23, 0.03], [24, 0.03], [24, 0.03]],
+    melee: [["throw", 19, 0.06, -4], ["throw", 20, 0.1, 10], ["throw", 22, 0.05, 7], ["throw", 23, 0.04, 4], ["throw", 24, 0.04, 1]],
+    hud: false, crop: [0.0, 0.0, 0.8, 0.52],
+  },
+};
+// lo que sale de las medidas del personaje de ahora (useChar)
+let RIGNOW, JP, JS, AIR_SHOT, HANG_HAND, IDLE_SPEED, FLIP, FLIP_ANG, GRAB_FRAMES, GRAB_T, CLIMB_SEQ, CLIMB, MUZZLE_H, CROUCH_MUZZLE;
+// cambia de personaje: sus medidas, lo que sale de ellas (las fases del salto, el tiro en el aire, la mano del colgado,
+// la subida, la altura de la boca para los bots) y sus cuadros de RIG. Al cargar va el primero de CHARS (o el que quedó
+// elegido en este navegador); después, el selector del menú o la tecla C (setChar, que además cambia los colores)
+function useChar(key) {
+  CHAR_KEY = key; SPR = CHARS[key].spr; RIGNOW = RIG[key] || RIG.ranger; [PIV_X, PIV_Y] = SPR.pivot;
+  JP = phases("jump");
+  JS = anim("jump_shoot").f;
+  AIR_SHOT = RIGNOW.airShot ?? JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
+  HANG_HAND = anim(HANG).f[0];
+  IDLE_SPEED = SPR.anims.idle_combat ? 1 : 1.4;
+  FLIP = (() => {
+    if (!SPR.anims.double_jump) return [];
+    const turned = anim("double_jump").f.map((f, i) => [i, f]).filter(([, f]) => f[2] / f[3] > 0.95 || f[3] < 100).map(([i]) => i);
+    return turned.length ? Array.from({ length: turned[turned.length - 1] - turned[0] + 1 }, (_, k) => turned[0] + k) : [];
+  })();
+  FLIP_ANG = SPR.anims.double_jump && anim("double_jump").f.length > 8 ? RIGNOW.flip : null;
+  GRAB_FRAMES = RIGNOW.grab; GRAB_T = GRAB_FRAMES.length * 0.05;
+  CLIMB_SEQ = RIGNOW.climb;
+  CLIMB = SPR.anims.climb && SPR.anims.hang_two ? (() => {
+    const f = anim("climb").f, last = f[f.length - 1], idle = anim(IDLE()).f[0], hang = anim("hang_two").f[0];
+    const cx = g => g[4] + g[2] / 2 - PIV_X, ox = cx(hang) - cx(f[0]);
+    return { ox, dx: ox + cx(last) - cx(idle), rise: last[8], dur: CLIMB_SEQ.reduce((a, s) => a + s[2], 0), exitRun: 0.7, wall: 20, grip: 6, hand: hang[10] };
+  })() : null;
+  // altura de la boca sobre los pies, parado y agachado: con eso los bots saben si el otro queda en la línea del disparo
+  MUZZLE_H = -anim("shoot").f[0][7] * CHAR - FOOT_SINK; CROUCH_MUZZLE = -anim("crouch_shoot").f[0][7] * CHAR - FOOT_SINK;
+  THROW_ANIM = SPR.anims.throw ? "throw" : "shoot_in";
+  THROW_SEQ = SPR.anims.throw ? RIGNOW.throw : null;
+  updateRelease();
+  MELEE_SEQ = SPR.anims.throw ? RIGNOW.melee
+    : [["shoot2h_in", 0, 0.06, -4], ["shoot2h_in", 3, 0.1, 10], ["shoot2h_in", 2, 0.05, 7], ["shoot2h_in", 1, 0.04, 4], ["shoot2h_in", 0, 0.04, 1]];
+  MELEE_T = { hit0: MELEE_SEQ[0][2], hit1: MELEE_SEQ[0][2] + MELEE_SEQ[1][2], end: MELEE_SEQ.reduce((a, q) => a + q[2], 0) };
+}
 
 /* ---------- equipos, reglas y bots ---------- */
 // el rojo es el del atlas; los demás cambian el tono del rojo de la armadura (hue en grados), con algo de saturación y brillo
@@ -271,8 +374,11 @@ let needBake = true;   // cambió la arena: hay que prearmarla de nuevo
 const PIECE = n => KIT.pieces[n];
 // piezas pintadas de la arena (ARENA.pieces: PNG con alfa, 1 px = 1 px del juego, src relativo a arenas/, y sus solids y
 // front relativos a la esquina de arriba a la izquierda). Un objeto cuyo piece es una de ellas va con x, y en esa esquina;
-// flip la espeja dentro de su caja y ledge pisa el de sus sólidos. No se mueven
+// flip la espeja dentro de su caja y ledge pisa el de sus sólidos. Quietas, van en el prearmado; con move (el mismo
+// {path, speed, wait} de las flotantes del kit, pero cada punto del recorrido es la esquina de la pieza, como su x, y) son
+// un objeto más: se dibujan cada cuadro y sus sólidos se mueven con ella (ver loadObjects)
 const painted = o => ARENA.pieces && ARENA.pieces[o.piece];
+const moves = o => !!(o.move && o.move.path && o.move.path.length > 1);
 const pieceSrc = Pc => `arenas/${Pc.src}`;
 const flipLedge = l => (l === "left" ? "right" : l === "right" ? "left" : l);
 function addSolid(s) {
@@ -284,7 +390,7 @@ function loadArena(name) {
   ARENA = ARENAS[name] || ARENA; solids.length = 0; gradeCache.clear(); hazeRGB = null;
   for (const s of ARENA.solids || []) addSolid(s);
   for (const o of ARENA.objects || []) {
-    const Pc = painted(o); if (!Pc) continue;
+    const Pc = painted(o); if (!Pc || moves(o)) continue;   // las que se mueven: en loadObjects
     for (const s of Pc.solids || []) addSolid({ ...s, x: o.x + (o.flip ? Pc.w - s.x - s.w : s.x), y: o.y + s.y,
                                                 ledge: o.ledge || (o.flip ? flipLedge(s.ledge) : s.ledge) || "both" });
   }
@@ -309,19 +415,29 @@ const OBJ_BACK_TINT = "rgba(14,24,52,0.35)";
 function loadObjects() {
   objects.length = 0;
   for (const o of ARENA.objects || []) {
-    if (painted(o)) continue;   // las pintadas: sus sólidos los puso loadArena y se dibujan en el prearmado
+    const Pc = painted(o);
+    if (Pc && !moves(o)) continue;   // las pintadas quietas: sus sólidos los puso loadArena y se dibujan en el prearmado
+    if (Pc) {   // pintada con recorrido: sus sólidos van con ella, sin cornisa (colgarse de una que se mueve no se puede)
+      const ob = { o, Pc, painted: true, x: o.x, y: o.y, solid: null, solids: [], back: false, seg: 0, dir: 1, waitT: 0,
+                   path: o.move.path, speed: o.move.speed || 120, wait: o.move.wait ?? 0.5 };
+      for (const r of Pc.solids || []) ob.solids.push({ ...r, ...(r.kind === "bridge" ? { h: 26, oneWay: true } : {}), ground: false, noLedge: true, rel: r, obj: ob });
+      resetObject(ob); solids.push(...ob.solids); objects.push(ob);
+      continue;
+    }
     const A = PIECE(o.piece); if (!A) continue;
     const plat = o.piece.startsWith("platforms/");
     const ob = { o, A, plat, x: o.x, y: o.y, solid: null, back: o.layer === "back" || o.solid === false, seg: 0, dir: 1, waitT: 0 };
     if (plat) ob.solid = { kind: "platform", x: 0, y: 0, w: A.w, h: 26, oneWay: true, noLedge: !!o.move || o.ledge === "none", obj: ob };
     else if (o.solid !== false) ob.solid = { kind: "box", x: 0, y: 0, w: A.w - 4, h: A.h - 3, noLedge: true, obj: ob };
     if (o.move && o.move.path && o.move.path.length > 1) { ob.path = o.move.path; ob.speed = o.move.speed || 120; ob.wait = o.move.wait ?? 0.5; }
+    ob.solids = ob.solid ? [ob.solid] : [];
     resetObject(ob);
     if (ob.solid) solids.push(ob.solid);
     objects.push(ob);
   }
 }
 function syncObject(ob) {
+  if (ob.painted) { for (const S of ob.solids) { const r = S.rel; S.x = ob.x + (ob.o.flip ? ob.Pc.w - r.x - r.w : r.x); S.y = ob.y + r.y; } return; }
   if (!ob.solid) return;
   if (ob.plat) { ob.solid.x = ob.x - ob.A.w / 2; ob.solid.y = ob.y; }
   else { ob.solid.x = ob.x - ob.A.w / 2 + 2; ob.solid.y = ob.y - ob.A.h + 3; }
@@ -340,7 +456,7 @@ function moveObjects(dt) {
     let nx = tx, ny = ty;
     if (d > stepLen) { nx = ob.x + ex / d * stepLen; ny = ob.y + ey / d * stepLen; }
     else { ob.seg = next; if (next === 0 || next === ob.path.length - 1) { ob.dir = -ob.dir; ob.waitT = ob.wait; } }
-    const riders = ob.solid ? players.filter(q => q.alive && q.onGround && supportAt(q.x, q.y, q) === ob.solid) : [];
+    const riders = ob.solids.length ? players.filter(q => q.alive && q.onGround && ob.solids.includes(supportAt(q.x, q.y, q))) : [];
     const mx = nx - ob.x, my = ny - ob.y;
     ob.x = nx; ob.y = ny; syncObject(ob);
     for (const q of riders) { q.x = Math.max(HALF_W, Math.min(AW - HALF_W, q.x + mx)); q.y += my; }
@@ -348,6 +464,17 @@ function moveObjects(dt) {
 }
 function drawObjects(back) {
   for (const ob of objects) {
+    if (ob.painted) {   // la pintada que se mueve, graduada como las plataformas, en las mismas dos capas que las quietas: en la
+      // pasada de atrás la pieza entera (con sus patas), detrás de los colgados; en la de adelante, su front
+      const Pc = ob.Pc, raw = IMG[pieceSrc(Pc)]; if (!raw) continue;
+      const pim = graded(raw, "plataformas", pieceSrc(Pc)), at = { x: ob.x, y: ob.y, flip: ob.o.flip };
+      if (back) { const [art, h] = pieceArt(ob.o, Pc, pim); atPiece(ctx, at, Pc, () => ctx.drawImage(art, 0, 0, Pc.w, h)); }
+      else {
+        const qx = raw.naturalWidth / Pc.w, qy = raw.naturalHeight / Pc.h;
+        atPiece(ctx, at, Pc, () => { for (const [x, y, w, h] of Pc.front || []) ctx.drawImage(pim, x * qx, y * qy, w * qx, h * qy, x, y, w, h); });
+      }
+      continue;
+    }
     if (ob.back !== back) continue;
     const A = ob.A, x = ob.x - A.w / 2, y = ob.plat ? ob.y - A.top : ob.y - A.h;
     put(ctx, ob.o.piece, x, y, { flip: ob.o.flip, tint: back ? OBJ_BACK_TINT : null, grade: "plataformas" });
@@ -365,7 +492,7 @@ function newPlayer(slot) {
            draw: { name: "idle_combat", i: 0, x: 0, y: 0, k: 1, rot: 0, center: false }, flash: null,
            hp: 3, alive: false, hitT: 0, stunT: 0, invT: 0, dropS: null, dropT: 0, kills: 0,
            lives: 3, out: false, respawnT: 0, beam: false, spawnPt: null, heat: 0, heatT: 9, overheat: false, steamT: 0,
-           meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0,
+           meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0, hudHitT: 0,
            in: blankInput(), ctrl: "bot", bot: null, art: null };
 }
 const players = [0, 1, 2, 3].map(newPlayer);
@@ -382,7 +509,12 @@ const keys = new Set(), tapped = new Set();
 window.addEventListener("keydown", e => {
   if (G.state !== "lobby" && GAME_KEYS.has(e.code)) e.preventDefault();
   if (e.code === "Escape" && G.state !== "lobby") { showLobby(); return; }
+  if (e.code === "Escape" && fsMax) { setMax(false); return; }   // en el menú, sale de la arena que tapa la ventana
   if (e.code === "KeyH" && !e.repeat) S.debug = !S.debug;
+  if (e.code === "KeyC" && !e.repeat && ready) {   // el otro personaje, también en medio de la partida
+    const ks = Object.keys(CHARS), k = ks[(ks.indexOf(CHAR_KEY) + 1) % ks.length]; setChar(k);
+    if (G.state !== "lobby") G.toast = { text: `Personaje: ${CHARS[k].label} · C cambia`, color: "#eef0f6", t: 1.6 };
+  }
   if (e.code === "KeyR" && !e.repeat && G.mode === "test" && G.state === "play") {   // prueba: al próximo lugar de salida
     G.testSpawn = (G.testSpawn + 1) % ARENA.spawns.length; resetPlayer(players[0], ARENA.spawns[G.testSpawn]); players[0].lives = 99;
   }
@@ -486,28 +618,26 @@ const hurtH = Q => (Q.crouch === "hold" || (Q.crouch === "in" && Q.crouchT > 0.0
 /* ---------- efectos ---------- */
 const bullets = [], fx = [], impacts = [], booms = [], beams = [];   // booms: la onda de una muerte; beams: el haz donde alguien vuelve
 const grenades = [], blasts = [];   // granadas en vuelo y explosiones
-const THROW_ANIM = SPR.anims.throw ? "throw" : "shoot_in";
-// el tiro (clip g11, ver characters/ranger/character.toml): cuadros de "throw" y cuánto dura cada uno. 0–1 puño atrás de
-// la cabeza, 2 la estela, 3 el brazo adelante (ahí sale la granada, de la punta de la mano), 16–18 la vuelta a la pose
-const THROW_SEQ = SPR.anims.throw ? [[0, 0.07], [1, 0.05], [2, 0.05], [3, 0.06], [6, 0.05], [16, 0.03], [17, 0.03], [18, 0.03]] : null;
+// el tiro: cuadros de "throw" y cuánto dura cada uno (RIG del personaje, useChar). En el ranger (clip g11, ver
+// characters/ranger/character.toml) 0–1 es el puño atrás de la cabeza, 2 la estela, 3 el brazo adelante (ahí sale la
+// granada, de la punta de la mano), 16–18 la vuelta a la pose. Sin el clip, los del arma que sube de shoot_in
+let THROW_ANIM, THROW_SEQ;
 // el momento en que sale: el principio del cuadro elegido del tiro (por defecto el 2, la estela)
 function updateRelease() {
   if (!THROW_SEQ) return;
   GRENADE.anim = THROW_SEQ.reduce((a, q) => a + q[1], 0);
   GRENADE.release = THROW_SEQ.slice(0, Math.min(THROW_SEQ.length - 1, GRENADE.releaseFrame)).reduce((a, q) => a + q[1], 0) + 1e-3;
 }
-updateRelease();
 function throwFrame(t) {
   if (!THROW_SEQ) { const n = anim(THROW_ANIM).f.length; return Math.min(n - 1, Math.floor(t / GRENADE.anim * n)); }
   let acc = 0; for (const [i, d] of THROW_SEQ) { acc += d; if (t < acc) return i; } return THROW_SEQ[THROW_SEQ.length - 1][0];
 }
-// el golpe de cerca, con cuadros del tiro (no hay clip de melee): 1 el puño atrás, 3 el brazo adelante (pega mientras se
-// ve) y 16–18 la vuelta a la pose. Encima, un envión del cuerpo (off: px del juego hacia adelante) y el barrido por código.
-// Sin el clip del tiro, los del arma que sube
-const MELEE_SEQ = SPR.anims.throw
-  ? [["throw", 1, 0.06, -4], ["throw", 3, 0.1, 10], ["throw", 16, 0.05, 7], ["throw", 17, 0.04, 4], ["throw", 18, 0.04, 1]]
-  : [["shoot2h_in", 0, 0.06, -4], ["shoot2h_in", 3, 0.1, 10], ["shoot2h_in", 2, 0.05, 7], ["shoot2h_in", 1, 0.04, 4], ["shoot2h_in", 0, 0.04, 1]];
-const MELEE_T = { hit0: MELEE_SEQ[0][2], hit1: MELEE_SEQ[0][2] + MELEE_SEQ[1][2], end: MELEE_SEQ.reduce((a, q) => a + q[2], 0) };
+// el golpe de cerca, con cuadros del tiro (no hay clip de melee): en el ranger, 1 el puño atrás, 3 el brazo adelante (pega
+// mientras se ve) y 16–18 la vuelta a la pose (RIG del personaje, useChar). Encima, un envión del cuerpo (off: px del
+// juego hacia adelante) y el barrido por código. Sin el clip del tiro, los del arma que sube
+let MELEE_SEQ, MELEE_T;
+// el personaje del arranque: el que quedó elegido en este navegador, si sigue estando
+useChar((() => { try { const k = localStorage.getItem("arena.char"); return k in CHARS ? k : CHAR_KEY; } catch (e) { return CHAR_KEY; } })());
 function meleeFrame(t) { let acc = 0; for (const q of MELEE_SEQ) { acc += q[2]; if (t < acc) return q; } return MELEE_SEQ[MELEE_SEQ.length - 1]; }
 // la caja del golpe: delante del cuerpo, de los hombros a las rodillas
 function meleeBox(Q) {
@@ -592,11 +722,48 @@ function explode(Gr) {
     const a = Math.random() * Math.PI * 2, v = 120 + Math.random() * 180;
     fx.push({ x: Gr.x, y: Gr.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 120, life: 0.9, t: 0.7 + Math.random() * 0.3, color: Math.random() < 0.5 ? "rgba(60,64,78,0.8)" : "rgba(95,100,118,0.7)", size: 30 + Math.random() * 22, g: -60, drag: 3, round: true, grow: 2 });
   }
-  if (!reduceMotion) shake = Math.max(shake, 0.32);
+  camShake("grenade");
   for (const Q of players) if (Q.alive && Math.hypot(Q.x - Gr.x, Q.y - Gr.y) < R * 2) rumble(Q, 220, 0.9, 0.6);
   sfx("boom");
 }
-let shake = 0, bumpY = 0, hitN = 0, shotN = 0;
+let hitN = 0, shotN = 0;
+// cámara: un solo manejador del temblor (Pablo, 2026-10-17: "Camera shake en un party brawler 2D"). Nadie mueve la
+// cámara directo: los personajes y las explosiones mandan un evento con camShake(tipo) y el manejador decide.
+//   - Una sola señal continua: ruido suave (senos de frecuencias que no se repiten) que no se reinicia con cada golpe,
+//     por una amplitud que sube rápido hasta lo pedido (attack) y después baja sola (decay), así vuelve a la base sin
+//     saltos. Tope global: amplitud 1 = CAM.max px de pantalla.
+//   - Los eventos débiles (menos de CAM.weak) tienen un enfriamiento de CAM.cooldown (80 ms) y no cuentan si ya hay un
+//     temblor igual o más fuerte: dos que caen con 60 ms de diferencia no suman otra sacudida entera.
+//   - Uno fuerte reemplaza al de ahora y lo refuerza un poco (CAM.stack de lo que había); uno fuerte pero menor que el de
+//     ahora lo prolonga un poco. Nunca pasa el tope.
+//   - Reservado para lo importante: los balazos no tiemblan (ahí van la animación, las partículas, el sonido y el hitstop).
+const CAM = { max: 7, attack: 0.035, decay: 1.6, cooldown: 0.08, weak: 0.3, stack: 0.25, freq: 8 };   // freq: Hz de la sacudida (más dos armónicos, por debajo de 30)
+// intensidad de cada evento (0 a 1) y hacia dónde tira (los aterrizajes, más vertical)
+const CAM_EVENTS = { land: [0.15, 0.3, 1.25], hit: [0, 1, 1], melee: [0.3, 1, 1], death: [0.55, 1, 1], grenade: [0.85, 1, 1], final: [1, 1, 1] };
+const cam = { a: 0, target: 0, t: Math.random() * 100, weakT: 0, bx: 1, by: 1 };
+function camShake(kind, k = 1) {
+  const E = CAM_EVENTS[kind]; if (!E || !CAMERA_FX || reduceMotion) return;
+  const I = Math.min(1, E[0] * k); if (I <= 0) return;
+  const cur = Math.max(cam.a, cam.target);
+  if (I < CAM.weak) {
+    if (cam.weakT > 0 || cur >= I) return;   // otro débil hace un momento, o ya hay uno igual o más fuerte
+    cam.weakT = CAM.cooldown; cam.target = I;
+  } else cam.target = I >= cur ? Math.min(1, I + CAM.stack * cur) : Math.min(1, cur + CAM.stack * I * 0.5);
+  if (I >= cur) { cam.bx = E[1]; cam.by = E[2]; }   // la dirección, la del que manda
+}
+function camUpdate(dt) {   // en tiempo real: la cámara lenta y la congelada del golpe no la frenan
+  cam.t += dt; if (cam.weakT > 0) cam.weakT -= dt;
+  if (cam.target > cam.a) { cam.a = Math.min(cam.target, cam.a + dt / CAM.attack); if (cam.a >= cam.target) cam.target = 0; }
+  else { cam.target = 0; cam.a = Math.max(0, cam.a - CAM.decay * dt); }
+  if (cam.a === 0) { cam.bx = 1; cam.by = 1; }
+}
+function camOffset() {   // px de pantalla
+  if (cam.a <= 0) return [0, 0];
+  const t = cam.t * CAM.freq * Math.PI * 2, A = CAM.max * cam.a;
+  const nx = Math.sin(t) * 0.55 + Math.sin(t * 1.87 + 1.7) * 0.3 + Math.sin(t * 3.13 + 0.4) * 0.15;
+  const ny = Math.sin(t * 1.13 + 2.9) * 0.55 + Math.sin(t * 2.07 + 0.8) * 0.3 + Math.sin(t * 2.71 + 4.2) * 0.15;
+  return [nx * A * cam.bx, ny * A * cam.by];
+}
 function dust(x, y, n, speed, size, up = 0.25) {
   const k = S.char;
   for (let i = 0; i < n; i++) {
@@ -605,12 +772,47 @@ function dust(x, y, n, speed, size, up = 0.25) {
               color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: size * k * (0.7 + Math.random() * 0.7), g: 120, drag: 4, round: true, grow: 1.6 });
   }
 }
-function impact(x, y, dir, big, glow = "159,245,250") {
-  impacts.push({ x, y, dir, t: 0, big, row: hitN++ % 2 ? "b" : "a" });
-  for (let i = 0, n = big ? 10 : 6; i < n; i++) {
-    const a = Math.PI * (0.55 + Math.random() * 0.9), v = 280 * (0.4 + Math.random() * 0.6);
-    fx.push({ x, y, vx: Math.cos(a) * v * dir, vy: Math.sin(a) * v - 84, life: 0.3, t: 0.3, color: `rgb(${glow})`, size: (big ? 5 : 4) * FXK * (0.6 + Math.random() * 0.6), g: 900, add: true });
+// low-poly (Pablo, 2026-10-17): el fogonazo, el impacto y sus esquirlas en los tonos del equipo (glow "r,g,b"): cada
+// cara de un polígono va lisa, una clara y otra oscura, como el sombreado por cara del estilo nuevo
+const LP_TONES = new Map();
+function lpTones(glow) {
+  if (!LP_TONES.has(glow)) {
+    const c = glow.split(",").map(Number), mix = (t, f) => `rgb(${c.map((v, i) => Math.round(v + (t[i] - v) * f)).join(",")})`;
+    LP_TONES.set(glow, { white: mix([255, 255, 255], 0.8), light: mix([255, 255, 255], 0.45), mid: `rgb(${glow})`, dark: mix([0, 0, 0], 0.4) });
   }
+  return LP_TONES.get(glow);
+}
+// esquirlas: triángulos que salen hacia dir dentro de un cono (spread, en radianes) y giran como piezas 3D (la cara clara
+// y la oscura se turnan al dar vuelta); las dibuja el bucle de fx
+function shards(x, y, dir, glow, n, speed, spread, size, life) {
+  const T = lpTones(glow);
+  for (let i = 0; i < n; i++) {
+    const a = (Math.random() * 2 - 1) * spread, v = speed * (0.5 + Math.random() * 0.5);
+    fx.push({ x, y, vx: Math.cos(a) * v * dir, vy: Math.sin(a) * v - speed * 0.12, life, t: life * (0.7 + Math.random() * 0.3), color: T.light, dark: T.dark,
+              size: size * (0.6 + Math.random() * 0.6), g: 700, drag: 3, tri: true, rot: Math.random() * 6.3, vr: (Math.random() * 2 - 1) * 18, spin: Math.random() * 6.3, vs: 14 + Math.random() * 16 });
+  }
+}
+// la estrella low-poly del fogonazo y del impacto, con el origen en la boca (o el punto del golpe) mirando a +x: n pinchos
+// en un abanico de ±spread, cada uno un triángulo partido en dos caras (clara arriba, oscura abajo), y un núcleo hexagonal
+// claro. len: el largo del pincho del medio; seed: la forma de este disparo; grow: de 0 a 1, cuánto está abierta
+function lpStar(g, len, n, spread, seed, grow, T, core = 0.24) {
+  const r = rng(seed), w = len * 0.2;
+  for (let i = 0; i < n; i++) {
+    const u = n > 1 ? i / (n - 1) * 2 - 1 : 0, a = u * spread + (r() - 0.5) * 0.18, L = len * (1 - 0.42 * Math.abs(u)) * (0.8 + 0.4 * r()) * grow;
+    const ca = Math.cos(a), sa = Math.sin(a), b0 = len * 0.06, mx = ca * L * 0.38, my = sa * L * 0.38;
+    const p1 = [ca * b0 - sa * w / 2, sa * b0 + ca * w / 2], p2 = [ca * b0 + sa * w / 2, sa * b0 - ca * w / 2], tip = [ca * L, sa * L];
+    g.fillStyle = T.light; g.beginPath(); g.moveTo(p2[0], p2[1]); g.lineTo(tip[0], tip[1]); g.lineTo(mx, my); g.closePath(); g.fill();
+    g.fillStyle = T.mid; g.beginPath(); g.moveTo(p1[0], p1[1]); g.lineTo(tip[0], tip[1]); g.lineTo(mx, my); g.closePath(); g.fill();
+  }
+  const R = len * core * (0.6 + 0.4 * grow);
+  for (let k = 0; k < 6; k++) {   // el núcleo: seis caras, alternando blanco y el claro del equipo
+    const a0 = k / 6 * Math.PI * 2 + 0.3, a1 = (k + 1) / 6 * Math.PI * 2 + 0.3;
+    g.fillStyle = k % 2 ? T.white : "#ffffff"; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a0) * R, Math.sin(a0) * R); g.lineTo(Math.cos(a1) * R, Math.sin(a1) * R); g.closePath(); g.fill();
+  }
+}
+function impact(x, y, dir, big, glow = "159,245,250") {
+  impacts.push({ x, y, dir, t: 0, big, glow, seed: Math.random() * 1e6, row: hitN++ % 2 ? "b" : "a" });
+  shards(x, y, -dir, glow, big ? 8 : 5, 300, 1.1, (big ? 7 : 5) * FXK, 0.32);   // salpica hacia el tirador
 }
 // el impacto del golpe de cerca: una estrella blanca con el borde del color del que pega (se dibuja en render) y chispas
 // y rayitas que salen hacia adelante, en la dirección del golpe
@@ -631,8 +833,10 @@ function fire(frame, footY, power) {
   const { x: mx, y: my } = muzzleAt(frame, footY), len = (power > 1 ? 46 : 32) * 1.3;
   bullets.push({ x: mx + P.facing * len, x0: mx, y: my, vx: 1350 * P.facing, life: 1.5, power, len, owner: P.slot, glow: P.team.glow });
   P.flash = { t: 0, big: power > 1, v: (shotN++ % 3) + 1, seed: Math.random() * 1000 };
-  if (!reduceMotion) shake = Math.max(shake, power > 1 ? 0.05 : 0.025);
-  if (power > 1) rumble(P, 70, 0.4, 0.25);
+  shards(mx + P.facing * 6, my, P.facing, P.team.glow, power > 1 ? 4 : 3, 520, 0.5, (power > 1 ? 6 : 5) * FXK, 0.2);
+  flashFollow(P);
+  // sin temblor de pantalla ni vibración del joystick por tiro (Pablo, 2026-10-16: con cuatro tirando la pantalla no
+  // paraba); quedan los de los golpes, las explosiones, las muertes y el arma trabada
   sfx(power > 1 ? "shot2" : "shot", 0.5);
   P.invT = 0;   // el que recién vuelve deja de ser invulnerable cuando dispara
   P.heat += power > 1 ? HEAT.shot2 : HEAT.shot1; P.heatT = 0;
@@ -666,7 +870,7 @@ function land(fallH, vy) {
   P.landKind = hard ? "hard" : "soft"; P.landT = hard ? 0.2 : 1 / 12;
   if (hard) {
     puff(P.x, P.y, 16, 8, 22, 150, 260, 0.4, 0.6, 13, 0.5); puff(P.x, P.y, 5, 60, 85, 60, 120, 0.4, 0.55, 11, 0.45);
-    if (!reduceMotion) bumpY = Math.max(bumpY, JFX.bump * 0.5);
+    camShake("land");
     sfx("landHard", 0.7); rumble(P, 90, 0.45, 0.3);
   } else { puff(P.x, P.y, 7, 10, 20, 60, 150, 0.3, 0.5, 10, 0.6); sfx("land", 0.4 + 0.3 * s); }
 }
@@ -674,14 +878,14 @@ function land(fallH, vy) {
 // push: el empujón de la granada o del golpe de cerca (knock, lift y, el de cerca, stun)
 function hitPlayer(Q, B, push = null) {
   const dir = Math.sign(B.vx), big = B.power > 1 || !!push?.melee;
-  Q.hp -= B.power; Q.hitT = 0.12; Q.stunT = push?.stun ?? COMBAT.stun * (big ? 1.4 : 1); Q.meleeT = 0;
+  Q.hp -= B.power; Q.hitT = 0.12; Q.hudHitT = 0.45; Q.stunT = push?.stun ?? COMBAT.stun * (big ? 1.4 : 1); Q.meleeT = 0;
   if (Q.state === "hang" || Q.state === "climb") { Q.state = "air"; Q.hang = Q.climb = null; Q.grabCD = 0.45; }
   Q.onGround = false; Q.jump = { mode: "phys", fixed: true }; Q.crouch = "none"; Q.aim = "none"; Q.landT = 0;
   Q.vx = dir * (push ? push.knock : big ? COMBAT.knock2 : COMBAT.knock1); Q.vy = Math.min(Q.vy, -(push ? push.lift : big ? COMBAT.lift2 : COMBAT.lift1));
   if (push?.melee) pow(B.x, B.y, dir, B.glow);   // el golpe de cerca: la estrella, que salpica hacia adelante
   else impact(B.x, B.y, dir, big, B.glow);       // salpica hacia el tirador
   burst(B.x, B.y, Q.team.color, big ? 10 : 6, 260, 0.35, 5);
-  if (!reduceMotion) shake = Math.max(shake, push?.melee ? 0.15 : big ? 0.12 : 0.07);
+  camShake(push?.melee ? "melee" : "hit");
   rumble(Q, push?.melee ? 180 : 120, push?.melee ? 0.9 : 0.6, 0.4); sfx(push?.melee ? "punch" : "hit", big ? 0.9 : 0.6);
   if (Q.hp <= 0) killPlayer(Q, B.owner);
 }
@@ -694,12 +898,13 @@ function killPlayer(Q, killer) {
   for (let k = 0; k < 18; k++) { const a = k / 18 * Math.PI * 2, v = 560;   // anillo de humo
     fx.push({ x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.45, t: 0.45, color: "#ffffff", size: 20, g: 0, drag: 6, round: true, grow: 1.8, add: true }); }
   if (players[killer] && killer !== Q.slot) players[killer].kills++;   // matarse con la propia granada no suma
-  if (!reduceMotion) shake = Math.max(shake, 0.28);
   rumble(Q, 300, 1, 0.8); sfx("death");
   Q.lives = Math.max(0, Q.lives - 1); Q.heat = 0; Q.overheat = false;
   if (Q.lives > 0) { Q.respawnT = RESPAWN.delay; Q.beam = false; }
   else { Q.out = true; G.toast = { text: `${Q.team.name} queda afuera`, color: Q.team.color, t: 1.8 }; }
-  if (G.state === "play" && active().filter(p => !p.out).length <= 1) G.slowT = 0.7;   // la muerte que define, en cámara lenta
+  const final = G.state === "play" && active().filter(p => !p.out).length <= 1;
+  if (final) G.slowT = 0.7;   // la muerte que define, en cámara lenta
+  camShake(final ? "final" : "death");
 }
 // dónde vuelve: el lugar de salida más lejos de los que están vivos (entre los dos mejores, al azar)
 function pickSpawn(Q) {
@@ -796,7 +1001,7 @@ function update(dt) {
     let name = HANG, i = Math.floor(Math.max(0, H.t - GRAB_T) * 12) % anim(HANG).f.length;
     if (grabbing) { name = "hang_in"; i = GRAB_FRAMES[Math.min(GRAB_FRAMES.length - 1, Math.floor(H.t / 0.05))]; }
     P.x = H.cx - P.facing * HANG_WALL * S.char; P.y = H.top - (HANG_HAND[10] + HANG_GRIP) * S.char;
-    setDraw(name, i, P.x, P.y);
+    setDraw(name, i, P.x, P.y + (grabbing && RIGNOW.grabAlign ? (HANG_HAND[10] - F(name, i)[10]) * S.char : 0));
     if (I.jp) H.jumpT = HANG_BUFFER + (grabbing ? GRAB_T - H.t : 0); else H.jumpT = (H.jumpT || 0) - dt;
     if (H.jumpT > 0 && !grabbing) {
       if (dir === -P.facing) wallJump(H);
@@ -952,7 +1157,7 @@ function update(dt) {
     } else if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
     else {
       const [a, b, c, e] = JFX.vy, vy = P.vy;
-      if (vy >= e && FLIP_ANG) { name = "double_jump"; idx = 8; drawK = JFX.dblScale; }
+      if (vy >= e && FLIP_ANG) { name = "double_jump"; idx = RIGNOW.flipFall; drawK = JFX.dblScale; }
       else { name = "jump"; idx = vy < a ? JP.rise[0] : vy < b ? (JP.rise[1] ?? JP.apex) : vy < c && P.jump ? JP.apex : (JP.fall[JP.fall.length - 1] ?? JP.apex); }
     }
     drawY = centered ? centered.y : P.y + anim(name).f[idx][8] * S.char;
@@ -1027,6 +1232,7 @@ function endPlayer(dt) {
   if (P.invT > 0) P.invT -= dt;
   if (P.hudGrenT > 0) P.hudGrenT -= dt;
   if (P.hudHpT > 0) P.hudHpT -= dt;
+  if (P.hudHitT > 0) P.hudHitT -= dt;
   if (P.dropT > 0 && (P.dropT -= dt) <= 0) P.dropS = null;
   // el arma se enfría: sola después de un rato sin tirar; trabada, hasta 0, largando vapor
   P.heatT += dt;
@@ -1065,9 +1271,7 @@ function updateWorld(dt) {
     }
     if (dead || B.x < -100 || B.x > AW + 100) bullets.splice(b, 1);
   }
-  for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; if (E.drag) { const d = Math.exp(-E.drag * dt); E.vx *= d; E.vy *= d; } E.x += E.vx * dt; E.y += E.vy * dt; if (E.t <= 0) fx.splice(i, 1); }
-  if (shake > 0) shake -= dt;
-  bumpY *= Math.pow(JFX.bumpDecay, dt * 60); if (bumpY < 0.3) bumpY = 0;
+  for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; if (E.drag) { const d = Math.exp(-E.drag * dt); E.vx *= d; E.vy *= d; } E.x += E.vx * dt; E.y += E.vy * dt; if (E.vr) { E.rot += E.vr * dt; E.spin += E.vs * dt; } if (E.t <= 0) fx.splice(i, 1); }
 }
 
 /* ---------- power-ups: granadas y salud ---------- */
@@ -1302,7 +1506,7 @@ function resetPlayer(p, [x, y], inv = 0) {
                      jump: null, hang: null, climb: null, landT: 0, flash: null, sqX: 1, sqY: 1, canDouble: true, flipT: 0, peakY: null,
                      hp: SET.hp, alive: true, hitT: 0, stunT: 0, invT: inv, dropS: null, dropT: 0, fireCD: 0, shotT: 1, skipLedge: null, wallLockT: 0,
                      heat: 0, heatT: 9, overheat: false, respawnT: 0, beam: false, grenades: GRENADE.count, grenCD: 0, throwT: 0, thrown: false, charging: false, charge: 0,
-                     meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0 });
+                     meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0, hudHitT: 0 });
   p.in = blankInput(); if (p.bot) Object.assign(p.bot, newBot());
 }
 function startMatch() {
@@ -1404,6 +1608,11 @@ const arenaSel = document.getElementById("arenaSel");
 for (const [k, a] of Object.entries(ARENAS)) { const o = document.createElement("option"); o.value = k; o.textContent = a.name || k; if (a === ARENA) o.selected = true; arenaSel.append(o); }
 arenaSel.addEventListener("change", () => { loadArena(arenaSel.value); previewLobby(); });
 segButtons("segBot", [["facil", "Fáciles"], ["normal", "Normales"], ["dificil", "Difíciles"]], () => SET.bot, v => { SET.bot = v; });
+// el personaje: el ranger 2D o el low-poly, para compararlos (C lo cambia también jugando)
+for (const id of ["segChar", "segFlashChar"]) {   // el del menú y el del panel del fogonazo
+  segButtons(id, Object.entries(CHARS).map(([k, c]) => [k, c.label]), () => CHAR_KEY, v => setChar(v));
+  document.querySelectorAll(`#${id} button`).forEach((b, i) => { b.dataset.v = Object.keys(CHARS)[i]; });
+}
 goBtn.addEventListener("click", startMatch);
 // ajustes de la granada: cada slider cambia GRENADE en el acto. "Guardar valores" los deja en la base del artifact
 // (tuning/grenade: los ve cualquiera que lo abra y Claude los lee para dejarlos fijos); abierta fuera del artifact,
@@ -1467,7 +1676,177 @@ document.getElementById("tuneReset").addEventListener("click", () => {
   for (const [k] of TUNE) tuneSet(k, k === "vyUp" ? -GRENADE_DEFAULT.vy : GRENADE_DEFAULT[k]);
   buildTune(); tuneDirty = true; tuneStatus("Volvieron los de fábrica: tocá Guardar para dejarlos");
 });
+// ajustes del fogonazo: los del personaje y el tiro elegidos (el selector de personaje del panel es el mismo del menú), en
+// el acto. En la prueba, el panel salta al último tiro (si no se está arrastrando un control). "Guardar valores" deja
+// todos en la base del artifact (tuning/flash: {values: {ranger: {parado: {scale, dx, dy}, corriendo, dos, agachado,
+// aire}, lowpoly: …}, savedAt}), como la granada; abierta fuera del artifact, en este navegador. Los guardados de antes
+// (un juego por personaje, sin tiros) valen para todos sus tiros. Fábrica vuelve sólo el tiro elegido
+const FLASH_TUNE = [["scale", "Tamaño", 0.4, 2.5, 0.05, "×"], ["dx", "Adelante (− atrás)", -40, 40, 1, "px"], ["dy", "Arriba (− abajo)", -40, 40, 1, "px"]];
+const FLASH_DOC = "tuning/flash", FLASH_LOCAL = "arena.flash.v1";
+let flashDb = null, flashDirty = false, flashTab = "parado", flashDrag = false;
+const flashStatus = t => { document.getElementById("flashOut").textContent = t; };
+function flashApply(v) {
+  if (!v || typeof v !== "object") return;
+  const put = (dst, vals) => { if (vals && typeof vals === "object") for (const [k] of FLASH_TUNE) if (typeof vals[k] === "number" && isFinite(vals[k])) dst[k] = vals[k]; };
+  for (const [ch, vals] of Object.entries(v)) {
+    if (!FLASH[ch] || !vals || typeof vals !== "object") continue;
+    if (typeof vals.scale === "number") for (const [t] of FLASH_KINDS) put(FLASH[ch][t], vals);   // los de antes: para todos
+    else for (const [t] of FLASH_KINDS) put(FLASH[ch][t], vals[t]);
+  }
+}
+function flashLocal(v) { try { localStorage.setItem(FLASH_LOCAL, JSON.stringify(v)); return true; } catch (e) { return false; } }
+// en la prueba, cada cambio muestra un fogonazo en la boca del cuadro de ahora, para verlo sin disparar
+function flashPreview() {
+  const Q = players[0];
+  if (G.mode === "test" && G.state === "play" && Q.alive) Q.flash = { t: 0, big: Q.aim === "two", v: (shotN++ % 3) + 1, seed: 0 };
+}
+// el panel sigue el último tiro de la prueba (lo llama fire)
+function flashFollow(Q) {
+  if (G.mode !== "test" || flashDrag || Q !== players[0]) return;
+  const t = flashKind(Q); if (t !== flashTab) { flashTab = t; buildFlashTune(); }
+}
+function buildFlashTune() {
+  const el = document.getElementById("flashTune"), V = FLASH[CHAR_KEY][flashTab]; el.innerHTML = "";
+  document.querySelectorAll("#segFlashKind button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === flashTab)));
+  for (const [k, label, min, max, st, unit] of FLASH_TUNE) {
+    const id = `flash_${k}`, lab = document.createElement("label"); lab.htmlFor = id;
+    lab.innerHTML = `<span>${label}</span><output></output><input type="range" id="${id}" min="${min}" max="${max}" step="${st}">`;
+    const inp = lab.querySelector("input"), out = lab.querySelector("output");
+    const show = () => { out.textContent = `${String(V[k]).replace(".", ",")} ${unit}`; };
+    inp.value = V[k]; show();
+    inp.addEventListener("input", () => { V[k] = +inp.value; show(); flashDirty = true; flashStatus("Cambios sin guardar"); flashPreview(); });
+    el.append(lab);
+  }
+}
+segButtons("segFlashKind", FLASH_KINDS, () => flashTab, v => { flashTab = v; buildFlashTune(); });
+document.querySelectorAll("#segFlashKind button").forEach((b, i) => { b.dataset.v = FLASH_KINDS[i][0]; });
+{ const el = document.getElementById("flashTune");   // mientras se arrastra un control, el panel no cambia de tiro solo
+  el.addEventListener("pointerdown", () => { flashDrag = true; });
+  for (const ev of ["pointerup", "pointercancel"]) window.addEventListener(ev, () => { flashDrag = false; }); }
+try { flashApply(JSON.parse(localStorage.getItem(FLASH_LOCAL) || "null")); } catch (e) { /* sin guardar */ }
+buildFlashTune();
+(async () => {
+  const db = window.claude?.use ? await window.claude.use("db").catch(() => null) : null;
+  if (!db) { flashStatus("Abierta fuera del artifact: Guardar los deja en este navegador"); return; }
+  flashDb = db;
+  try {
+    const snap = await db.doc(FLASH_DOC).get();
+    if (!snap.exists) { flashStatus("Todavía no se guardó nada en el artifact"); return; }
+    const d = snap.data();
+    if (!flashDirty) { flashApply(d.values); buildFlashTune(); }
+    flashStatus(`Guardados el ${tuneWhen(d.savedAt)}`);
+  } catch (e) { flashStatus("No pude leer los valores guardados"); }
+})();
+const flashBtn = document.getElementById("flashSave");
+flashBtn.addEventListener("click", async () => {
+  const values = structuredClone(FLASH), savedAt = new Date().toISOString();
+  if (!flashDb) { flashDirty = false; flashStatus(flashLocal(values) ? "Guardados en este navegador" : "Este navegador no deja guardar"); return; }
+  flashBtn.disabled = true; flashStatus("Guardando…");
+  const put = () => flashDb.doc(FLASH_DOC).set({ values, savedAt });
+  try {
+    try { await put(); } catch (e) { if (e?.code !== "unavailable") throw e; await new Promise(r => setTimeout(r, 600 + Math.random() * 600)); await put(); }
+    flashDirty = false; flashLocal(values); flashStatus(`Guardados el ${tuneWhen(savedAt)}`);
+  } catch (e) {
+    flashStatus(e?.code === "invalid_argument" ? "No tenés permiso para guardar en este artifact" : `No se pudo guardar (${e?.code || "error"})`);
+  } finally { flashBtn.disabled = false; }
+});
+document.getElementById("flashReset").addEventListener("click", () => {
+  Object.assign(FLASH[CHAR_KEY][flashTab], FLASH_DEFAULT[CHAR_KEY][flashTab]);
+  const tiro = FLASH_KINDS.find(([t]) => t === flashTab)[1];
+  buildFlashTune(); flashDirty = true; flashStatus(`Volvieron los de fábrica de ${tiro} (${CHARS[CHAR_KEY].label}): tocá Guardar para dejarlos`); flashPreview();
+});
+// la vista del fogonazo: el personaje elegido en la animación del tiro elegido, de cerca y disparando solo, con el mismo
+// dibujo que el juego (drawSprite y drawFlash sobre otro lienzo, con un jugador de mentira). Pausa y ◀ ▶ pasan cuadro por
+// cuadro con el fogonazo quieto (el primer dibujo); ¼× es cámara lenta; la cruz es la boca medida, sin los corrimientos.
+// Corre sólo mientras se ve
+const fpCv = document.getElementById("flashPrev"), fpG = fpCv.getContext("2d");
+const FP = { play: true, speed: 1, t: 0, i: 0, muzzle: true, on: false, last: 0, info: "" };
+const FP_VIEW = { w: 250, feetX: 95, feetY: 122 };   // lo que se ve, en px del juego: 250 de ancho (16:9), y dónde van los pies
+const fpQ = { x: 0, y: 0, facing: 1, sqX: 1, sqY: 1, state: "ground", invT: 0, flashT: 0, hitT: 0, team: TEAM[0], aim: "one", flash: null, art: null,
+              draw: { name: "shoot", i: 0, x: 0, y: 0, k: 1, rot: 0, center: false } };
+// la animación de cada tiro, cada cuánto dispara y si es el grande (como en el juego)
+function fpShot(tiro) {
+  const big = tiro === "dos", per = Math.max(0.1, big ? FEEL.rate2 : FEEL.rate1);
+  const name = tiro === "corriendo" ? RUN() : tiro === "dos" ? "shoot2h" : tiro === "agachado" ? "crouch_shoot" : tiro === "aire" ? "jump_shoot" : "shoot";
+  return { name, per, big };
+}
+function fpFrame(tiro, name, t, per) {
+  if (tiro === "corriendo") return Math.floor(t * 12 * RUN_SPEED / 260) % anim(name).f.length;
+  if (tiro === "aire") return AIR_SHOT;
+  return shotFrame(name, t % per, tiro === "agachado" ? 0.15 : per);
+}
+function fpDraw() {
+  const r = fpCv.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1), W = Math.max(1, Math.round(r.width * dpr)), H = Math.round(W * 9 / 16);
+  if (fpCv.width !== W || fpCv.height !== H) { fpCv.width = W; fpCv.height = H; }
+  const g = fpG, k = W / FP_VIEW.w;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  const bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#4f79b8"); bg.addColorStop(1, "#22355a");
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  if (!ready) return;
+  const { name, per, big } = fpShot(flashTab), n = anim(name).f.length;
+  const i = FP.play ? fpFrame(flashTab, name, FP.t, per) : Math.min(FP.i, n - 1), age = FP.play ? FP.t % per : 0;
+  g.setTransform(k, 0, 0, k, 0, 0);
+  g.fillStyle = "#1a2236"; g.fillRect(0, FP_VIEW.feetY + FOOT_SINK, FP_VIEW.w, FP_VIEW.w);   // el piso
+  const Q = fpQ, f = anim(name).f[i];
+  Q.art = artOf(CHAR_KEY, TEAM[0]); Q.x = FP_VIEW.feetX; Q.y = FP_VIEW.feetY; Q.aim = big ? "two" : "one";
+  Object.assign(Q.draw, { name, i, x: Q.x, y: Q.y + (flashTab === "aire" ? f[8] * S.char : 0) });
+  drawSprite(Q, g);
+  const keep = P;
+  if (age < FXT.flashA + FXT.flashB) { Q.flash = { t: age, big, v: (Math.floor(FP.t / per) % 3) + 1 }; drawFlash(Q, g); }
+  if (FP.muzzle) {
+    P = Q; const m = muzzleNow();
+    g.strokeStyle = "#ff3df2"; g.lineWidth = 1.5 / k;
+    g.beginPath(); g.moveTo(m.x - 5, m.y); g.lineTo(m.x + 5, m.y); g.moveTo(m.x, m.y - 5); g.lineTo(m.x, m.y + 5); g.stroke();
+  }
+  P = keep;
+  const info = `${name} · cuadro ${i + 1} de ${n}${FP.play ? "" : " · fogonazo quieto"}`;
+  if (info !== FP.info) document.getElementById("fpInfo").textContent = FP.info = info;
+}
+function fpTick(now) {
+  if (!FP.on) return;
+  const dt = FP.last ? Math.min(0.05, (now - FP.last) / 1000) : 0; FP.last = now;
+  if (FP.play) FP.t += dt * FP.speed;
+  fpDraw(); requestAnimationFrame(fpTick);
+}
+new IntersectionObserver(es => {
+  const v = es.some(e => e.isIntersecting);
+  if (v && !FP.on) { FP.on = true; FP.last = 0; requestAnimationFrame(fpTick); } else if (!v) FP.on = false;
+}).observe(fpCv);
+const fpPlay = document.getElementById("fpPlay");
+function fpSetPlay(on) {
+  if (!on && FP.play) { const sh = fpShot(flashTab); FP.i = fpFrame(flashTab, sh.name, FP.t, sh.per); }
+  FP.play = on; fpPlay.textContent = on ? "Pausa" : "Seguir"; fpDraw();
+}
+fpPlay.addEventListener("click", () => fpSetPlay(!FP.play));
+for (const [id, d] of [["fpPrev", -1], ["fpNext", 1]]) document.getElementById(id).addEventListener("click", () => {
+  fpSetPlay(false); const n = anim(fpShot(flashTab).name).f.length; FP.i = (Math.min(FP.i, n - 1) + d + n) % n; fpDraw();
+});
+segButtons("segFpSpeed", [[1, "1×"], [0.25, "¼×"]], () => FP.speed, v => { FP.speed = v; });
+document.getElementById("fpMuzzle").addEventListener("change", e => { FP.muzzle = e.target.checked; fpDraw(); });
 document.getElementById("testBtn").addEventListener("click", startTest);
+// pantalla completa: el escenario entero (la arena con el menú encima) ocupa la pantalla, en 16:9 con franjas negras.
+// Esc sale (lo maneja el navegador). Donde el navegador no la da (la niega, no la tiene o, como el panel de la app de
+// Claude, no contesta el pedido: a los 0,6 s se la da por perdida), el escenario tapa la ventana (fsMax, la clase .max);
+// de ahí se sale con el mismo botón o con Esc en el menú
+const stageEl = cv.parentElement, fsBtn = document.getElementById("fsBtn");
+const fsNow = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+const fsReal = !!(stageEl.requestFullscreen || stageEl.webkitRequestFullscreen) && (document.fullscreenEnabled ?? document.webkitFullscreenEnabled ?? true) !== false;
+let fsMax = false;
+const fsLabel = () => { fsBtn.textContent = fsNow() || fsMax ? "Salir de pantalla completa" : "Pantalla completa"; };
+function setMax(on) { fsMax = on; stageEl.classList.toggle("max", on); document.body.classList.toggle("maxed", on); fsLabel(); resize(); cv.focus(); }
+fsBtn.addEventListener("click", async () => {
+  if (fsMax) { setMax(false); return; }
+  if (fsNow()) { try { await (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) { /* ya salió */ } return; }
+  if (!fsReal) { setMax(true); return; }
+  const req = Promise.resolve((stageEl.requestFullscreen || stageEl.webkitRequestFullscreen).call(stageEl));
+  const ok = await Promise.race([req.then(() => true, () => false), new Promise(r => setTimeout(() => r(false), 600))]);
+  if (!ok && !fsNow()) setMax(true);
+  cv.focus();
+});
+for (const ev of ["fullscreenchange", "webkitfullscreenchange"]) document.addEventListener(ev, () => {
+  if (fsNow() && fsMax) { setMax(false); return; }   // el pedido llegó tarde: queda la de verdad
+  fsLabel(); resize(); cv.focus();
+});
 // en el menú: un joystick que todavía no juega se suma en el primer lugar que tenga un bot (o nadie); Start empieza
 function lobbyPads() {
   for (const gp of pads) {
@@ -1501,7 +1880,9 @@ const plateSrc = A => `arenas/${A.plate.src}`;
 const artFiles = [...new Set([...Object.values(KIT.pieces), ...Object.values(KIT.layers)].map(p => p.src)
   .concat(Object.values(ARENAS).filter(A => A.plate).map(plateSrc))
   .concat(Object.values(ARENAS).flatMap(A => Object.values(A.pieces || {}).map(pieceSrc)))
-  .concat(Object.values(GREN).flatMap(a => Object.values(a).map(p => p.src))))];
+  .concat(Object.values(GREN).flatMap(a => Object.values(a).map(p => p.src)))
+  .concat(Object.values(HUDART).flatMap(a => Object.values(a).map(p => p.src)))
+  .concat(Object.values(PICKART).flatMap(a => Object.values(a).map(p => p.src))))];
 Promise.all(artFiles.map(src => new Promise((ok, fail) => { const im = new Image(); im.onload = () => { IMG[src] = im; ok(); }; im.onerror = () => fail(src); im.src = src; })))
   .then(() => { artState = "ok"; }, src => { artState = "error"; lobbyMsg.textContent = `No se pudo cargar la arena (${src}).`; });
 function surface(w, h) { const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; return [c, g]; }
@@ -1619,7 +2000,7 @@ const FLOOR_S = 980 * ZOOM, FLOOR_75 = 475.5, LAYER_Z = ZOOM / 0.75;   // las ca
 // Con ARENA.color, la lámina va graduada como fondo, y los recortes de plate.solid y las piezas, como plataformas
 function eachPainted(fn) {
   for (const o of ARENA.objects || []) {
-    const Pc = painted(o), raw = Pc && IMG[pieceSrc(Pc)]; if (!raw) continue;
+    const Pc = painted(o), raw = Pc && IMG[pieceSrc(Pc)]; if (!raw || moves(o)) continue;   // las que se mueven, cada cuadro
     fn(o, Pc, graded(raw, "plataformas", pieceSrc(Pc)), raw.naturalWidth / Pc.w, raw.naturalHeight / Pc.h);
   }
 }
@@ -1712,34 +2093,38 @@ function recolor(img, T) {
 }
 
 /* ---------- dibujo ---------- */
-function drawSprite(Q) {
+function drawSprite(Q, gc = ctx) {
   const d = Q.draw, f = anim(d.name).f[d.i]; if (!f || !Q.art) return;
   const blink = Q.invT > 0 && Math.floor(Q.invT / 0.08) % 2;   // invulnerable: parpadea entre entero y casi transparente
-  const frame = g => ctx.drawImage(Q.art, g[0], g[1], g[2], g[3], -PIV_X + g[4], -PIV_Y + g[5], g[2], g[3]);
+  const frame = g => gc.drawImage(Q.art, g[0], g[1], g[2], g[3], -PIV_X + g[4], -PIV_Y + g[5], g[2], g[3]);
   const sink = Q.state === "hang" || Q.state === "climb" ? 0 : FOOT_SINK;
-  ctx.save(); ctx.translate(Math.round(d.x), Math.round(d.y) + sink);
+  gc.save(); gc.translate(Math.round(d.x), Math.round(d.y) + sink);
   const qx = Q.sqX * (d.k || 1), qy = Q.sqY * (d.k || 1), fs = Q.facing < 0 ? -1 : 1;
   if (d.center) {
     const ux = f[4] + f[2] / 2 - PIV_X, uy = f[5] + f[3] / 2 - PIV_Y;
-    ctx.translate(fs * S.char * ux, S.char * uy); ctx.rotate(fs * d.rot); ctx.scale(fs * S.char * qx, S.char * qy); ctx.translate(-ux, -uy);
-  } else ctx.scale(fs * S.char * qx, S.char * qy);
-  if (blink) ctx.globalAlpha = 0.28;
+    gc.translate(fs * S.char * ux, S.char * uy); gc.rotate(fs * d.rot); gc.scale(fs * S.char * qx, S.char * qy); gc.translate(-ux, -uy);
+  } else gc.scale(fs * S.char * qx, S.char * qy);
+  if (blink) gc.globalAlpha = 0.28;
   frame(f);
-  if (Q.flashT > 0 || Q.hitT > 0 || (Q.invT > 0 && !blink)) { ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = Q.hitT > 0 ? 0.9 : Q.invT > 0 ? 0.35 : 0.7; frame(f); }
-  ctx.restore();
+  if (Q.flashT > 0 || Q.hitT > 0 || (Q.invT > 0 && !blink)) { gc.globalCompositeOperation = "lighter"; gc.globalAlpha = Q.hitT > 0 ? 0.9 : Q.invT > 0 ? 0.35 : 0.7; frame(f); }
+  gc.restore();
 }
-function drawFlash(Q) {
-  P = Q; const Fl = Q.flash, m = muzzleNow(), age = Fl.t, q = age / (FXT.flashA + FXT.flashB), k = S.char / 0.8 * (Fl.big ? 1.3 : 1) * FXK;
-  const name = (age < FXT.flashA ? "a" : "b") + Fl.v, p = FX.muzzle.pieces[name];
-  ctx.save(); ctx.translate(m.x, m.y); ctx.scale(Q.facing, 1);
+function drawFlash(Q, gc = ctx) {
+  P = Q; const Fl = Q.flash, Ft = FLASH[CHAR_KEY][flashKind(Q)], m = muzzleNow(), age = Fl.t, q = age / (FXT.flashA + FXT.flashB);
+  const k = S.char / 0.8 * (Fl.big ? 1.3 : 1) * FXK * Ft.scale, name = (age < FXT.flashA ? "a" : "b") + Fl.v, p = FX.muzzle.pieces[name];
+  gc.save(); gc.translate(m.x + Q.facing * Ft.dx, m.y - Ft.dy); gc.scale(Q.facing, 1);
   const R = FX.muzzle.len * k * (0.5 + 0.2 * q);
-  ctx.save(); ctx.beginPath(); ctx.rect(-4, -200, 400, 400); ctx.clip();
-  ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.85 * (1 - q);
-  const gr = ctx.createRadialGradient(2, 0, 1, R * 0.45, 0, R);
-  gr.addColorStop(0, "rgba(235,255,255,0.9)"); gr.addColorStop(0.45, `rgba(${Q.team.glow},0.45)`); gr.addColorStop(1, `rgba(${Q.team.glow},0)`);
-  ctx.fillStyle = gr; ctx.beginPath(); ctx.ellipse(R * 0.45, 0, R, R * 0.65, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-  if (FX_IMG[`muzzle/${name}`].complete) ctx.drawImage(FX_IMG[`muzzle/${name}`], -p.ax * k, -p.ay * k, p.w * k, p.h * k);
-  ctx.restore();
+  gc.save(); gc.beginPath(); gc.rect(-4, -200, 400, 400); gc.clip();
+  gc.globalCompositeOperation = "lighter"; gc.globalAlpha = 0.6 * (1 - q);
+  const gr = gc.createRadialGradient(2, 0, 1, R * 0.45, 0, R);
+  gr.addColorStop(0, "rgba(255,255,255,0.8)"); gr.addColorStop(0.45, `rgba(${Q.team.glow},0.45)`); gr.addColorStop(1, `rgba(${Q.team.glow},0)`);
+  gc.fillStyle = gr; gc.beginPath(); gc.ellipse(R * 0.45, 0, R, R * 0.65, 0, 0, Math.PI * 2); gc.fill(); gc.restore();
+  // la estrella low-poly del color del equipo (antes, el dibujo cian de backgrounds/ranger_fx): se abre en el primer
+  // tramo y se cierra en el segundo
+  const grow = age < FXT.flashA ? 0.7 + 0.3 * age / FXT.flashA : 1 - 0.55 * Math.min(1, (age - FXT.flashA) / FXT.flashB);
+  gc.globalAlpha = age < FXT.flashA ? 1 : 0.9;
+  lpStar(gc, FX.muzzle.len * k * 1.05, Fl.big ? 7 : 5, 0.62, Math.floor((Fl.seed || 0) * 1000), grow, lpTones(Q.team.glow));
+  gc.restore();
 }
 // el número del jugador en un círculo del color del equipo, con aro oscuro (como en prototypes/arena/refs/refineria.webp)
 function badge(g, x, y, R, Q) {
@@ -1787,6 +2172,18 @@ function drawPickup(K) {
   gr.addColorStop(0, `rgba(${c.glow},0.9)`); gr.addColorStop(0.45, `rgba(${c.glow},0.35)`); gr.addColorStop(1, `rgba(${c.glow},0)`);
   ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
   ctx.globalCompositeOperation = "source-over";
+  // el dibujo low-poly: flota y se mece un poco, con un aro redondo de su color que se abre una vez por segundo y un
+  // brillo cada tanto (el mismo dibujo encima, sumado)
+  const art = PICKART.pickups && PICKART.pickups[K.kind], aim = art && IMG[art.src];
+  if (aim) {
+    const ring = (a * 1.1 + K.seed) % 1, h = 46 * sc, w = h * art.w / art.h, rr = Math.max(w, h) * 0.6 + 22 * ring;
+    ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.lineWidth = 4 * (1 - ring) + 1; ctx.strokeStyle = `rgba(${c.glow},${0.8 * (1 - ring)})`; ctx.stroke();
+    ctx.translate(cx, cy); ctx.rotate(Math.sin(a * 2.1 + K.seed) * 0.08);
+    ctx.drawImage(aim, -w / 2, -h / 2, w, h);
+    const sh = (a * 0.8 + K.seed) % 2.2;
+    if (sh < 0.35) { ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.45 * Math.sin(sh / 0.35 * Math.PI); ctx.drawImage(aim, -w / 2, -h / 2, w, h); }
+    ctx.restore(); return;
+  }
   // late: un aro de su color que se abre y se apaga, una vez por segundo
   const ring = (a * 1.1 + K.seed) % 1;
   ctx.beginPath(); ctx.roundRect(cx - S2 - 22 * ring, cy - S2 - 22 * ring, (S2 + 22 * ring) * 2, (S2 + 22 * ring) * 2, 8 + 14 * ring);
@@ -1893,53 +2290,87 @@ function drawShadow(Q) {
   const shY = supportAt(Q.x, Q.y, Q) ? Q.y : (landingTop(Q.x, Q.y, AH + 1) ?? AH), hgt = Math.max(0, shY - Q.y), w = 30 * S.char * Math.max(0.4, 1 - hgt / 220);
   ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(Q.x, shY + FOOT_SINK - 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
 }
-const HUD_K = 0.7;   // el tamaño de las tarjetas de arriba (Pablo, 2026-10-16: 30% más chicas)
-function drawHud() {
-  ctx.save(); ctx.setTransform(DS, 0, 0, DS, 0, 0);
-  // un panel por jugador, arriba al centro: el círculo con el número, la salud de la vida actual en segmentos del color
-  // del equipo (los golpes perdidos, oscuros) y las vidas que le quedan en dos cifras. Esperando volver, la cuenta.
-  // Todo al HUD_K de su tamaño (Pablo: 70%), letras, barras, íconos y márgenes, centrado en la pantalla
-  const act = active(), W = 196, gap = 18, x0 = (VIEW_W / HUD_K - (act.length * W + (act.length - 1) * gap)) / 2;
-  ctx.setTransform(DS * HUD_K, 0, 0, DS * HUD_K, 0, 0);
+// el HUD de arriba a la derecha: ver drawHud. HUD2: medidas en px de pantalla (960 × 540)
+const HUD2 = { r: 18, gap: 60, right: 14, top: 8, ring: 4, segGap: 0.12 };
+// el retrato: el dibujo de backgrounds/ranger_hud (HUDART.portrait), recoloreado por equipo como el atlas, con la cara
+// según el momento: golpeado un rato después de cada golpe (hudHitT), fuera de combate esperando volver o afuera. Sin el
+// dibujo (o con el low-poly, que no tiene), la cabeza del primer cuadro de idle del atlas, recortada con RIG.crop.
+// PORTRAIT_FIT: el ancho del dibujo y su corrimiento, en diámetros del círculo (la misma escala para las tres caras, así
+// no salta)
+const PORTRAIT_FIT = { w: 1.0, x: -0.07, y: 0.03 };
+function portraitsOf(Q) {
+  if (Q.portraits) return Q.portraits;
+  const P = HUDART.portrait; if (!P || !Object.values(P).every(p => IMG[p.src])) return null;   // todavía cargando
+  return (Q.portraits = Object.fromEntries(Object.entries(P).map(([k, p]) => [k, recolor(IMG[p.src], Q.team)])));
+}
+function drawPortrait(g, Q, cx, cy, R) {
+  g.save(); g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.clip();
+  g.translate(2 * cx, 0); g.scale(-1, 1);   // espejado: miran a la izquierda, hacia la arena (Pablo: miraban para afuera)
+  g.fillStyle = Q.team.color; g.globalAlpha *= 0.35; g.fillRect(cx - R, cy - R, R * 2, R * 2); g.globalAlpha /= 0.35;
+  const faces = RIGNOW.hud ? portraitsOf(Q) : null;
+  if (faces) {
+    const face = Q.out || (!Q.alive && G.state === "play") ? "ko" : Q.hudHitT > 0 ? "hit" : "normal";
+    const P = HUDART.portrait, D = R * 2, k = D * PORTRAIT_FIT.w / P.normal.w, p = P[face];
+    g.drawImage(faces[face], cx - p.w * k / 2 + D * PORTRAIT_FIT.x, cy - R + D * PORTRAIT_FIT.y, p.w * k, p.h * k);
+  } else if (Q.art) {
+    const C = RIGNOW.crop, f = anim("idle").f[0], [fx, fy, fw] = [f[0], f[1], f[2]], w = fw * C[2], h = f[3] * C[3], k = (R * 2.15) / Math.max(w, h);
+    g.drawImage(Q.art, fx + fw * C[0], fy + f[3] * C[1], w, h, cx - w * k / 2, cy - R * 0.95, w * k, h * k);
+  }
+  if (Q.hitT > 0) { g.fillStyle = "rgba(255,70,60,0.45)"; g.fillRect(cx - R, cy - R, R * 2, R * 2); }   // recién golpeado
+  g.restore();
+}
+function drawMiniHud() {
+  const act = active(), R = HUD2.r, n = SET.hp;
   act.forEach((Q, k) => {
-    const x = x0 + k * (W + gap), y = 8, cy = y + 19, R = 18;
-    ctx.globalAlpha = Q.out ? 0.4 : 1;
-    // marco: oscuro, redondeado, con borde del color del equipo
-    ctx.beginPath(); ctx.roundRect(x + R, y + 6, W - R, 26, 7); ctx.fillStyle = "#151a28"; ctx.fill();
-    ctx.lineWidth = 2; ctx.strokeStyle = "#0b0e18"; ctx.stroke();
-    ctx.beginPath(); ctx.roundRect(x + R + 2, y + 8, W - R - 4, 22, 5); ctx.lineWidth = 1.5; ctx.strokeStyle = Q.team.color; ctx.globalAlpha *= 0.7; ctx.stroke(); ctx.globalAlpha = Q.out ? 0.4 : 1;
-    // salud: segmentos
-    const sx0 = x + R + 22, sx1 = x + W - 44, n = SET.hp, sw = (sx1 - sx0 - (n - 1) * 3) / n, alive = Q.alive || G.state === "lobby";
-    const hpFlash = Q.hudHpT > 0 && Math.floor(Q.hudHpT / 0.08) % 2;   // recién curado: titila en blanco
-    for (let h = 0; h < n; h++) {
-      const on = alive && h < Q.hp, hx = sx0 + h * (sw + 3);
-      ctx.fillStyle = on ? (hpFlash ? "#ffffff" : Q.team.color) : "#2a3142"; ctx.fillRect(hx, y + 12, sw, 13);
-      if (on) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillRect(hx, y + 12, sw, 3); }
-    }
-    ctx.fillStyle = Q.team.color; ctx.globalAlpha *= 0.5; ctx.fillRect(sx0, y + 27, sx1 - sx0, 2); ctx.globalAlpha = Q.out ? 0.4 : 1;
-    if (!Q.alive && !Q.out && G.state === "play") {   // esperando volver
-      ctx.font = "700 13px 'JetBrains Mono', Menlo, monospace"; ctx.textAlign = "center"; ctx.fillStyle = "#eef0f6";
-      ctx.fillText(`vuelve en ${Q.respawnT.toFixed(1).replace(".", ",")}`, (sx0 + sx1) / 2, y + 23);
-    }
-    // granadas: debajo del panel, el dibujo de la granada por cada una que queda (las gastadas, en sombra) sobre una tira
-    // oscura; en la prueba, sin límite, una sola con ∞. Recién recargadas, brillan
-    if (Q.alive || G.state === "lobby") {
-      const inf = G.mode === "test" && G.state !== "lobby", ih = 17, iw = GREN_HUD ? ih * GREN_HUD.w / GREN_HUD.h : ih * 0.9, st = iw + 2;
-      const gx0 = sx0 - 2, gy = y + 35, n = inf ? 1 : GRENADE.count, rowW = inf ? iw + 22 : n * st - 2;
-      const flash = Q.hudGrenT > 0 && Math.floor(Q.hudGrenT / 0.08) % 2;
-      ctx.fillStyle = "rgba(11,14,24,0.8)"; ctx.beginPath(); ctx.roundRect(gx0 - 3, gy - 2, rowW + 6, ih + 4, 4); ctx.fill();
-      for (let gI = 0; gI < n; gI++) grenIcon(ctx, gx0 + gI * st, gy, ih, inf || gI < Q.grenades, flash);
-      if (inf) {
-        ctx.font = "700 19px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.lineJoin = "round"; ctx.lineWidth = 4;
-        ctx.strokeStyle = "#0b0e18"; ctx.strokeText("∞", gx0 + iw + 3, gy + ih - 1); ctx.fillStyle = "#ffd23a"; ctx.fillText("∞", gx0 + iw + 3, gy + ih - 1);
+    const cx = VIEW_W - HUD2.right - R - HUD2.ring - (act.length - 1 - k) * HUD2.gap, cy = HUD2.top + 12 + R;
+    const alive = Q.alive || G.state === "lobby", waiting = !Q.alive && !Q.out && G.state === "play";
+    ctx.globalAlpha = Q.out ? 0.35 : 1;
+    // fondo y retrato
+    ctx.beginPath(); ctx.arc(cx, cy, R + HUD2.ring + 1.5, 0, Math.PI * 2); ctx.fillStyle = "rgba(11,14,24,0.85)"; ctx.fill();
+    drawPortrait(ctx, Q, cx, cy, R);
+    if (waiting || Q.out) {   // apagado: esperando volver o afuera
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fillStyle = "rgba(11,14,24,0.45)"; ctx.fill();
+      if (waiting) {
+        ctx.font = "700 14px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillStyle = "#ffffff"; ctx.fillText(Math.ceil(Q.respawnT).toString(), cx, cy + 1); ctx.textBaseline = "alphabetic";
       }
     }
-    // vidas: dos cifras en una caja oscura
-    ctx.fillStyle = "#0b0e18"; ctx.beginPath(); ctx.roundRect(x + W - 39, y + 10, 33, 18, 4); ctx.fill();
-    ctx.font = "700 15px 'JetBrains Mono', Menlo, monospace"; ctx.textAlign = "center"; ctx.fillStyle = Q.lives > 0 || G.state === "lobby" ? "#ffffff" : "#5a6378";
-    ctx.fillText(String(Q.lives).padStart(2, "0"), x + W - 22.5, y + 24);
-    badge(ctx, x + R, cy, R, Q);
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.lineWidth = 1.5; ctx.strokeStyle = "#0b0e18"; ctx.stroke();
+    // la salud: un arco del lado derecho, de las 7 y media a la 1 y media, un tramo por golpe (del de abajo al de arriba)
+    const a0 = Math.PI * 0.75, a1 = -Math.PI * 0.25, span = a0 - a1, seg = span / n, rr = R + HUD2.ring / 2 + 1;
+    const hpFlash = Q.hudHpT > 0 && Math.floor(Q.hudHpT / 0.08) % 2;
+    ctx.lineCap = "butt"; ctx.lineWidth = HUD2.ring;
+    for (let h = 0; h < n; h++) {
+      const on = alive && h < Q.hp, s0 = a0 - h * seg - HUD2.segGap / 2, s1 = a0 - (h + 1) * seg + HUD2.segGap / 2;
+      ctx.beginPath(); ctx.arc(cx, cy, rr, s0, s1, true); ctx.strokeStyle = on ? (hpFlash ? "#ffffff" : Q.team.color) : "#2a3142"; ctx.stroke();
+    }
+    // el número arriba, como el marcador de la cabeza
+    badge(ctx, cx, HUD2.top + 6, 7, Q);
+    // las vidas: grande, abajo a la izquierda
+    ctx.font = "700 17px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = 4;
+    const lx = cx - R + 1, ly = cy + R + 3;
+    ctx.strokeStyle = "#0b0e18"; ctx.strokeText(String(Q.lives), lx, ly);
+    ctx.fillStyle = Q.lives > 0 || G.state === "lobby" ? "#ffffff" : "#5a6378"; ctx.fillText(String(Q.lives), lx, ly);
+    // las granadas: chiquitas, abajo a la derecha; en la prueba, una con ∞
+    if (alive) {
+      const inf = G.mode === "test" && G.state !== "lobby", ih = 8, iw = GREN_HUD ? ih * GREN_HUD.w / GREN_HUD.h : ih * 0.9, st = iw + 1;
+      const cnt = inf ? 1 : GRENADE.count, gx = cx + 2, gy = cy + R - 1, flash = Q.hudGrenT > 0 && Math.floor(Q.hudGrenT / 0.08) % 2;
+      for (let gI = 0; gI < cnt; gI++) grenIcon(ctx, gx + gI * st, gy, ih, inf || gI < Q.grenades, flash);
+      if (inf) {
+        ctx.font = "700 10px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.lineWidth = 3;
+        ctx.strokeStyle = "#0b0e18"; ctx.strokeText("∞", gx + iw + 1, gy + ih - 0.5); ctx.fillStyle = "#ffd23a"; ctx.fillText("∞", gx + iw + 1, gy + ih - 0.5);
+      }
+    }
   });
+  ctx.globalAlpha = 1;
+}
+function drawHud() {
+  ctx.save(); ctx.setTransform(DS, 0, 0, DS, 0, 0);
+  // arriba a la derecha, chico (Pablo, 2026-10-17, como los party games): por jugador, su retrato en un círculo con el
+  // número arriba (el mismo del marcador sobre la cabeza), la salud en un arco alrededor (un tramo por golpe, del color del
+  // equipo; los perdidos, oscuros), las vidas en grande abajo a la izquierda y las granadas en chiquito abajo. Esperando
+  // volver, el retrato apagado con la cuenta; afuera, todo apagado
+  drawMiniHud();
   ctx.setTransform(DS, 0, 0, DS, 0, 0);
   ctx.globalAlpha = 1; ctx.textAlign = "center";
   const banner = (text, sub, color = "#ffffff") => {
@@ -1959,16 +2390,16 @@ function drawHud() {
   ctx.restore();
 }
 function render() {
-  const sx = shake > 0 ? (Math.random() - 0.5) * 6 : 0, sy = shake > 0 ? (Math.random() - 0.5) * 6 : 0;
+  const [sx, sy] = camOffset();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (artState !== "ok") { ctx.fillStyle = "#2a6fd0"; ctx.fillRect(0, 0, cv.width, cv.height); drawHud(); return; }
   if (bakedDS !== DS || needBake) bake();
   ctx.fillStyle = "#2a6fd0"; ctx.fillRect(0, 0, cv.width, cv.height);
-  const ox = Math.round(sx * DS), oy = Math.round((sy + bumpY) * DS);
+  const ox = Math.round(sx * DS), oy = Math.round(sy * DS);
   ctx.drawImage(baked.back, ox, oy);
   ctx.setTransform(DS * W2S, 0, 0, DS * W2S, ox, oy);
   const live = players.filter(p => p.alive && p.ctrl !== "off");
-  drawObjects(true);   // objetos de fondo: no chocan, oscurecidos
+  drawObjects(true);   // objetos de fondo (no chocan, oscurecidos) y el cuerpo de las pintadas que se mueven
   for (const Bm of beams) drawBeam(Bm);
   for (const Q of live) if (Q.state === "hang") drawSprite(Q);   // colgados: detrás del canto
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(baked.solid, ox, oy);
@@ -1992,13 +2423,14 @@ function render() {
     if (Im.t < 0.06) {
       const k = Im.t / 0.06, r = (Im.big ? 26 : 18) * FXK * (0.5 + k);
       ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 1 - k;
-      const gr = ctx.createRadialGradient(Im.x, Im.y, 1, Im.x, Im.y, r); gr.addColorStop(0, "rgba(240,255,255,1)"); gr.addColorStop(1, "rgba(89,227,236,0)");
+      const gr = ctx.createRadialGradient(Im.x, Im.y, 1, Im.x, Im.y, r); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(1, `rgba(${Im.glow},0)`);
       ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(Im.x, Im.y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     }
-    const i = Math.floor(Im.t / FXT.impact); if (i > 3) continue;
-    const name = Im.row + (i + 1), p = FX.impact.pieces[name], s = S.char / 0.8 * (Im.big ? 1.3 : 1) * FXK, im = FX_IMG[`impact/${name}`];
-    if (!im.complete) continue;
-    ctx.save(); ctx.translate(Im.x, Im.y); ctx.scale(Im.dir * s, s); ctx.drawImage(im, -p.ax, -p.ay, p.w, p.h); ctx.restore();
+    const life = FXT.impact * 4; if (Im.t > life) continue;   // la estrella low-poly, hacia el que tiró, que se cierra
+    const s = S.char / 0.8 * (Im.big ? 1.3 : 1) * FXK, u = Im.t / life;
+    ctx.save(); ctx.translate(Im.x, Im.y); ctx.scale(-Im.dir, 1); ctx.globalAlpha = 1 - u * 0.6;
+    lpStar(ctx, 30 * s, Im.big ? 6 : 5, 0.95, Math.floor(Im.seed), u < 0.25 ? 0.6 + 1.6 * u : 1 - 0.8 * (u - 0.25) / 0.75, lpTones(Im.glow || "159,245,250"), 0.32);
+    ctx.restore();
   }
   for (const Gr of grenades) {   // la granada: gira al rodar y la luz titila más rápido al final
     const blink = Math.floor(Gr.t / Math.max(0.06, 0.25 * (1 - Gr.t / GRENADE.fuse))) % 2, r = GRENADE.r * 1.15;
@@ -2053,6 +2485,13 @@ function render() {
     const a = Math.max(0, E.t / E.life); ctx.globalAlpha = E.round ? a * 0.85 : a; ctx.fillStyle = E.color;
     ctx.globalCompositeOperation = E.add ? "lighter" : "source-over";
     if (E.round) { const sz = E.size * (1 + (E.grow - 1) * (1 - a)); ctx.beginPath(); ctx.arc(E.x, E.y, sz / 2, 0, Math.PI * 2); ctx.fill(); }
+    else if (E.tri) {   // esquirla low-poly: dos caras; el giro en profundidad (spin) aplasta y da vuelta, y se ve la otra cara
+      const c = Math.cos(E.spin), s = E.size;
+      ctx.save(); ctx.translate(E.x, E.y); ctx.rotate(E.rot); ctx.scale(1, Math.max(0.15, Math.abs(c)));
+      ctx.fillStyle = c > 0 ? E.color : E.dark; ctx.beginPath(); ctx.moveTo(s, 0); ctx.lineTo(-s * 0.55, -s * 0.7); ctx.lineTo(-s * 0.2, 0); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = c > 0 ? E.dark : E.color; ctx.beginPath(); ctx.moveTo(s, 0); ctx.lineTo(-s * 0.2, 0); ctx.lineTo(-s * 0.55, s * 0.7); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
     else ctx.fillRect(E.x - E.size / 2, E.y - E.size / 2, E.size, E.size);
   }
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
@@ -2085,13 +2524,14 @@ function render() {
 
 /* ---------- loop ---------- */
 function resize() {
-  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  // hasta 2 px por px de pantalla, y no más de 2560 de ancho (en pantalla completa, en un monitor grande)
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1, 2560 / Math.max(1, r.width));
   cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr)); DS = cv.width / VIEW_W;
 }
 window.addEventListener("resize", resize);
 let last = performance.now();
 function step(dt) {
-  pads = readPads();
+  pads = readPads(); camUpdate(dt);
   // la congelada del golpe de cerca: todo quieto un instante (los toques quedan para el cuadro siguiente)
   if (G.hitStop > 0 && G.state === "play") { G.hitStop -= dt; return; }
   if (G.state === "lobby") lobbyPads();
@@ -2134,12 +2574,28 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 function start() { resize(); buildSlots(); previewLobby(); requestAnimationFrame(tick); }
-atlas.onload = () => {
-  players.forEach(p => { p.art = recolor(atlas, p.team); });
-  ready = true; buildSlots();
-};
-atlas.onerror = () => { lobbyMsg.textContent = "No se pudo cargar el atlas de sprites."; };
-// adentro de la página (data:): abierta desde el disco, un PNG de al lado no deja leer sus píxeles para los colores
-atlas.src = "__ATLAS_SRC__";
+// los atlas de los personajes, adentro de la página (data:): abierta desde el disco, un PNG de al lado no deja leer sus
+// píxeles para los colores. Se cargan todos al abrir; los colores de cada uno se arman la primera vez que se lo elige
+const ATLAS = {}, artCache = new Map();
+const artOf = (key, T) => { const k = `${key}|${T.name}`; if (!artCache.has(k)) artCache.set(k, recolor(ATLAS[key], T)); return artCache.get(k); };
+function setChar(key) {
+  if (!(key in CHARS)) return;
+  useChar(key);
+  try { localStorage.setItem("arena.char", key); } catch (e) { /* sin almacenamiento: vuelve al primero al recargar */ }
+  for (const p of players) {
+    p.portraits = null;
+    if (ready) p.art = artOf(key, p.team);
+    if (p.draw.name && anim(p.draw.name)) p.draw.i = Math.min(p.draw.i, anim(p.draw.name).f.length - 1);
+  }
+  document.querySelectorAll("#segChar button, #segFlashChar button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === key)));
+  buildFlashTune();
+}
+let atlasLeft = Object.keys(CHARS).length;
+for (const [key, c] of Object.entries(CHARS)) {
+  const im = ATLAS[key] = new Image();
+  im.onload = () => { if (--atlasLeft) return; ready = true; players.forEach(p => { p.art = artOf(CHAR_KEY, p.team); }); buildSlots(); };
+  im.onerror = () => { lobbyMsg.textContent = `No se pudo cargar el atlas de ${c.label}.`; };
+  im.src = c.atlas;
+}
 (document.fonts ? document.fonts.ready : Promise.resolve()).finally(() => { window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(); });
 </script>

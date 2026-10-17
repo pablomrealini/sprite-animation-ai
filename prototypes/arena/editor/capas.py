@@ -43,17 +43,23 @@ AW, AH = 1920, 1080
 LEFT = {
     "refineria": [
         ("pasarela_abajo", 1, 4, [[0, 708, 668, 78], [112, 784, 614, 147], [636, 708, 92, 223]]),
-        ("pasarela_medio", 3, 2, [[362, 518, 442, 70], [376, 586, 316, 122]]),
+        ("pasarela_medio", 3, 2, [[362, 518, 442, 70], [376, 586, 316, 122], [692, 586, 22, 18]]),
         ("pasarela_arriba", 5, 0, [[0, 328, 530, 70], [200, 398, 330, 120]]),
     ],
 }
+LEFT["refineria_lowpoly"] = LEFT["refineria"]   # la misma arena redibujada en low-poly: las mismas zonas
+# lo que no es de ninguna pieza pero tampoco va en el fondo: ahí el fondo sale de la edición (en la low-poly, la plataforma
+# que el restyle le agregó a la columna: la recorta aparte flotante.py, como pintada que sube y baje; la pieza "flotante"
+# y su objeto quedan en el JSON porque capas no los arma)
+FROM_EDIT = {"refineria_lowpoly": [[840, 650, 240, 120]]}
 RIGHT_OF = {1: 2, 3: 4, 5: 6, 4: 5, 2: 3, 0: 1}   # el sólido / recorte de la derecha de cada uno de la izquierda
 # las patas de cada pieza (las dos de cada par, que son espejo): la franja de filas entre la losa y los pies que se estira
-# cuando la pasarela sube (legs, relativa a la pieza recortada) y cuántos px por encima de la línea de los pies de lo de
-# abajo terminan (legsGap, medido con las piezas donde estaban en la lámina). Si cambia el recorte, hay que medirlas de nuevo
+# cuando la pasarela sube (en filas de la lámina; en el JSON van relativas a la pieza, legs) y cuántos px por encima de la
+# línea de los pies de lo de abajo terminan (legsGap, medido con las piezas donde estaban en la lámina)
 LEGS = {
-    "refineria": {"pasarela_abajo": ([80, 160], 8), "pasarela_medio": ([68, 178], 15), "pasarela_arriba": ([78, 176], 13)},
+    "refineria": {"pasarela_abajo": ([787, 867], 8), "pasarela_medio": ([585, 695], 15), "pasarela_arriba": ([405, 503], 13)},
 }
+LEGS["refineria_lowpoly"] = LEGS["refineria"]   # la misma geometría
 
 
 def pieces_for(name: str, arena: dict) -> list:
@@ -62,6 +68,12 @@ def pieces_for(name: str, arena: dict) -> list:
         out.append((f"{base}_izq", si, fi, rects))
         out.append((f"{base}_der", RIGHT_OF[si], RIGHT_OF[fi], [[AW - x - w, y, w, h] for x, y, w, h in rects]))
     return out
+
+
+def clip_rect(r: list, w: int, h: int) -> list:
+    """[x, y, w, h] recortado a la caja de la pieza (0, 0, w, h)."""
+    x0, y0, x1, y1 = max(0, r[0]), max(0, r[1]), min(w, r[0] + r[2]), min(h, r[1] + r[3])
+    return [x0, y0, max(0, x1 - x0), max(0, y1 - y0)]
 
 
 def align(big: Image.Image, plate: np.ndarray, keep: np.ndarray) -> tuple[np.ndarray, tuple[int, int], float]:
@@ -138,9 +150,16 @@ def main() -> None:
     R, G, B = plate_rgb[..., 0], plate_rgb[..., 1], plate_rgb[..., 2]
     # la neblina es clara (las sombras azul oscuro de un andamio no), y el brillo alrededor de una luz cian es de la luz
     bright = cv2.dilate(((G > 200) & (B > 220)).astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool)
-    haze = (B - R > 30) & (B - G > 15) & (G < 190) & (G < 0.72 * B) & (B >= 95) & ~bright
-    bluish = (B - R > 50) & (B - G > 10) & (G < 0.8 * B) & (B >= 90) & ~bright   # el antialias con el cielo (no los contornos oscuros)
-    glowish = (B - R > 45) & (B > 110)   # azul o cian: cielo, o una luz (propia, si está encerrada en la pieza)
+    if args.arena.endswith("lowpoly"):
+        # low-poly: el cielo y la refinería lejana son claros y más azules que verdes (B - G de 33 a 60); el metal es gris
+        # neutro (B - G ~12) y las losas, grises claras, pero las caras iluminadas del metal también azulean (B - G hasta
+        # ~29, B ~134): con 22 se cortaban en escalera. No hay contorno: el borde contra el cielo es la mezcla de los dos
+        haze = (((B - G > 30) & (B > 140)) | (B - G > 40)) & (B > 110) & ~bright
+        bluish = haze   # sin contorno no hay antialias azulado que pelar: el brillo gris azulado de las aristas es de la pieza
+    else:
+        haze = (B - R > 30) & (B - G > 15) & (G < 190) & (G < 0.72 * B) & (B >= 95) & ~bright
+        bluish = (B - R > 50) & (B - G > 10) & (G < 0.8 * B) & (B >= 90) & ~bright   # el antialias con el cielo (no los contornos oscuros)
+    glowish = (B - R > 45) & (B > 150)   # azul o cian claro: cielo, o una luz (no la sombra azul oscura entre dos patas)
 
     # lo que el modelo dejó igual, en manchas grandes, es del fondo aunque toque la pasarela (un caño que pasa por
     # debajo, la pared): no va en la pieza. Las motas sueltas iguales son ruido y quedan
@@ -155,7 +174,8 @@ def main() -> None:
     alike = np.abs(cv2.GaussianBlur(plate_rgb, (5, 5), 0) - cv2.GaussianBlur(empty, (5, 5), 0)).max(2) < 20
     kept_bg = big(same > 0, 2500) | cv2.dilate(big(alike, 1500, red=True).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
 
-    defs, objects, allmask, allcore, cut = {}, [], np.zeros((AH, AW), np.float32), np.zeros((AH, AW), bool), {}
+    defs, objects, allmask, allcore, cut, cores = {}, [], np.zeros((AH, AW), np.float32), np.zeros((AH, AW), bool), {}, []
+    allpeeled = np.zeros((AH, AW), bool)
     for k, (name, si, fi, rects) in enumerate(pieces):
         mine = owner == k
         # la losa (el recorte de adelante, plate.solid) es la semilla: va lo que no es neblina y está pegado a ella. No se
@@ -175,10 +195,13 @@ def main() -> None:
         n, lab, st, _ = cv2.connectedComponentsWithStats((~core).astype(np.uint8), connectivity=4)
         for i in np.nonzero(st[1:, cv2.CC_STAT_AREA] < 120)[0] + 1:
             core |= (lab == i) & mine & ~haze
-        # el borde, pelado: el antialias del contorno con el cielo deja una línea azulada (sobre todo arriba de la losa)
+        # el borde, pelado: el antialias del contorno con el cielo deja una línea azulada (sobre todo arriba de la losa).
+        # Lo pelado no se tira: más abajo se "despega" del cielo (aa), para que el borde siga suave sobre cualquier fondo
+        before = core.copy()
         for _ in range(2):
             edge = core & ~cv2.erode(core.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
             core &= ~(edge & bluish)
+        peeled = before & ~core
         # y lo azul que toca el afuera de la pieza y sigue en el fondo sin pasarelas (las luces de una torre lejana pegadas
         # a una punta) se va; las luces de los postes, que el modelo sacó con la pasarela, quedan. Después, otra vez sólo
         # lo pegado a la losa
@@ -192,13 +215,51 @@ def main() -> None:
         core &= ~(np.isin(lab, [i for i in small if rim[lab == i].any()]))
         n, lab = cv2.connectedComponents(core.astype(np.uint8), connectivity=8)
         core = np.isin(lab, np.unique(lab[deck & core & (lab > 0)])) & (lab > 0)
+        # los huecos de 1 px entre dos partes de la pieza (una sombra entre una pata y un caño): achicada, se vería una raya
+        for _ in range(2):
+            c = core
+            gap = ~c & mine & ((np.roll(c, 1, 1) & np.roll(c, -1, 1)) | (np.roll(c, 1, 0) & np.roll(c, -1, 0)))
+            core = c | gap
+        cores.append((k, name, si, fi, core, deck, peeled))
+
+    # donde dos piezas se tocan por un corte de zona (las patas de una apoyadas en la otra), cada una se estira 2 px sobre
+    # la otra, con los mismos píxeles de la lámina: el juego las dibuja achicadas y por separado, y sin esto en la unión
+    # cada una cubre sólo parte del píxel y se asoma el fondo, una raya clara (Pablo, 2026-10-17)
+    every = np.zeros((AH, AW), bool)
+    for _, _, _, _, core, _, _ in cores:
+        every |= core
+    for k, name, si, fi, core, deck, peeled in cores:
+        others = every & ~core
+        core = core | (cv2.dilate(core.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool) & others)
+        fx, fy, fw, fh = arena["plate"]["solid"][fi]
         m8 = core.astype(np.uint8)
         allcore |= core
+        allpeeled |= peeled
         # el alfa: duro adentro; suave (1 px) sólo en el borde que da al cielo, donde estaba el antialias. Donde la zona corta
         # la pieza contra una pared queda duro, y así calza con la lámina de al lado sin costura
         soft = np.clip(cv2.GaussianBlur(m8.astype(np.float32), (3, 3), 0) * 1.35, 0, 1)
         sky_edge = cv2.dilate((haze & ~core).astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
         alpha = np.where(core, np.where(sky_edge, soft, 1.0), 0.0).astype(np.float32)
+        # el antialias pelado, despegado del cielo: cada píxel es una mezcla del color de la pieza más cercano (fg) y del
+        # cielo de atrás (el del fondo vacío, bg); se guarda fg con la parte de fg como alfa. Así, sobre el fondo vacío queda
+        # igual que en la lámina y sobre otro fondo no arrastra el azul
+        rgb_piece = plate_rgb.copy()
+        # (lo pelado, y el anillo de 1 px alrededor de la pieza que la neblina se llevó: el antialias es casi todo cielo)
+        ring = cv2.dilate(core.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & ~core
+        aa = (peeled | (ring & haze)) & ~core & (owner == k) & ~others
+        if aa.any():
+            _, lab = cv2.distanceTransformWithLabels((~core).astype(np.uint8), cv2.DIST_L2, 3, labelType=cv2.DIST_LABEL_PIXEL)
+            zy, zx = np.nonzero(core)   # el rótulo de cada píxel de la pieza, para saber cuál es el más cercano
+            idx = np.zeros(lab.max() + 1, np.int64); idx[lab[zy, zx]] = zy * AW + zx
+            ys, xs = np.nonzero(aa)
+            near = idx[lab[ys, xs]]
+            fg = plate_rgb.reshape(-1, 3)[near]
+            bg, px = empty[ys, xs], plate_rgb[ys, xs]
+            dv = fg - bg
+            a = np.clip(((px - bg) * dv).sum(1) / np.maximum((dv * dv).sum(1), 1.0), 0, 1)
+            a = np.where(a > 0.06, a, 0.0)   # lo que es casi todo cielo, afuera
+            rgb_piece[ys, xs] = fg
+            alpha[ys, xs] = np.maximum(alpha[ys, xs], a)
         if args.keep_boxes:   # la caja de la pieza que ya está en el JSON: no cambia nada más
             d0 = cur["pieces"][name]
             org = d0.get("cut") or next([o["x"], o["y"]] for o in cur.get("objects", []) if o.get("piece") == name)
@@ -212,7 +273,7 @@ def main() -> None:
         else:
             ys, xs = np.nonzero(alpha > 0.02)
             bx, by, bx1, by1 = int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
-        rgba = plate_rgba[by:by1, bx:bx1].copy()
+        rgba = np.dstack([rgb_piece[by:by1, bx:bx1], np.zeros((by1 - by, bx1 - bx), np.float32)]).astype(np.uint8)
         rgba[..., 3] = np.round(alpha[by:by1, bx:bx1] * 255).astype(np.uint8)
         Image.fromarray(rgba, "RGBA").save(out_dir / f"{name}.png", optimize=True)
         allmask = np.maximum(allmask, alpha)
@@ -220,11 +281,11 @@ def main() -> None:
         defs[name] = {
             "src": f"{args.arena}/{name}.png", "w": bx1 - bx, "h": by1 - by, "cut": [bx, by],
             "solids": [{"kind": s["kind"], "x": s["x"] - bx, "y": s["y"] - by, "w": s["w"], "ledge": "both"}],
-            "front": [[fx - bx, fy - by, fw, fh]],
+            "front": [clip_rect([fx - bx, fy - by, fw, fh], bx1 - bx, by1 - by)],
         }
         legs = LEGS.get(args.arena, {}).get(name.rsplit("_", 1)[0])
         if legs:
-            defs[name]["legs"], defs[name]["legsGap"] = legs
+            defs[name]["legs"], defs[name]["legsGap"] = [legs[0][0] - by, legs[0][1] - by], legs[1]
         objects.append({"piece": name, "x": bx, "y": by})
         print(f"  {name}: {bx1 - bx} × {by1 - by} en {bx}, {by}  ({int(m8.sum())} px)")
 
@@ -235,11 +296,35 @@ def main() -> None:
     if left.any():
         empty = cv2.inpaint(np.clip(empty, 0, 255).astype(np.uint8), left, 9, cv2.INPAINT_TELEA).astype(np.float32)
     # el fondo: la lámina, y la edición sólo donde había pieza (un poco más ancho, sin salir de su zona, con transición)
-    # (debajo de la pieza, siempre; alrededor, hasta 3 px, sólo sobre la neblina del cielo, para que al mover la pieza no
-    # quede el fantasma de su contorno: al lado de una pared, la de la edición no es la de la lámina y se vería el corte)
+    # (debajo de la pieza, siempre; alrededor, 1 px y el borde azulado que se peló, sólo sobre la neblina del cielo, para que
+    # al mover la pieza no quede el fantasma de su contorno: al lado de una pared, la de la edición no es la de la lámina y
+    # se vería el corte. Más ancho no: en un hueco de la pieza, el cielo de la edición es de otro tono y se ve un parche)
     piece = (allmask > 0.02).astype(np.uint8)
-    grow = (piece.astype(bool) | (cv2.dilate(piece, np.ones((7, 7), np.uint8)).astype(bool) & haze)).astype(np.float32)
-    grow = np.where(piece.astype(bool) | haze, cv2.GaussianBlur(grow, (5, 5), 0), 0)[..., None]   # sin desbordar a una pared
+    # (sólo donde la edición también es cielo: detrás de una pata, la edición a veces dibujó otra cosa, un codo de caño o
+    # una pared, que al lado de la pieza quedaba como una astilla roja o gris)
+    e = np.clip(empty, 0, 255)
+    sky_e = (((e[..., 2] - e[..., 1] > 30) & (e[..., 2] > 140)) | (e[..., 2] - e[..., 1] > 40)) & (e[..., 2] > 110) \
+        if args.arena.endswith("lowpoly") else (e[..., 2] - e[..., 0] > 30) & (e[..., 2] - e[..., 1] > 15) & (e[..., 2] >= 95)
+    grow = piece.astype(bool) | ((cv2.dilate(piece, np.ones((3, 3), np.uint8)).astype(bool) | allpeeled) & (haze | bluish) & sky_e)
+    for x, y, w, h in FROM_EDIT.get(args.arena, []):
+        grow[y:y + h, x:x + w] = True
+    # y, en la zona de las piezas, lo que la edición sacó pero no entró en ninguna (puntas de un soporte, el borde de una
+    # luz): si no, queda suelto en el fondo. Sólo las manchas chicas: una grande (un caño de la pared que el modelo
+    # redibujó un poco distinto) sigue de la lámina, si no se ve cortado contra la parte que quedó igual
+    # Y no lo que la edición sólo corrió un poco (el borde de un caño): eso es del fondo, y de la edición queda un escalón.
+    # Se mira si la edición, corrida hasta 3 px, explica la lámina ahí: un soporte que el modelo sacó no lo explica
+    loose = (anyzone & ~alike & ~allcore & ~haze).astype(np.uint8)
+    n, lab, st, _ = cv2.connectedComponentsWithStats(loose, connectivity=8)
+    pb, eb = cv2.GaussianBlur(plate_rgb, (3, 3), 0), cv2.GaussianBlur(empty, (3, 3), 0)
+    moved = np.full((AH, AW), 1e9, np.float32)
+    for dy in range(-3, 4):
+        for dx in range(-3, 4):
+            moved = np.minimum(moved, np.abs(np.roll(eb, (dy, dx), (0, 1)) - pb).max(2))
+    gone = [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] < 400 and moved[lab == i].mean() > 18]
+    print(f"  sueltos que la edición sacó: {len(gone)} de {n - 1} (los otros, corridos, quedan de la lámina)")
+    grow |= np.isin(lab, gone)
+    grow = grow.astype(np.float32)
+    grow = np.where(grow.astype(bool) | (haze & sky_e), cv2.GaussianBlur(grow, (5, 5), 0), 0)[..., None]   # sin desbordar a una pared
     fondo = plate_rgb * (1 - grow) + empty * grow
     Image.fromarray(np.clip(np.round(fondo), 0, 255).astype(np.uint8), "RGB").save(out_dir / "fondo.webp", quality=92, method=6)
 
@@ -280,6 +365,11 @@ def write_layered(args, arena, pieces, defs, objects, menu, out_dir, serve) -> N
     layered["pieces"] = defs
     layered["solids"] = [s for i, s in enumerate(arena["solids"]) if i not in used_s]
     layered["objects"] = objects + arena.get("objects", [])
+    if menu.exists():   # lo que no hizo capas.py y ya estaba (otra pieza, como la flotante; los objetos del kit, los spawns, el color) queda
+        cur = json.loads(menu.read_text(encoding="utf-8"))
+        layered["pieces"] = defs | {k: v for k, v in cur.get("pieces", {}).items() if k not in defs}
+        layered["objects"] = objects + [o for o in cur.get("objects", []) if o.get("piece") not in defs]
+        layered |= {k: cur[k] for k in ("spawns", "decor", "pipes", "color") if k in cur}
     order = ["name", "note", "size", "seed", "plate", "pieces", "solids", "objects", "spawns", "decor", "pipes"]
     layered = {k: layered[k] for k in order if k in layered} | {k: v for k, v in layered.items() if k not in order}
     menu.write_text(serve.fmt(layered) + "\n", encoding="utf-8")

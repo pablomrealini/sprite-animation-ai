@@ -1,0 +1,47 @@
+{
+  "name": "Refinería low-poly",
+  "note": "Px del juego, y para abajo. La Refinería del juego redibujada en low-poly (2026-10-17, pedido de Pablo): la lámina limpia de la Refinería (arenas/refineria.webp) en el estilo de refs/refineria_lowpoly.webp, con Nano Banana 2.1 (backgrounds/arena_refineria_lowpoly, lowpoly_restyle opción 1, achicada a 1920 × 1080 y corrida 2 px). Es la fuente de capas.py (arenas/refineria_lowpoly.json es la de capas). La geometría es la de la Refinería, medida de nuevo en la lámina low-poly: caras de arriba a 338, 529 y 722 y el piso de 937 a 947 (la colisión queda en 340, 532, 724 y 940); las puntas de las pasarelas a 1–4 px de las de antes. La tapa de la columna es más angosta (x 931–988, desde y 424) y los bloques rojos de los costados quedan más abajo: el sólido de arriba es sólo la tapa y su recorte de adelante, sólo la tapa, para no tapar al que se cuelga. Color neutro: la paleta de Pablo es del estilo viejo",
+  "size": [1920, 1080],
+  "seed": 11,
+  "color": {
+    "fondo": {"paleta": 0, "saturacion": 1, "contraste": 1, "brillo": 1, "bruma": 0},
+    "plataformas": {"paleta": 0, "saturacion": 1, "contraste": 1, "brillo": 1, "bruma": 0}
+  },
+  "plate": {
+    "src": "refineria_lowpoly/lamina.webp",
+    "solid": [
+      [0, 333, 522, 58],
+      [1398, 333, 522, 58],
+      [368, 524, 426, 58],
+      [1126, 524, 426, 58],
+      [0, 715, 659, 62],
+      [1265, 715, 655, 62],
+      [931, 422, 58, 18]
+    ]
+  },
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 940, "w": 2000, "h": 200, "fill": "full"},
+    {"kind": "bridge", "x": 0, "y": 724, "w": 657, "ledge": "right"},
+    {"kind": "bridge", "x": 1265, "y": 724, "w": 655, "ledge": "left"},
+    {"kind": "bridge", "x": 370, "y": 532, "w": 422, "ledge": "both"},
+    {"kind": "bridge", "x": 1128, "y": 532, "w": 421, "ledge": "both"},
+    {"kind": "bridge", "x": 0, "y": 340, "w": 520, "ledge": "right"},
+    {"kind": "bridge", "x": 1400, "y": 340, "w": 520, "ledge": "left"},
+    {"kind": "bridge", "x": 931, "y": 426, "w": 58, "ledge": "both"}
+  ],
+  "objects": [
+    {"piece": "platforms/float_m", "x": 960, "y": 780, "move": {"path": [[960, 780], [960, 532]], "speed": 80, "wait": 1.2}}
+  ],
+  "spawns": [
+    [385, 940],
+    [1607, 724],
+    [1250, 532],
+    [373, 340],
+    [1535, 940],
+    [313, 724],
+    [670, 532],
+    [1547, 340]
+  ],
+  "decor": [],
+  "pipes": []
+}
