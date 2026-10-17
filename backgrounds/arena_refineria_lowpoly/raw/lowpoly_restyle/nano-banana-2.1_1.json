@@ -1,0 +1,74 @@
+{
+  "set": "arena_refineria_lowpoly",
+  "asset": "lowpoly_restyle",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nRedraw the first reference image in the art style of the second reference image.\nThe first image is the exact layout to keep: every element stays at exactly the same position, size and shape, with the same framing. The six walkways at their exact heights and lengths (the two top walkways coming out of the side walls, the two free-standing middle walkways with X-braced scaffolding, the two lower walkways coming out of the side walls), the center pillar, the tall machinery walls at the far left and right, the long floor walkway along the bottom with the machinery and red pipes under it, and the background refinery with its towers, tanks and pipes.\nChange only the rendering to match the second image: a 3D low-poly look made of flat-shaded polygon faces with soft shading per face and no black outlines; walkway decks in light gray with red end caps and small yellow-and-black hazard panels, dark gray metal structure, red pipes, glowing cyan light strips, and a soft blue hazy sky with low-poly clouds and faceted refinery towers.\nDo not add anything from the second image that is not in the first: no characters, no crates or boxes, no platform or canister on the center pillar, no health bars, numbers or markers, no laser shots.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria.webp",
+      "sha256": "6015cb72a90d75d2e9113545e4d4ea2cad7b3493e60e4ad3359adcd44675d5d0"
+    },
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria.webp",
+      "sha256": "6015cb72a90d75d2e9113545e4d4ea2cad7b3493e60e4ad3359adcd44675d5d0"
+    },
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14bdb-e066-7683-975e-8dd6ca114578",
+  "created": "2026-10-17T21:55:02+00:00",
+  "sha256": "fcf4a8b55c48c7becc3dea231c2980e1401202459f906342a358cc75f96581c1",
+  "post": {
+    "file": "backgrounds/arena_refineria_lowpoly/post/lowpoly_restyle/nano-banana-2.1_1.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

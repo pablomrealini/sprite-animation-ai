@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ranger_hud: modelos</title>
+<style>
+:root { --bg: #121522; --fg: #eef0f6; --muted: #9aa3bd; --line: #2f3750; --warn: #f2c230; --bad: #e8392e; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.4 system-ui, sans-serif; margin: 16px; }
+.wrap { overflow-x: auto; }
+table { border-collapse: collapse; }
+th, td { border: 1px solid var(--line); padding: 8px; vertical-align: top; }
+td { min-width: 280px; max-width: 520px; }
+figure { margin: 0 0 8px; }
+img { max-width: 100%; display: block; background: repeating-conic-gradient(#3a4060 0 25%, #2a2f48 0 50%) 0 0 / 16px 16px; }
+body.violet img { background: #3d2563; }
+figcaption, p { color: var(--muted); margin: 2px 0; font-size: 12px; }
+.warn { color: var(--warn); } .bad { color: var(--bad); }
+a { color: var(--fg); }
+</style></head><body>
+<h1>ranger_hud</h1>
+<p><label><input type="checkbox" onchange="document.body.classList.toggle('violet', this.checked)"> fondo violeta en vez de damero</label></p>
+<div class="wrap"><table><tr><th></th><th>gpt-image-2.5-sunburst-fal</th><th>nano-banana-2.1</th></tr><tr><th>portrait</th><td><figure><img src="post/portrait/gpt-image-2.5-sunburst-fal_1/hit.png" loading="lazy"><figcaption>hit</figcaption></figure><figure><img src="post/portrait/gpt-image-2.5-sunburst-fal_1/ko.png" loading="lazy"><figcaption>ko</figcaption></figure><figure><img src="post/portrait/gpt-image-2.5-sunburst-fal_1/normal.png" loading="lazy"><figcaption>normal</figcaption></figure><p>ok · US$ 0,11 · <a href="raw/portrait/gpt-image-2.5-sunburst-fal_1.png">original</a> · <a href="raw/portrait/gpt-image-2.5-sunburst-fal_1.json">json</a></p><figure><img src="post/portrait/gpt-image-2.5-sunburst-fal_2/hit.png" loading="lazy"><figcaption>hit</figcaption></figure><figure><img src="post/portrait/gpt-image-2.5-sunburst-fal_2/ko.png" loading="lazy"><figcaption>ko</figcaption></figure><figure><img src="post/portrait/gpt-image-2.5-sunburst-fal_2/normal.png" loading="lazy"><figcaption>normal</figcaption></figure><p>ok · US$ 0,11 · <a href="raw/portrait/gpt-image-2.5-sunburst-fal_2.png">original</a> · <a href="raw/portrait/gpt-image-2.5-sunburst-fal_2.json">json</a></p></td><td><figure><img src="post/portrait/nano-banana-2.1_1/hit.png" loading="lazy"><figcaption>hit</figcaption></figure><figure><img src="post/portrait/nano-banana-2.1_1/ko.png" loading="lazy"><figcaption>ko</figcaption></figure><figure><img src="post/portrait/nano-banana-2.1_1/normal.png" loading="lazy"><figcaption>normal</figcaption></figure><p>ok · US$ 0,06 · <a href="raw/portrait/nano-banana-2.1_1.png">original</a> · <a href="raw/portrait/nano-banana-2.1_1.json">json</a></p><p class="warn">3 manchas chicas descartadas</p><figure><img src="post/portrait/nano-banana-2.1_2/hit.png" loading="lazy"><figcaption>hit</figcaption></figure><figure><img src="post/portrait/nano-banana-2.1_2/ko.png" loading="lazy"><figcaption>ko</figcaption></figure><figure><img src="post/portrait/nano-banana-2.1_2/normal.png" loading="lazy"><figcaption>normal</figcaption></figure><p>ok · US$ 0,06 · <a href="raw/portrait/nano-banana-2.1_2.png">original</a> · <a href="raw/portrait/nano-banana-2.1_2.json">json</a></p><p class="warn">2 manchas chicas descartadas</p></td></tr></table></div>
+</body></html>

@@ -1,0 +1,51 @@
+# Los power-ups de la arena (prototypes/arena) en el estilo nuevo, low-poly 3D (Pablo, 2026-10-17: "iconos de power up
+# en 3d, low poly también, que sean más cools"). Hoy el juego los dibuja por código, un cuadro con un ícono plano; con
+# esto pasan a ser objetos low-poly que flotan sobre lo que se pisa, con la luz de su color en el piso.
+#   - hp: salud (suma un golpe), el de la luz rosada.
+#   - gren: recarga de granadas (vuelven a 3), el de la luz amarilla.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/lowpoly_pickups/gen.toml --dry-run
+#
+# Referencias de estilo: la Refinería low-poly (la imagen de Pablo) y el arma low-poly del personaje nuevo, para que
+# los power-ups tengan los mismos materiales: polígonos planos, sombreado suave por cara, sin contorno negro.
+# Escala en el juego: flotan a ~42 px del juego de alto (21 de pantalla con la cámara al 50%): formas grandes y simples.
+# Dos modelos, dos hojas cada uno, para elegir.
+#
+# Generadas el 2026-10-17 (US$0,47). Elegida la 1 de GPT Image (PICKUP_ART en prototypes/arena/build.py): a 42 px es la
+# que mejor se lee, con la cruz roja grande de frente y las luces arriba. En el juego: en_el_juego.png.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1"]
+images_per_asset = 2
+max_usd = 2
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+lowpoly = """
+3D low-poly game prop render in the exact style of the reference images: flat-shaded polygons with soft per-face \
+lighting, clean faceted geometry, a few large facets rather than many small ones, saturated toy-like colors, soft \
+studio light from the top left, no black outlines, no texture noise, no photographic detail.
+"""
+no_text = "No text, letters, numbers, logos, frames, circles, badges, borders, grid lines or labels anywhere."
+
+[[asset]]
+name = "pickups"          # los dos power-ups, en fila
+style = ["lowpoly", "no_text"]
+prompt = """
+Two separate collectible power-up props for a 2D arena shooter, in one row, the same size, with wide empty space \
+between them, not touching each other or the image edges, both seen from the front and slightly from above, \
+floating (no ground, no shadow, no pedestal). Big chunky shapes that still read at 40 pixels tall.
+1. Health: a chunky low-poly medkit capsule, a rounded white faceted case with a big bold red cross on the front and \
+a small glowing pink-red crystal light on top.
+2. Grenade refill: three chunky low-poly hand grenades bundled side by side with a dark strap, white and red armor \
+plates like the gear in the reference, each with a short dark steel cap, and a small glowing yellow light on the \
+strap.
+"""
+refs = ["../../prototypes/arena/refs/refineria_lowpoly.webp", "../../characters/lowpoly/refs/arma_vistas_alfa.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["hp", "gren"]

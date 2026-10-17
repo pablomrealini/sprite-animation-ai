@@ -1,0 +1,137 @@
+# La Refinería en low-poly (pedido de Pablo, 2026-10-17): la misma arena que la del juego, en el estilo nuevo, polígonos
+# planos con sombreado suave por cara y sin contorno negro. La referencia de estilo es la imagen que trajo Pablo,
+# prototypes/arena/refs/refineria_lowpoly.webp: la composición de la referencia vieja (con personajes, HUD, cajas y la
+# plataforma de la columna), en low-poly. Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/arena_refineria_lowpoly/gen.toml --assets <asset> --dry-run
+#
+# Dos caminos para la lámina:
+# A. lowpoly_restyle: la lámina limpia del juego (prototypes/arena/arenas/refineria.webp: sin personajes ni cajas, con
+#    las pasarelas de arriba subidas) redibujada en el estilo de la imagen de Pablo. Si mantiene la geometría, la
+#    colisión de refineria.json y las cajas de las piezas sirven tal cual (capas.py --keep-boxes).
+# B. lowpoly_clean: la imagen de Pablo limpia (sin personajes, marcadores, tiros, HUD, cajas ni la plataforma de la
+#    columna), como plate + plate_bare de la Refinería en un solo pedido. Después habría que subir las pasarelas de
+#    arriba (recorte a mano + relleno en magenta) y calcar la colisión de nuevo.
+# Después, en los dos: el fondo sin pasarelas (como plate_no_walkways) y las piezas con capas.py.
+#
+# Resultado de A (2026-10-17, US$0,13): la opción 1 mantiene la geometría del juego (losas a 338, 529 y 722, con la
+# colisión en 340, 532 y 724; corrida 2 px), pero agregó una plataforma con franjas en el medio de la columna. La 2 bajó
+# las de arriba a la altura vieja (46 px). Queda la 1, achicada a 1920 × 1080 y corrida 2 px para arriba:
+# prototypes/arena/arenas/refineria_lowpoly/lamina.webp.
+# lowpoly_no_walkways: esa lámina sin las seis pasarelas (con sus patas, también lo pegado a las paredes) ni la
+# plataforma de la columna, para la lámina en capas. --assets lowpoly_no_walkways.
+# Resultado (US$0,12): la 1 dejó las pasarelas de abajo enteras; la 2 sacó todo (también la plataforma de la columna)
+# salvo cuatro muñones pegados a las paredes. lowpoly_no_walkways_fill: la 2 alineada (corrida 3 px para arriba) con
+# los muñones en magenta (refs/no_walkways_hueco.png: x 0–224 y 1696–1920, y 328–380; x 66–306 y 1614–1854,
+# y 708–936); el modelo sólo rellena el magenta. --assets lowpoly_no_walkways_fill.
+
+[gen]
+models = ["nano-banana-2.1"]
+images_per_asset = 2      # dos opciones para elegir
+max_usd = 1
+max_parallel = 2
+quality = "high"
+resolution = "2K"
+seed = 7
+
+[styles]
+empty = "No characters, people, robots, enemies, turrets, drones or vehicles anywhere."
+no_text = "No text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere."
+
+[[asset]]
+name = "lowpoly_restyle"
+style = ["empty", "no_text"]
+prompt = """
+Redraw the first reference image in the art style of the second reference image.
+The first image is the exact layout to keep: every element stays at exactly the same position, size and shape, with \
+the same framing. The six walkways at their exact heights and lengths (the two top walkways coming out of the side \
+walls, the two free-standing middle walkways with X-braced scaffolding, the two lower walkways coming out of the side \
+walls), the center pillar, the tall machinery walls at the far left and right, the long floor walkway along the \
+bottom with the machinery and red pipes under it, and the background refinery with its towers, tanks and pipes.
+Change only the rendering to match the second image: a 3D low-poly look made of flat-shaded polygon faces with soft \
+shading per face and no black outlines; walkway decks in light gray with red end caps and small yellow-and-black \
+hazard panels, dark gray metal structure, red pipes, glowing cyan light strips, and a soft blue hazy sky with \
+low-poly clouds and faceted refinery towers.
+Do not add anything from the second image that is not in the first: no characters, no crates or boxes, no platform \
+or canister on the center pillar, no health bars, numbers or markers, no laser shots.
+"""
+refs = ["../../prototypes/arena/arenas/refineria.webp", "../../prototypes/arena/refs/refineria_lowpoly.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "lowpoly_clean"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. Remove: the four armored player characters; the colored round number markers floating \
+above them; the cyan laser shots and muzzle flashes; the whole HUD at the top of the image (the four health panels \
+with numbers); every crate and box (the gray crates with X braces on the floor and on the lower walkways); and the \
+platform with yellow-and-black hazard stripes in the middle of the center pillar, together with the small glowing \
+canister on top of it. The pillar shaft continues straight through where that platform was, with the same dark \
+frame and glowing cyan light strips; keep the pillar's top cap and its base exactly as they are.
+Fill every removed area with what is behind it, continuing the surrounding sky, clouds, background refinery, \
+scaffolding, walkway surfaces, machinery and pipes seamlessly, in the same low-poly style, so that no trace is left.
+Keep everything else exactly as it is: the same composition and framing, the same walkways, center pillar, side \
+walls, floor and pipes at exactly the same positions and sizes, the same colors and the same flat-shaded low-poly \
+rendering. Do not move, add, resize or redraw anything else.
+"""
+refs = ["../../prototypes/arena/refs/refineria_lowpoly.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "lowpoly_no_walkways"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. Remove all six elevated walkways completely, each one together with everything that holds \
+it up, including the parts where they meet or come out of the side walls (nothing of them may stay attached to the \
+walls):
+1. The two top walkways that come out of the left and right walls near the top (light gray decks with red end caps \
+and a small yellow-and-black hazard panel), with the posts, brackets and diagonal braces under them.
+2. The two middle walkways that stand free on either side of the center pillar, with the X-braced scaffolding, posts \
+and feet under them.
+3. The two lower walkways that come out of the left and right walls, with all the posts, X braces, end blocks, \
+brackets and small hazard posts under them, down to the floor.
+4. The wide platform with yellow-and-black hazard stripes and red end caps in the middle of the center pillar: the \
+pillar shaft continues straight through where it was, with the same frame and glowing cyan light strips.
+Fill every removed area with what is behind it: the blue sky and low-poly clouds, the hazy background refinery with \
+its towers, tanks, pipes and distant catwalks, and, at the far left and right, the tall machinery walls continuing \
+straight down, so that no trace of the walkways or their supports is left and the middle of the image is open \
+background.
+Keep everything else exactly as it is: the tall machinery walls at the far left and right edges, the center pillar \
+with its top cap and base, the long floor walkway along the bottom with the machinery and red pipes under it, at \
+exactly the same positions and sizes, in the same flat-shaded low-poly style and colors. Do not move, add, resize or \
+redraw anything else.
+"""
+refs = ["../../prototypes/arena/arenas/refineria_lowpoly/lamina.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "lowpoly_no_walkways_fill"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image. It has four solid magenta (#FF00FF) rectangles against the left and right side walls: two \
+near the top and two lower down, just above the floor. Fill each magenta rectangle with what belongs there, \
+continuing the surroundings so that no magenta is left: at the far left and right edges the tall side wall machinery \
+continues straight through (gray columns and panels, red pipes, cyan lights), and between the wall and the rest of \
+the image the hazy blue background refinery, distant pipes and sky continue, in the same flat-shaded low-poly style. \
+Do not put any walkway, platform, ledge, deck, end cap, post, brace or crate in the magenta areas: they must become \
+open background and wall.
+Do not change anything outside the magenta rectangles: keep the center pillar, the side walls, the floor, the pipes \
+and the background exactly where they are, with the same colors and low-poly rendering.
+"""
+refs = ["refs/no_walkways_hueco.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"

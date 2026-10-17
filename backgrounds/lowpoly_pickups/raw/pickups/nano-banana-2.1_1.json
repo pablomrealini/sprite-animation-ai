@@ -1,0 +1,111 @@
+{
+  "set": "lowpoly_pickups",
+  "asset": "pickups",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "3D low-poly game prop render in the exact style of the reference images: flat-shaded polygons with soft per-face lighting, clean faceted geometry, a few large facets rather than many small ones, saturated toy-like colors, soft studio light from the top left, no black outlines, no texture noise, no photographic detail.\n\nNo text, letters, numbers, logos, frames, circles, badges, borders, grid lines or labels anywhere.\n\nTwo separate collectible power-up props for a 2D arena shooter, in one row, the same size, with wide empty space between them, not touching each other or the image edges, both seen from the front and slightly from above, floating (no ground, no shadow, no pedestal). Big chunky shapes that still read at 40 pixels tall.\n1. Health: a chunky low-poly medkit capsule, a rounded white faceted case with a big bold red cross on the front and a small glowing pink-red crystal light on top.\n2. Grenade refill: three chunky low-poly hand grenades bundled side by side with a dark strap, white and red armor plates like the gear in the reference, each with a short dark steel cap, and a small glowing yellow light on the strap.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "lowpoly",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "backgrounds/lowpoly_pickups/refs/arma_vistas_alfa_43c24689_FFFFFF.png",
+      "sha256": "098a6276ced43e89fcc2719888218ceb7fdf16b06096fe6225afd8f2057555c3"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    },
+    {
+      "file": "characters/lowpoly/refs/arma_vistas_alfa.png",
+      "sha256": "43c246895b718959413a672a9bd9705bea44b1a7775ac54e0828da710d4e2855"
+    }
+  ],
+  "background": "key",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14c17-cfc2-75c0-a9ad-0b17762f5b7e",
+  "created": "2026-10-17T23:00:27+00:00",
+  "sha256": "c9495afe4cba2b33ab52160983742a2da02acc1499608320c09f19e7677ad6cb",
+  "post": {
+    "file": "backgrounds/lowpoly_pickups/post/pickups/nano-banana-2.1_1",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FC03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6392,
+      "opaque": 0.356,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "hp": [
+        157,
+        243,
+        1239,
+        1246
+      ],
+      "gren": [
+        1518,
+        345,
+        2592,
+        1234
+      ]
+    },
+    "trim": {
+      "hp": [
+        0,
+        0,
+        1082,
+        1003
+      ],
+      "gren": [
+        0,
+        0,
+        1074,
+        889
+      ]
+    },
+    "files": {
+      "hp": {
+        "file": "hp.png",
+        "w": 1082,
+        "h": 1003
+      },
+      "gren": {
+        "file": "gren.png",
+        "w": 1074,
+        "h": 889
+      }
+    }
+  }
+}

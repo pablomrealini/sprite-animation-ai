@@ -1,0 +1,105 @@
+{
+  "attempts": [
+    {
+      "id": "pickups/nano-banana-2.1_2",
+      "asset": "pickups",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": null,
+      "size": "16:9 2K",
+      "usd_estimate": 0.063,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_pickups/refs/arma_vistas_alfa_43c24689_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14c17-cfb8-7430-9169-345166bbd16d",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14c17-cfb8-7430-9169-345166bbd16d/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14c17-cfb8-7430-9169-345166bbd16d"
+      },
+      "submitted": "2026-10-17T22:59:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T23:00:27+00:00"
+    },
+    {
+      "id": "pickups/nano-banana-2.1_1",
+      "asset": "pickups",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": null,
+      "size": "16:9 2K",
+      "usd_estimate": 0.063,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_pickups/refs/arma_vistas_alfa_43c24689_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14c17-cfc2-75c0-a9ad-0b17762f5b7e",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14c17-cfc2-75c0-a9ad-0b17762f5b7e/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14c17-cfc2-75c0-a9ad-0b17762f5b7e"
+      },
+      "submitted": "2026-10-17T22:59:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T23:00:27+00:00"
+    },
+    {
+      "id": "pickups/gpt-image-2.5-sunburst-fal_2",
+      "asset": "pickups",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1703,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_pickups/refs/arma_vistas_alfa_43c24689_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14c17-d13c-7392-8e6a-cb2d09b95d77",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14c17-d13c-7392-8e6a-cb2d09b95d77/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14c17-d13c-7392-8e6a-cb2d09b95d77"
+      },
+      "submitted": "2026-10-17T22:59:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T23:00:27+00:00"
+    },
+    {
+      "id": "pickups/gpt-image-2.5-sunburst-fal_1",
+      "asset": "pickups",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1703,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_pickups/refs/arma_vistas_alfa_43c24689_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14c17-d13a-7eb3-899c-54de6c669c7d",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14c17-d13a-7eb3-899c-54de6c669c7d/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14c17-d13a-7eb3-899c-54de6c669c7d"
+      },
+      "submitted": "2026-10-17T22:59:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T23:00:28+00:00"
+    }
+  ],
+  "qa": {}
+}

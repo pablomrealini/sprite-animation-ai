@@ -1,0 +1,54 @@
+# El retrato del ranger para el HUD de la arena (prototypes/arena): arriba a la derecha, un círculo por jugador con la
+# cara y la salud en un arco alrededor (Pablo, 2026-10-17, como los party games). Tres caras del mismo retrato: normal,
+# recién golpeado (titila un instante al recibir un golpe) y fuera de combate (cuando se queda sin vidas).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/ranger_hud/gen.toml --dry-run
+# Ver "Fondos por API de imagen" en pipeline/README.md.
+#
+# Los otros equipos salen del mismo dibujo: el juego cambia el tono del rojo de la armadura, como con el atlas. Por
+# eso tiene que ser el ranger de la referencia, con el casco blanco de franjas rojas y la armadura roja.
+# Escala en el juego: el círculo mide 36 px de pantalla (72 en una pantalla retina); el post recorta cada cara y el
+# juego la encaja en el círculo. El prompt pide formas grandes y contorno grueso, que se lean así de chicas.
+#
+# Dos modelos, dos hojas cada uno, para elegir: GPT Image 2.5 Sunburst (alfa nativo, como la granada y los efectos) y
+# Nano Banana 2.1 (el que mejor sostiene al personaje de la referencia).
+#
+# Generadas el 2026-10-17 (US$0,35). Elegida la 2 de Nano Banana (HUD_ART en prototypes/arena/build.py): las tres
+# caras salen con el mismo encuadre (788 × 961), así cambiar de cara no salta, y la armadura gris es la del sprite.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal", "nano-banana-2.1"]
+images_per_asset = 2      # dos hojas por modelo para elegir
+max_usd = 2               # si la estimación lo pasa, no se manda nada
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+game = """
+2D video game character art in the exact style of the reference image: bold, uniform black outlines (thick ink \
+lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly \
+brushwork, clean chunky shapes, readable silhouettes.
+"""
+no_text = "No text, letters, numbers, logos, frames, circles, badges, borders, grid lines or labels anywhere."
+
+[[asset]]
+name = "portrait"         # las tres caras del retrato, en fila
+style = ["game", "no_text"]
+prompt = """
+Three separate head-and-shoulders portrait icons of the exact character from the reference (the same white helmet \
+with red stripes and dark visor band, the same face, the same red and dark grey armor), in one row, all the same \
+size and framing, with wide empty space between them, not touching each other or the image edges. Each one is \
+the head and the top of the shoulders only, turned three quarters to the right (looking right), the helmet near \
+the top and the shoulders cut flat at the bottom, so it fits inside a round icon. Big simple shapes and thick \
+outlines that still read at 70 pixels wide.
+1. Normal: calm and determined, the same expression as the reference.
+2. Hit: just got punched, wincing, eyes squeezed shut, teeth gritted, head tilted back a little.
+3. Knocked out: dazed, eyes drawn as two X marks, mouth open, a small sweat drop, head tilted down a little.
+"""
+refs = ["../../poses/ranger_concept.png"]
+ref_role = "character"
+aspect = "16:9"
+alpha = "cutout"
+split = ["normal", "hit", "ko"]

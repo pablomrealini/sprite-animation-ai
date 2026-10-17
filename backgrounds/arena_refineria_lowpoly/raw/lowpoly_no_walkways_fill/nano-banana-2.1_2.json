@@ -1,0 +1,66 @@
+{
+  "set": "arena_refineria_lowpoly",
+  "asset": "lowpoly_no_walkways_fill",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nEdit the reference image. It has four solid magenta (#FF00FF) rectangles against the left and right side walls: two near the top and two lower down, just above the floor. Fill each magenta rectangle with what belongs there, continuing the surroundings so that no magenta is left: at the far left and right edges the tall side wall machinery continues straight through (gray columns and panels, red pipes, cyan lights), and between the wall and the rest of the image the hazy blue background refinery, distant pipes and sky continue, in the same flat-shaded low-poly style. Do not put any walkway, platform, ledge, deck, end cap, post, brace or crate in the magenta areas: they must become open background and wall.\nDo not change anything outside the magenta rectangles: keep the center pillar, the side walls, the floor, the pipes and the background exactly where they are, with the same colors and low-poly rendering.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/arena_refineria_lowpoly/refs/no_walkways_hueco.png",
+      "sha256": "11b56b43209c8e09d8fa4d57576001881e421b936e3aa680795f3672d0376c2a"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/arena_refineria_lowpoly/refs/no_walkways_hueco.png",
+      "sha256": "11b56b43209c8e09d8fa4d57576001881e421b936e3aa680795f3672d0376c2a"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14be6-6714-75f0-820a-377a4c0f976f",
+  "created": "2026-10-17T22:06:24+00:00",
+  "sha256": "8c764583c388a61942aaa78952f1c611ee4cfc2fdc1c1332d0c6a15acaec5ea5",
+  "post": {
+    "file": "backgrounds/arena_refineria_lowpoly/post/lowpoly_no_walkways_fill/nano-banana-2.1_2.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

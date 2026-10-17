@@ -1,0 +1,122 @@
+{
+  "set": "ranger_hud",
+  "asset": "portrait",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "2D video game character art in the exact style of the reference image: bold, uniform black outlines (thick ink lines), flat cel colors with at most one darker shade per color, no gradients, no texture noise, no painterly brushwork, clean chunky shapes, readable silhouettes.\n\nNo text, letters, numbers, logos, frames, circles, badges, borders, grid lines or labels anywhere.\n\nThree separate head-and-shoulders portrait icons of the exact character from the reference (the same white helmet with red stripes and dark visor band, the same face, the same red and dark grey armor), in one row, all the same size and framing, with wide empty space between them, not touching each other or the image edges. Each one is the head and the top of the shoulders only, turned three quarters to the right (looking right), the helmet near the top and the shoulders cut flat at the bottom, so it fits inside a round icon. Big simple shapes and thick outlines that still read at 70 pixels wide.\n1. Normal: calm and determined, the same expression as the reference.\n2. Hit: just got punched, wincing, eyes squeezed shut, teeth gritted, head tilted back a little.\n3. Knocked out: dazed, eyes drawn as two X marks, mouth open, a small sweat drop, head tilted down a little.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "game",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/ranger_hud/refs/ranger_concept_f08d29d6_FFFFFF.png",
+      "sha256": "efa0a46ecdeca2ce4c93c51d1138034384b39be6916a62b148cbedf9d537dfba"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "poses/ranger_concept.png",
+      "sha256": "f08d29d65962369f6e4498a03ee78c39360f70284cf021792c28820009379b75"
+    }
+  ],
+  "background": "key",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14adc-69ab-7361-a610-ed9039406715",
+  "created": "2026-10-17T17:15:49+00:00",
+  "sha256": "775c6f328a82b24422bd54bb4f61019c07c5c268ad863817c88bccc2f852f205",
+  "post": {
+    "file": "backgrounds/ranger_hud/post/portrait/nano-banana-2.1_2",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [
+      "2 manchas chicas descartadas"
+    ],
+    "key": {
+      "key_color": "#02FD02",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.5879,
+      "opaque": 0.4075,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "normal": [
+        123,
+        236,
+        911,
+        1197
+      ],
+      "hit": [
+        978,
+        236,
+        1765,
+        1197
+      ],
+      "ko": [
+        1834,
+        236,
+        2621,
+        1197
+      ]
+    },
+    "trim": {
+      "normal": [
+        0,
+        0,
+        788,
+        961
+      ],
+      "hit": [
+        0,
+        0,
+        787,
+        961
+      ],
+      "ko": [
+        0,
+        0,
+        787,
+        961
+      ]
+    },
+    "files": {
+      "normal": {
+        "file": "normal.png",
+        "w": 788,
+        "h": 961
+      },
+      "hit": {
+        "file": "hit.png",
+        "w": 787,
+        "h": 961
+      },
+      "ko": {
+        "file": "ko.png",
+        "w": 787,
+        "h": 961
+      }
+    }
+  }
+}

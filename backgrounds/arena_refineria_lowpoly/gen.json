@@ -1,0 +1,151 @@
+{
+  "attempts": [
+    {
+      "id": "lowpoly_restyle/nano-banana-2.1_1",
+      "asset": "lowpoly_restyle",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.063,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bdb-e066-7683-975e-8dd6ca114578",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bdb-e066-7683-975e-8dd6ca114578/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bdb-e066-7683-975e-8dd6ca114578"
+      },
+      "submitted": "2026-10-17T21:54:22+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:55:02+00:00"
+    },
+    {
+      "id": "lowpoly_restyle/nano-banana-2.1_2",
+      "asset": "lowpoly_restyle",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.063,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14bdb-e063-7f33-928f-57b6ca521bf1",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bdb-e063-7f33-928f-57b6ca521bf1/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14bdb-e063-7f33-928f-57b6ca521bf1"
+      },
+      "submitted": "2026-10-17T21:54:22+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T21:55:02+00:00"
+    },
+    {
+      "id": "lowpoly_no_walkways/nano-banana-2.1_1",
+      "asset": "lowpoly_no_walkways",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14be1-9b33-7ae3-9b5f-582dae746a01",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be1-9b33-7ae3-9b5f-582dae746a01/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be1-9b33-7ae3-9b5f-582dae746a01"
+      },
+      "submitted": "2026-10-17T22:00:37+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T22:01:19+00:00"
+    },
+    {
+      "id": "lowpoly_no_walkways/nano-banana-2.1_2",
+      "asset": "lowpoly_no_walkways",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14be1-a000-7060-b472-4fb8300e0896",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be1-a000-7060-b472-4fb8300e0896/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be1-a000-7060-b472-4fb8300e0896"
+      },
+      "submitted": "2026-10-17T22:00:38+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T22:01:18+00:00"
+    },
+    {
+      "id": "lowpoly_no_walkways_fill/nano-banana-2.1_1",
+      "asset": "lowpoly_no_walkways_fill",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria_lowpoly/refs/no_walkways_hueco.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14be6-648f-7041-ad98-e3dfe42fade4",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be6-648f-7041-ad98-e3dfe42fade4/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be6-648f-7041-ad98-e3dfe42fade4"
+      },
+      "submitted": "2026-10-17T22:05:51+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T22:06:24+00:00"
+    },
+    {
+      "id": "lowpoly_no_walkways_fill/nano-banana-2.1_2",
+      "asset": "lowpoly_no_walkways_fill",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/arena_refineria_lowpoly/refs/no_walkways_hueco.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14be6-6714-75f0-820a-377a4c0f976f",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be6-6714-75f0-820a-377a4c0f976f/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14be6-6714-75f0-820a-377a4c0f976f"
+      },
+      "submitted": "2026-10-17T22:05:51+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T22:06:24+00:00"
+    }
+  ],
+  "qa": {}
+}

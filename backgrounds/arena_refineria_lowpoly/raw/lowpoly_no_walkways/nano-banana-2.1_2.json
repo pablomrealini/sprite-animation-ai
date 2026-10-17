@@ -1,0 +1,66 @@
+{
+  "set": "arena_refineria_lowpoly",
+  "asset": "lowpoly_no_walkways",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere.\n\nEdit the reference image. Remove all six elevated walkways completely, each one together with everything that holds it up, including the parts where they meet or come out of the side walls (nothing of them may stay attached to the walls):\n1. The two top walkways that come out of the left and right walls near the top (light gray decks with red end caps and a small yellow-and-black hazard panel), with the posts, brackets and diagonal braces under them.\n2. The two middle walkways that stand free on either side of the center pillar, with the X-braced scaffolding, posts and feet under them.\n3. The two lower walkways that come out of the left and right walls, with all the posts, X braces, end blocks, brackets and small hazard posts under them, down to the floor.\n4. The wide platform with yellow-and-black hazard stripes and red end caps in the middle of the center pillar: the pillar shaft continues straight through where it was, with the same frame and glowing cyan light strips.\nFill every removed area with what is behind it: the blue sky and low-poly clouds, the hazy background refinery with its towers, tanks, pipes and distant catwalks, and, at the far left and right, the tall machinery walls continuing straight down, so that no trace of the walkways or their supports is left and the middle of the image is open background.\nKeep everything else exactly as it is: the tall machinery walls at the far left and right edges, the center pillar with its top cap and base, the long floor walkway along the bottom with the machinery and red pipes under it, at exactly the same positions and sizes, in the same flat-shaded low-poly style and colors. Do not move, add, resize or redraw anything else.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.",
+  "styles": [
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    }
+  ],
+  "background": "opaque",
+  "size_requested": "16:9 2K",
+  "size": [
+    2752,
+    1536
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.061,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a14be1-a000-7060-b472-4fb8300e0896",
+  "created": "2026-10-17T22:01:18+00:00",
+  "sha256": "89fa34706478d53891922dfe7ef844f712e916338b58129e72dbed0dd399336c",
+  "post": {
+    "file": "backgrounds/arena_refineria_lowpoly/post/lowpoly_no_walkways/nano-banana-2.1_2.png",
+    "source": {
+      "w": 2752,
+      "h": 1536
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 2752,
+        "h": 1536
+      }
+    }
+  }
+}

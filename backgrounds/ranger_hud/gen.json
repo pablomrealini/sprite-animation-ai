@@ -1,0 +1,101 @@
+{
+  "attempts": [
+    {
+      "id": "portrait/gpt-image-2.5-sunburst-fal_2",
+      "asset": "portrait",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1138,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_hud/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14adc-69a2-76c2-b9ab-1f90e5c7c595",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14adc-69a2-76c2-b9ab-1f90e5c7c595/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14adc-69a2-76c2-b9ab-1f90e5c7c595"
+      },
+      "submitted": "2026-10-17T17:15:20+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T17:15:56+00:00"
+    },
+    {
+      "id": "portrait/nano-banana-2.1_2",
+      "asset": "portrait",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": null,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_hud/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14adc-69ab-7361-a610-ed9039406715",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14adc-69ab-7361-a610-ed9039406715/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14adc-69ab-7361-a610-ed9039406715"
+      },
+      "submitted": "2026-10-17T17:15:20+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T17:15:49+00:00"
+    },
+    {
+      "id": "portrait/gpt-image-2.5-sunburst-fal_1",
+      "asset": "portrait",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1138,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_hud/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14adc-69ad-7c33-9b05-4cf7ccc335cd",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14adc-69ad-7c33-9b05-4cf7ccc335cd/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a14adc-69ad-7c33-9b05-4cf7ccc335cd"
+      },
+      "submitted": "2026-10-17T17:15:20+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T17:15:53+00:00"
+    },
+    {
+      "id": "portrait/nano-banana-2.1_1",
+      "asset": "portrait",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": null,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/ranger_hud/refs/ranger_concept_f08d29d6_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a14adc-69a0-7f13-a64c-fabf92cb600b",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14adc-69a0-7f13-a64c-fabf92cb600b/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a14adc-69a0-7f13-a64c-fabf92cb600b"
+      },
+      "submitted": "2026-10-17T17:15:20+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-17T17:15:53+00:00"
+    }
+  ],
+  "qa": {}
+}
