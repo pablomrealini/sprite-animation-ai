@@ -81,6 +81,11 @@ abrieron o cerraron (si el canvas no cambió, la comparación es exacta; si camb
 
 ## Cuadros a mano
 
+El low-poly va a 24 fps desde el 2026-10-19 (`game_fps = 24`): con los clips de Kling (24 fps), los cuadros a mano son
+todos los nativos del tramo salvo los rotos, salteados (`revision/24fps_hoy.md`). RIG.lowpoly nombra los cuadros por su
+nativo (`natives: true`): si cambian qué nativos entran, el juego los resuelve solo, pero un nativo de RIG que se saque
+del atlas va al más cercano (con aviso en la consola): avisarle a Programación.
+
 `frames = [n, …]` (oneshot) toma esos nativos del clip (24 fps), uno por cuadro de salida, sin decimar. Sin `frames`, el
 pipeline toma el más nítido de cada par: los intervalos quedan desparejos y a veces cae en uno corrido. Para el salto,
 uno de cada dos salvo donde Kling los corre (ver los comentarios de `character.toml`).
@@ -123,6 +128,12 @@ tanda 3) no se borra hasta que Pablo decida.
    cuadro (medido: casco contra el centro del cuerpo, horario desde arriba).
 
 ## Lo que aprendimos
+
+- 24 fps (prueba del 2026-10-19, `revision/para_pablo/24fps.md`): los clips de Kling ya son de 24, así que los ciclos y
+  los recortes pasan solos con `game_fps = 24`; los cuadros a mano hay que rehacerlos (todos los nativos del tramo,
+  sosteniendo los rotos) y los números de RIG se remapean por nativo (`work_revisar/fps24_todo/remap.py`). La hoja 0,5×
+  en WebP sin pérdida es la mitad de la página del juego: todo a 24 no entra en los 16 MB del artifact si no se dejan
+  afuera las animaciones apagadas. `video_fps.py` arma el video lado a lado de dos corridas del atlas.
 
 - El arma de run_gun "saltaba" (2026-10-18): `apagar_video.py` pinta de gris todo lo cian, también el halo del cañón
   prendido, recortado por el borrado de rayos: la tapa cambia de forma cada pocos cuadros. Para revisar un arma:

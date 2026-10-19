@@ -92,6 +92,9 @@ se puede alcanzar, el editor tiene que decir lo mismo (`HANG_ON` y `PHYS` en `ed
   salía un cuadro tarde y había un cuadro sin granada ni en la mano ni en el aire.
 - Las cajas de golpe salen de `hurtBox(Q)` (balas, golpe, granada, modo H): si una animación nueva cambia la forma
   del cuerpo (el slide, con las piernas adelante), se ajusta ahí, en proporción a la caja de pie contra el dibujo.
+- Los cuadros del low-poly en `RIG` van por su nativo del clip (`natives: true`, `natRig`), no por la posición: a 12 o a 24
+  fps es la misma tabla. Lo que se reproduce de corrido va con `fpsOf(anim)`, nunca con un `* 12` fijo. Lo que el juego
+  tiene apagado no va a la página (`drop`, `OFF_ANIMS` en build.py): si se prende un interruptor, recompilar.
 - Lo de cada personaje que el panel ajusta (de dónde sale la granada) va en `RIG.<personaje>` y se guarda con el
   personaje; si no, al cambiar de personaje queda lo del otro.
 - Los dibujos de Arte se exportan en `build.py` con `export_hud` (set, hoja elegida, pieza de escala, eje y medida en px

@@ -46,6 +46,10 @@ MANO = {
     24: (463, 290, -15), 28: (463, 291, -12), 36: (464, 290, -15), 44: (479, 300, -10), 45: (494, 297, -5),
     47: (512, 312, -40), 49: (780, 276, 15), 50: (805, 272, 25),
 }
+# a 24 fps (2026-10-19) se usan todos los nativos con la granada en la mano: en los que no están en MANO, el centro y el
+# giro salen de interpolar entre los de MANO; hasta el 45 (la esfera se ve) el centro se corrige con `esfera`, con el
+# mismo corrimiento promedio que tienen los de MANO contra lo detectado
+GRANADA = [n for n in range(24, 51) if n != 48]   # el 48 sale movido y no se usa: la interpolación caía en la cara
 
 
 def esfera(frame: np.ndarray, hint: tuple[int, int], r: int = 60) -> tuple[float, float, float] | None:
@@ -62,6 +66,26 @@ def esfera(frame: np.ndarray, hint: tuple[int, int], r: int = 60) -> tuple[float
     ys, xs = np.nonzero(lab == i)
     (cx, cy), rad = cv2.minEnclosingCircle(np.column_stack([xs, ys]).astype(np.float32))
     return cx, cy, rad
+
+
+def manos(frames: list[np.ndarray]) -> dict[int, tuple[float, float, float]]:
+    """Centro y giro de la granada de la mano en cada nativo de GRANADA (ver arriba)."""
+    det = {n: esfera(frames[n], MANO[n][:2]) for n in MANO if n <= 45}
+    off = np.mean([(MANO[n][0] - d[0], MANO[n][1] - d[1]) for n, d in det.items() if d], axis=0)
+    out = {}
+    for n in GRANADA:
+        if n in MANO:
+            out[n] = MANO[n]
+            continue
+        a, b = max(k for k in MANO if k < n), min(k for k in MANO if k > n)
+        t = (n - a) / (b - a)
+        cx, cy, ang = (MANO[a][i] + (MANO[b][i] - MANO[a][i]) * t for i in range(3))
+        if n <= 45:
+            e = esfera(frames[n], (round(cx), round(cy)))
+            if e and e[2] > 15 and abs(e[0] + off[0] - cx) < 25 and abs(e[1] + off[1] - cy) < 25:
+                cx, cy = e[0] + off[0], e[1] + off[1]
+        out[n] = (cx, cy, ang)
+    return out
 
 
 def granada_juego() -> Image.Image:
@@ -107,22 +131,23 @@ def main() -> None:
         imgio.extract(CLIP, Path(tmp), info, "bt601")
         paths = imgio.frames(Path(tmp))
         frames = [np.array(Image.open(p).convert("RGB")) for p in paths]
-    antes = {n: frames[n].copy() for n in list(MANO) + list(SOLO)}
-    for n, (cx, cy, ang) in MANO.items():
+    pos = manos(frames)
+    antes = {n: frames[n].copy() for n in list(GRANADA) + list(SOLO)}
+    for n, (cx, cy, ang) in pos.items():
         frames[n] = pegar(frames[n], g, cx, cy, ang)
     for n in SOLO:
         frames[n] = solo_personaje(frames[n])
     imgio.encode_rgb_video(frames, OUT, info["fps"], crf=0, pix_fmt="yuv444p")
-    print(f"✓ {OUT}: {len(frames)} cuadros; granada del juego en {', '.join(map(str, MANO))}; "
+    print(f"✓ {OUT}: {len(frames)} cuadros; granada del juego en {GRANADA[0]}–{GRANADA[-1]} (sin el 48); "
           f"sólo el personaje en {SOLO.start}–{SOLO.stop - 1}")
     if args.hoja:
-        hoja(antes, frames, ROOT / "revision" / "throw2_retoque.png")
+        hoja(antes, frames, pos, ROOT / "revision" / "throw2_retoque.png")
 
 
-def hoja(antes: dict[int, np.ndarray], frames: list[np.ndarray], dest: Path) -> None:
+def hoja(antes: dict[int, np.ndarray], frames: list[np.ndarray], pos: dict, dest: Path) -> None:
     tiles = []
-    for n in MANO:
-        cx, cy, _ = MANO[n]
+    for n in pos:
+        cx, cy, _ = pos[n]
         box = (round(cx) - 70, round(cy) - 80, round(cx) + 70, round(cy) + 60)
         for f in (antes[n], frames[n]):
             t = Image.fromarray(f).crop(box).resize((280, 280), Image.NEAREST)

@@ -13,6 +13,7 @@ import base64
 import importlib.util
 import io
 import json
+import re
 import shutil
 from pathlib import Path
 
@@ -56,11 +57,18 @@ HUD_ART = {   # elegida el 2026-10-17: la 2 de Nano Banana (las tres caras con e
 # marca measure, como en el ranger. frames: las transiciones a tantos cuadros parejos como las del ranger, porque el
 # juego da 0,04 s por cuadro a las entradas y no deja disparar hasta que terminan (con los 9 del clip, el primer tiro
 # salía a los 0,36 s y no a los 0,16)
+# drop: animaciones del atlas que el juego no usa y no van a la página (Pablo, 2026-10-19: "sacando de la página las
+# animaciones apagadas"); con drop_off, además, las de los interruptores apagados de src.html (OFF_ANIMS). Siguen en el
+# atlas: si se prende el interruptor, vuelven a entrar al compilar
 CHARACTERS = {
     "ranger": {"label": "2D", "variant": "1x"},
     "lowpoly": {"label": "Low-poly", "variant": "0.5x", "fx_muzzle": True,
-                "frames": {"shoot_in": 4, "shoot2h_in": 4, "crouch_in": 4, "crouch_out": 4}},
+                "frames": {"shoot_in": 4, "shoot2h_in": 4, "crouch_in": 4, "crouch_out": 4},
+                # el tiro viejo (el juego usa throw2) y el mortal viejo (?mortal=1 usa double_jump_fix)
+                "drop": ["throw", "double_jump"], "drop_off": True},
 }
+# las animaciones de cada interruptor de src.html (`const NOMBRE = true|false`): apagado, no van a la página
+OFF_ANIMS = {"HANG_ON": ["hang_in", "hang", "hang_two", "climb"], "TWO_HAND_ON": ["shoot2h_in", "shoot2h", "shoot2h_out"]}
 # los power-ups low-poly (backgrounds/lowpoly_pickups): la hoja elegida y el alto de la pieza que da la escala, en px del
 # archivo exportado (en el juego flotan a 46 px de alto: el doble, para que se vean nítidos en retina)
 PICKUP_SET = ROOT / "backgrounds" / "lowpoly_pickups"
@@ -183,13 +191,56 @@ def export_hud(pb, dist: Path, set_dir: Path = HUD_SET, art: dict = HUD_ART, pre
     return data
 
 
+def switches_off() -> list[str]:
+    """Las animaciones de los interruptores apagados en src.html (OFF_ANIMS)."""
+    src = (HERE / "src.html").read_text(encoding="utf-8")
+    off = []
+    for sw, names in OFF_ANIMS.items():
+        m = re.search(rf"\b{sw} = (true|false)\b", src)
+        if m and m.group(1) == "false":
+            off += names
+    return off
+
+
+def repack(sheet: Image.Image, anims: dict, width: int = 2048, pad: int = 2) -> Image.Image:
+    """Un atlas nuevo con sólo los cuadros de `anims` (los mismos recortes, sin repetir los que comparten), en estantes
+    de `width`, y los cuadros corridos a su lugar nuevo (x, y del atlas: f[0], f[1])."""
+    frames = {id(f): f for a in anims.values() for f in a["f"]}.values()   # shoot_out comparte los de shoot_in
+    rects = sorted({tuple(f[:4]) for f in frames}, key=lambda r: (-r[3], -r[2]))
+    pos, x, y, shelf = {}, 0, 0, 0
+    for r in rects:
+        if x + r[2] > width:
+            x, y, shelf = 0, y + shelf + pad, 0
+        pos[r] = (x, y)
+        x += r[2] + pad
+        shelf = max(shelf, r[3])
+    out = Image.new("RGBA", (width, y + shelf))
+    for r, (px, py) in pos.items():
+        out.paste(sheet.crop((r[0], r[1], r[0] + r[2], r[1] + r[3])), (px, py))
+    for f in frames:
+        f[0], f[1] = pos[tuple(f[:4])]
+    return out
+
+
 def export_character(pb, name: str, cfg: dict) -> dict:
     """Las medidas y el atlas de un personaje del selector: {label, spr, atlas} con el atlas como data: URI. El de una
     página va tal cual (PNG); el unido de varias, en WebP sin pérdida (los colores exactos para el recoloreo, ~20%
-    menos que en PNG)."""
+    menos que en PNG). Lo de `drop` (y, con drop_off, lo apagado en src.html) se saca y el atlas se rearma sin eso."""
     out = ROOT / "characters" / name / "out"
     sheet, frames = pb.load_atlas(out, name, cfg["variant"])
     spr = pb.measure(out, name, cfg["variant"], (sheet, frames))
+    drop = [an for an in cfg.get("drop", []) + (switches_off() if cfg.get("drop_off") else []) if an in spr["anims"]]
+    for an in drop:
+        del spr["anims"][an]
+    # nat: el cuadro del clip (nativo) de cada cuadro, de provenance.json; con él, RIG puede nombrar los cuadros por su
+    # nativo y sirven a 12 o a 24 fps (natRig en src.html)
+    prov = out / "provenance.json"
+    if prov.exists():
+        pa = json.loads(prov.read_text())["animations"]
+        for an, a in spr["anims"].items():
+            nat = (pa.get(an, {}).get("timing") or {}).get("native_indices")
+            if nat and len(nat) == len(a["f"]):
+                a["nat"] = nat
     for an, a in spr["anims"].items():
         fxp = out / "fx" / f"{an}_muzzle.json"
         if cfg.get("fx_muzzle") and fxp.exists():
@@ -198,15 +249,23 @@ def export_character(pb, name: str, cfg: dict) -> dict:
             for f, m in zip(a["f"], fx):
                 f[6], f[7] = round(m["dx"], 1), round(m["dy"], 1)
     for an, n in cfg.get("frames", {}).items():
+        if an not in spr["anims"]:
+            continue
         a = spr["anims"][an]
-        a["f"] = [a["f"][i] for i in np.round(np.linspace(0, len(a["f"]) - 1, n)).astype(int)]
+        pick = np.round(np.linspace(0, len(a["f"]) - 1, n)).astype(int)
+        a["f"] = [a["f"][i] for i in pick]
+        if "nat" in a:
+            a["nat"] = [a["nat"][i] for i in pick]
     # sin salida de apuntar (el low-poly no la tiene): la entrada al revés
     for b in ("shoot", "shoot2h"):
         if f"{b}_out" not in spr["anims"] and f"{b}_in" in spr["anims"]:
             a = spr["anims"][f"{b}_in"]
-            spr["anims"][f"{b}_out"] = {**a, "f": a["f"][::-1]}
+            spr["anims"][f"{b}_out"] = {**a, "f": a["f"][::-1], **({"nat": a["nat"][::-1]} if "nat" in a else {})}
     pages = json.loads((out / f"{name}.json").read_text())["variants"][cfg["variant"]]["atlas"]
-    if len(pages) == 1:
+    if drop:
+        sheet = repack(sheet, spr["anims"])
+        print(f"  {name}: sin {', '.join(drop)} (atlas de la página {sheet.width} × {sheet.height})")
+    if len(pages) == 1 and not drop:
         src = "data:image/png;base64," + base64.b64encode((out / pages[0]["image"]).read_bytes()).decode()
     else:
         buf = io.BytesIO()

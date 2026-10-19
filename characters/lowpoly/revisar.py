@@ -457,7 +457,7 @@ def main() -> None:
         for anim in args.anims:
             nota = {int(k): v for k, v in notas.get(anim, {}).items()}
             ms = hoja(args.out, anim, rev / f"{anim}_cuadros{args.sufijo}.png", f"{anim}: cuadro por cuadro (atlas 1x)",
-                      nota=nota)
+                      nota=nota, con_usos=args.out.resolve() == (HERE / "out").resolve())   # RIG es del atlas del juego
             hoja_juego(args.out, anim, rev / f"{anim}_juego{args.sufijo}.png", f"{anim} a tamaño de juego (0,5× × 1,6)")
             for i, m in enumerate(ms):
                 print(f"{anim:12s} {i:3d}  nit {m['nit']:.2f}  rosa {m['pink']:4d}  dx {m['dx']:+5.1f}  "

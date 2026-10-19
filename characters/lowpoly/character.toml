@@ -18,7 +18,9 @@
 [character]
 name = "lowpoly"
 style = "hd"
-game_fps = 12
+game_fps = 24             # todo a 24 (Pablo, 2026-10-19: "Pasá todo a 24 de una"): los clips de Kling son de 24, así que
+                          # los ciclos y los recortes salen con todos los nativos; los cuadros a mano, con todos los del
+                          # tramo salvo los rotos, salteados (revision/24fps_hoy.md). A 12 estaba revision/para_pablo/24fps.md
 target_height = 256       # la arena dibuja al personaje a ~205 px en 1080p (128 × 0,8 × 2); la variante 0,5× da 128 como el ranger
 scale_reference = "idle_combat"
 margin_px = 8
@@ -95,17 +97,17 @@ model = "kling-o3-std"
 prompt = "prompts/jump.txt"
 pose = "poses/salto_dullmagenta_16x9.png"
 
-# cuadros a mano, uno de cada dos (24 → 12 fps) salvo donde Kling los corre: 14 en vez de 13 (sube borroso) y 18 en vez
-# de 17 (mancha en la pierna de atrás) (revisión del 2026-10-18, revision/jump_cuadros.png). La caída (el 8) es el 21:
-# el juego la sostiene hasta tocar el piso (~200 ms) y en el 22 la cara y el brazo salen movidos; en el 21 las botas se
-# juntan, pero a tamaño de juego no se nota (revision/caida_tamano_juego.png). En la arena, cada cuadro tiene su fase
-# (RIG.lowpoly.jump en prototypes/arena/src.html): 0–2 parado y agachándose (no se usan: despega al toque), 3 el
-# empujón, 4–5 sube, 6 ápice, 7 empieza a caer, 8 cae, 9 aterriza
+# cuadros a mano, a 24: todos los nativos de 5 a 23 salvo los que Kling corre (revisión del 2026-10-18,
+# revision/jump_cuadros.png): 13 (sube borroso), 17 (mancha en la pierna de atrás) y 22 (la cara y el brazo movidos).
+# En la arena, cada cuadro tiene su fase (RIG.lowpoly.jump en prototypes/arena/src.html): 0–5 parado y agachándose (n5–
+# 10; no se usan: despega al toque), 6 el empujón (n11), 7 despega (n12), 8–10 sube (n14–16), 11 ápice (n18), 12
+# empieza a caer (n19), 13–14 cae (n20–21; el juego sostiene el 14 hasta tocar el piso), 15 aterriza (n23). A 12 era
+# [5, 7, 9, 11, 14, 15, 18, 19, 21, 23]
 [[animation]]
 name = "jump"
 clip = "salto"
 kind = "oneshot"
-frames = [5, 7, 9, 11, 14, 15, 18, 19, 21, 23]
+frames = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 18, 19, 20, 21, 23]
 
 # doble salto: set toma 2, el primer mortal (22-42). Provisorio: el plan es la bolita (poses/bolita.png) girada por la
 # arena, porque Kling deforma al personaje en el medio de la vuelta.
@@ -197,13 +199,14 @@ pose = "poses/perfil_dullmagenta_16x9.png"
 # al idle; el 24 sale borroso). Acá, sólo nativos en el lugar y sin manchas: 0 n64 lleva el puño atrás, 1 n67 el puño
 # atrás de la cabeza (el de la carga), 2 n71 el brazo estirado (sale), 3 n72 el brazo estirado, 4 n73 empieza a
 # bajarlo, 5 n63 el puño contra el pecho (los que lo recogen de verdad, n69 y n70, dejan una estela rosa detrás del
-# puño). Lo que no se arregla sin otra toma: en todo el clip está agachado y girado a 3/4 (230–243 px de alto contra
+# puño). A 24 (2026-10-19): 64, 65, 66 y 67 llevan el puño atrás de la cabeza, 71–72 estirado, 73 lo baja, 63 al pecho;
+# se saltean 68 (el puño hecho una mancha naranja) y 69–70 (la estela rosa). Lo que no se arregla sin otra toma: en todo el clip está agachado y girado a 3/4 (230–243 px de alto contra
 # 256 del idle, de perfil), así que entrar y salir del idle salta igual; el brazo pega una trompada, no tira por arriba.
 [[animation]]
 name = "throw_fix"
 clip = "clips/apagado/throw_2.mp4"
 kind = "oneshot"
-frames = [64, 67, 71, 72, 73, 63]
+frames = [64, 65, 66, 67, 71, 72, 73, 63]
 model = "kling-o3-std"
 prompt = "prompts/throw.txt"
 pose = "poses/perfil_dullmagenta_16x9.png"
@@ -320,7 +323,7 @@ pose_body_height_px = 518
 name = "slide_in"
 clip = "slide"
 kind = "oneshot"
-frames = [41, 43, 46, 47]
+frames = [41, 43, 44, 45, 46, 47]   # a 24: sin el 42 (el cuerpo hecho una mancha); 44 y 45 tienen las piernas movidas, pero a tamaño de juego se leen como la caída
 ground_from_clip = true
 
 [[animation]]
@@ -335,7 +338,7 @@ ground_from_clip = true
 name = "slide_out"
 clip = "slide"
 kind = "oneshot"
-frames = [75, 76, 77, 78, 79, 80, 82, 84]   # el 75 a tamaño de juego se lee bien; el 84 es la zancada del 0 (run_gun)
+frames = [75, 76, 77, 78, 79, 80, 82, 83, 84]   # a 24: sin el 81 (borroso); el 75 a tamaño de juego se lee bien; el 84 es la zancada del 0 (run_gun)
 ground_from_clip = true
 
 # doble salto en bolita: toma 1, el primer salto. Sube (16–20), se encoge (21–22), sostiene la bolita (23–41) y se
@@ -353,14 +356,14 @@ pose = "poses/salto_apagada_dullmagenta_16x9.png"
 name = "double_jump_in"
 clip = "bolita"
 kind = "oneshot"
-frames = [16, 18, 20, 21, 22]
+frames = [16, 17, 18, 19, 20, 21, 22]   # a 24, todos
 ground_from_clip = true
 
 [[animation]]
 name = "double_jump_out"
 clip = "bolita"
 kind = "oneshot"
-frames = [43, 44, 45, 47]
+frames = [43, 44, 45, 47]   # a 24 igual: el 46 sale borroso (y el 42, movido)
 ground_from_clip = true
 
 # la bolita sostenida: poses/bolita.png (la gira el juego), no la del video, donde el casco crece ~30 % y pierde la
@@ -392,8 +395,11 @@ pose_body_height_px = 518   # la granada levantada estira la pose a 532 px; el c
 # el 22 movido, el 29–30 con una mancha roja arriba del casco ni el 33–34 con una chispa); tiro 45, 47, 49, 50 (sin el
 # 48 movido; el 50 es el último con la granada en la mano); suelta 51; seguimiento 52, 56, 60, 62; vuelta 64, 66, 68,
 # 72, 76, que termina en la pose de perfil. Pablo la quiere más rápida en el juego: la velocidad la pone RIG.
+# A 24 (2026-10-19): todos los nativos de 24 a 76 salvo los rotos (29–30, 33–34 y 48); retocar_throw2.py pega la
+# granada del juego en todos los que la tienen en la mano (24–50). Cuadro → nativo: 0–3 n24–27, 4–5 n28, 31, 6 n32,
+# 7–19 n35–47, 20–21 n49–50, 22 n51 (la suelta), 23–47 n52–76.
 [[animation]]
 name = "throw2"
 clip = "throw_cerca"
 kind = "oneshot"
-frames = [24, 28, 36, 44, 45, 47, 49, 50, 51, 52, 56, 60, 62, 64, 66, 68, 72, 76]
+frames = [24, 25, 26, 27, 28, 31, 32, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76]
