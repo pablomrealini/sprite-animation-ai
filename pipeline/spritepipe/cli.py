@@ -176,6 +176,8 @@ def run_character(cfg_path: Path, strict: bool) -> int:
                                             fixed_key)
         if ch.anchor == "clip":  # el frame 0 del clip es la pose parada: de ahí sale el ancla de todas sus animaciones
             bodies[anim.name]["frame0_anchor_x"] = align.image_anchor_x(imgio.load(raw[0]), anim_key(ch, anim), fixed_key)
+        if anim.ground_from_clip:  # el tramo arranca en el aire: el piso es el del frame 0 del clip
+            bodies[anim.name]["frame0_ground"] = align.image_ground(imgio.load(raw[0]), anim_key(ch, anim), fixed_key)
         if qres["verdict"] == "fail":
             failed = True
             if strict:

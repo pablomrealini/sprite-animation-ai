@@ -1,0 +1,42 @@
+# Tanda 4 del low-poly (2026-10-18): el slide de nuevo, con la pose fija. El de la tanda 3 no le gustó a Pablo ("se
+# abre de piernas ahora... quería algo más así... como que se desliza en el piso... sin disparar"): pedido con
+# palabras, Kling lo hizo sentado con las piernas abiertas (slide_2) o de panza disparando (slide_1).
+# Acá el slide clásico de plataformas queda fijado en un cuadro quieto, como en subir (primer y último cuadro):
+#   deslizarse   la pose (poses_gen, asset deslizarse, US$0,36): pies adelante, pierna de adelante estirada al ras con
+#                la suela adelante, la de atrás doblada con la rodilla arriba, torso bajo y echado atrás, la mano
+#                izquierda apoyada atrás, cabeza arriba, pistola apagada al pecho. Elegida: gpt-image-2.5-sunburst-fal_2
+#                (poses/deslizarse_concept.png), la más baja: 386 px de alto contra 483 de nano_1 y 504 de correr; en
+#                nano_2 el torso gira a tres cuartos y estira el brazo. A 16:9 con pose_16x9.py de la skill de
+#                Animación: casco del ancho del de correr (242 px), piso en 777 y centrada como correr (x 656-1261).
+#   slide_in     correr (zancada apagada) → la pose: se tira y la sostiene hasta el final
+#   slide_out    la pose → correr: la sostiene un instante, se levanta y corre hasta la zancada
+# El sostenido del juego es la pose misma (último cuadro de slide_in = primero de slide_out: empalman). 3 s: la
+# entrada y la salida duran menos de 1 s, y con tiempo de sobra Kling inventa (quietud, disparos).
+#   uv run --project pipeline spritepipe gen-images characters/lowpoly/poses_gen/gen.toml --assets deslizarse --dry-run
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_tanda4.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 3
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 1.2
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/tanda4"
+
+[[animation]]
+name = "slide_in"
+pose = "poses/correr_apagada_dullmagenta_16x9.png"
+prompt = "prompts/slide_in.txt"
+kind = "oneshot"
+last_frame = "poses/deslizarse_dullmagenta_16x9.png"
+
+[[animation]]
+name = "slide_out"
+pose = "poses/deslizarse_dullmagenta_16x9.png"
+prompt = "prompts/slide_out.txt"
+kind = "oneshot"
+last_frame = "poses/correr_apagada_dullmagenta_16x9.png"

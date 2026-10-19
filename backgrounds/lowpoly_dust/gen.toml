@@ -1,0 +1,89 @@
+# El polvo del despegue y del aterrizaje en el estilo low-poly, para la arena (prototypes/arena). Hoy el juego lo hace
+# por código (dust(): círculos grises sueltos); con esto pasa a ser polvo facetado como el humo de la explosión elegida
+# (backgrounds/lowpoly_grenade, e6).
+#   - dust: dos animaciones en la misma hoja, a la misma escala: arriba el despegue (t1–t4), abajo el aterrizaje
+#     (l1–l4). En el juego, con el personaje de ~90 px del juego de alto: el despegue ~56 px de ancho y el aterrizaje
+#     ~80 en el cuadro más grande.
+#   - hard: la caída fuerte (h1–h4), más grande y más alta, ~150 px del juego de ancho en el cuadro más grande.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/lowpoly_dust/gen.toml --dry-run
+#
+# Color: gris neutro, sin tinte, para que el juego lo tiña (el piso de cada arena, el equipo). Todos los cuadros
+# apoyan en la misma línea de piso (abajo plano) y comparten el centro en x: se alinean por el centro de abajo.
+# Modelo: GPT Image 2.5 Sunburst, con alfa nativo. Cada cuadro tiene que salir de una sola mancha (el post separa la
+# hoja por componentes conexos del alfa): nada de piedritas ni motas sueltas, las pone el código.
+#
+# Generadas el 2026-10-18 (US$0,68). Elegida la hoja 1 de los dos assets (post/dust/gpt-image-2.5-sunburst-fal_1/ y
+# post/hard/gpt-image-2.5-sunburst-fal_1/). Es el gris más neutro: la diferencia entre canales da 4 y 3, contra 5 y 6
+# de la hoja 2. La caída fuerte tiene nubes llenas, y la 2 hace columnas de bolitas en h3. Todas las piezas salieron
+# de una mancha, sin descartes. El gris está a ~116 de luma: multiplicado por un color, oscurece (revision.png); para
+# un polvo claro, teñir con un color más claro que el piso o aclarar después. Tamaño en el juego: el despegue mide 62
+# px de ancho en t2 y el aterrizaje, 80 en l3, a la misma escala; la caída fuerte, 150 × 95 en h2.
+# Revisión a tamaño de juego, sobre verde, sobre oscuro y teñido sobre la Refinería: revision.png.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por asset para elegir
+max_usd = 2
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+lowdust = """
+3D low-poly video game dust cloud sprites in the style of the grey smoke puffs in the reference images: rounded \
+puffs built from big faceted polygons with flat per-face shading, clean geometric shapes, no black outlines, no soft \
+airbrushed glow around them, no blur, no texture noise, no particles. Strictly neutral grey with no color tint at \
+all (no blue, no brown, no warm tones): light grey facets in the light from the top left, mid grey, and a darker grey \
+in the shadow, never black, so the game can tint it. Orthographic side view at ground level.
+"""
+no_text = "No text, letters, numbers, logos, frames, grid lines or labels anywhere."
+
+[[asset]]
+name = "dust"             # despegue (fila de arriba) y aterrizaje (fila de abajo), cuatro cuadros cada uno, en orden
+style = ["lowdust", "no_text"]
+prompt = """
+A sprite sheet of two low-poly dust animations for a 2D platformer character, in two rows of four frames, each row \
+left to right in time order, all drawn at the same scale, with wide empty space between the frames, not touching \
+each other or the image edges. Every frame rests on its own flat invisible ground line: its bottom edge is flat and \
+horizontal, and it is symmetric around its own vertical center. Each frame is one single connected shape: the puffs \
+overlap each other, no detached puffs, pebbles or specks.
+Top row, the jump take-off, small: a puff of dust kicked out sideways at the feet as the character jumps straight up.
+Frame 1: a small, low, flat cluster of four faceted puffs.
+Frame 2: wider, the puffs pushed out to both sides and a little up, a dip in the middle.
+Frame 3: wider and lower, the puffs smaller.
+Frame 4: a few small flat puffs along the ground, still touching each other.
+Bottom row, the landing, wider than the take-off: dust pushed out along the ground on both sides of where the \
+character lands.
+Frame 1: a flat, wide burst hugging the ground, much wider than tall.
+Frame 2: two rolling clusters of puffs on the left and on the right, joined by a low band of dust in the middle.
+Frame 3: the side clusters bigger, further apart and rising, the middle band thinner but still joining them.
+Frame 4: small low puffs, the last frame before it disappears, still one connected shape.
+"""
+refs = ["../lowpoly_grenade/post/explosion/gpt-image-2.5-sunburst-fal_2/e6.png", "../../prototypes/arena/refs/refineria_lowpoly.webp"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["t1", "t2", "t3", "t4", "l1", "l2", "l3", "l4"]
+
+[[asset]]
+name = "hard"             # la caída fuerte, cuatro cuadros en orden
+style = ["lowdust", "no_text"]
+prompt = """
+A sprite sheet of one low-poly heavy landing dust animation for a 2D platformer character falling from very high, \
+in four frames in one row, left to right in time order, all drawn at the same scale, with wide empty space between \
+the frames, not touching each other or the image edges. Every frame rests on its own flat invisible ground line: its \
+bottom edge is flat and horizontal, and it is symmetric around its own vertical center. Each frame is one single \
+connected shape: the big faceted puffs overlap each other, no detached puffs, pebbles or specks.
+Frame 1: a wide flat shockwave of dust hugging the ground, very wide and low.
+Frame 2: the biggest frame, two tall billowing walls of big faceted dust puffs on the left and on the right, joined \
+along the ground by a low band of dust.
+Frame 3: the dust walls rolling further out and rising, thinner, still joined along the ground.
+Frame 4: a low line of small faceted puffs, the last frame before it disappears, still one connected shape.
+"""
+refs = ["../lowpoly_grenade/post/explosion/gpt-image-2.5-sunburst-fal_2/e6.png", "../../prototypes/arena/refs/refineria_lowpoly.webp"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "cutout"
+split = ["h1", "h2", "h3", "h4"]

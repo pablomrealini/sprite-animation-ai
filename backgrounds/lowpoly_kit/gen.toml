@@ -1,0 +1,200 @@
+# El kit de piezas low-poly para las arenas grandes (A1, pedido de Pablo, 2026-10-18): en vez de una lámina pintada
+# entera, un fondo sin pasarelas (backgrounds/lowpoly_fondos) y piezas sueltas con alfa que el editor de arenas pone,
+# espeja y estira. Las medidas son las del Editor de niveles: prototypes/arena/editor/kit_medidas.md (todo en px del
+# juego, 1 px del archivo final = 1 px del juego, medido contra la Refinería low-poly).
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/lowpoly_kit/gen.toml --dry-run
+#
+# Cinco hojas, cada una con sus piezas a la misma escala, en el orden de `split`:
+#   - pasarela: punta izquierda (80 × 200), medio a (256 × 200, taco y pilar al centro), medio b (256, sin pilar:
+#     franja y luz en la losa) y punta derecha (80). Las cuatro con la misma losa a la misma altura: la línea de los pies
+#     a 16 px de arriba, la losa hasta 72, la franja de patas que se estira (72 – 172, sólo pilares verticales) y los
+#     pies (172 – 200). Los medios se repiten sin costura (tile x, corte de error mínimo si hace falta).
+#   - columnas: columna angosta (48 × 200, capitel sin tope pisable), columna ancha (96, tope pisable), bloque (128),
+#     pared (64) y guía de ascensor (40, de fondo). Lo del medio, sólo vertical: se estira.
+#   - flotantes: 200, 300 y 450 de ancho y el ascensor (200), todos de 80 de alto: la losa arriba (pies en 8, hasta 54) y
+#     lo que cuelga abajo. En dos filas, para que entren a ~3× sin achicarse.
+#   - deco y canos: el decorado de fondo, más azulado y con menos contraste, sin nada que parezca pisable. Van en dos
+#     hojas porque mezclar piezas de 600 y de 48 de alto en una fila desordena los nombres (el post arma las filas por
+#     el centro de cada pieza). El caño horizontal se repite en x y el vertical, en y.
+#
+# Modelo: GPT Image 2.5 Sunburst, con alfa nativo (los huecos entre pilares tienen que ser aire real). Referencias: la
+# lámina de la Refinería low-poly como style frame y una de sus pasarelas ya recortadas, para que las piezas casen con
+# ella; el decorado, contra el fondo sin pasarelas.
+# Sin `same_height`: escala las piezas que difieren menos de un 15% y el medio sin pilar mide la mitad, así que se
+# rompería la escala común. Cada pieza queda a la escala en que la dibujó el modelo y la caja de cada una en la hoja
+# queda en raw/<asset>/<modelo>_<n>.json (`post.pieces`), para alinearlas por la línea de los pies.
+# Cada pieza tiene que salir de una sola mancha (el post separa la hoja por componentes conexos del alfa).
+#
+# Generadas el 2026-10-18 (US$1,49). Elegidas:
+#   - pasarela: la hoja 2. La 1 dibujó las puntas con el taco del lado de adentro y no empalman. Los cuatro tramos
+#     tienen la losa en las mismas filas (132 px de grueso en la hoja), y las uniones, después de emparejar el tono del
+#     borde, difieren en ~1 nivel.
+#   - columnas: la hoja 1. Tiene los anchos más cerca de lo pedido y las franjas amarillas arriba, fuera de la zona que
+#     se estira (en la 2 caen en el medio del bloque y de la pared).
+#   - flotantes: la hoja 1. A la misma escala midieron 240/317/435 de ancho, la más cerca de 200/300/450; la entrega las
+#     lleva a la medida con columnas de los tramos lisos.
+#   - deco: la hoja 1, con las proporciones más cerca. La torre traía una mota blanca, que se borra en la entrega.
+#   - canos: la hoja 1, porque el codo tiene el corte recto abajo.
+# Las piezas a px del juego las arma entrega.py en entrega/: piezas, medidas.json (tamaño, línea de los pies, escala) y
+# las hojas de revisión (revision_pasarela.png, revision_piezas.jpg y revision_arena.jpg, una arena de prueba sobre el
+# fondo elegido).
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por asset para elegir
+max_usd = 2
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+lowkit = """
+3D low-poly video game level pieces in the exact style of the reference images, the refinery arena of this game: \
+flat-shaded polygons with soft per-face lighting, a few large facets, clean chunky shapes, soft light from the top \
+left, a thin dark contour, no texture noise, no photographic detail. Three-quarter front view from slightly above: \
+the top face of every deck shows as a light flat strip and the front face below it in medium grey; the sides show \
+only at the ends. Palette: light and steel greys, red blocks and clamps, yellow-and-black hazard stripes used \
+sparingly, glowing cyan light strips. No shadow on the ground.
+"""
+lowdeco = """
+3D low-poly background props in the exact style of the hazy background refinery of the reference image: \
+flat-shaded polygons with soft per-face lighting, a few large facets, clean chunky shapes, soft light from the top \
+left, no texture noise, no photographic detail. They stand far behind the gameplay: bluer, hazier and with less \
+contrast than the gameplay walkways, grey-blue steel, muted red pipes and glowing cyan lights. No shadow on the \
+ground.
+"""
+empty = "No characters, people, robots, enemies, turrets, drones or vehicles anywhere."
+no_text = "No text, letters, numbers, logos, frames, grid lines or labels anywhere."
+
+[[asset]]
+name = "pasarela"         # hoja 1: la pasarela en tramos
+style = ["lowkit", "empty", "no_text"]
+prompt = """
+A 2D platformer tileset sheet with four separate pieces of one low-poly steel walkway like the walkways in the \
+reference images, drawn at the same scale, in a single row, left to right, with wide empty space between them, not \
+touching each other or the image edges. All four share exactly the same deck slab at exactly the same height, and \
+the three pieces with pillars have exactly the same total height. From top to bottom:
+- at the very top, only the thin dark contour of the back edge and the tops of the red blocks;
+- the deck slab, about a third of the piece height: a light grey flat top face (about a tenth of the piece height) \
+whose back edge is one perfectly straight horizontal line, a medium grey front face about one and a half times as \
+tall, and a thin dark shadow strip under the slab;
+- below the slab, half of the piece height of open space with only straight vertical steel pillars: no diagonal \
+braces, no X braces, no cross beams;
+- at the bottom, a wide steel foot under each pillar.
+1. The left end, narrow (about two fifths as wide as tall): the slab ends in a beveled end wrapped by a red block, \
+with one vertical pillar and its foot right under that red block.
+2. A straight middle segment, about 1.3 times wider than tall, that tiles seamlessly left to right: one red block \
+wrapping the slab in its center and one vertical pillar with its foot under it. Its left and right edges are cut \
+perfectly straight and vertical through the plain slab, like a slice of a longer walkway: no end cap, bevel, block, \
+pillar or contour at the cut, and the slab looks exactly the same at both edges.
+3. A second middle segment with exactly the same width, slab and cut edges, with no pillar and no red block: a short \
+yellow-and-black hazard stripe panel and a small glowing cyan light strip on the front face of the slab, and nothing \
+below the slab.
+4. The right end, the mirror image of the left end.
+"""
+refs = ["../../prototypes/arena/arenas/refineria_lowpoly/lamina.webp", "../../prototypes/arena/arenas/refineria_lowpoly/pasarela_arriba_izq.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["pasarela_punta_izq", "pasarela_medio_a", "pasarela_medio_b", "pasarela_punta_der"]
+tile = { pasarela_medio_a = "x", pasarela_medio_b = "x" }
+seam = "cut"
+seam_px = 0.08            # si hay que arreglar la costura, el medio pierde hasta un 8% del ancho
+
+[[asset]]
+name = "columnas"         # hoja 2: columnas, bloques y la guía del ascensor
+style = ["lowkit", "empty", "no_text"]
+prompt = """
+A 2D platformer tileset sheet with five separate low-poly steel structure pieces for the same refinery, all exactly \
+the same height and drawn at the same scale, in a single row, all standing on the same ground line, with wide empty \
+space between them, not touching each other or the image edges. Each piece is one single connected object, and \
+between its top part and its foot it has only straight vertical shapes (shafts, panel lines, light strips), no \
+diagonals or crosses.
+1. A narrow free-standing steel pillar, a quarter as wide as tall: a small decorative capital at the top with no flat \
+walkable top face, a long straight vertical shaft with a glowing cyan light strip, and a wider foot at the bottom.
+2. A wide steel column, half as wide as tall, with a walkable top like the top of the center column in the \
+reference: a light grey flat top face with red blocks at its two front corners and a medium grey front face, then a \
+straight vertical shaft with a dashed cyan light strip, and a wide foot at the bottom.
+3. A solid block, two thirds as wide as tall: at the top a light grey flat top face and a medium grey front face \
+like the walkway decks, then a solid armored steel front of large flat vertical panels with bolts and a small \
+yellow-and-black hazard stripe, and a wide base at the bottom.
+4. A narrow wall, a third as wide as tall: the same as the block, narrower.
+5. A thin vertical elevator guide rail, a fifth as wide as tall: a dark steel rail with small evenly spaced cyan \
+lights, a small cap at the top and a small foot at the bottom, darker and bluer than the other pieces because it \
+stands in the background.
+"""
+refs = ["../../prototypes/arena/arenas/refineria_lowpoly/lamina.webp", "../../prototypes/arena/arenas/refineria_lowpoly/pasarela_arriba_izq.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["columna_angosta", "columna_ancha", "bloque", "pared", "guia_ascensor"]
+
+[[asset]]
+name = "flotantes"        # hoja 3: las flotantes y el ascensor, en dos filas
+style = ["lowkit", "empty", "no_text"]
+prompt = """
+A 2D platformer tileset sheet with four separate low-poly hovering steel platforms for the same refinery, like the \
+small hovering platform in the reference images, all drawn at the same scale and with the same thickness, in two \
+rows of two, with wide empty space between them, not touching each other or the image edges. Each one is a deck \
+slab with a light grey flat top face, whose back edge is one perfectly straight horizontal line, and a medium grey \
+front face; under the slab hang small thrusters with a cyan glow, lights and reinforcement ribs, about a third of the \
+total height. They float: nothing reaches the ground.
+Top row:
+1. A short hovering platform, two and a half times wider than its total height, with red blocks at both ends.
+2. The same platform, one and a half times longer.
+Bottom row:
+3. The same platform, two and a quarter times longer than the first one, with red blocks at both ends and one more \
+in the middle.
+4. An elevator platform exactly as long as the first one: yellow-and-black hazard stripes on its front face, red \
+blocks at both ends, and under it a short stub of a hydraulic piston in the middle.
+"""
+refs = ["../../prototypes/arena/arenas/refineria_lowpoly/lamina.webp", "../../prototypes/arena/arenas/refineria_lowpoly/flotante.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["flotante_200", "flotante_300", "flotante_450", "ascensor"]
+
+[[asset]]
+name = "deco"             # hoja 4a: el decorado de fondo grande
+style = ["lowdeco", "empty", "no_text"]
+prompt = """
+Three separate low-poly background structures for the same refinery, drawn at the same scale, in one row, all \
+standing on the same ground line, with wide empty space between them, not touching each other or the image edges. \
+Nothing on them looks walkable: no light flat top faces, ledges, decks, railings, stairs or ladders.
+1. A storage tank, two thirds as wide as tall: a faceted cylinder with a domed top, muted red pipe bands and a \
+vertical cyan light window.
+2. A tall thin chimney, a fifth as wide as tall and almost one and a half times as tall as the tank, with muted red \
+bands and a small cap.
+3. A refinery tower, a third as wide as tall and the tallest of the three (one and two thirds the height of the \
+tank): stepped faceted levels with muted red pipes and glowing cyan light strips, ending in a thin spire.
+"""
+refs = ["../../prototypes/arena/arenas/refineria_lowpoly/fondo.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["deco_tanque", "deco_chimenea", "deco_torre"]
+
+[[asset]]
+name = "canos"            # hoja 4b: los caños de fondo que se repiten y el codo
+style = ["lowdeco", "empty", "no_text"]
+prompt = """
+Three separate low-poly red industrial pipe pieces for the background of the same refinery, like the red pipes in \
+the hazy background of the reference image, drawn at the same scale and with the same pipe thickness, in one row, all \
+centered on the same horizontal line, with wide empty space between them, not touching each other or the image edges. \
+A faceted muted red pipe, lighter on the facets that face the top left and darker on the others.
+1. A straight horizontal pipe segment, five times longer than its thickness, with no flanges, bands or caps, cut \
+straight at both ends, that tiles seamlessly left to right.
+2. The same straight pipe standing vertical, five times taller than its thickness, cut straight at both ends, that \
+tiles seamlessly top to bottom.
+3. A 90-degree elbow of the same pipe, coming in from the left and turning down, twice the pipe thickness in each \
+direction.
+"""
+refs = ["../../prototypes/arena/arenas/refineria_lowpoly/fondo.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["deco_cano_h", "deco_cano_v", "deco_codo"]
+tile = { deco_cano_h = "x", deco_cano_v = "y" }
+seam = "cut"

@@ -8,7 +8,11 @@ Sirve prototypes/arena/ entero: el editor (editor/dist/, que arma editor/build.p
 juego (dist/, el de prototypes/arena/build.py), todo en el mismo origen, así el botón "Probar en el juego" le pasa la
 arena al juego por localStorage. Además:
   GET  /api/arenas   las arenas: arenas/<nombre>.json (las del menú del juego) y los borradores arenas/<carpeta>/*.json
-  POST /api/save     {"key": "refineria", "arena": {...}}: escribe arenas/<key>.json con el formato de siempre
+                     (sin las carpetas que empiezan con punto ni los kit.json)
+  GET  /api/kits     los kits de piezas: arenas/<kit>/kit.json (los arma editor/kit.py)
+  POST /api/save     {"key": "refineria", "arena": {...}}: escribe arenas/<key>.json con el formato de siempre. Si ya
+                     había uno distinto, antes lo copia a arenas/.respaldo/<key>-<fecha>.json (quedan los últimos 30
+                     de cada arena; la carpeta se ignora sola en git)
   GET  /api/game     si el juego está armado (dist/index.html)
   POST /api/build    arma el juego (prototypes/arena/build.py)
   /dist/arenas/<x>   si el build todavía no copió una imagen nueva (una pieza recién recortada), sale de arenas/<x>
@@ -16,8 +20,10 @@ arena al juego por localStorage. Además:
 import argparse
 import json
 import re
+import shutil
 import subprocess
 import sys
+import time
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -46,8 +52,33 @@ def fmt(v, ind: int = 0, depth: int = 0) -> str:
 
 def arenas() -> dict:
     out = {p.stem: p for p in sorted(ARENAS.glob("*.json"))}
-    out.update({f"{p.parent.name}/{p.stem}": p for p in sorted(ARENAS.glob("*/*.json"))})
+    out.update({f"{p.parent.name}/{p.stem}": p for p in sorted(ARENAS.glob("*/*.json"))
+                if not p.parent.name.startswith(".") and p.name != "kit.json"})
     return {k: json.loads(p.read_text(encoding="utf-8")) for k, p in out.items()}
+
+
+def kits() -> dict:
+    return {p.parent.name: json.loads(p.read_text(encoding="utf-8")) for p in sorted(ARENAS.glob("*/kit.json"))}
+
+
+BACKUP = ARENAS / ".respaldo"
+KEEP = 30
+
+
+def backup(dst: Path, key: str, new_text: str) -> Path | None:
+    """La versión que estaba en disco, antes de pisarla: arenas/.respaldo/<key>-<fecha>.json (las últimas KEEP)."""
+    if not dst.exists() or dst.read_text(encoding="utf-8") == new_text:
+        return None
+    BACKUP.mkdir(exist_ok=True)
+    ignore = BACKUP / ".gitignore"
+    if not ignore.exists():
+        ignore.write_text("*\n", encoding="utf-8")
+    stem = key.replace("/", "__")
+    out = BACKUP / f"{stem}-{time.strftime('%Y%m%d-%H%M%S')}.json"
+    shutil.copy2(dst, out)
+    for old in sorted(BACKUP.glob(f"{stem}-*.json"))[:-KEEP]:
+        old.unlink()
+    return out
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -76,6 +107,8 @@ class Handler(SimpleHTTPRequestHandler):
             return
         if path == "/api/arenas":
             return self._json(arenas())
+        if path == "/api/kits":
+            return self._json(kits())
         if path == "/api/game":
             game = ARENA / "dist" / "index.html"
             return self._json({"built": game.exists(), "mtime": game.stat().st_mtime if game.exists() else None})
@@ -95,9 +128,12 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json({"ok": False, "error": f"nombre inválido: {key!r} (minúsculas, números y _)"}, 400)
             dst = ARENAS / f"{key}.json"
             dst.parent.mkdir(exist_ok=True)
-            dst.write_text(fmt(arena) + "\n", encoding="utf-8")
-            print(f"  guardada {dst.relative_to(ROOT)}")
-            return self._json({"ok": True, "file": str(dst.relative_to(ROOT))})
+            text = fmt(arena) + "\n"
+            old = backup(dst, key, text)
+            dst.write_text(text, encoding="utf-8")
+            print(f"  guardada {dst.relative_to(ROOT)}" + (f" (la anterior: {old.relative_to(ROOT)})" if old else ""))
+            return self._json({"ok": True, "file": str(dst.relative_to(ROOT)),
+                               "backup": str(old.relative_to(ROOT)) if old else None})
         if path == "/api/build":
             cmd = ["uv", "run", "--project", str(ROOT / "pipeline"), "python", str(ARENA / "build.py")]
             r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=600)

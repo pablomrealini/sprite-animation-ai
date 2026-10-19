@@ -1,0 +1,251 @@
+{
+  "attempts": [
+    {
+      "id": "columnas/gpt-image-2.5-sunburst-fal_2",
+      "asset": "columnas",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.172,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_kit/refs/pasarela_arriba_izq_47ef47dd_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-2785-70a0-ac3d-3546a1b9740c",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-2785-70a0-ac3d-3546a1b9740c/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-2785-70a0-ac3d-3546a1b9740c"
+      },
+      "submitted": "2026-10-18T22:00:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:01:31+00:00"
+    },
+    {
+      "id": "columnas/gpt-image-2.5-sunburst-fal_1",
+      "asset": "columnas",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.172,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_kit/refs/pasarela_arriba_izq_47ef47dd_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-27e3-79c2-9062-eaeb604488dd",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-27e3-79c2-9062-eaeb604488dd/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-27e3-79c2-9062-eaeb604488dd"
+      },
+      "submitted": "2026-10-18T22:00:50+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:01:26+00:00"
+    },
+    {
+      "id": "pasarela/gpt-image-2.5-sunburst-fal_2",
+      "asset": "pasarela",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1724,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_kit/refs/pasarela_arriba_izq_47ef47dd_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-2897-7b83-9b74-bfba1fc08b54",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-2897-7b83-9b74-bfba1fc08b54/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-2897-7b83-9b74-bfba1fc08b54"
+      },
+      "submitted": "2026-10-18T22:00:51+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:01:22+00:00"
+    },
+    {
+      "id": "pasarela/gpt-image-2.5-sunburst-fal_1",
+      "asset": "pasarela",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1724,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_kit/refs/pasarela_arriba_izq_47ef47dd_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-293f-7a60-b0e2-408b319e67bb",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-293f-7a60-b0e2-408b319e67bb/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-293f-7a60-b0e2-408b319e67bb"
+      },
+      "submitted": "2026-10-18T22:00:51+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:01:30+00:00"
+    },
+    {
+      "id": "flotantes/gpt-image-2.5-sunburst-fal_1",
+      "asset": "flotantes",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1714,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_kit/refs/flotante_d5a4c0a4_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-abd1-77e2-8a02-3bf77250c40c",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-abd1-77e2-8a02-3bf77250c40c/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-abd1-77e2-8a02-3bf77250c40c"
+      },
+      "submitted": "2026-10-18T22:01:24+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:02:04+00:00"
+    },
+    {
+      "id": "flotantes/gpt-image-2.5-sunburst-fal_2",
+      "asset": "flotantes",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1714,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_kit/refs/flotante_d5a4c0a4_FFFFFF.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-b407-72d3-929a-cd74f3a81e95",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-b407-72d3-929a-cd74f3a81e95/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-b407-72d3-929a-cd74f3a81e95"
+      },
+      "submitted": "2026-10-18T22:01:26+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:02:02+00:00"
+    },
+    {
+      "id": "deco/gpt-image-2.5-sunburst-fal_1",
+      "asset": "deco",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1142,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/fondo.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-c9a9-71f3-8367-9c95e3e2b6a0",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-c9a9-71f3-8367-9c95e3e2b6a0/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-c9a9-71f3-8367-9c95e3e2b6a0"
+      },
+      "submitted": "2026-10-18T22:01:32+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:02:08+00:00"
+    },
+    {
+      "id": "deco/gpt-image-2.5-sunburst-fal_2",
+      "asset": "deco",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1142,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/fondo.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15108-cf33-7342-825d-d4fb31005833",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-cf33-7342-825d-d4fb31005833/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15108-cf33-7342-825d-d4fb31005833"
+      },
+      "submitted": "2026-10-18T22:01:33+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:02:09+00:00"
+    },
+    {
+      "id": "canos/gpt-image-2.5-sunburst-fal_1",
+      "asset": "canos",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1142,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/fondo.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15109-4132-7e90-9933-05c55ebf3f12",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15109-4132-7e90-9933-05c55ebf3f12/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15109-4132-7e90-9933-05c55ebf3f12"
+      },
+      "submitted": "2026-10-18T22:02:02+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:02:35+00:00"
+    },
+    {
+      "id": "canos/gpt-image-2.5-sunburst-fal_2",
+      "asset": "canos",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1142,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/arenas/refineria_lowpoly/fondo.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15109-45ff-7c33-9010-f98fca003416",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15109-45ff-7c33-9010-f98fca003416/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15109-45ff-7c33-9010-f98fca003416"
+      },
+      "submitted": "2026-10-18T22:02:04+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:02:32+00:00"
+    }
+  ],
+  "qa": {}
+}

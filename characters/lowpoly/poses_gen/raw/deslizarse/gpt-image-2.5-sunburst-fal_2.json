@@ -1,0 +1,74 @@
+{
+  "set": "poses_gen",
+  "asset": "deslizarse",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the pose into a low feet-first slide along the floor, seen exactly from the side and moving to the right, like the slide of a classic 2D platformer hero. The front leg is stretched straight forward, flat along the floor, the sole of the boot facing forward to the right. The back leg is bent under the body with the knee pointing up, in line with the front leg: seen from the side, never spread apart. The torso is low and leans back. The left hand, the far one, rests flat on the floor behind the body, dragging. The head is up, looking right. The right hand holds the same dark pistol close to the chest, pointing forward, not aiming. A compact, low pose, like an arrow sweeping the floor, about half his standing height. Same helmet, same red belt, same proportions and the same size as the reference. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2160×1440",
+  "size": [
+    2160,
+    1440
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.1173,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a150e6-edc0-7233-8f8e-333ca467534b",
+  "created": "2026-10-18T21:25:06+00:00",
+  "sha256": "603de616119912bb76118eeb709085619095d1fce4aeb14378b07ddc8d5854c7",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/deslizarse/gpt-image-2.5-sunburst-fal_2.png",
+    "source": {
+      "w": 2160,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6879,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        127,
+        143,
+        1921,
+        1293
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_2.png",
+        "w": 1794,
+        "h": 1150
+      }
+    }
+  }
+}

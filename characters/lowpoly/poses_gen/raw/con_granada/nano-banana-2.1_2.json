@@ -1,0 +1,86 @@
+{
+  "set": "poses_gen",
+  "asset": "con_granada",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the left arm and hand: the left arm comes forward, bent, and the left hand now holds the hand grenade shown in the second reference image (the same grenade, same shape and colors, about the size of the fist) in front of the red belt, just below the right fist, the fingers wrapped around it and the red ring pull on top. The grenade is fully visible against the background, not hidden by the right arm or the pistol. The right hand keeps holding the same dark pistol close to the chest, pointing forward. Everything else stays identical: the helmet, the red belt, the legs and the stance. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    },
+    {
+      "file": "characters/lowpoly/poses_gen/refs/granada_10ce8b75_C0C3CC.png",
+      "sha256": "4e9704edecd9b0cfb3395dd016f577137a869616ae30b32c9afc4b264c385233"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    },
+    {
+      "file": "characters/lowpoly/poses/granada.png",
+      "sha256": "10ce8b75fb598cf00c901b79922b08d8cd6b268d489af90b7a572ad048019398"
+    }
+  ],
+  "background": "key",
+  "size_requested": "2:3 2K",
+  "size": [
+    1696,
+    2528
+  ],
+  "seed": 8,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a150a7-dc84-7da2-9a8a-5f76e797c45d",
+  "created": "2026-10-18T20:16:17+00:00",
+  "sha256": "3e2b80a75a6b61075513277092bf228fff1c6419413761c3149ca0709fd60646",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/con_granada/nano-banana-2.1_2.png",
+    "source": {
+      "w": 1696,
+      "h": 2528
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FC03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.5861,
+      "opaque": 0.4099,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        32,
+        217,
+        1449,
+        2356
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_2.png",
+        "w": 1417,
+        "h": 2139
+      }
+    }
+  }
+}

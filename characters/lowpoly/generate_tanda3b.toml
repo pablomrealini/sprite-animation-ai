@@ -1,0 +1,30 @@
+# Tanda 3, segundo intento de tirar la granada. En las dos tomas de generate_tanda3.toml (granada en la mano de atrás),
+# Kling giró al personaje hacia cámara para la anticipación (throw_1 34-65, throw_2 22-49), dio una vuelta de espaldas
+# (67 y 51) y disparó la pistola con fogonazo al final (69-72 y 52-53): revision/tanda3/.
+# Acá la granada va en la mano de adelante (la derecha) y la pistola en la de atrás: el brazo que tira es el que se ve de
+# perfil, sin girar. La pose sale de poses_gen (con_granada_cerca, US$0,47): gpt-image-2.5-sunburst-fal_2, la que tiene
+# la pistola horizontal como la pose final (en las de Nano Banana apunta para arriba), copiada a
+# poses/con_granada_cerca_concept.png. pad-pose --bg C42D7D --height 0.4923 (salía 2,5% chica) y corrida 13 px: casco
+# de 243 px, x del casco y pies iguales a los de perfil_apagada_dullmagenta_16x9.png. 4 s en vez de 5: en
+# 5 s Kling rellenaba el final inventando (quieto al arranque, disparos al final).
+#   uv run --project pipeline spritepipe gen-images characters/lowpoly/poses_gen/gen.toml --assets con_granada_cerca --dry-run
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_tanda3b.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 4
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 1
+max_parallel = 2
+game_fps = 12
+out_dir = "clips/tanda3b"   # aparte: hasta el dry-run reescribe el bakeoff.md de su carpeta
+
+[[animation]]
+name = "throw_cerca"      # tira con la mano de adelante y vuelve a agarrar la pistola con la derecha
+pose = "poses/con_granada_cerca_dullmagenta_16x9.png"
+prompt = "prompts/tirar_granada_cerca.txt"
+kind = "oneshot"
+last_frame = "poses/perfil_apagada_dullmagenta_16x9.png"

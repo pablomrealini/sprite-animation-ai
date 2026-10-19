@@ -1,0 +1,85 @@
+{
+  "set": "poses_gen",
+  "asset": "deslizarse_c",
+  "model": "nano-banana-2.1",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+  "model_docs": "https://fal.ai/models/google/nano-banana-2.1/edit/api",
+  "prompt": "No text, letters, numbers or logos.\n\nEdit the first reference image, the character in a low feet-first slide seen from the side facing right. Keep the same slide: the body low and leaning back, the left hand flat on the floor behind him, the head up looking right, the same helmet, colors and low-poly rendering. Fix only two things. First, the proportions: use exactly the chibi proportions of the second reference image, the same character standing: short, thick legs and short arms. Measured in helmet widths, each leg from the hip to the sole of the boot is only about 0.55 of the helmet width, and the boot is about half the helmet width long. So the stretched front leg, from the hip to the sole, is a little more than half as long as the helmet is wide, never longer; the back leg is bent with the knee up and is just as short. The whole pose is compact: about 1.7 helmet widths long and 1.4 helmet widths tall. Second, the right arm: relaxed and low, the right hand resting near the floor beside the hip, holding the same dark pistol flat along the floor and pointing forward, not aiming and not stretched out. Full body, side view facing right. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nBackground: a perfectly flat, uniform pure chroma key color #00FF00 (pure green) everywhere that is not part of the described elements, with no gradient, shadow, glow, floor or texture on it, and never use that color inside the artwork.",
+  "styles": [
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/deslizarse_concept_4ad4863a_C0C3CC.png",
+      "sha256": "c260464f5f0eb9d469344dec4b09766cc2bae0fda9de88d4704125547366dead"
+    },
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/deslizarse_concept.png",
+      "sha256": "4ad4863a3014adeeb24cd27ee9fb5b4022d4f75ebbbd4fafd09c92035a0b863c"
+    },
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "key",
+  "size_requested": "3:2 2K",
+  "size": [
+    2528,
+    1696
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.063,
+  "price_note": "Por tokens (imagen de salida US$35,294/M, entrada 1,764/M). Según la página: 1K ~0,040, 2K ~0,059, 4K ~0,134 por imagen, más ~0,002 por referencia. Thinking medium (el default)",
+  "usage": null,
+  "request_id": "01a15107-087c-7f20-840e-3bb6ecb0b662",
+  "created": "2026-10-18T22:00:10+00:00",
+  "sha256": "7eed6d05f39860be0a56f4e65a4aa6a90ac6a9f413db4449ac7c1ddbe20184a9",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/deslizarse_c/nano-banana-2.1_1.png",
+    "source": {
+      "w": 2528,
+      "h": 1696
+    },
+    "notes": [],
+    "key": {
+      "key_color": "#02FB03",
+      "method": "chroma"
+    },
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.5848,
+      "opaque": 0.4117,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        97,
+        9,
+        2181,
+        1673
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "nano-banana-2.1_1.png",
+        "w": 2084,
+        "h": 1664
+      }
+    }
+  }
+}

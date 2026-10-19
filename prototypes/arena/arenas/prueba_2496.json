@@ -1,0 +1,336 @@
+{
+  "name": "Prueba 2496 (escala nueva)",
+  "note": "Px del juego. Arena de PRUEBA de la escala nueva (2496 × 1404, Pablo 2026-10-18): la lámina es el fondo de la Refinería low-poly agrandado × 1,3 (prueba_2496/fondo.webp, sólo para probar: sus detalles quedan 1,3 veces más grandes que las piezas) y las pasarelas son las piezas de la Refinería low-poly a su tamaño, con el piso en 1222 y los pisos cada ~200 px como en la original, más un piso arriba (430). La hizo Programación a mano; la de verdad la arma Editor/Arte de niveles con una lámina de 2496 × 1404.",
+  "size": [
+    2496,
+    1404
+  ],
+  "seed": 11,
+  "plate": {
+    "src": "prueba_2496/fondo.webp",
+    "solid": [
+      [
+        1210,
+        549,
+        75,
+        23
+      ]
+    ]
+  },
+  "pieces": {
+    "pasarela_abajo_izq": {
+      "src": "refineria_lowpoly/pasarela_abajo_izq.png",
+      "w": 719,
+      "h": 225,
+      "solids": [
+        {
+          "kind": "bridge",
+          "x": 0,
+          "y": 18,
+          "w": 657,
+          "ledge": "both"
+        }
+      ],
+      "front": [
+        [
+          0,
+          9,
+          659,
+          62
+        ]
+      ],
+      "legs": [
+        81,
+        161
+      ],
+      "legsGap": 8
+    },
+    "pasarela_abajo_der": {
+      "src": "refineria_lowpoly/pasarela_abajo_der.png",
+      "w": 718,
+      "h": 225,
+      "solids": [
+        {
+          "kind": "bridge",
+          "x": 63,
+          "y": 18,
+          "w": 655,
+          "ledge": "both"
+        }
+      ],
+      "front": [
+        [
+          63,
+          9,
+          655,
+          62
+        ]
+      ],
+      "legs": [
+        81,
+        161
+      ],
+      "legsGap": 8
+    },
+    "pasarela_medio_izq": {
+      "src": "refineria_lowpoly/pasarela_medio_izq.png",
+      "w": 425,
+      "h": 194,
+      "solids": [
+        {
+          "kind": "bridge",
+          "x": 0,
+          "y": 16,
+          "w": 422,
+          "ledge": "both"
+        }
+      ],
+      "front": [
+        [
+          0,
+          8,
+          424,
+          58
+        ]
+      ],
+      "legs": [
+        69,
+        179
+      ],
+      "legsGap": 15
+    },
+    "pasarela_medio_der": {
+      "src": "refineria_lowpoly/pasarela_medio_der.png",
+      "w": 435,
+      "h": 194,
+      "solids": [
+        {
+          "kind": "bridge",
+          "x": 12,
+          "y": 16,
+          "w": 421,
+          "ledge": "both"
+        }
+      ],
+      "front": [
+        [
+          10,
+          8,
+          425,
+          58
+        ]
+      ],
+      "legs": [
+        69,
+        179
+      ],
+      "legsGap": 15
+    },
+    "pasarela_arriba_izq": {
+      "src": "refineria_lowpoly/pasarela_arriba_izq.png",
+      "w": 522,
+      "h": 192,
+      "solids": [
+        {
+          "kind": "bridge",
+          "x": 0,
+          "y": 12,
+          "w": 520,
+          "ledge": "both"
+        }
+      ],
+      "front": [
+        [
+          0,
+          5,
+          522,
+          58
+        ]
+      ],
+      "legs": [
+        77,
+        175
+      ],
+      "legsGap": 13
+    },
+    "pasarela_arriba_der": {
+      "src": "refineria_lowpoly/pasarela_arriba_der.png",
+      "w": 521,
+      "h": 192,
+      "solids": [
+        {
+          "kind": "bridge",
+          "x": 1,
+          "y": 12,
+          "w": 520,
+          "ledge": "both"
+        }
+      ],
+      "front": [
+        [
+          0,
+          5,
+          521,
+          58
+        ]
+      ],
+      "legs": [
+        77,
+        175
+      ],
+      "legsGap": 13
+    },
+    "flotante": {
+      "src": "refineria_lowpoly/flotante.png",
+      "w": 207,
+      "h": 75,
+      "solids": [
+        {
+          "kind": "bridge",
+          "x": 0,
+          "y": 6,
+          "w": 206,
+          "ledge": "none"
+        }
+      ],
+      "front": [
+        [
+          0,
+          0,
+          207,
+          49
+        ]
+      ]
+    }
+  },
+  "solids": [
+    {
+      "kind": "walk",
+      "x": -40,
+      "y": 1222,
+      "w": 2576,
+      "h": 200,
+      "fill": "full"
+    },
+    {
+      "kind": "bridge",
+      "x": 1210,
+      "y": 554,
+      "w": 75,
+      "ledge": "both"
+    }
+  ],
+  "objects": [
+    {
+      "piece": "pasarela_abajo_izq",
+      "x": 0,
+      "y": 988
+    },
+    {
+      "piece": "pasarela_abajo_der",
+      "x": 1778,
+      "y": 988
+    },
+    {
+      "piece": "pasarela_medio_izq",
+      "x": 370,
+      "y": 798
+    },
+    {
+      "piece": "pasarela_medio_der",
+      "x": 1691,
+      "y": 798
+    },
+    {
+      "piece": "pasarela_arriba_izq",
+      "x": 0,
+      "y": 610
+    },
+    {
+      "piece": "pasarela_arriba_der",
+      "x": 1975,
+      "y": 610
+    },
+    {
+      "piece": "flotante",
+      "x": 700,
+      "y": 424
+    },
+    {
+      "piece": "flotante",
+      "x": 1589,
+      "y": 424
+    },
+    {
+      "piece": "flotante",
+      "x": 1145,
+      "y": 1094,
+      "move": {
+        "path": [
+          [
+            1145,
+            1094
+          ],
+          [
+            1145,
+            766
+          ]
+        ],
+        "speed": 80,
+        "wait": 1.2
+      }
+    }
+  ],
+  "spawns": [
+    [
+      420,
+      1222
+    ],
+    [
+      2076,
+      1222
+    ],
+    [
+      300,
+      1006
+    ],
+    [
+      2196,
+      1006
+    ],
+    [
+      580,
+      814
+    ],
+    [
+      1916,
+      814
+    ],
+    [
+      260,
+      622
+    ],
+    [
+      2236,
+      622
+    ]
+  ],
+  "decor": [],
+  "pipes": [],
+  "color": {
+    "fondo": {
+      "paleta": 0,
+      "saturacion": 1,
+      "contraste": 1,
+      "brillo": 1,
+      "bruma": 0
+    },
+    "plataformas": {
+      "paleta": 0,
+      "saturacion": 1,
+      "contraste": 1,
+      "brillo": 1,
+      "bruma": 0
+    }
+  }
+}

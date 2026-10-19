@@ -67,6 +67,12 @@ def image_anchor_x(img: np.ndarray, ch: Character, fixed_key: np.ndarray | None)
     return m["anchor_x"] if m else None
 
 
+def image_ground(img: np.ndarray, ch: Character, fixed_key: np.ndarray | None) -> float | None:
+    """Piso (fila opaca más baja) de un frame sin keyear, en px del clip."""
+    m = _measure(key.key_frame(img[..., :3], ch, fixed_key)[0][..., 3])
+    return m["ground"] if m else None
+
+
 def body_height(alpha: np.ndarray) -> float | None:
     """Alto del personaje en px: desde la fila opaca más alta hasta la línea de piso."""
     m = _measure(alpha)
@@ -258,6 +264,9 @@ def run(ch: Character, key_dirs: dict[str, Path], kinds: dict[str, str], out_dir
             k, d = kxy[name][0], b.get("camera_drift_x", 0.0)
             shifts[name] = [(_snap(-(b["frame0_anchor_x"] + d * n) * k, grid), sy)
                             for n, (_, sy) in zip(b["native_indices"], shifts[name])]
+        if b.get("frame0_ground") is not None:   # ground_from_clip: los pies del frame 0 del clip, no los del primer cuadro
+            sy = _snap(-b["frame0_ground"] * kxy[name][1], grid)
+            shifts[name] = [(sx, sy) for sx, _ in shifts[name]]
         for m, (dx, dy) in zip(meas[name], shifts[name]):
             if m:
                 x0, y0, x1, y1 = m["bbox"]

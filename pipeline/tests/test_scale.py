@@ -313,3 +313,29 @@ def test_run_warns_when_clips_differ_and_nothing_is_declared(two_resolutions, ca
     assert "! jump: el frame 0 mide" in log and "no declara escala" in log
     jump = _sheet_bodies(two_resolutions / "out", "jump")
     assert abs((jump[0]["ground"] - jump[0]["bbox"][1]) - 32) <= 2  # con la escala única, a la mitad
+
+
+def test_ground_from_clip_keeps_a_stretch_that_starts_in_the_air_at_its_height(two_resolutions, capsys):
+    # dos tramos del salto que arrancan en el aire (6: 50 px arriba en el clip) y terminan en el piso (12): con
+    # ground_from_clip, el piso es el del frame 0 del clip; sin él, el del primer cuadro (los pies en el aire)
+    extra = 'pose = "jump_pose.png"\n'
+    for name, opt in (("fall", "ground_from_clip = true\n"), ("fall_own", "")):
+        extra += (f'\n[[animation]]\nname = "{name}"\nclip = "clips/jump.mp4"\nkind = "oneshot"\nframes = [6, 12]\n'
+                  f'pose = "jump_pose.png"\n{opt}')
+    cfg = _run_config(two_resolutions, extra)
+    assert cli.run_character(cfg, strict=False) in (0, 2)
+    out = two_resolutions / "out"
+    floor = np.median([m["ground"] for m in _sheet_bodies(out, "idle")])
+    fall, own = _sheet_bodies(out, "fall"), _sheet_bodies(out, "fall_own")
+    assert floor - fall[0]["ground"] > 15          # en el aire, a su altura
+    assert abs(fall[1]["ground"] - floor) <= 1     # y aterriza en el piso
+    assert abs(own[0]["ground"] - floor) <= 1      # sin la opción, el primer cuadro va al piso
+    assert own[1]["ground"] - floor > 15           # y el aterrizaje queda abajo del piso
+
+
+def test_ground_from_clip_is_only_for_oneshots(tmp_path):
+    cfg = tmp_path / "character.toml"
+    cfg.write_text('[character]\nname = "t"\n[[animation]]\nname = "a"\nclip = "a.mp4"\nkind = "cycle"\n'
+                   'ground_from_clip = true\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="ground_from_clip"):
+        config.load(cfg)

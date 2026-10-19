@@ -8,7 +8,8 @@ uso (desde la raíz del repo):
 
 No gasta: usa la arena de lámina entera (arenas/<arena>/entera.json: la lámina con la colisión calcada; la primera vez
 se copia de arenas/<arena>.json) y una edición del modelo con las pasarelas sacadas.
-1. La edición vuelve estirada (2752 × 1536 por una referencia de 1920 × 1080): se achica a 1920 × 1080 sin recortar y
+1. La edición vuelve estirada (2752 × 1536 por una referencia de 1920 × 1080): se achica al tamaño de la arena (su
+   size: 1920 × 1080 las de antes, 2496 × 1404 las de la escala nueva) sin recortar y
    se prueba correrla hasta ±4 px; queda el corrimiento con menos diferencia fuera de las piezas. Si la edición dejó
    algo (en Refinería, un muñón de cada pasarela pegado a la pared), --fill es una segunda edición que rellenó lo que
    estaba en magenta en --fill-ref: de ella se usa sólo eso.
@@ -35,7 +36,7 @@ from PIL import Image
 HERE = Path(__file__).resolve().parent
 ARENA = HERE.parent
 ROOT = ARENA.parent.parent
-AW, AH = 1920, 1080
+AW, AH = 1920, 1080   # el tamaño del mundo de la arena: main lo pisa con el size de su JSON
 
 # las piezas de cada arena: nombre, el sólido del JSON (índice en solids) y el recorte de adelante (índice en
 # plate.solid) que van con ella, y su zona en px del juego: [x, y, w, h], primero la losa y después lo que cuelga.
@@ -77,7 +78,7 @@ def clip_rect(r: list, w: int, h: int) -> list:
 
 
 def align(big: Image.Image, plate: np.ndarray, keep: np.ndarray) -> tuple[np.ndarray, tuple[int, int], float]:
-    """La edición a 1920 × 1080 (sin recortar) y corrida lo que haga falta para calzar con la lámina fuera de `keep`."""
+    """La edición al tamaño de la arena (sin recortar) y corrida lo que haga falta para calzar con la lámina fuera de `keep`."""
     e = np.asarray(big.convert("RGB").resize((AW, AH), Image.LANCZOS)).astype(np.float32)
     best = None
     for dy in range(-4, 5):
@@ -91,6 +92,7 @@ def align(big: Image.Image, plate: np.ndarray, keep: np.ndarray) -> tuple[np.nda
 
 
 def main() -> None:
+    global AW, AH
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("arena")
     ap.add_argument("empty", help="la edición sin pasarelas (post/<asset>/<modelo>_<n>.png)")
@@ -116,7 +118,10 @@ def main() -> None:
         raise SystemExit(f"{menu.relative_to(ROOT)} ya está en capas (¿cambios del editor?): --force para pisarla, "
                          "o --keep-boxes para rehacer sólo las imágenes")
     arena = json.loads(src.read_text(encoding="utf-8"))
+    AW, AH = arena.get("size") or [1920, 1080]   # la lámina, las máscaras y las zonas, en el tamaño de esta arena
     plate_rgb = np.asarray(Image.open(ARENA / "arenas" / arena["plate"]["src"]).convert("RGB")).astype(np.float32)
+    if plate_rgb.shape[:2] != (AH, AW):
+        raise SystemExit(f"la lámina mide {plate_rgb.shape[1]} × {plate_rgb.shape[0]} y la arena {AW} × {AH} (size)")
     pieces = pieces_for(args.arena, arena)
 
     zones = []

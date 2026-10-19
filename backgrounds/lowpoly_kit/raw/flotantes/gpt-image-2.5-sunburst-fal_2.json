@@ -1,0 +1,142 @@
+{
+  "set": "lowpoly_kit",
+  "asset": "flotantes",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game level pieces in the exact style of the reference images, the refinery arena of this game: flat-shaded polygons with soft per-face lighting, a few large facets, clean chunky shapes, soft light from the top left, a thin dark contour, no texture noise, no photographic detail. Three-quarter front view from slightly above: the top face of every deck shows as a light flat strip and the front face below it in medium grey; the sides show only at the ends. Palette: light and steel greys, red blocks and clamps, yellow-and-black hazard stripes used sparingly, glowing cyan light strips. No shadow on the ground.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA 2D platformer tileset sheet with four separate low-poly hovering steel platforms for the same refinery, like the small hovering platform in the reference images, all drawn at the same scale and with the same thickness, in two rows of two, with wide empty space between them, not touching each other or the image edges. Each one is a deck slab with a light grey flat top face, whose back edge is one perfectly straight horizontal line, and a medium grey front face; under the slab hang small thrusters with a cyan glow, lights and reinforcement ribs, about a third of the total height. They float: nothing reaches the ground.\nTop row:\n1. A short hovering platform, two and a half times wider than its total height, with red blocks at both ends.\n2. The same platform, one and a half times longer.\nBottom row:\n3. The same platform, two and a quarter times longer than the first one, with red blocks at both ends and one more in the middle.\n4. An elevator platform exactly as long as the first one: yellow-and-black hazard stripes on its front face, red blocks at both ends, and under it a short stub of a hydraulic piston in the middle.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowkit",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    },
+    {
+      "file": "backgrounds/lowpoly_kit/refs/flotante_d5a4c0a4_FFFFFF.png",
+      "sha256": "a38d91fe108ecd8b61cf1e033800ee4525a145442f2494b13811044f59dceac3"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    },
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/flotante.png",
+      "sha256": "d5a4c0a44f163a0dcb05b92b269bb4c861f4a0cc86bf6c7e92ea81d30f4ea48d"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1714,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15108-b407-72d3-929a-cd74f3a81e95",
+  "created": "2026-10-18T22:02:02+00:00",
+  "sha256": "26a52f30ede95596dd4f6a0ff9375b3f25ddc80c3d0e3af0975ecfca5ab349d6",
+  "post": {
+    "file": "backgrounds/lowpoly_kit/post/flotantes/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8047,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "flotante_200": [
+        229,
+        299,
+        895,
+        508
+      ],
+      "flotante_300": [
+        1287,
+        298,
+        2334,
+        510
+      ],
+      "flotante_450": [
+        190,
+        939,
+        1467,
+        1148
+      ],
+      "ascensor": [
+        1726,
+        938,
+        2369,
+        1249
+      ]
+    },
+    "trim": {
+      "flotante_200": [
+        0,
+        0,
+        666,
+        209
+      ],
+      "flotante_300": [
+        0,
+        0,
+        1047,
+        212
+      ],
+      "flotante_450": [
+        0,
+        0,
+        1277,
+        209
+      ],
+      "ascensor": [
+        0,
+        0,
+        643,
+        311
+      ]
+    },
+    "files": {
+      "flotante_200": {
+        "file": "flotante_200.png",
+        "w": 666,
+        "h": 209
+      },
+      "flotante_300": {
+        "file": "flotante_300.png",
+        "w": 1047,
+        "h": 212
+      },
+      "flotante_450": {
+        "file": "flotante_450.png",
+        "w": 1277,
+        "h": 209
+      },
+      "ascensor": {
+        "file": "ascensor.png",
+        "w": 643,
+        "h": 311
+      }
+    }
+  }
+}

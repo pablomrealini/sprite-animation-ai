@@ -1,0 +1,117 @@
+{
+  "set": "lowpoly_kit",
+  "asset": "deco",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly background props in the exact style of the hazy background refinery of the reference image: flat-shaded polygons with soft per-face lighting, a few large facets, clean chunky shapes, soft light from the top left, no texture noise, no photographic detail. They stand far behind the gameplay: bluer, hazier and with less contrast than the gameplay walkways, grey-blue steel, muted red pipes and glowing cyan lights. No shadow on the ground.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nThree separate low-poly background structures for the same refinery, drawn at the same scale, in one row, all standing on the same ground line, with wide empty space between them, not touching each other or the image edges. Nothing on them looks walkable: no light flat top faces, ledges, decks, railings, stairs or ladders.\n1. A storage tank, two thirds as wide as tall: a faceted cylinder with a domed top, muted red pipe bands and a vertical cyan light window.\n2. A tall thin chimney, a fifth as wide as tall and almost one and a half times as tall as the tank, with muted red bands and a small cap.\n3. A refinery tower, a third as wide as tall and the tallest of the three (one and two thirds the height of the tank): stepped faceted levels with muted red pipes and glowing cyan light strips, ending in a thin spire.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowdeco",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/fondo.webp",
+      "sha256": "c0dafe9c2e058a984cd6a34573aeb87d3c17dd8106cb160629a0eb54226b31ff"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/fondo.webp",
+      "sha256": "c0dafe9c2e058a984cd6a34573aeb87d3c17dd8106cb160629a0eb54226b31ff"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1142,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15108-c9a9-71f3-8367-9c95e3e2b6a0",
+  "created": "2026-10-18T22:02:08+00:00",
+  "sha256": "60b21370f7fb733f8f8555ab72818e777887c6c69767f563f2ccb0ac866891ca",
+  "post": {
+    "file": "backgrounds/lowpoly_kit/post/deco/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.7393,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "deco_tanque": [
+        174,
+        708,
+        853,
+        1329
+      ],
+      "deco_chimenea": [
+        1160,
+        278,
+        1403,
+        1329
+      ],
+      "deco_torre": [
+        1857,
+        106,
+        2456,
+        1329
+      ]
+    },
+    "trim": {
+      "deco_tanque": [
+        0,
+        0,
+        679,
+        621
+      ],
+      "deco_chimenea": [
+        0,
+        0,
+        243,
+        1051
+      ],
+      "deco_torre": [
+        0,
+        0,
+        599,
+        1223
+      ]
+    },
+    "files": {
+      "deco_tanque": {
+        "file": "deco_tanque.png",
+        "w": 679,
+        "h": 621
+      },
+      "deco_chimenea": {
+        "file": "deco_chimenea.png",
+        "w": 243,
+        "h": 1051
+      },
+      "deco_torre": {
+        "file": "deco_torre.png",
+        "w": 599,
+        "h": 1223
+      }
+    }
+  }
+}

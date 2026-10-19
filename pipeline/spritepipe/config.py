@@ -75,6 +75,9 @@ class Animation:
     reverse: bool = False  # el tramo elegido (trim o loop, en frames del clip) se reproduce al revés
     source: str | None = None  # el [[clip]] del que sale, si sale de uno
     key_method: str | None = None  # pisa [key].method para este clip (p. ej. "chroma" con fondo magenta puro)
+    # el piso de la animación es el del frame 0 del clip (la pose parada), no el de su primer cuadro: para tramos que
+    # arrancan en el aire (la salida de un mortal), que si no se alinean con los pies en el aire y estiran el canvas
+    ground_from_clip: bool = False
 
 
 @dataclass
@@ -93,6 +96,9 @@ class Character:
     key_mode: str  # "auto" | "global" | "connected"
     key_method: str  # "auto" | "chroma" | "distance": forzar distancia si el personaje comparte tono con el fondo
     hole_max_frac: float
+    floor_streak: bool  # borrar la raya fina y oscura que deja la sombra del piso junto a los pies (ver key.py)
+    edge_unmix: bool  # desmezclar el borde contra el color de adentro: el contorno de fondo que queda opaco (ver key.py)
+    hole_inpaint: bool  # los huecos que se rellenan (hole_max_frac) toman el color de alrededor, no el del fondo
     key_tolerance: tuple[float, float]
     despill: float
     despill_band_px: int
@@ -238,6 +244,10 @@ def load(path: str | Path) -> Character:
             raise ValueError(f"{a['name']}: key_method tiene que ser uno de {', '.join(KEY_METHODS)}")
         if not isinstance(a.get("reverse", False), bool):
             raise ValueError(f"{a['name']}: reverse tiene que ser true o false")
+        if not isinstance(a.get("ground_from_clip", False), bool):
+            raise ValueError(f"{a['name']}: ground_from_clip tiene que ser true o false")
+        if a.get("ground_from_clip") and kind != "oneshot":
+            raise ValueError(f"{a['name']}: ground_from_clip es sólo para kind = \"oneshot\"")
         frames = a.get("frames")
         if frames is not None:
             if kind != "oneshot":
@@ -273,6 +283,7 @@ def load(path: str | Path) -> Character:
                 reverse=a.get("reverse", False),
                 source=source["name"] if source else None,
                 key_method=a.get("key_method"),
+                ground_from_clip=a.get("ground_from_clip", False),
             )
         )
     if not anims:
@@ -296,6 +307,9 @@ def load(path: str | Path) -> Character:
         key_mode=key.get("mode", "auto"),
         key_method=key.get("method", "auto"),
         hole_max_frac=float(key.get("hole_max_frac", 0.01)),
+        floor_streak=bool(key.get("floor_streak", False)),
+        edge_unmix=bool(key.get("edge_unmix", False)),
+        hole_inpaint=bool(key.get("hole_inpaint", False)),
         key_tolerance=tuple(key.get("tolerance", (0.12, 0.80))),
         despill=float(key.get("despill", 1.0)),
         despill_band_px=int(key.get("despill_band_px", 3)),

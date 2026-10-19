@@ -1,0 +1,109 @@
+{
+  "set": "lowpoly_shield",
+  "asset": "pickup",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly game prop render in the exact style of the reference images: flat-shaded polygons with soft per-face lighting, clean faceted geometry, a few large facets rather than many small ones, saturated toy-like colors, soft studio light from the top left, no black outlines, no texture noise, no photographic detail.\n\nNo text, letters, numbers, logos, frames, circles, badges, borders, grid lines or labels anywhere.\n\nTwo separate collectible shield power-up props for a 2D arena shooter, from the same family as the medkit and the grenade pack in the reference images (the same white faceted armor plates, dark grey straps and rims, and a glowing crystal light), in one row, the same size, with wide empty space between them, not touching each other or the image edges, both seen from the front and slightly from above, floating (no ground, no shadow, no pedestal). Big chunky shapes that still read at 40 pixels tall. Each one is a single solid object.\n1. A chunky low-poly heater shield, wide at the top and pointed at the bottom, a white faceted face with a thick dark grey beveled rim, and a big glowing cyan-blue faceted crystal emblem in the center shaped like a chevron, with a soft cyan glow around the shield.\n2. A chunky low-poly round buckler shield, a white faceted face with a thick dark grey beveled rim and four short dark grey bolts, and a big glowing cyan-blue faceted hexagonal crystal in the center, with a soft cyan glow around the shield.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowpoly",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_shield/refs/hp_9948f701_FFFFFF.png",
+      "sha256": "062737c5f6be2b9ad78b6f2c962f01fe7404b7691ce07f7b1f31a4c0dbf766fb"
+    },
+    {
+      "file": "backgrounds/lowpoly_shield/refs/gren_249af12e_FFFFFF.png",
+      "sha256": "e1fe6ed08916168e174262f9393f1a8670df4b399a341010f9ada75f76e540aa"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_pickups/post/pickups/gpt-image-2.5-sunburst-fal_1/hp.png",
+      "sha256": "9948f701340ea9cdeddbdd43acd8b45534330ab0ab89aa79d3907dffcc1c9d17"
+    },
+    {
+      "file": "backgrounds/lowpoly_pickups/post/pickups/gpt-image-2.5-sunburst-fal_1/gren.png",
+      "sha256": "249af12e291431b5943fe5b460979c975a4c87d69f8cd31cb487dd5f0efd3185"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1707,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a150ad-ffd2-7ed2-b2e1-b43950ff920b",
+  "created": "2026-10-18T20:23:01+00:00",
+  "sha256": "4ba6a386dd58cf40e0ddcd8805b70cba93be2147e0ac2e86e039ae59172df435",
+  "post": {
+    "file": "backgrounds/lowpoly_shield/post/pickup/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.4746,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 0.985,
+        "bottom": 0.993,
+        "left": 0.978,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (left): puede estar cortado"
+      ]
+    },
+    "pieces": {
+      "shield": [
+        74,
+        153,
+        1185,
+        1315
+      ],
+      "buckler": [
+        1405,
+        174,
+        2495,
+        1272
+      ]
+    },
+    "trim": {
+      "shield": [
+        0,
+        0,
+        1111,
+        1162
+      ],
+      "buckler": [
+        0,
+        0,
+        1090,
+        1098
+      ]
+    },
+    "files": {
+      "shield": {
+        "file": "shield.png",
+        "w": 1111,
+        "h": 1162
+      },
+      "buckler": {
+        "file": "buckler.png",
+        "w": 1090,
+        "h": 1098
+      }
+    }
+  }
+}

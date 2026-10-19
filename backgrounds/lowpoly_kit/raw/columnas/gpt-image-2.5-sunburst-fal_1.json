@@ -1,0 +1,159 @@
+{
+  "set": "lowpoly_kit",
+  "asset": "columnas",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game level pieces in the exact style of the reference images, the refinery arena of this game: flat-shaded polygons with soft per-face lighting, a few large facets, clean chunky shapes, soft light from the top left, a thin dark contour, no texture noise, no photographic detail. Three-quarter front view from slightly above: the top face of every deck shows as a light flat strip and the front face below it in medium grey; the sides show only at the ends. Palette: light and steel greys, red blocks and clamps, yellow-and-black hazard stripes used sparingly, glowing cyan light strips. No shadow on the ground.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA 2D platformer tileset sheet with five separate low-poly steel structure pieces for the same refinery, all exactly the same height and drawn at the same scale, in a single row, all standing on the same ground line, with wide empty space between them, not touching each other or the image edges. Each piece is one single connected object, and between its top part and its foot it has only straight vertical shapes (shafts, panel lines, light strips), no diagonals or crosses.\n1. A narrow free-standing steel pillar, a quarter as wide as tall: a small decorative capital at the top with no flat walkable top face, a long straight vertical shaft with a glowing cyan light strip, and a wider foot at the bottom.\n2. A wide steel column, half as wide as tall, with a walkable top like the top of the center column in the reference: a light grey flat top face with red blocks at its two front corners and a medium grey front face, then a straight vertical shaft with a dashed cyan light strip, and a wide foot at the bottom.\n3. A solid block, two thirds as wide as tall: at the top a light grey flat top face and a medium grey front face like the walkway decks, then a solid armored steel front of large flat vertical panels with bolts and a small yellow-and-black hazard stripe, and a wide base at the bottom.\n4. A narrow wall, a third as wide as tall: the same as the block, narrower.\n5. A thin vertical elevator guide rail, a fifth as wide as tall: a dark steel rail with small evenly spaced cyan lights, a small cap at the top and a small foot at the bottom, darker and bluer than the other pieces because it stands in the background.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowkit",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    },
+    {
+      "file": "backgrounds/lowpoly_kit/refs/pasarela_arriba_izq_47ef47dd_FFFFFF.png",
+      "sha256": "fd0c9b4c8bcdfc01d9285138acc9ff5a49b77162ae88c81d8dc6eaaddd38b164"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    },
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/pasarela_arriba_izq.png",
+      "sha256": "47ef47ddb9dab2371286f347ff4b3697a49fdef3d40665fcd51e66ee0fc72ce1"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.172,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15108-27e3-79c2-9062-eaeb604488dd",
+  "created": "2026-10-18T22:01:26+00:00",
+  "sha256": "6f7b39fac95f3ce58591afd5f7d3a51e185bbcc8b682baab35cd00286e83ee5d",
+  "post": {
+    "file": "backgrounds/lowpoly_kit/post/columnas/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6687,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "columna_angosta": [
+        89,
+        296,
+        397,
+        1169
+      ],
+      "columna_ancha": [
+        496,
+        321,
+        1011,
+        1171
+      ],
+      "bloque": [
+        1126,
+        326,
+        1704,
+        1166
+      ],
+      "pared": [
+        1816,
+        340,
+        2151,
+        1165
+      ],
+      "guia_ascensor": [
+        2268,
+        296,
+        2471,
+        1165
+      ]
+    },
+    "trim": {
+      "columna_angosta": [
+        0,
+        0,
+        308,
+        873
+      ],
+      "columna_ancha": [
+        0,
+        0,
+        515,
+        850
+      ],
+      "bloque": [
+        0,
+        0,
+        578,
+        840
+      ],
+      "pared": [
+        0,
+        0,
+        335,
+        825
+      ],
+      "guia_ascensor": [
+        0,
+        0,
+        203,
+        869
+      ]
+    },
+    "files": {
+      "columna_angosta": {
+        "file": "columna_angosta.png",
+        "w": 308,
+        "h": 873
+      },
+      "columna_ancha": {
+        "file": "columna_ancha.png",
+        "w": 515,
+        "h": 850
+      },
+      "bloque": {
+        "file": "bloque.png",
+        "w": 578,
+        "h": 840
+      },
+      "pared": {
+        "file": "pared.png",
+        "w": 335,
+        "h": 825
+      },
+      "guia_ascensor": {
+        "file": "guia_ascensor.png",
+        "w": 203,
+        "h": 869
+      }
+    }
+  }
+}

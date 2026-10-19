@@ -1,0 +1,158 @@
+{
+  "attempts": [
+    {
+      "clip": "kling-o3-std_slide_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "slide",
+      "n": 1,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1512a-f8db-74a1-9a63-3710392b5820",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-f8db-74a1-9a63-3710392b5820/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-f8db-74a1-9a63-3710392b5820"
+      },
+      "submitted": "2026-10-18T22:38:53+00:00",
+      "detail": "",
+      "finished": "2026-10-18T22:41:49+00:00"
+    },
+    {
+      "clip": "kling-o3-std_slide_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "slide",
+      "n": 2,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1512a-fafd-7c00-9d87-b3a341e16036",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-fafd-7c00-9d87-b3a341e16036/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-fafd-7c00-9d87-b3a341e16036"
+      },
+      "submitted": "2026-10-18T22:38:53+00:00",
+      "detail": "",
+      "finished": "2026-10-18T22:41:52+00:00"
+    },
+    {
+      "clip": "kling-o3-std_slide_3.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "slide",
+      "n": 3,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1512a-fd8f-77f1-9add-180c8adb652b",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-fd8f-77f1-9add-180c8adb652b/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-fd8f-77f1-9add-180c8adb652b"
+      },
+      "submitted": "2026-10-18T22:38:54+00:00",
+      "detail": "",
+      "finished": "2026-10-18T22:41:57+00:00"
+    },
+    {
+      "clip": "kling-o3-std_slide_4.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "slide",
+      "n": 4,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1512a-ffae-7862-9dbd-3b808f34d53e",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-ffae-7862-9dbd-3b808f34d53e/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a1512a-ffae-7862-9dbd-3b808f34d53e"
+      },
+      "submitted": "2026-10-18T22:38:54+00:00",
+      "detail": "",
+      "finished": "2026-10-18T22:42:11+00:00"
+    }
+  ],
+  "qa": {
+    "kling-o3-std_slide_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "slide",
+      "n": 1,
+      "usd": 0.336,
+      "qa": "warn",
+      "drift_pct": 8.6,
+      "zoom_pct": 2.4,
+      "edge_frames": 0,
+      "pose_mad": 1.95,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 8.96): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 97 fr"
+    },
+    "kling-o3-std_slide_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "slide",
+      "n": 2,
+      "usd": 0.336,
+      "qa": "warn",
+      "drift_pct": 22.3,
+      "zoom_pct": 6.4,
+      "edge_frames": 0,
+      "pose_mad": 1.95,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 8.92): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 97 fr"
+    },
+    "kling-o3-std_slide_3.mp4": {
+      "model": "kling-o3-std",
+      "animation": "slide",
+      "n": 3,
+      "usd": 0.336,
+      "qa": "warn",
+      "drift_pct": 34.6,
+      "zoom_pct": 12.7,
+      "edge_frames": 0,
+      "pose_mad": 2.04,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 8.42): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 97 fr"
+    },
+    "kling-o3-std_slide_4.mp4": {
+      "model": "kling-o3-std",
+      "animation": "slide",
+      "n": 4,
+      "usd": 0.336,
+      "qa": "warn",
+      "drift_pct": 16.1,
+      "zoom_pct": 6.4,
+      "edge_frames": 0,
+      "pose_mad": 1.98,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 8.81): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 97 fr"
+    }
+  }
+}

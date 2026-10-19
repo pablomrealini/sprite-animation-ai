@@ -1,0 +1,81 @@
+{
+  "set": "poses_gen",
+  "asset": "deslizarse_b",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "No text, letters, numbers or logos.\n\nEdit the first reference image, the character in a low feet-first slide seen from the side facing right. Keep the same slide: the body low and leaning back, the left hand flat on the floor behind him, the head up looking right, the same helmet, colors and low-poly rendering. Fix only two things. First, the proportions: use exactly the chibi proportions of the second reference image, the same character standing: short, thick legs and short arms. Measured in helmet widths, each leg from the hip to the sole of the boot is only about 0.55 of the helmet width, and the boot is about half the helmet width long. So the stretched front leg, from the hip to the sole, is a little more than half as long as the helmet is wide, never longer; the back leg is bent with the knee up and is just as short. The whole pose is compact: about 1.7 helmet widths long and 1.4 helmet widths tall. Second, the right arm: bent and relaxed, the elbow down against the side of the body, the right hand holding the same dark pistol tight against the chest, pointing forward and slightly up, not aiming and not stretched out. Full body, side view facing right. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/deslizarse_concept_4ad4863a_C0C3CC.png",
+      "sha256": "c260464f5f0eb9d469344dec4b09766cc2bae0fda9de88d4704125547366dead"
+    },
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/deslizarse_concept.png",
+      "sha256": "4ad4863a3014adeeb24cd27ee9fb5b4022d4f75ebbbd4fafd09c92035a0b863c"
+    },
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2160×1440",
+  "size": [
+    2160,
+    1440
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.174,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15105-09ea-7343-a4f0-a2bf8d597198",
+  "created": "2026-10-18T21:58:02+00:00",
+  "sha256": "31495cb23e7bc308645b2f29bd9ba527155a4d0985bdf9b6c8bc37e968705430",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/deslizarse_b/gpt-image-2.5-sunburst-fal_1.png",
+    "source": {
+      "w": 2160,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.6504,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        291,
+        88,
+        1841,
+        1370
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_1.png",
+        "w": 1550,
+        "h": 1282
+      }
+    }
+  }
+}

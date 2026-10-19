@@ -6,11 +6,14 @@ uso (desde la raíz del repo):
 
 Usa las mismas funciones que el juego (export_kit de prototypes/arena/build.py y measure de prototypes/build.py), así
 las piezas del kit tienen las mismas medidas. El color es el del juego: el LUT de color_lut() (la paleta de Pablo, de
-prototypes/arena/paleta.py) y prototypes/arena/color.js en línea (gradePixels, la misma cuenta que gradúa el juego). Las arenas no van adentro: el editor las lee de prototypes/arena/arenas/
+prototypes/arena/paleta.py) y prototypes/arena/color.js en línea (gradePixels, la misma cuenta que gradúa el juego). La
+física, el colgado, la caída que saca vida y el HUD salen de src.html (export_game): si Programación los cambia, alcanza
+con volver a armar el editor. Las arenas no van adentro: el editor las lee de prototypes/arena/arenas/
 por el servidor (serve.py); las de este momento quedan en la página como respaldo para abrirla sin servidor.
 """
 import importlib.util
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -52,6 +55,23 @@ def export_lut() -> dict | None:
         return None
 
 
+def export_game() -> str:
+    """Las reglas del juego que importan para armar una arena, leídas de src.html (sólo se lee): FEEL y DOUBLE_V (el
+    salto y el doble, para el alcance), HANG_ON (colgarse), FALL (la caída que saca vida) y HUD2 (lo que tapa el HUD).
+    Van como texto JS, tal cual están en el juego; la que no se encuentra va en null y el editor usa la de respaldo."""
+    src = (ARENA / "src.html").read_text(encoding="utf-8")
+    pats = {"FEEL": r"^const FEEL = (\{[^\n]*?\});", "HANG_ON": r"^const HANG_ON = (true|false);",
+            "FALL": r"^const FALL = (\{[^\n]*?\});", "HUD2": r"^const HUD2 = (\{[^\n]*?\});",
+            "DOUBLE_V": r"\bDOUBLE_V = ([0-9.]+)"}
+    vals = {}
+    for k, p in pats.items():
+        m = re.search(p, src, re.M)
+        vals[k] = m.group(1) if m else "null"
+        if not m:
+            print(f"  ojo: no encontré {k} en src.html (el editor usa el de respaldo)")
+    return "{ " + ", ".join(f"{k}: {v}" for k, v in vals.items()) + " }"
+
+
 def main() -> None:
     dist = HERE / "dist"
     dist.mkdir(exist_ok=True)
@@ -66,13 +86,17 @@ def main() -> None:
         cache.write_text(json.dumps([kit, ranger]))
     lut = export_lut()
     arenas = {p.stem: json.loads(p.read_text()) for p in sorted((ARENA / "arenas").glob("*.json"))}
+    kits = {p.parent.name: json.loads(p.read_text()) for p in sorted((ARENA / "arenas").glob("*/kit.json"))}
     html = (HERE / "editor.html").read_text(encoding="utf-8")
     color_js = ARENA / "color.js"
     html = html.replace("__COLOR_JS__", color_js.read_text(encoding="utf-8") if color_js.exists() else "")
-    for key, val in (("__KIT_DATA__", kit), ("__RANGER_DATA__", ranger), ("__ARENA_DATA__", arenas), ("__LUT_DATA__", lut)):
+    html = html.replace("__GAME_DATA__", export_game())
+    for key, val in (("__KIT_DATA__", kit), ("__RANGER_DATA__", ranger), ("__ARENA_DATA__", arenas), ("__LUT_DATA__", lut),
+                     ("__KITS_DATA__", kits)):
         html = html.replace(key, json.dumps(val, separators=(",", ":"), ensure_ascii=False))
     (dist / "index.html").write_text(html, encoding="utf-8")
-    print(f"✓ {dist / 'index.html'}  ({len(kit['pieces'])} piezas del kit, arenas: {', '.join(arenas)})")
+    print(f"✓ {dist / 'index.html'}  ({len(kit['pieces'])} piezas del kit 2D, kits: {', '.join(kits) or 'ninguno'}, "
+          f"arenas: {', '.join(arenas)})")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,48 @@
+# Tanda 3 del low-poly (2026-10-18): el deslizamiento (nuevo), tirar la granada con la granada en la mano y el doble
+# salto hecho bolita. La receta de siempre: Kling O3 standard, sólo el primer y el último cuadro (sin referencias),
+# magenta apagado 16:9, cámara fija, a la escala del idle, el arma apagada y sin disparar (ver generate_tanda2.toml).
+#   slide        desde la zancada de correr (apagada con apagar_arma.py): corre en el lugar, se tira a un deslizamiento
+#                bajo con los pies adelante y el arma al frente, lo sostiene ~1 s y se levanta corriendo. Termina en la
+#                misma zancada, así entrada y salida empalman con run_gun.
+#   throw        desde la pose con la granada en la mano izquierda (poses_gen con_granada, nano-banana-2.1_2, copiada a
+#                poses/con_granada_concept.png; pad-pose --bg C42D7D: misma caja y casco de 242 px contra 243 de la de
+#                perfil) hasta la de perfil con la mano vacía. Arranca ya: en set/throw_2 se quedaba quieto 28 cuadros y al final
+#                disparaba un rayo. El arma queda baja, sin apuntar.
+#   double_jump  salta, se hace bolita (como poses/bolita.png) sin girar, la sostiene ~0,5 s y se abre a la caída de un
+#                salto común; dos veces. El giro lo pone el juego: Kling deforma al personaje en el mortal (set/double_jump).
+# La pose del throw sale primero (gen-images, US$0,47); después van los tres videos:
+#   uv run --project pipeline spritepipe gen-images characters/lowpoly/poses_gen/gen.toml --assets con_granada --dry-run
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_tanda3.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 2
+duration = 5
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 3
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/tanda3"
+
+[[animation]]
+name = "slide"            # slide_in, slide (sostenido) y slide_out
+pose = "poses/correr_apagada_dullmagenta_16x9.png"
+prompt = "prompts/slide.txt"
+kind = "oneshot"
+last_frame = true
+
+[[animation]]
+name = "throw"            # el juego suelta su granada en el cuadro en que sale de la mano
+pose = "poses/con_granada_dullmagenta_16x9.png"
+prompt = "prompts/tirar_granada.txt"
+kind = "oneshot"
+last_frame = "poses/perfil_apagada_dullmagenta_16x9.png"
+
+[[animation]]
+name = "double_jump"      # se encoge, bolita sostenida (la gira el juego) y se abre a la caída
+pose = "poses/salto_apagada_dullmagenta_16x9.png"
+prompt = "prompts/doble_salto_bolita.txt"
+kind = "oneshot"
+last_frame = true

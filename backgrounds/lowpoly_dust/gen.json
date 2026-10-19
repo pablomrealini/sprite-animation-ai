@@ -1,0 +1,105 @@
+{
+  "attempts": [
+    {
+      "id": "hard/gpt-image-2.5-sunburst-fal_1",
+      "asset": "hard",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1709,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_dust/refs/e6_3086b4f6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150ae-b637-70a3-b9f9-c1f6cbb2f8c0",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-b637-70a3-b9f9-c1f6cbb2f8c0/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-b637-70a3-b9f9-c1f6cbb2f8c0"
+      },
+      "submitted": "2026-10-18T20:23:09+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T20:23:46+00:00"
+    },
+    {
+      "id": "dust/gpt-image-2.5-sunburst-fal_1",
+      "asset": "dust",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1714,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_dust/refs/e6_3086b4f6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150ae-b652-7c72-887e-431f6ecba1cf",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-b652-7c72-887e-431f6ecba1cf/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-b652-7c72-887e-431f6ecba1cf"
+      },
+      "submitted": "2026-10-18T20:23:09+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T20:23:45+00:00"
+    },
+    {
+      "id": "hard/gpt-image-2.5-sunburst-fal_2",
+      "asset": "hard",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1709,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_dust/refs/e6_3086b4f6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150ae-b6d4-7ee0-b611-19bf6ac6f07d",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-b6d4-7ee0-b611-19bf6ac6f07d/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-b6d4-7ee0-b611-19bf6ac6f07d"
+      },
+      "submitted": "2026-10-18T20:23:09+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T20:23:55+00:00"
+    },
+    {
+      "id": "dust/gpt-image-2.5-sunburst-fal_2",
+      "asset": "dust",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1714,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_dust/refs/e6_3086b4f6_FFFFFF.png",
+        "/Users/litowork/Documents/Games/sprite-animation-ai/prototypes/arena/refs/refineria_lowpoly.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150ae-bb14-7c93-89da-431805883954",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-bb14-7c93-89da-431805883954/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a150ae-bb14-7c93-89da-431805883954"
+      },
+      "submitted": "2026-10-18T20:23:10+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T20:23:56+00:00"
+    }
+  ],
+  "qa": {}
+}

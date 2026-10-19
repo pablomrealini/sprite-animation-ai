@@ -1,0 +1,236 @@
+{
+  "attempts": [
+    {
+      "clip": "kling-o3-std_slide_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "slide",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150a9-1925-7d91-8078-850cde01dcac",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-1925-7d91-8078-850cde01dcac/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-1925-7d91-8078-850cde01dcac"
+      },
+      "submitted": "2026-10-18T20:17:01+00:00",
+      "detail": "",
+      "finished": "2026-10-18T20:18:11+00:00"
+    },
+    {
+      "clip": "kling-o3-std_slide_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "slide",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150a9-1b47-73d2-a4cf-40ba22cede50",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-1b47-73d2-a4cf-40ba22cede50/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-1b47-73d2-a4cf-40ba22cede50"
+      },
+      "submitted": "2026-10-18T20:17:02+00:00",
+      "detail": "",
+      "finished": "2026-10-18T20:18:15+00:00"
+    },
+    {
+      "clip": "kling-o3-std_throw_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "throw",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150a9-2b83-7002-b2a1-f926d207c17b",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-2b83-7002-b2a1-f926d207c17b/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-2b83-7002-b2a1-f926d207c17b"
+      },
+      "submitted": "2026-10-18T20:17:06+00:00",
+      "detail": "",
+      "finished": "2026-10-18T20:18:18+00:00"
+    },
+    {
+      "clip": "kling-o3-std_throw_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "throw",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150a9-2daa-73d3-ae92-8f2a42e17676",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-2daa-73d3-ae92-8f2a42e17676/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150a9-2daa-73d3-ae92-8f2a42e17676"
+      },
+      "submitted": "2026-10-18T20:17:07+00:00",
+      "detail": "",
+      "finished": "2026-10-18T20:18:21+00:00"
+    },
+    {
+      "clip": "kling-o3-std_double_jump_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "double_jump",
+      "n": 1,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150aa-8314-7f40-82f9-119470182e14",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150aa-8314-7f40-82f9-119470182e14/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150aa-8314-7f40-82f9-119470182e14"
+      },
+      "submitted": "2026-10-18T20:18:34+00:00",
+      "detail": "",
+      "finished": "2026-10-18T20:20:19+00:00"
+    },
+    {
+      "clip": "kling-o3-std_double_jump_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "double_jump",
+      "n": 2,
+      "seed": null,
+      "duration_s": 5,
+      "usd_estimate": 0.42,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150aa-8538-7ad3-91f2-f59781bde372",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150aa-8538-7ad3-91f2-f59781bde372/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150aa-8538-7ad3-91f2-f59781bde372"
+      },
+      "submitted": "2026-10-18T20:18:34+00:00",
+      "detail": "",
+      "finished": "2026-10-18T20:20:34+00:00"
+    }
+  ],
+  "qa": {
+    "kling-o3-std_slide_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "slide",
+      "n": 1,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 47.3,
+      "zoom_pct": 20.8,
+      "edge_frames": 0,
+      "pose_mad": 1.94,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 8.78): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_slide_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "slide",
+      "n": 2,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 5.7,
+      "zoom_pct": 0.6,
+      "edge_frames": 0,
+      "pose_mad": 1.97,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 9.24): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_throw_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "throw",
+      "n": 1,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 24.8,
+      "zoom_pct": 3.6,
+      "edge_frames": 2,
+      "pose_mad": 1.79,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el personaje toca el borde del cuadro en 2 frames (arma o capa cortada)",
+        "fondo poco plano (desvío 9.11): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_throw_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "throw",
+      "n": 2,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 15.7,
+      "zoom_pct": 0.4,
+      "edge_frames": 2,
+      "pose_mad": 1.73,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el personaje toca el borde del cuadro en 2 frames (arma o capa cortada)",
+        "fondo poco plano (desvío 9.16): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_double_jump_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "double_jump",
+      "n": 1,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 9.5,
+      "zoom_pct": 8.3,
+      "edge_frames": 0,
+      "pose_mad": 1.71,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 8.76): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    },
+    "kling-o3-std_double_jump_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "double_jump",
+      "n": 2,
+      "usd": 0.42,
+      "qa": "warn",
+      "drift_pct": 12.4,
+      "zoom_pct": 1.5,
+      "edge_frames": 0,
+      "pose_mad": 1.73,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 8.1): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 121 fr"
+    }
+  }
+}

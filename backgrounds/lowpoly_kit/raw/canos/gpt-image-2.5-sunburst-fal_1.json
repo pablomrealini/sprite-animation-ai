@@ -1,0 +1,165 @@
+{
+  "set": "lowpoly_kit",
+  "asset": "canos",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly background props in the exact style of the hazy background refinery of the reference image: flat-shaded polygons with soft per-face lighting, a few large facets, clean chunky shapes, soft light from the top left, no texture noise, no photographic detail. They stand far behind the gameplay: bluer, hazier and with less contrast than the gameplay walkways, grey-blue steel, muted red pipes and glowing cyan lights. No shadow on the ground.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nThree separate low-poly red industrial pipe pieces for the background of the same refinery, like the red pipes in the hazy background of the reference image, drawn at the same scale and with the same pipe thickness, in one row, all centered on the same horizontal line, with wide empty space between them, not touching each other or the image edges. A faceted muted red pipe, lighter on the facets that face the top left and darker on the others.\n1. A straight horizontal pipe segment, five times longer than its thickness, with no flanges, bands or caps, cut straight at both ends, that tiles seamlessly left to right.\n2. The same straight pipe standing vertical, five times taller than its thickness, cut straight at both ends, that tiles seamlessly top to bottom.\n3. A 90-degree elbow of the same pipe, coming in from the left and turning down, twice the pipe thickness in each direction.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowdeco",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/fondo.webp",
+      "sha256": "c0dafe9c2e058a984cd6a34573aeb87d3c17dd8106cb160629a0eb54226b31ff"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/fondo.webp",
+      "sha256": "c0dafe9c2e058a984cd6a34573aeb87d3c17dd8106cb160629a0eb54226b31ff"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1142,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15109-4132-7e90-9933-05c55ebf3f12",
+  "created": "2026-10-18T22:02:35+00:00",
+  "sha256": "184d8d7809bca0f8c436e3fdbb531309e655d0c02aa0f5b893f419807c1bb2e6",
+  "post": {
+    "file": "backgrounds/lowpoly_kit/post/canos/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8856,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "deco_cano_h": [
+        205,
+        680,
+        1032,
+        854
+      ],
+      "deco_cano_v": [
+        1302,
+        311,
+        1483,
+        1103
+      ],
+      "deco_codo": [
+        1870,
+        661,
+        2379,
+        1085
+      ]
+    },
+    "seam": {
+      "deco_cano_h:x": {
+        "before": {
+          "axis": "x",
+          "score": 41.14,
+          "peak": 70.95,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 99,
+          "cut_error": 3e-05,
+          "cut_x": [
+            21,
+            54
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.99,
+          "peak": 2.02,
+          "verdict": "ok"
+        }
+      },
+      "deco_cano_v:y": {
+        "before": {
+          "axis": "y",
+          "score": 66.63,
+          "peak": 128.9,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 95,
+          "cut_error": 2e-05,
+          "cut_x": [
+            40,
+            72
+          ]
+        },
+        "after": {
+          "axis": "y",
+          "score": 0.81,
+          "peak": 2.14,
+          "verdict": "ok"
+        }
+      }
+    },
+    "trim": {
+      "deco_cano_h": [
+        0,
+        0,
+        728,
+        174
+      ],
+      "deco_cano_v": [
+        0,
+        0,
+        181,
+        697
+      ],
+      "deco_codo": [
+        0,
+        0,
+        509,
+        424
+      ]
+    },
+    "files": {
+      "deco_cano_h": {
+        "file": "deco_cano_h.png",
+        "w": 728,
+        "h": 174
+      },
+      "deco_cano_v": {
+        "file": "deco_cano_v.png",
+        "w": 181,
+        "h": 697
+      },
+      "deco_codo": {
+        "file": "deco_codo.png",
+        "w": 509,
+        "h": 424
+      }
+    }
+  }
+}

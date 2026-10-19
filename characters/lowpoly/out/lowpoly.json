@@ -4,48 +4,48 @@
   "fps": 12,
   "pivot": {
     "x": 0.5,
-    "y": 0.93795
+    "y": 0.93683
   },
   "variants": {
     "1x": {
       "canvas": {
         "w": 500,
-        "h": 622
+        "h": 624
       },
       "pivot_px": {
         "x": 250.0,
-        "y": 583.4
+        "y": 584.58
       },
       "atlas": [
         {
           "image": "lowpoly_1x-0.png",
           "data": "lowpoly_1x-0.json",
-          "w": 2047,
-          "h": 2048
+          "w": 2048,
+          "h": 2047
         },
         {
           "image": "lowpoly_1x-1.png",
           "data": "lowpoly_1x-1.json",
-          "w": 2010,
-          "h": 2047
+          "w": 2019,
+          "h": 2043
         },
         {
           "image": "lowpoly_1x-2.png",
           "data": "lowpoly_1x-2.json",
-          "w": 2033,
-          "h": 2048
+          "w": 2042,
+          "h": 2042
         },
         {
           "image": "lowpoly_1x-3.png",
           "data": "lowpoly_1x-3.json",
-          "w": 2044,
+          "w": 2045,
           "h": 2048
         },
         {
           "image": "lowpoly_1x-4.png",
           "data": "lowpoly_1x-4.json",
-          "w": 839,
-          "h": 941
+          "w": 1685,
+          "h": 1715
         }
       ],
       "animations": {
@@ -93,7 +93,7 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 2,
               "name": "idle_combat/0008",
               "duration": 83.3
             },
@@ -108,12 +108,12 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 2,
               "name": "idle_combat/0011",
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 2,
               "name": "idle_combat/0012",
               "duration": 83.3
             },
@@ -138,7 +138,7 @@
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 3,
               "name": "idle_combat/0017",
               "duration": 83.3
             },
@@ -153,12 +153,12 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 2,
               "name": "idle_combat/0020",
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 2,
               "name": "idle_combat/0021",
               "duration": 83.3
             },
@@ -173,17 +173,17 @@
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 3,
               "name": "idle_combat/0024",
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 3,
               "name": "idle_combat/0025",
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 3,
               "name": "idle_combat/0026",
               "duration": 83.3
             },
@@ -308,7 +308,7 @@
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 3,
               "name": "idle_combat/0051",
               "duration": 83.3
             },
@@ -461,7 +461,7 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "jump/0001",
               "duration": 83.3
             },
@@ -476,22 +476,22 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 2,
               "name": "jump/0004",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 3,
               "name": "jump/0005",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "jump/0006",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "jump/0007",
               "duration": 83.3
             },
@@ -532,12 +532,12 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 0,
               "name": "double_jump/0004",
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 4,
               "name": "double_jump/0005",
               "duration": 83.3
             },
@@ -547,7 +547,7 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 2,
               "name": "double_jump/0007",
               "duration": 83.3
             },
@@ -557,7 +557,7 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "double_jump/0009",
               "duration": 83.3
             },
@@ -569,6 +569,57 @@
           ],
           "sheet": "sheets/1x/double_jump.png"
         },
+        "double_jump_fix": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "double_jump_fix/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_fix/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "double_jump_fix/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "double_jump_fix/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_fix/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "double_jump_fix/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_fix/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "double_jump_fix/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump_fix/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/double_jump_fix.png"
+        },
         "hang_in": {
           "loop": false,
           "frames": [
@@ -578,12 +629,12 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "hang_in/0001",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "hang_in/0002",
               "duration": 83.3
             },
@@ -689,7 +740,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "hang/0013",
               "duration": 83.3
             },
@@ -699,12 +750,12 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "hang/0015",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "hang/0016",
               "duration": 83.3
             }
@@ -795,7 +846,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "climb/0016",
               "duration": 83.3
             },
@@ -810,7 +861,7 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 0,
               "name": "climb/0019",
               "duration": 83.3
             },
@@ -825,7 +876,7 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "climb/0022",
               "duration": 83.3
             },
@@ -835,7 +886,7 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 0,
               "name": "climb/0024",
               "duration": 83.3
             },
@@ -850,7 +901,7 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 0,
               "name": "climb/0027",
               "duration": 83.3
             },
@@ -860,12 +911,12 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "climb/0029",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "climb/0030",
               "duration": 83.3
             },
@@ -911,17 +962,17 @@
           "loop": true,
           "frames": [
             {
-              "page": 0,
+              "page": 1,
               "name": "hang_two/0000",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "hang_two/0001",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "hang_two/0002",
               "duration": 83.3
             },
@@ -1116,7 +1167,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "hang_two/0041",
               "duration": 83.3
             },
@@ -1126,22 +1177,22 @@
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 0,
               "name": "hang_two/0043",
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 0,
               "name": "hang_two/0044",
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 0,
               "name": "hang_two/0045",
               "duration": 83.3
             },
             {
-              "page": 1,
+              "page": 0,
               "name": "hang_two/0046",
               "duration": 83.3
             },
@@ -1162,12 +1213,12 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0001",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0002",
               "duration": 83.3
             },
@@ -1197,17 +1248,17 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0008",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0009",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0010",
               "duration": 83.3
             },
@@ -1237,17 +1288,17 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0016",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0017",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "throw/0018",
               "duration": 83.3
             },
@@ -1284,6 +1335,42 @@
           ],
           "sheet": "sheets/1x/throw.png"
         },
+        "throw_fix": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 4,
+              "name": "throw_fix/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw_fix/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw_fix/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw_fix/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw_fix/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "throw_fix/0005",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/throw_fix.png"
+        },
         "shoot_in": {
           "loop": false,
           "frames": [
@@ -1318,12 +1405,12 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 2,
               "name": "shoot_in/0006",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 2,
               "name": "shoot_in/0007",
               "duration": 83.3
             }
@@ -1344,7 +1431,7 @@
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 3,
               "name": "shoot/0002",
               "duration": 83.3
             },
@@ -1375,7 +1462,7 @@
               "duration": 83.3
             },
             {
-              "page": 2,
+              "page": 3,
               "name": "shoot2h_in/0003",
               "duration": 83.3
             },
@@ -1477,27 +1564,27 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_in/0005",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_in/0006",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_in/0007",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_in/0008",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_in/0009",
               "duration": 83.3
             }
@@ -1513,17 +1600,17 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_shoot/0001",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_shoot/0002",
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_shoot/0003",
               "duration": 83.3
             }
@@ -1534,7 +1621,7 @@
           "loop": false,
           "frames": [
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_out/0000",
               "duration": 83.3
             },
@@ -1544,7 +1631,7 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_out/0002",
               "duration": 83.3
             },
@@ -1554,7 +1641,7 @@
               "duration": 83.3
             },
             {
-              "page": 3,
+              "page": 4,
               "name": "crouch_out/0004",
               "duration": 83.3
             },
@@ -1616,30 +1703,277 @@
             }
           ],
           "sheet": "sheets/1x/jump_shoot.png"
+        },
+        "slide_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "slide_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "slide_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "slide_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 2,
+              "name": "slide_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/slide_in.png"
+        },
+        "slide": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 2,
+              "name": "slide/0000",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/slide.png"
+        },
+        "slide_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "slide_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "slide_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "slide_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "slide_out/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "slide_out/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "slide_out/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "slide_out/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "slide_out/0007",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/slide_out.png"
+        },
+        "double_jump_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "double_jump_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "double_jump_in/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/double_jump_in.png"
+        },
+        "double_jump_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 2,
+              "name": "double_jump_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "double_jump_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "double_jump_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 4,
+              "name": "double_jump_out/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/double_jump_out.png"
+        },
+        "double_jump_ball": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 0,
+              "name": "double_jump_ball/0000",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/double_jump_ball.png"
+        },
+        "throw2": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 3,
+              "name": "throw2/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw2/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 3,
+              "name": "throw2/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw2/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw2/0017",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/1x/throw2.png"
         }
       }
     },
     "0.5x": {
       "canvas": {
         "w": 250,
-        "h": 311
+        "h": 312
       },
       "pivot_px": {
         "x": 125.0,
-        "y": 291.7
+        "y": 292.29
       },
       "atlas": [
         {
           "image": "lowpoly_0.5x-0.png",
           "data": "lowpoly_0.5x-0.json",
-          "w": 2047,
+          "w": 2048,
           "h": 2048
         },
         {
           "image": "lowpoly_0.5x-1.png",
           "data": "lowpoly_0.5x-1.json",
-          "w": 580,
-          "h": 474
+          "w": 1019,
+          "h": 1015
         }
       ],
       "animations": {
@@ -2055,7 +2389,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "jump/0001",
               "duration": 83.3
             },
@@ -2080,12 +2414,12 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "jump/0006",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "jump/0007",
               "duration": 83.3
             },
@@ -2095,7 +2429,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "jump/0009",
               "duration": 83.3
             }
@@ -2151,28 +2485,79 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "double_jump/0009",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "double_jump/0010",
               "duration": 83.3
             }
           ],
           "sheet": "sheets/0.5x/double_jump.png"
         },
-        "hang_in": {
+        "double_jump_fix": {
           "loop": false,
           "frames": [
             {
               "page": 0,
-              "name": "hang_in/0000",
+              "name": "double_jump_fix/0000",
               "duration": 83.3
             },
             {
               "page": 0,
+              "name": "double_jump_fix/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_fix/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_fix/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_fix/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_fix/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_fix/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_fix/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_fix/0008",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/double_jump_fix.png"
+        },
+        "hang_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "hang_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
               "name": "hang_in/0001",
               "duration": 83.3
             },
@@ -2414,12 +2799,12 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "climb/0021",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "climb/0022",
               "duration": 83.3
             },
@@ -2454,7 +2839,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "climb/0029",
               "duration": 83.3
             },
@@ -2469,12 +2854,12 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "climb/0032",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "climb/0033",
               "duration": 83.3
             },
@@ -2756,12 +3141,12 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0001",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0002",
               "duration": 83.3
             },
@@ -2771,7 +3156,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0004",
               "duration": 83.3
             },
@@ -2781,27 +3166,27 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0006",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0007",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0008",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0009",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0010",
               "duration": 83.3
             },
@@ -2831,22 +3216,22 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0016",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0017",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0018",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "throw/0019",
               "duration": 83.3
             },
@@ -2877,6 +3262,42 @@
             }
           ],
           "sheet": "sheets/0.5x/throw.png"
+        },
+        "throw_fix": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "throw_fix/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw_fix/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw_fix/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw_fix/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw_fix/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw_fix/0005",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/throw_fix.png"
         },
         "shoot_in": {
           "loop": false,
@@ -3071,12 +3492,12 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "crouch_in/0005",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "crouch_in/0006",
               "duration": 83.3
             },
@@ -3091,7 +3512,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "crouch_in/0009",
               "duration": 83.3
             }
@@ -3102,12 +3523,12 @@
           "loop": true,
           "frames": [
             {
-              "page": 0,
+              "page": 1,
               "name": "crouch_shoot/0000",
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "crouch_shoot/0001",
               "duration": 83.3
             },
@@ -3148,7 +3569,7 @@
               "duration": 83.3
             },
             {
-              "page": 0,
+              "page": 1,
               "name": "crouch_out/0004",
               "duration": 83.3
             },
@@ -3210,6 +3631,253 @@
             }
           ],
           "sheet": "sheets/0.5x/jump_shoot.png"
+        },
+        "slide_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "slide_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "slide_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "slide_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "slide_in/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/slide_in.png"
+        },
+        "slide": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 1,
+              "name": "slide/0000",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/slide.png"
+        },
+        "slide_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "slide_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "slide_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "slide_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "slide_out/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "slide_out/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "slide_out/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "slide_out/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "slide_out/0007",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/slide_out.png"
+        },
+        "double_jump_in": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "double_jump_in/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_in/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_in/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "double_jump_in/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_in/0004",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/double_jump_in.png"
+        },
+        "double_jump_out": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 1,
+              "name": "double_jump_out/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_out/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_out/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "double_jump_out/0003",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/double_jump_out.png"
+        },
+        "double_jump_ball": {
+          "loop": true,
+          "frames": [
+            {
+              "page": 1,
+              "name": "double_jump_ball/0000",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/double_jump_ball.png"
+        },
+        "throw2": {
+          "loop": false,
+          "frames": [
+            {
+              "page": 0,
+              "name": "throw2/0000",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0001",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0002",
+              "duration": 83.3
+            },
+            {
+              "page": 1,
+              "name": "throw2/0003",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0004",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0005",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0006",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0007",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0008",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0009",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0010",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0011",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0012",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0013",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0014",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0015",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0016",
+              "duration": 83.3
+            },
+            {
+              "page": 0,
+              "name": "throw2/0017",
+              "duration": 83.3
+            }
+          ],
+          "sheet": "sheets/0.5x/throw2.png"
         }
       }
     }

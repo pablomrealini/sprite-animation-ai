@@ -125,7 +125,7 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
 
   <section class="box" aria-labelledby="hFlash">
     <h2 id="hFlash">Ajustes del fogonazo</h2>
-    <p class="note">Un juego de valores por personaje y por tiro (parado, corriendo, a dos manos, agachado y en el aire): el tamaño del dibujo y del halo, y cuánto se corre de la boca del arma. La vista muestra el tiro elegido de cerca, disparando solo con el mismo dibujo del juego: Pausa y ◀ ▶ pasan cuadro por cuadro con el fogonazo quieto, ¼× es cámara lenta y la cruz es la boca medida. Los cambios valen en el acto también en el juego (en "Probar arena solo", el panel salta al último tiro que hiciste). Guardar valores deja todos en el artifact, como los de la granada.</p>
+    <p class="note">Un juego de valores por personaje y por tiro (parado, corriendo, agachado y en el aire): el tamaño del dibujo y del halo, y cuánto se corre de la boca del arma. La vista muestra el tiro elegido de cerca, disparando solo con el mismo dibujo del juego: Pausa y ◀ ▶ pasan cuadro por cuadro con el fogonazo quieto, ¼× es cámara lenta y la cruz es la boca medida. Los cambios valen en el acto también en el juego (en "Probar arena solo", el panel salta al último tiro que hiciste). Guardar valores deja todos en el artifact, como los de la granada.</p>
     <div class="row"><div class="opt"><span id="lblFlashChar">Personaje</span><div class="seg" role="group" aria-labelledby="lblFlashChar" id="segFlashChar"></div></div><div class="opt"><span id="lblFlashKind">Tiro</span><div class="seg" role="group" aria-labelledby="lblFlashKind" id="segFlashKind"></div></div></div>
     <div class="flashGrid">
       <div class="flashPrev">
@@ -141,11 +141,12 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
     <section class="box" aria-labelledby="hControls">
       <h2 id="hControls">Controles</h2>
       <dl class="keys">
-        <dt><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dt><dd><b>Teclado izquierdo.</b> Saltar con W o Espacio, agacharse con S. Disparar con F o J, a dos manos con G o K, granada con E o L, golpe con Q o U</dd>
-        <dt><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></dt><dd><b>Teclado derecho.</b> Saltar con ↑, agacharse con ↓. Disparar con <kbd>.</kbd> o Num 1, a dos manos con <kbd>-</kbd> o Num 2, granada con <kbd>,</kbd> o Num 3, golpe con <kbd>M</kbd> o Num 4</dd>
-        <dt><kbd>Stick</kbd><kbd>A</kbd><kbd>X</kbd><kbd>B</kbd></dt><dd><b>Joystick.</b> A salta, X o RT dispara, B o RB a dos manos, Y o LB tira una granada, LT golpea (en PlayStation: X, Cuadrado o R2, Círculo o R1, Triángulo o L1, L2; en Switch, ZL golpea). El primero maneja al Rojo junto con el teclado izquierdo; en el menú, los demás se suman apretando un botón. Start empieza</dd>
+        <dt><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dt><dd><b>Teclado izquierdo.</b> Saltar con W o Espacio, agacharse con S. Disparar con F o J, deslizarse con G o K, granada con E o L, golpe con Q o U</dd>
+        <dt><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></dt><dd><b>Teclado derecho.</b> Saltar con ↑, agacharse con ↓. Disparar con <kbd>.</kbd> o Num 1, deslizarse con <kbd>-</kbd> o Num 2, granada con <kbd>,</kbd> o Num 3, golpe con <kbd>M</kbd> o Num 4</dd>
+        <dt><kbd>Stick</kbd><kbd>A</kbd><kbd>X</kbd><kbd>B</kbd></dt><dd><b>Joystick.</b> A salta, X o RT dispara, B o RB se desliza, Y o LB tira una granada, LT golpea (en PlayStation: X salta, Cuadrado o R2 dispara, Círculo o R1 se desliza, Triángulo o L1 granada, L2 golpea; en Switch, A o R se desliza y ZL golpea). El primero maneja al Rojo junto con el teclado izquierdo; en el menú, los demás se suman apretando un botón. Start empieza</dd>
         <dt><kbd>Abajo</kbd>+<kbd>saltar</kbd></dt><dd>Bajar atravesando el puente, las plataformas flotantes y las repisas</dd>
-        <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 3 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y matan de una a cualquiera en el radio, también al que la tiró</dd>
+        <dt><kbd>Deslizarse</kbd></dt><dd>Con el low-poly, en el piso: se tira sentado con un envión hacia donde apretás (sin dirección, hacia donde mira), con la caja de golpe baja: los tiros de pie y del aire le pasan por arriba (el agachado, el golpe y la granada le pegan) y se levanta corriendo. Mientras se desliza no dispara. Saltar lo corta y sale saltando con el envión</dd>
+        <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 3 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y matan de una a cualquiera en el radio, también al que la tiró. Ojo: con la barra llena, si no la soltás en 1,75 s te explota en la mano (titila, se pone roja y pita cada vez más rápido)</dd>
         <dt><kbd>Golpe</kbd></dt><dd>Un puñetazo corto hacia adelante, a la altura del cuerpo, en el piso o en el aire: saca un golpe, empuja fuerte y aturde un momento. Sirve pegado al otro, donde la bala sale de largo y no le pega. Uno cada medio segundo</dd>
         <dt><kbd>C</kbd></dt><dd>Cambiar de personaje: el ranger 2D o el low-poly (también se elige en el menú). Anda en medio de la partida, para compararlos jugando</dd>
         <dt><kbd>Esc</kbd></dt><dd>Volver al menú</dd>
@@ -157,12 +158,13 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
     <section class="box" aria-labelledby="hRules">
       <h2 id="hRules">Reglas de la prueba</h2>
       <p class="note"><b>Vidas.</b> Cada uno tiene 3 vidas por partida (se cambia en el menú). Al morir vuelve a los 1,6 s, en el lugar de salida más lejos de los demás, con un haz de luz que avisa dónde. Durante 2 s parpadea y las balas lo atraviesan, hasta que dispara. Gana el último al que le quedan vidas.</p>
-      <p class="note"><b>El arma se calienta.</b> Cada disparo la calienta (el de dos manos, el triple) y deja de enfriarse mientras seguís tirando. La barra arriba de la cabeza muestra cuánto: si llega al tope, el arma se traba, larga vapor y no dispara hasta enfriarse del todo (1,2 s). Tirando sin parar con una mano dura menos de un segundo (6 tiros).</p>
-      <p class="note"><b>Golpes.</b> El disparo de una mano saca un golpe y empuja; el de dos manos te planta, saca dos y empuja más. 7 disparos por segundo con una mano y 3,5 a dos manos (el polígono tenía 12 y 7). Agachado, el cuerpo es más bajo y las balas de alguien parado pasan cerca de la cabeza. El golpe de cerca llega unos 70 px delante del cuerpo, saca uno, empuja más que el disparo de dos manos y aturde 0,4 s; también le pega al que está agachado.</p>
-      <p class="note"><b>Power-ups.</b> Cada 12 a 18 s (el primero a los 9) aparece uno apoyado en algo que se pisa, con un haz que avisa dónde: el amarillo con la granada recarga las 3, el blanco con la cruz suma 1 golpe de salud (2 si se juega a 5). Se agarran tocándolos; si no te sirve (lo tenés lleno), queda ahí. A los 12 s parpadean y se van. Hay como mucho 2 a la vez (1 con dos jugadores o en la prueba) y los bots a veces van a buscarlos.</p>
-      <p class="note"><b>El ranger es el mismo del polígono</b>, con su feel, doble salto, colgado, subida y salto desde la cornisa. Los otros tres colores salen del mismo atlas al cargar la página: el rojo de la armadura cambia de tono.</p>
+      <p class="note"><b>El arma se calienta.</b> Cada disparo la calienta y deja de enfriarse mientras seguís tirando. La barra arriba de la cabeza muestra cuánto: si llega al tope, el arma se traba, larga vapor y no dispara hasta enfriarse del todo (1,2 s). Tirando sin parar con una mano dura menos de un segundo (6 tiros).</p>
+      <p class="note"><b>Golpes.</b> El disparo saca un golpe y empuja; 6 por segundo (el polígono tenía 12). No hay disparo a dos manos. Agachado, el cuerpo es más bajo y las balas de alguien parado pasan cerca de la cabeza. El golpe de cerca llega unos 70 px delante del cuerpo, saca uno, empuja fuerte y aturde 0,4 s; también le pega al que está agachado.</p>
+      <p class="note"><b>Power-ups.</b> Cada 12 a 18 s (el primero a los 9) aparece uno apoyado en algo que se pisa, con un haz que avisa dónde: el amarillo con la granada recarga las 3, el blanco con la cruz suma 1 golpe de salud (2 si se juega a 5) y el celeste con el escudo te hace invulnerable 4 s a todo (balas, golpes, granadas y caídas), con una burbuja alrededor que titila el último segundo y el escudo en el HUD, que se va vaciando; disparar no lo corta. Se agarran tocándolos, siempre: si lo tenés lleno, se gasta igual y no suma. A los 12 s parpadean y se van. Hay como mucho 2 a la vez (1 con dos jugadores o en la prueba) y los bots a veces van a buscarlos.</p>
+      <p class="note"><b>El ranger es el mismo del polígono</b>, con su feel y su doble salto (el colgado de las cornisas está apagado: a lo alto se llega con el doble salto). Los otros tres colores salen del mismo atlas al cargar la página: el rojo de la armadura cambia de tono.</p>
       <p class="note"><b>Low-poly:</b> el personaje 3D de characters/lowpoly (Kling O3), con las mismas reglas, cajas y feel que el ranger; cambia sólo el dibujo. Se elige en el menú o con C en cualquier momento. Los fondos siguen siendo los 2D con contorno.</p>
-      <p class="note"><b>Provisorio:</b> recibir un golpe y morir son efectos de código (destello, empujón y estallido), sin animación propia. El golpe de cerca usa cuadros del tiro de granada (el puño atrás y el brazo adelante) con un envión del cuerpo y un barrido dibujado. Los power-ups se dibujan por código. Los bots son simples: buscan al más cercano, suben por donde pueden, disparan cuando lo tienen en línea, golpean si lo tienen encima, a veces esquivan o van por un power-up que les sirve y, si pasan un rato sin nadie a tiro, van a buscar altura.</p>
+      <p class="note"><b>Caídas.</b> Bajar de golpe unos 3 pisos (560 px o más desde lo último que pisaste: saltar no cuenta) saca un golpe, pero nunca el último: aterrizás plantado un momento, con sacudón, polvo grande y el −1. Con escudo o recién vuelto, no saca.</p>
+      <p class="note"><b>Provisorio:</b> recibir un golpe y morir son efectos de código (destello, empujón y estallido), sin animación propia. El golpe de cerca usa cuadros del tiro de granada (el puño atrás y el brazo adelante) con un envión del cuerpo y un barrido dibujado. Los power-ups, la burbuja del escudo y el polvo de los saltos son dibujos low-poly; el anillo del doble salto y las piedritas, de código. El tiro de granada y el mortal del low-poly son arreglos interinos de los clips (throw_fix, double_jump_fix) hasta las tomas nuevas. Los bots son simples: buscan al más cercano, suben por donde pueden, disparan cuando lo tienen en línea, golpean si lo tienen encima, a veces esquivan o van por un power-up que les sirve y, si pasan un rato sin nadie a tiro, van a buscar altura.</p>
       <p class="note"><b>Arena:</b> el kit industrial de backgrounds/ranger_industrial (GPT Image 2.5 y Nano Banana 2.1 por fal), armado desde prototypes/arena/arenas/fundicion.json.</p>
     </section>
   </div>
@@ -190,6 +192,13 @@ const PICKART = __PICKUP_DATA__;
 // el fogonazo y el impacto low-poly (backgrounds/lowpoly_fx, LOWFX_ART en build.py): tres cuadros cada uno, en rojo; se
 // recolorean por equipo como el atlas (recolor). Sin el dibujo, la estrella por código (lpStar)
 const LOWFX = __LOWFX_DATA__;
+// el escudo low-poly (backgrounds/lowpoly_shield, SHIELD_ART en build.py): la burbuja entera (dome) y rajada (crack), al
+// doble del juego (126 × 130). El power-up va con los otros, en PICKART.pickups.shield. Sin el dibujo, por código
+const SHIELDART = __SHIELD_DATA__;
+// el polvo low-poly (backgrounds/lowpoly_dust, DUST_ART en build.py): despegue t1–t4 y aterrizaje l1–l4 (dust) y caída
+// fuerte h1–h4 (hard), en gris neutro y al doble del juego; se tiñe con el color de la arena (dustImg). Sin el dibujo,
+// los pedazos por código (lpDust)
+const DUSTART = __DUST_DATA__;
 const LOWFX_TEAM = new Map();   // equipo → {pieza: canvas recoloreado}
 function lowfx(asset, piece, T) {
   const A = LOWFX[asset], p = A && A[piece], im = p && IMG[p.src]; if (!im) return null;
@@ -210,9 +219,22 @@ try {
     if (E && E.arena && typeof E.arena === "object") ARENAS.editor = { ...E.arena, name: `Del editor: ${E.arena.name || E.key || "sin nombre"}` };
   }
 } catch (e) { /* sin editor */ }
-let ARENA = ARENAS.editor || ARENAS.refineria_lowpoly || ARENAS.fundicion || Object.values(ARENAS)[0];   // de fábrica, la Refinería low-poly   // la del menú: cada arenas/<nombre>.json, todas de 1920 × 1080
-const [AW, AH] = [1920, 1080];
-const VIEW_W = 960, VIEW_H = 540, ZOOM = VIEW_W / AW;   // 0,5: la arena entera en pantalla
+let ARENA = ARENAS.editor || ARENAS.refineria_lowpoly || ARENAS.fundicion || Object.values(ARENAS)[0];   // de fábrica, la Refinería low-poly   // la del menú: cada arenas/<nombre>.json
+// el tamaño del mundo es el de cada arena (size en su JSON; sin él, 1920 × 1080) y la cámara la muestra entera: ZOOM px
+// de pantalla (960 × 540) por px del juego. Las de 1920 × 1080 se ven como siempre (0,5); las de la escala nueva
+// (Pablo, 2026-10-18), de 2496 × 1404, a 0,385: el personaje, la física, las balas, la granada, los power-ups y los
+// efectos no cambian sus números (px del juego) y se ven 1/1,3 en pantalla, con 1,69 veces más lugar. El HUD no cambia, y
+// lo que se lee sobre la cabeza se compensa (HEAD_K). setWorld lo pone al cargar la arena
+const VIEW_W = 960, VIEW_H = 540;
+const SIZE_DEFAULT = [1920, 1080];
+let AW, AH, ZOOM, W2S, FLOOR_S, LAYER_Z, HEAD_K;   // W2S: px de pantalla por px del juego (= ZOOM)
+const FLOOR_75 = 475.5;   // las capas lejanas del kit, achicadas como en kit.html y apoyadas en el piso (FLOOR_S)
+function setWorld(size) {
+  [AW, AH] = Array.isArray(size) && size[0] > 0 && size[1] > 0 ? size : SIZE_DEFAULT;
+  ZOOM = W2S = VIEW_W / AW; FLOOR_S = (AH - 100) * ZOOM; LAYER_Z = ZOOM / 0.75;
+  HEAD_K = 0.5 / ZOOM;   // lo de arriba de la cabeza (barras y textos que suben), del tamaño de pantalla de las de 1920
+}
+setWorld(ARENA.size);
 const FX_IMG = {};
 for (const [asset, A] of Object.entries(FX)) for (const [name, p] of Object.entries(A.pieces)) { const im = new Image(); im.src = p.src; FX_IMG[`${asset}/${name}`] = im; }
 const FXT = { flashA: 2 / 60, flashB: 3 / 60, impact: 2 / 60 };
@@ -221,22 +243,26 @@ const FXK = 1.5;   // los efectos del disparo, más grandes que en el polígono:
 // corre de la boca medida, adelante y arriba, en px del juego. El tiro sale de la animación que se ve (flashKind): parado
 // (una mano, quieto), corriendo, a dos manos, agachado o en el aire
 const FLASH_KINDS = [["parado", "Parado"], ["corriendo", "Corriendo"], ["dos", "A dos manos"], ["agachado", "Agachado"], ["aire", "En el aire"]];
-// los de fábrica: los que dejó Pablo el 2026-10-17 mirando la vista de cada tiro (un personaje nuevo arranca en 1, 0, 0)
+// los de fábrica: los que dejó Pablo el 2026-10-17 mirando la vista de cada tiro (un personaje nuevo arranca en 1, 0, 0).
+// Low-poly, 2026-10-18: la boca de shoot, shoot2h y crouch_shoot pasó a la punta del cañón (Limpieza, boca_disparos.py),
+// 2,7 / 3,5 / 3,2 px más adelante y 4,4 / 6,1 / 7,3 más arriba en los cuadros del fogonazo: parado, a dos manos y
+// agachado se corren eso al revés para que el fogonazo quede donde lo puso Pablo (antes: −2, 5; 0, 9; −1, 8)
 const FLASH_PABLO = {
   ranger: { parado: { scale: 1.15, dx: 0, dy: -2 }, corriendo: { scale: 1.15, dx: -1, dy: 0 }, dos: { scale: 1.1, dx: -3, dy: 0 }, agachado: { scale: 1.2, dx: -5, dy: 0 }, aire: { scale: 1.25, dx: -4, dy: 0 } },
-  lowpoly: { parado: { scale: 1.5, dx: -2, dy: 5 }, corriendo: { scale: 1.5, dx: -3, dy: 0 }, dos: { scale: 1.5, dx: 0, dy: 9 }, agachado: { scale: 1.5, dx: -1, dy: 8 }, aire: { scale: 1.5, dx: -3, dy: 0 } },
+  lowpoly: { parado: { scale: 1.5, dx: -5, dy: 1 }, corriendo: { scale: 1.5, dx: -3, dy: 0 }, dos: { scale: 1.5, dx: -3, dy: 3 }, agachado: { scale: 1.5, dx: -4, dy: 1 }, aire: { scale: 1.5, dx: -3, dy: 0 } },
 };
 const FLASH_DEFAULT = Object.fromEntries(Object.keys(CHARS).map(k => [k, Object.fromEntries(FLASH_KINDS.map(([t]) => [t, { scale: 1, dx: 0, dy: 0, ...FLASH_PABLO[k]?.[t] }]))]));
 const FLASH = structuredClone(FLASH_DEFAULT);
 const flashKind = Q => {
   const n = Q.draw.name || "";
-  return n.startsWith("crouch") ? "agachado" : n.startsWith("jump") || n === "double_jump" ? "aire" : n.startsWith("shoot2h") ? "dos" : n.startsWith("run") ? "corriendo" : "parado";
+  return n.startsWith("crouch") ? "agachado" : n.startsWith("jump") || n.startsWith("double_jump") ? "aire" : n.startsWith("shoot2h") ? "dos" : n.startsWith("run") ? "corriendo" : "parado";
 };
 let PIV_X, PIV_Y;   // el pivot de la celda del personaje de ahora (useChar)
 const CHAR = 0.8, HALF_W = 20 * CHAR, BODY_H = 112 * CHAR;
 const S = { char: CHAR, jumpFx: true, sound: true, debug: false };
-// el feel del polígono ("reporte"), con la cadencia de la arena: a 12 disparos por segundo, tres golpes duraban 0,17 s
-const FEEL = { run: 300, accel: 4500, decel: 6000, air: 3000, v0: 1067, gUp: 2963, gDown: 4898, cut: 480, term: 1400, coyote: 0.10, buffer: 0.10, corner: 12, rate1: 1 / 7, rate2: 1 / 3.5, kick: 0 };
+// el feel del polígono ("reporte"), con la cadencia de la arena: a 12 disparos por segundo, tres golpes duraban 0,17 s.
+// Pablo, 2026-10-18: ~15% más lenta, 6 por segundo con una mano (antes 7) y 3 a dos manos (antes 3,5)
+const FEEL = { run: 300, accel: 4500, decel: 6000, air: 3000, v0: 1067, gUp: 2963, gDown: 4898, cut: 480, term: 1400, coyote: 0.10, buffer: 0.10, corner: 12, rate1: 1 / 6, rate2: 1 / 3, kick: 0 };
 const RUN_SPEED = FEEL.run;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 // el temblor de cámara (ver camShake): false lo apaga entero, sin tocar nada más
@@ -255,7 +281,10 @@ function phases(name) {
 const SHOT = n => { const f = anim(n).f, fl = Math.max(0, f.findIndex(x => x[11])); return f.map((_, k) => (fl + k) % f.length); };
 const noBaked = (n, i) => (anim(n).f[i][11] ? (i + anim(n).f.length - 1) % anim(n).f.length : i);
 const shotFrame = (n, t, per) => { const s = SHOT(n); return noBaked(n, t < per ? s[Math.min(s.length - 1, Math.floor(t / (per / s.length)))] : s[s.length - 1]); };
-// colgado de una mano, detrás del canto (ver el polígono); la subida arranca en la pose de dos manos
+// colgado de una mano, detrás del canto (ver el polígono); la subida arranca en la pose de dos manos.
+// HANG_ON = false: nadie se agarra de las cornisas, ni jugadores ni bots (Pablo, 2026-10-18); true lo devuelve entero
+// (agarre, subida y salto desde la cornisa). Apagado, a lo que no se llega de un salto se llega con el doble salto
+const HANG_ON = false;
 const HANG = "hang";
 const HANG_WALL = 28, HANG_GRIP = 8;
 const WALL_JUMP = { vx: 300, vy: 0.92, lock: 0.14, regrab: 0.3, late: 0.08 };
@@ -263,7 +292,17 @@ const HANG_BUFFER = 0.15;
 const RUN = () => (SPR.anims.run_gun ? "run_gun" : "run");
 const IDLE = () => (SPR.anims.idle_combat ? "idle_combat" : "idle");
 const FLIP_DUR = 0.32, DOUBLE_V = 0.9;
-const JFX = { micro: 0.3, hard: 2.8, takeoff: [0.87, 1.15], dbl: [0.84, 1.19], land: [0.18, 0.15], back: 0.8, bump: 9, bumpDecay: 0.85, vy: [-590, -180, 300, 840], dblScale: 1.05 };
+// el deslizamiento del low-poly: prendido de fábrica desde que Pablo aprobó el slide nuevo (tanda 5, 2026-10-18); false
+// vuelve a lo de antes (abajo corriendo frena y se agacha). El doble salto en bolita sigue apagado (no aprobado): sin
+// él, el mortal (double_jump_fix)
+const SLIDE_ON = true, BALL_ON = false;
+// el disparo a dos manos: SACADO (Pablo, 2026-10-18: "saquemos el disparo a dos manos"). Con false nadie lo tiene, ni
+// jugadores ni bots; sus teclas y el botón del joystick pasaron al slide. true lo devuelve (hay que darle otras teclas)
+const TWO_HAND_ON = false;
+// para que Pablo la pruebe jugando sin cambiar la de fábrica: con ?bolita=1 en la dirección, la bolita se prende en esa
+// página (y se ve el cartel "bolita de prueba" abajo a la izquierda). Sin el parámetro, el mortal
+const BALL_TRY = (() => { try { return new URLSearchParams(location.search).get("bolita") === "1"; } catch (e) { return false; } })();
+const JFX = { micro: 0.3, hard: 2.8, takeoff: [0.87, 1.15], dbl: [0.84, 1.19], land: [0.18, 0.15], back: 0.8, bump: 9, bumpDecay: 0.85, vy: [-590, -180, 300, 840], dblScale: 1.05, takeoffT: 0.05, turn: [120, 500] };
 // los pies se hunden en el contorno negro de arriba de la pasarela (si no, parece que flota)
 const FOOT_SINK = 3;
 // lo que no sale de medir: los cuadros de cada personaje, elegidos mirándolos sobre verde
@@ -272,8 +311,22 @@ const FOOT_SINK = 3;
 //   climb: la subida, [cuadro de climb, avance en px, duración]
 //   flip: el mortal del doble salto, [cuadro, ángulo en que está dibujado]; flipFall: el cuadro de la caída después
 //   airShot: el cuadro de jump_shoot del tiro en el aire; sin él, el de la boca más adelante de los que van en el aire
-//   throw: el tiro de la granada, [cuadro de throw, duración]: puño atrás, puño atrás, sale, el brazo adelante y la vuelta
+//   throw: el tiro de la granada, [cuadro de throw, duración]: puño atrás, puño atrás, sale, el brazo adelante y la vuelta.
+//          El paso 1 es el que se sostiene mientras carga. throwFrom: en qué paso arranca el tiro al soltar el botón (sin
+//          él, justo antes de la suelta). grenade: lo de GRENADE que es de este personaje (de dónde sale la granada,
+//          spawnX y spawnY desde los pies, y en qué paso, releaseFrame); sin él, los de GRENADE. inHand: dónde está la
+//          granada en el cuadro que se sostiene al cargar ([x adelante, y arriba desde los pies, giro en grados]), para
+//          prenderle la luz cuando se pasa del aguante; sin él, la luz no se ve (la barra y el pitido sí)
 //   melee: el golpe de cerca, [animación, cuadro, duración, envión del cuerpo en px] (ver MELEE_SEQ)
+//   jump: las fases del salto elegidas a ojo (sin esto salen de medir los pies, phases): takeoff el empujón, los primeros
+//         JFX.takeoffT; rise los de subida; apex el ápice; turn el que empieza a caer (con vy entre JFX.turn); fall la
+//         caída hasta el piso; land el aterrizaje suave. dblFall: false para que la caída rápida no pase al cuadro de
+//         caída del mortal (flipFall) si no hizo el doble salto
+//   throwAnim, flipAnim: la animación del tiro (y del golpe) y la del mortal, si no son "throw" y "double_jump"
+//   slide: el deslizamiento, [cuadro, duración] de slide_in (in) y de slide_out (out); en el medio, el cuadro de slide
+//          sostenido. low: desde qué paso de in y hasta qué paso de out la caja de golpe va baja
+//   ball: el doble salto en bolita (con BALL_ON): los pasos de double_jump_in (in), la vuelta de double_jump_ball (spin s,
+//         con el easing del mortal) y los de double_jump_out (out; el de duración 0 se sostiene hasta tocar el piso)
 //   hud: el retrato del HUD es el dibujo de backgrounds/ranger_hud (true) o la cabeza del primer cuadro de idle (false),
 //        recortada con crop (x, y, ancho y alto, en fracciones del cuadro)
 const RIG = {
@@ -288,34 +341,70 @@ const RIG = {
   // low-poly (characters/lowpoly, revisado en sus hojas a 0,5x): el agarre salta el 4, que trae la cornisa que dibujó
   // Kling; la subida va de colgado (0–9) a las piernas arriba (12–23), el salto al canto (24 sale borroso: se saltea) y
   // de agachado a parado (25–37); el mortal salta el 5 (borroso); el tiro es la segunda vez que lleva el brazo atrás
-  // (18–19), suelta en 20 y vuelve en 24. Su jump_shoot (4 cuadros) va con los pies en el piso: el 1, el brazo estirado
+  // (18–19), suelta en 20 y vuelve en 24. Su jump_shoot (4 cuadros) va con los pies en el piso: el 1, el brazo estirado.
+  // El salto (revision/salto_hoy.png): 0–2 parado y agachándose no se usan (despega al toque, el estirón lo pone squash).
+  // El tiro de granada es throw2 (Limpieza, revision/throw2.md, 2026-10-18; la toma que aprobó Pablo, con la granada del
+  // juego en la mano): 0–3 la anticipación con la granada atrás de la cabeza (al cargar se sostiene el 3), 4–7 el tiro
+  // por arriba (7, el último con la granada en la mano), 8 la suelta (sale la del juego, desde donde estaba la de la
+  // mano en el 7: (57, 74) desde los pies), 9–12 el seguimiento y 13–17 la vuelta, que empalma con el idle. Más rápido
+  // que el clip (Pablo): sale a los 200 ms y todo dura 450; al soltar el botón arranca en el 4 y el tiro (4–7) va a 25 ms
+  // por cuadro, así la granada sale ~100 ms después (saltear el 4 corría el cuerpo 20 px de golpe: el casco va de −12 en
+  // el 3 a −6 en el 4 y +7 en el 5). El golpe sigue con throw_fix (0 lleva el puño atrás, 1 atrás de la
+  // cabeza, 2 el brazo estirado, 3 estirado, 4 lo empieza a bajar, 5 el puño contra el pecho): en throw2 la granada está
+  // en la mano. El mortal, interino, con double_jump_fix (9 cuadros sin los deformados; ángulos 3, 24, 44, 181, 226, 256,
+  // 292 y 347°)
   lowpoly: {
     grab: [5, 6, 7, 8], grabAlign: true, airShot: 1,
+    jump: { takeoff: 3, rise: [4, 5], apex: 6, turn: 7, fall: 8, land: 9, dblFall: false },
     climb: [[0, 0, 0.02], [6, 0, 0.05], [9, 0, 0.05], [12, 0, 0.05], [16, 0, 0.04], [20, 4, 0.05], [23, 8, 0.05], [25, 8, 0.05], [28, 6, 0.04], [31, 4, 0.04], [34, 0, 0.05], [37, 0, 0.06]],
-    flip: [[1, 0], [2, 30], [3, 95], [4, 180], [6, 235], [7, 295], [8, 360]], flipFall: 8,
-    throw: [[18, 0.07], [19, 0.05], [20, 0.05], [21, 0.06], [22, 0.05], [23, 0.03], [24, 0.03], [24, 0.03]],
-    melee: [["throw", 19, 0.06, -4], ["throw", 20, 0.1, 10], ["throw", 22, 0.05, 7], ["throw", 23, 0.04, 4], ["throw", 24, 0.04, 1]],
+    flipAnim: "double_jump_fix", flip: [[1, 0], [2, 30], [3, 50], [4, 180], [5, 235], [6, 262], [7, 295], [8, 360]], flipFall: 8,
+    throwAnim: "throw2", throw: [[0, 0.05], [3, 0.05], [4, 0.025], [5, 0.025], [6, 0.025], [7, 0.025], [8, 0.05], [9, 0.04], [11, 0.04], [13, 0.04], [15, 0.04], [17, 0.04]],
+    throwFrom: 2, grenade: { spawnX: 57, spawnY: 74, releaseFrame: 6 }, inHand: [-40, 66, -10],
+    melee: [["throw_fix", 1, 0.06, -4], ["throw_fix", 2, 0.1, 10], ["throw_fix", 3, 0.05, 7], ["throw_fix", 4, 0.04, 4], ["throw_fix", 5, 0.04, 1]],
+    // el slide aprobado (Limpieza, revision/slide.md, 2026-10-18; todos los cuadros apoyan en el piso de correr y el casco
+    // queda en el lugar, el avance lo pone el juego): slide_in sin su 0 (es correr) y rápido, 1 se junta, 2 aterriza
+    // sentado, 3 se acomoda (0,12 s; a 12 fps eran 0,33); el sostenido; slide_out entero a 40 ms (0,32 s): 0–3 se
+    // levanta, 4 parado, 5–7 los pasos del arranque, que empalman con run_gun 0. La caja va baja desde el 2 de la entrada
+    // hasta el 1 de la salida (miden 75 y 74 entrando, 70 el sostenido, 81 y 87 saliendo; el idle, 105).
+    // La bolita (con BALL_ON): después de lo que se encoge (double_jump_in 0, 2, 3, 4) y la caída en el 3 de out
+    slide: { in: [[1, 0.04], [2, 0.04], [3, 0.04]], out: [[0, 0.04], [1, 0.04], [2, 0.04], [3, 0.04], [4, 0.04], [5, 0.04], [6, 0.04], [7, 0.04]], low: [1, 1] },
+    ball: { in: [[0, 0.03], [2, 0.03], [3, 0.03], [4, 0.04]], spin: 0.3, out: [[0, 0.05], [1, 0.05], [2, 0.05], [3, 0]] },
     hud: false, crop: [0.0, 0.0, 0.8, 0.52],
   },
 };
 // lo que sale de las medidas del personaje de ahora (useChar)
-let RIGNOW, JP, JS, AIR_SHOT, HANG_HAND, IDLE_SPEED, FLIP, FLIP_ANG, GRAB_FRAMES, GRAB_T, CLIMB_SEQ, CLIMB, MUZZLE_H, CROUCH_MUZZLE;
+let RIGNOW, JP, JS, AIR_SHOT, HANG_HAND, IDLE_SPEED, FLIP_ANIM, FLIP, FLIP_ANG, GRAB_FRAMES, GRAB_T, CLIMB_SEQ, CLIMB, MUZZLE_H, CROUCH_MUZZLE, SLIDE_SEQ, DBL_BALL;
+// el paso de una secuencia [[cuadro, duración], ...] a los t s (el último se sostiene)
+function seqAt(seq, t) { let acc = 0; for (let k = 0; k < seq.length; k++) { acc += seq[k][1]; if (t < acc) return k; } return seq.length - 1; }
+const seqDur = seq => seq.reduce((a, q) => a + q[1], 0);
 // cambia de personaje: sus medidas, lo que sale de ellas (las fases del salto, el tiro en el aire, la mano del colgado,
 // la subida, la altura de la boca para los bots) y sus cuadros de RIG. Al cargar va el primero de CHARS (o el que quedó
 // elegido en este navegador); después, el selector del menú o la tecla C (setChar, que además cambia los colores)
 function useChar(key) {
   CHAR_KEY = key; SPR = CHARS[key].spr; RIGNOW = RIG[key] || RIG.ranger; [PIV_X, PIV_Y] = SPR.pivot;
-  JP = phases("jump");
+  const ph = phases("jump");
+  JP = { takeoff: null, rise: ph.rise, apex: ph.apex, turn: null, fall: ph.fall[ph.fall.length - 1] ?? ph.apex, land: ph.prep, dblFall: true, ...RIGNOW.jump };
   JS = anim("jump_shoot").f;
   AIR_SHOT = RIGNOW.airShot ?? JS.map((x, i) => i).filter(i => JS[i][8] > 10 && !JS[i][11]).reduce((b, i) => (JS[i][6] > JS[b][6] ? i : b), 3);
   HANG_HAND = anim(HANG).f[0];
   IDLE_SPEED = SPR.anims.idle_combat ? 1 : 1.4;
+  FLIP_ANIM = RIGNOW.flipAnim && SPR.anims[RIGNOW.flipAnim] ? RIGNOW.flipAnim : "double_jump";
   FLIP = (() => {
-    if (!SPR.anims.double_jump) return [];
-    const turned = anim("double_jump").f.map((f, i) => [i, f]).filter(([, f]) => f[2] / f[3] > 0.95 || f[3] < 100).map(([i]) => i);
+    if (!SPR.anims[FLIP_ANIM]) return [];
+    const turned = anim(FLIP_ANIM).f.map((f, i) => [i, f]).filter(([, f]) => f[2] / f[3] > 0.95 || f[3] < 100).map(([i]) => i);
     return turned.length ? Array.from({ length: turned[turned.length - 1] - turned[0] + 1 }, (_, k) => turned[0] + k) : [];
   })();
-  FLIP_ANG = SPR.anims.double_jump && anim("double_jump").f.length > 8 ? RIGNOW.flip : null;
+  FLIP_ANG = SPR.anims[FLIP_ANIM] && anim(FLIP_ANIM).f.length > 8 ? RIGNOW.flip : null;
+  // el deslizamiento y la bolita, si el personaje los tiene (el ranger 2D, no)
+  const has = (...n) => n.every(a => SPR.anims[a]);
+  SLIDE_SEQ = SLIDE_ON && RIGNOW.slide && has("slide_in", "slide", "slide_out") ? { ...RIGNOW.slide, inT: seqDur(RIGNOW.slide.in), outT: seqDur(RIGNOW.slide.out) } : null;
+  DBL_BALL = (BALL_ON || BALL_TRY) && RIGNOW.ball && has("double_jump_in", "double_jump_ball", "double_jump_out") ? (() => {
+    const B = RIGNOW.ball, inT = seqDur(B.in), outT = seqDur(B.out);
+    // dónde está el centro del cuerpo (respecto de los pies) en el último cuadro de la entrada y en el primero de la salida,
+    // dibujados con los pies donde está el jugador: la bolita va de uno al otro mientras gira, así no salta
+    const ctr = (n, i) => { const f = anim(n).f[i]; return { x: (f[4] + f[2] / 2 - PIV_X) * CHAR, y: (f[8] + f[5] + f[3] / 2 - PIV_Y) * CHAR + FOOT_SINK }; };
+    return { ...B, inT, outT, busy: inT + B.spin + outT, from: ctr("double_jump_in", B.in[B.in.length - 1][0]), to: ctr("double_jump_out", B.out[0][0]) };
+  })() : null;
   GRAB_FRAMES = RIGNOW.grab; GRAB_T = GRAB_FRAMES.length * 0.05;
   CLIMB_SEQ = RIGNOW.climb;
   CLIMB = SPR.anims.climb && SPR.anims.hang_two ? (() => {
@@ -325,10 +414,13 @@ function useChar(key) {
   })() : null;
   // altura de la boca sobre los pies, parado y agachado: con eso los bots saben si el otro queda en la línea del disparo
   MUZZLE_H = -anim("shoot").f[0][7] * CHAR - FOOT_SINK; CROUCH_MUZZLE = -anim("crouch_shoot").f[0][7] * CHAR - FOOT_SINK;
-  THROW_ANIM = SPR.anims.throw ? "throw" : "shoot_in";
-  THROW_SEQ = SPR.anims.throw ? RIGNOW.throw : null;
+  THROW_ANIM = RIGNOW.throwAnim && SPR.anims[RIGNOW.throwAnim] ? RIGNOW.throwAnim : SPR.anims.throw ? "throw" : "shoot_in";
+  THROW_SEQ = THROW_ANIM !== "shoot_in" ? RIGNOW.throw : null;
+  IN_HAND = THROW_SEQ && RIGNOW.inHand || null;
+  // de dónde sale la granada y en qué paso: los de este personaje (los del panel, al cambiar de personaje, vuelven a estos)
+  Object.assign(GRENADE, { spawnX: GRENADE_DEFAULT.spawnX, spawnY: GRENADE_DEFAULT.spawnY, releaseFrame: GRENADE_DEFAULT.releaseFrame }, RIGNOW.grenade || {});
   updateRelease();
-  MELEE_SEQ = SPR.anims.throw ? RIGNOW.melee
+  MELEE_SEQ = THROW_ANIM !== "shoot_in" ? RIGNOW.melee
     : [["shoot2h_in", 0, 0.06, -4], ["shoot2h_in", 3, 0.1, 10], ["shoot2h_in", 2, 0.05, 7], ["shoot2h_in", 1, 0.04, 4], ["shoot2h_in", 0, 0.04, 1]];
   MELEE_T = { hit0: MELEE_SEQ[0][2], hit1: MELEE_SEQ[0][2] + MELEE_SEQ[1][2], end: MELEE_SEQ.reduce((a, q) => a + q[2], 0) };
 }
@@ -345,14 +437,19 @@ const COMBAT = { power2: 2, knock1: 330, knock2: 560, lift1: 230, lift2: 380, st
 // reaparición: cuánto tarda, cuánto dura la invulnerabilidad (parpadea; disparar la corta) y el haz que avisa dónde
 const RESPAWN = { delay: 1.6, inv: 2.0, beam: 0.45 };
 // temperatura del arma, de 0 a 1: lo que suma cada disparo, cuánto se enfría por segundo después de `delay` sin tirar y,
-// trabada en 1, cuánto por segundo hasta volver a 0 (1,25 s). Una mano sin parar: 7 × 0,17 = 1,2 por segundo, ~0,9 s (6 tiros)
+// trabada en 1, cuánto por segundo hasta volver a 0 (1,25 s). Una mano sin parar (6 por segundo, sin enfriarse entre tiros:
+// 1/6 s < delay) se traba en el 6.º tiro (6 × 0,17 = 1,02), a los 0,83 s; a dos manos, en el 3.º (0,48 + 0,48 − 0,05 de
+// enfriarse en el hueco de 0,33 s, + 0,48), a los 0,67 s. Son los mismos tiros que con la cadencia de antes
 const HEAT = { shot1: 0.17, shot2: 0.48, cool: 0.55, delay: 0.25, overCool: 0.8 };   // Pablo, 2026-10-16: el doble por tiro (se traba en la mitad de los tiros)
 // granadas: cuántas por vida (se recargan al reaparecer; en la prueba, sin límite), la mecha, el tiro (px/s, con la carga
-// llena; sin cargar sale con minVx y minVy de eso, y `charge` es lo que tarda en llenarse), cuánto
+// llena; sin cargar sale con minVx y minVy de eso, y `charge` es lo que tarda en llenarse: 0,56 s, el 70% de los 0,8 de
+// antes, Pablo 2026-10-18: "que el cargar la granada sea más rápido... un 30%"), el aguante (`hold`: con la carga llena,
+// si no la suelta en ese tiempo le explota en la mano; Pablo: "pero que explote si la mantenemos en la mano mucho
+// tiempo"), cuánto
 // rebotan, el radio del daño (adentro del radio mata de una, a cualquiera que no esté invulnerable, también al que la
 // tiró) y
 // el empujón, que sale del centro. Si toca a otro, explota en el acto
-const GRENADE = { count: 3, fuse: 1.3, vx: 800, vy: -800, minVx: 0.4, minVy: 0.62, charge: 0.8, gravity: 2200, bounce: 0.45, friction: 0.72,
+const GRENADE = { count: 3, fuse: 1.3, vx: 800, vy: -800, minVx: 0.4, minVy: 0.62, charge: 0.56, hold: 1.75, gravity: 2200, bounce: 0.45, friction: 0.72,
                   r: 9, radius: 150, knock: 720, lift: 520, cooldown: 0.45, anim: 0.32, release: 0.13,
                   spawnX: 54, spawnY: 114, releaseFrame: 2 };   // los que eligió Pablo; con 0,6 de carga sale como su 620 / -720   // de dónde sale (px del juego desde los pies, hacia adelante y arriba) y en qué cuadro del tiro
 const GRENADE_DEFAULT = { ...GRENADE };
@@ -365,6 +462,32 @@ const MELEE = { reach: 72, back: 10, dmg: 1, knock: 780, lift: 420, stun: 0.4, c
 // duran (los últimos `blink` parpadean), el radio para agarrarlo y a qué altura flota. El de salud cura un tercio de la
 // salud, al menos 1 (+1 con 3 golpes, +2 con 5; con 1 golpe no aparece)
 const PICKUP = { first: 9, firstTest: 3, every: [12, 18], max: 2, warn: 0.75, life: 12, blink: 3, r: 24, lift: 56 };   // lift: a qué altura flota sobre lo que se pisa (Pablo: más arriba, a la altura del pecho)
+// escudo (el tercer power-up, Pablo 2026-10-18): dur s invulnerable a todo (balas, golpe de cerca, granada y caída), con
+// una burbuja low-poly de radio r (px del juego, desde el medio del cuerpo) que titila el último `blink`. Las balas que
+// tocan la burbuja se apagan en ella; disparar no lo corta (la invulnerabilidad de volver, sí)
+const SHIELD = { dur: 4, blink: 1, r: 62, cy: 55 };   // cy: el centro, px sobre los pies (el del dibujo)
+const immune = Q => Q.invT > 0 || Q.shieldT > 0;
+// daño por caída (Pablo, 2026-10-18): bajar de golpe unos 3 pisos saca un golpe, sin matar (deja minHp). Los pisos de
+// arenas/refineria_lowpoly.json: piso 940, pasarelas de abajo 724, del medio 532 y de arriba 340 (216, 192 y 192 entre
+// uno y otro: 200 de promedio), así que 3 pisos son 600 (de arriba al piso). h = 2,8 pisos = 560: entra de arriba al
+// piso y no del puente del medio al piso (514) ni dos pisos (408 y 384). Se mide desde lo último que pisó (fallY0), no
+// desde el ápice: saltar no cuenta, sólo bajar pisos. Al caer, stun s sin control (plantado) y land s agachado; con la
+// invulnerabilidad de volver o el escudo, el aterrizaje fuerte sin daño
+const FALL = { h: 560, dmg: 1, minHp: 1, stun: 0.3, land: 0.38 };
+// deslizarse (SLIDE_ON; el low-poly, con slide_in, slide y slide_out): con su botón (Pablo, 2026-10-18: O en el
+// DualSense; ver KB y padState), en el piso, corriendo o parado, hacia donde aprieta (sin dirección, hacia donde mira).
+// Abajo es agacharse y bajar, como antes del slide. Arranca a boost × la velocidad de correr y frena parejo hasta end ×
+// en dur s (con un toque alcanza: dura eso); se corta con salto (sale saltando con el envión; abajo + saltar sobre algo
+// que se atraviesa, baja). Mientras está abajo, la caja de golpe es baja y larga, con las piernas adelante:
+// hurt del alto y back px para atrás y front para adelante de los pies (el dibujo va de −26 a +70; de pie, de −28 a +42
+// contra la caja de ±16). El alto (Pablo, 2026-10-18: "si hacemos slide esquivamos los disparos, deberíamos de pasarle
+// por abajo"): 0,55 × 89,6 = 49 px, entre las dos líneas de las balas desde el piso: de pie salen a 55,2–57,6 (el ranger,
+// 56,6–61) y le pasan por arriba (6 px de margen); agachado, a 42–43,6 (el ranger, 40,8–42,6) y le pegan (el
+// contragolpe). Las balas van siempre derechas: una más baja (de alguien que salta y tira bajando, o desde más abajo)
+// le pega si pasa por debajo de los 49. El golpe de cerca y la granada le pegan igual.
+// Al levantarse, si sigue la dirección, sale corriendo. Después, cd s sin poder tirarse de nuevo. Sin disparar, granada
+// ni golpe mientras dura. Los cuadros, en RIG (slide)
+const SLIDE = { boost: 1.3, end: 0.65, dur: 0.45, cd: 0.4, hurt: 0.55, back: 16, front: 60 };   // end 0,65: en los 0,45 s recorre ~132 px, como corriendo
 const SET = { hp: 3, lives: 3, bot: "normal", count: 4 };   // count: cuántos juegan, de 2 a 4
 // react: cuánto tiene que tenerlo en línea antes de disparar; burst y pause: ráfagas; dodge: probabilidad de esquivar una
 // bala que viene; think: cada cuánto revisa a quién perseguir
@@ -393,15 +516,18 @@ const pieceSrc = Pc => `arenas/${Pc.src}`;
 const flipLedge = l => (l === "left" ? "right" : l === "right" ? "left" : l);
 function addSolid(s) {
   if (s.kind === "bridge") solids.push({ ...s, h: 26, oneWay: true });
-  // cajas: bloquean balas y se suben de un salto, pero no tienen cornisa (colgado de una caja, los pies quedarían bajo la pasarela)
-  else solids.push({ ...s, ground: s.y >= 900, noLedge: s.noLedge ?? (s.kind === "box" || s.y >= 900) });
+  // cajas: bloquean balas y se suben de un salto, pero no tienen cornisa (colgado de una caja, los pies quedarían bajo la pasarela).
+  // El piso: lo que está a 200 px del borde de abajo o menos (900 en las de 1920 × 1080), o ground: true en el JSON
+  // walk y box sin h: 60, como dice arenas/FORMATO.md (el contrato con el editor)
+  else { const ground = s.ground ?? s.y >= AH - 200; solids.push({ ...s, h: s.h ?? 60, ground, noLedge: s.noLedge ?? (s.kind === "box" || ground) }); }
 }
 function loadArena(name) {
-  ARENA = ARENAS[name] || ARENA; solids.length = 0; gradeCache.clear(); hazeRGB = null;
+  ARENA = ARENAS[name] || ARENA; solids.length = 0; gradeCache.clear(); hazeRGB = null; setWorld(ARENA.size);
   for (const s of ARENA.solids || []) addSolid(s);
   for (const o of ARENA.objects || []) {
     const Pc = painted(o); if (!Pc || moves(o)) continue;   // las que se mueven: en loadObjects
-    for (const s of Pc.solids || []) addSolid({ ...s, x: o.x + (o.flip ? Pc.w - s.x - s.w : s.x), y: o.y + s.y,
+    // los sólidos de una pieza sin kind son puentes (FORMATO.md); con stretch, estirados como se ve (pieceSolid)
+    for (const s of (Pc.solids || []).map(r => pieceSolid(r, Pc, o))) addSolid({ ...s, x: o.x + (o.flip ? Pc.w - s.x - s.w : s.x), y: o.y + s.y,
                                                 ledge: o.ledge || (o.flip ? flipLedge(s.ledge) : s.ledge) || "both" });
   }
   for (const p of ARENA.platforms || []) {
@@ -418,7 +544,7 @@ function loadArena(name) {
 }
 // objetos del kit encima de la arena (sobre todo de las pintadas, "lámina + objetos"): cajas que chocan o son decorado,
 // y plataformas, quietas o que se mueven por un recorrido. El que choca tiene su sólido en `solids`; se dibujan cada cuadro
-//   cajas y otras piezas: x es el centro y y la base. solid: false (no choca) o layer: "back" los manda detrás, oscurecidos
+//   cajas y otras piezas: x es el centro y y la base. solid: false o layer: "back" los manda detrás, oscurecidos, y no chocan
 //   platforms/*: y es lo que se pisa; move: {path: [[x, y], ...], speed: px/s, wait: s}, ida y vuelta, llevando al de arriba
 const objects = [];
 const OBJ_BACK_TINT = "rgba(14,24,52,0.35)";
@@ -429,8 +555,8 @@ function loadObjects() {
     if (Pc && !moves(o)) continue;   // las pintadas quietas: sus sólidos los puso loadArena y se dibujan en el prearmado
     if (Pc) {   // pintada con recorrido: sus sólidos van con ella, sin cornisa (colgarse de una que se mueve no se puede)
       const ob = { o, Pc, painted: true, x: o.x, y: o.y, solid: null, solids: [], back: false, seg: 0, dir: 1, waitT: 0,
-                   path: o.move.path, speed: o.move.speed || 120, wait: o.move.wait ?? 0.5 };
-      for (const r of Pc.solids || []) ob.solids.push({ ...r, ...(r.kind === "bridge" ? { h: 26, oneWay: true } : {}), ground: false, noLedge: true, rel: r, obj: ob });
+                   path: o.move.path, speed: o.move.speed ?? 120, wait: o.move.wait ?? 0.5 };
+      for (const r of (Pc.solids || []).map(q => pieceSolid(q, Pc, o))) ob.solids.push({ ...r, ...(r.kind === "bridge" ? { h: 26, oneWay: true } : {}), ground: false, noLedge: true, rel: r, obj: ob });
       resetObject(ob); solids.push(...ob.solids); objects.push(ob);
       continue;
     }
@@ -438,13 +564,30 @@ function loadObjects() {
     const plat = o.piece.startsWith("platforms/");
     const ob = { o, A, plat, x: o.x, y: o.y, solid: null, back: o.layer === "back" || o.solid === false, seg: 0, dir: 1, waitT: 0 };
     if (plat) ob.solid = { kind: "platform", x: 0, y: 0, w: A.w, h: 26, oneWay: true, noLedge: !!o.move || o.ledge === "none", obj: ob };
-    else if (o.solid !== false) ob.solid = { kind: "box", x: 0, y: 0, w: A.w - 4, h: A.h - 3, noLedge: true, obj: ob };
-    if (o.move && o.move.path && o.move.path.length > 1) { ob.path = o.move.path; ob.speed = o.move.speed || 120; ob.wait = o.move.wait ?? 0.5; }
+    // layer "back": decorado detrás, oscurecido, y no choca (como solid: false; FORMATO.md)
+    else if (o.solid !== false && o.layer !== "back") ob.solid = { kind: "box", x: 0, y: 0, w: A.w - 4, h: A.h - 3, noLedge: true, obj: ob };
+    if (o.move && o.move.path && o.move.path.length > 1) { ob.path = o.move.path; ob.speed = o.move.speed ?? 120; ob.wait = o.move.wait ?? 0.5; }
     ob.solids = ob.solid ? [ob.solid] : [];
     resetObject(ob);
     if (ob.solid) solids.push(ob.solid);
     objects.push(ob);
   }
+}
+// el estirado de una pieza pintada (Pc.legs = [y0, y1], o.stretch): cuánto se alarga la franja (lo mismo que dibuja
+// pieceArt; puede achicarse hasta dejarla en 8 px) y dónde cae una fila y de la pieza: arriba de y0, igual; en la franja,
+// en proporción; abajo de y1, corrida s. Sin legs no se estira
+const stretchOf = (o, Pc) => (Pc.legs ? Math.max(8 - (Pc.legs[1] - Pc.legs[0]), Math.round(o.stretch || 0)) : 0);
+function stretchRow(Pc, s, y) {
+  if (!s) return y; const [y0, y1] = Pc.legs;
+  return y <= y0 ? y : y >= y1 ? y + s : y0 + (y - y0) * (y1 - y0 + s) / (y1 - y0);
+}
+// un sólido de una pieza, con los valores por defecto del contrato (bridge si falta kind; walk y box, h 60) y estirado
+// como se ve: un bloque o una pared que se alarga crece de alto y frena balas en todo lo estirado
+function pieceSolid(r, Pc, o) {
+  const kind = r.kind ?? "bridge", s = stretchOf(o, Pc), y = stretchRow(Pc, s, r.y);
+  if (kind === "bridge") return { ...r, kind, y };
+  const h = r.h ?? 60;
+  return { ...r, kind, y, h: stretchRow(Pc, s, r.y + h) - y };
 }
 function syncObject(ob) {
   if (ob.painted) { for (const S of ob.solids) { const r = S.rel; S.x = ob.x + (ob.o.flip ? ob.Pc.w - r.x - r.w : r.x); S.y = ob.y + r.y; } return; }
@@ -493,7 +636,7 @@ function drawObjects(back) {
 loadArena(Object.keys(ARENAS).find(k => ARENAS[k] === ARENA));
 
 /* ---------- jugadores ---------- */
-const blankInput = () => ({ left: false, right: false, down: false, jumpHeld: false, fire1: false, fire2: false, jp: false, dp: false, gp: false, gh: false, mp: false, face: 0 });   // gp: el toque del botón de granada; gh: mantenido (carga); mp: el toque del golpe
+const blankInput = () => ({ left: false, right: false, down: false, jumpHeld: false, fire1: false, fire2: false, jp: false, dp: false, gp: false, gh: false, mp: false, sl: false, face: 0 });   // gp: el toque del botón de granada; gh: mantenido (carga); mp: el toque del golpe; sl: el del slide
 function newPlayer(slot) {
   return { slot, team: TEAM[slot], x: 0, y: 0, vx: 0, vy: 0, onGround: true, facing: 1, state: "ground",
            aim: "none", aimAnim: null, aimT: 0, idleAimT: 0, shotT: 1, crouch: "none", crouchT: 0, jump: null, landT: 0,
@@ -502,7 +645,7 @@ function newPlayer(slot) {
            draw: { name: "idle_combat", i: 0, x: 0, y: 0, k: 1, rot: 0, center: false }, flash: null,
            hp: 3, alive: false, hitT: 0, stunT: 0, invT: 0, dropS: null, dropT: 0, kills: 0,
            lives: 3, out: false, respawnT: 0, beam: false, spawnPt: null, heat: 0, heatT: 9, overheat: false, steamT: 0,
-           meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0, hudHitT: 0,
+           meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0, hudHitT: 0, shieldT: 0, shieldHitT: 0, fallY0: 0, slide: null, slideCD: 0,
            in: blankInput(), ctrl: "bot", bot: null, art: null };
 }
 const players = [0, 1, 2, 3].map(newPlayer);
@@ -511,8 +654,9 @@ const active = () => players.filter(p => p.ctrl !== "off");
 
 /* ---------- entrada ---------- */
 const KB = {
-  kb1: { left: ["KeyA"], right: ["KeyD"], down: ["KeyS"], jump: ["KeyW", "Space"], fire1: ["KeyF", "KeyJ"], fire2: ["KeyG", "KeyK"], gren: ["KeyE", "KeyL"], melee: ["KeyQ", "KeyU"] },
-  kb2: { left: ["ArrowLeft"], right: ["ArrowRight"], down: ["ArrowDown"], jump: ["ArrowUp"], fire1: ["Period", "Numpad1", "Numpad0"], fire2: ["Slash", "Numpad2", "NumpadDecimal"], gren: ["Comma", "Numpad3"], melee: ["KeyM", "Numpad4"] },
+  // slide: las teclas que eran del disparo a dos manos (fire2, sin teclas mientras TWO_HAND_ON esté apagado)
+  kb1: { left: ["KeyA"], right: ["KeyD"], down: ["KeyS"], jump: ["KeyW", "Space"], fire1: ["KeyF", "KeyJ"], fire2: [], slide: ["KeyG", "KeyK"], gren: ["KeyE", "KeyL"], melee: ["KeyQ", "KeyU"] },
+  kb2: { left: ["ArrowLeft"], right: ["ArrowRight"], down: ["ArrowDown"], jump: ["ArrowUp"], fire1: ["Period", "Numpad1", "Numpad0"], fire2: [], slide: ["Slash", "Numpad2", "NumpadDecimal"], gren: ["Comma", "Numpad3"], melee: ["KeyM", "Numpad4"] },
 };
 const GAME_KEYS = new Set(Object.values(KB).flatMap(m => Object.values(m).flat()));
 const keys = new Set(), tapped = new Set();
@@ -535,7 +679,7 @@ window.addEventListener("keyup", e => keys.delete(e.code));
 window.addEventListener("blur", () => keys.clear());
 function kbInput(m) {
   const any = l => l.some(c => keys.has(c)), tap = l => l.some(c => tapped.has(c));
-  return { left: any(m.left), right: any(m.right), down: any(m.down), jumpHeld: any(m.jump), fire1: any(m.fire1), fire2: any(m.fire2), jp: tap(m.jump), dp: tap(m.down), gp: tap(m.gren), gh: any(m.gren), mp: tap(m.melee), face: 0 };
+  return { left: any(m.left), right: any(m.right), down: any(m.down), jumpHeld: any(m.jump), fire1: any(m.fire1), fire2: any(m.fire2), jp: tap(m.jump), dp: tap(m.down), gp: tap(m.gren), gh: any(m.gren), mp: tap(m.melee), sl: tap(m.slide), face: 0 };
 }
 // joysticks (Gamepad API, mapping estándar): por índice del control, con lo apretado el cuadro anterior para los toques
 let pads = [], padBlocked = false;
@@ -556,7 +700,8 @@ function hat(gp) {
 function padState(gp) {
   const b = i => !!(gp.buttons[i] && (gp.buttons[i].pressed || gp.buttons[i].value > 0.4)), x = gp.axes[0] || 0, y = gp.axes[1] || 0, h = hat(gp) || {};
   return { left: b(14) || h.left || x < -0.35, right: b(15) || h.right || x > 0.35, down: b(13) || h.down || (y > 0.6 && Math.abs(x) < 0.6), up: b(12) || h.up,
-           jump: b(0), fire1: b(2) || b(7), fire2: b(1) || b(5), gren: b(3) || b(4), melee: b(6), start: b(9), any: gp.buttons.some(q => q.pressed) || !!(h.up || h.down || h.left || h.right) };
+           // slide: el botón 1 (O del DualSense, B de Xbox, A de Switch) o RB / R1, los que eran del disparo a dos manos
+           jump: b(0), fire1: b(2) || b(7), fire2: false, slide: b(1) || b(5), gren: b(3) || b(4), melee: b(6), start: b(9), any: gp.buttons.some(q => q.pressed) || !!(h.up || h.down || h.left || h.right) };
 }
 // el joystick del lugar "auto": el primero conectado que ningún lugar tiene elegido
 function autoPad() { return pads.find(gp => !SLOTS.some(x => x.ctrl === `pad:${gp.index}`)) || null; }
@@ -565,7 +710,7 @@ const mergeIn = (a, b) => Object.fromEntries(Object.keys(a).map(k => [k, k === "
 function padInput(idx) {
   const gp = pads.find(p => p.index === idx); if (!gp) return blankInput();
   const s = padState(gp), o = padPrev[idx] || {};
-  return { left: s.left, right: s.right, down: s.down, jumpHeld: s.jump || s.up, fire1: s.fire1, fire2: s.fire2, jp: (s.jump && !o.jump) || (s.up && !o.up), dp: s.down && !o.down, gp: s.gren && !o.gren, gh: s.gren, mp: s.melee && !o.melee, face: 0 };
+  return { left: s.left, right: s.right, down: s.down, jumpHeld: s.jump || s.up, fire1: s.fire1, fire2: s.fire2, jp: (s.jump && !o.jump) || (s.up && !o.up), dp: s.down && !o.down, gp: s.gren && !o.gren, gh: s.gren, mp: s.melee && !o.melee, sl: s.slide && !o.slide, face: 0 };
 }
 function rumble(p, ms, strong, weak) {
   const gp = padOf(p);
@@ -606,7 +751,7 @@ function cornerNudge(x, headY) {
   return null;
 }
 function findLedge() {
-  if (P.grabCD > 0 || P.vy < -220) return null;
+  if (!HANG_ON || P.grabCD > 0 || P.vy < -220) return null;
   const hx = P.x + P.facing * HANG_HAND[9] * S.char, hy = P.y + HANG_HAND[10] * S.char;
   for (const s of solids) {
     if (s.noLedge) continue;
@@ -623,7 +768,14 @@ function findLedge() {
   return null;
 }
 // alto de la caja de golpe: agachado es más bajo
-const hurtH = Q => (Q.crouch === "hold" || (Q.crouch === "in" && Q.crouchT > 0.06) ? BODY_H * COMBAT.crouchH : BODY_H);
+// la caja entera (x0, x1, y0, y1): de pie, ±HALF_W; deslizando, de SLIDE.back atrás a SLIDE.front adelante
+function hurtBox(Q) {
+  const h = hurtH(Q);
+  if (!Q.slide?.low) return { x0: Q.x - HALF_W, x1: Q.x + HALF_W, y0: Q.y - h, y1: Q.y + 2 };
+  const a = Q.x - Q.facing * SLIDE.back, b = Q.x + Q.facing * SLIDE.front;
+  return { x0: Math.min(a, b), x1: Math.max(a, b), y0: Q.y - h, y1: Q.y + 2 };
+}
+const hurtH = Q => (Q.slide?.low ? BODY_H * SLIDE.hurt : Q.crouch === "hold" || (Q.crouch === "in" && Q.crouchT > 0.06) ? BODY_H * COMBAT.crouchH : BODY_H);
 
 /* ---------- efectos ---------- */
 const bullets = [], fx = [], impacts = [], booms = [], beams = [];   // booms: la onda de una muerte; beams: el haz donde alguien vuelve
@@ -631,12 +783,16 @@ const grenades = [], blasts = [];   // granadas en vuelo y explosiones
 // el tiro: cuadros de "throw" y cuánto dura cada uno (RIG del personaje, useChar). En el ranger (clip g11, ver
 // characters/ranger/character.toml) 0–1 es el puño atrás de la cabeza, 2 la estela, 3 el brazo adelante (ahí sale la
 // granada, de la punta de la mano), 16–18 la vuelta a la pose. Sin el clip, los del arma que sube de shoot_in
-let THROW_ANIM, THROW_SEQ;
+let THROW_ANIM, THROW_SEQ, IN_HAND = null;
 // el momento en que sale: el principio del cuadro elegido del tiro (por defecto el 2, la estela)
+let THROW_FROM = null;   // dónde arranca el tiro al soltar el botón (RIG throwFrom); null: justo antes de la suelta
 function updateRelease() {
   if (!THROW_SEQ) return;
   GRENADE.anim = THROW_SEQ.reduce((a, q) => a + q[1], 0);
-  GRENADE.release = THROW_SEQ.slice(0, Math.min(THROW_SEQ.length - 1, GRENADE.releaseFrame)).reduce((a, q) => a + q[1], 0) + 1e-3;
+  // la suelta, justo al empezar su cuadro (con 1 ms de margen salía un cuadro tarde: el primero de la suelta, sin granada)
+  GRENADE.release = THROW_SEQ.slice(0, Math.min(THROW_SEQ.length - 1, GRENADE.releaseFrame)).reduce((a, q) => a + q[1], 0) + 1e-6;
+  const from = RIGNOW.throwFrom != null ? THROW_SEQ.slice(0, RIGNOW.throwFrom).reduce((a, q) => a + q[1], 0) + 1e-4 : null;
+  THROW_FROM = from != null && from < GRENADE.release ? from : null;
 }
 function throwFrame(t) {
   if (!THROW_SEQ) { const n = anim(THROW_ANIM).f.length; return Math.min(n - 1, Math.floor(t / GRENADE.anim * n)); }
@@ -659,10 +815,11 @@ function meleeHits() {
   const M = meleeBox(P);
   for (const Q of players) {
     if (Q === P || !Q.alive || Q.ctrl === "off" || Q.invT > 0 || P.meleeHit.has(Q.slot)) continue;
-    if (M.x1 < Q.x - HALF_W || M.x0 > Q.x + HALF_W || M.y1 < Q.y - hurtH(Q) || M.y0 > Q.y) continue;
+    const hb = hurtBox(Q); if (M.x1 < hb.x0 || M.x0 > hb.x1 || M.y1 < hb.y0 || M.y0 > Q.y) continue;
     if (!clearShot(P.x, P.y - BODY_H * 0.6, Q.x)) continue;
     P.meleeHit.add(Q.slot);
     const hy = Math.max(Q.y - hurtH(Q) + 12, P.y - BODY_H * 0.62);
+    if (Q.shieldT > 0) { shieldPing(Q, Q.x - P.facing * SHIELD.r * 0.8, hy, P.facing); P.vx *= 0.3; continue; }   // pega en la burbuja
     hitPlayer(Q, { vx: P.facing, x: Q.x - P.facing * HALF_W, y: hy, power: MELEE.dmg, owner: P.slot, glow: P.team.glow },
               { knock: MELEE.knock, lift: MELEE.lift, stun: MELEE.stun, melee: true });
     G.hitStop = Math.max(G.hitStop, MELEE.hitStop);
@@ -674,6 +831,20 @@ const BLAST_FRAMES = GREN.explosion ? Object.keys(GREN.explosion).sort((a, b) =>
 // la velocidad de salida para una carga de 0 a 1: de minVx/minVy de la llena, a la llena
 function grenadeVel(p, dir) {
   return { vx: dir * GRENADE.vx * (GRENADE.minVx + (1 - GRENADE.minVx) * p), vy: GRENADE.vy * (GRENADE.minVy + (1 - GRENADE.minVy) * p) };
+}
+// el aguante: el pitido (y la luz) cada cookGap(k) s, de 0,32 a 0,06 mientras k va de 0 a 1
+const cookGap = k => Math.max(0.06, 0.32 * (1 - k));
+// la granada en la mano: en el cuadro de la carga (IN_HAND), en el piso; si no, donde sale
+function handPos(Q) {
+  const pose = IN_HAND && Q.draw?.name === THROW_ANIM;
+  return pose ? { x: Q.x + Q.facing * IN_HAND[0], y: Q.y - IN_HAND[1] } : { x: Q.x + Q.facing * GRENADE.spawnX, y: Q.y - GRENADE.spawnY };
+}
+// se le pasó el aguante: la explosión de siempre en la mano (mata al que la tiene y a los del radio, salvo escudo)
+function cookOff(Q) {
+  const h = handPos(Q);
+  Q.charging = false; Q.charge = 0; Q.cookT = 0; Q.grenCD = GRENADE.cooldown;
+  if (G.mode !== "test") Q.grenades--;
+  explode({ x: h.x, y: h.y, owner: Q.slot });
 }
 function throwGrenade(p) {
   // sale de arriba y adelante del personaje, en diagonal (GRENADE.spawnX y spawnY, desde los pies), en el piso y en el aire
@@ -689,11 +860,12 @@ function throwGrenade(p) {
 function moveGrenade(Gr, dt) {
   const r = GRENADE.r, n = Math.max(1, Math.ceil(Math.max(Math.abs(Gr.vx), Math.abs(Gr.vy)) * dt / 6)), h = dt / n;
   for (let k = 0; k < n; k++) {
-    Gr.vy = Math.min(1600, Gr.vy + GRENADE.gravity * h);
+    const vy0 = Gr.vy;   // con trapecio, como el salto: la misma curva a cualquier Hz (y la de la vista, arc)
+    Gr.vy = Math.min(1600, vy0 + GRENADE.gravity * h);
     const nx = Gr.x + Gr.vx * h;
     if (solids.some(s => !s.oneWay && nx + r > s.x && nx - r < s.x + s.w && Gr.y + r > s.y && Gr.y - r < s.y + s.h)) Gr.vx = -Gr.vx * 0.55;
     else Gr.x = nx;
-    const ny = Gr.y + Gr.vy * h;
+    const ny = Gr.y + (vy0 + Gr.vy) / 2 * h;
     let hit = null;
     for (const s of solids) {
       if (Gr.x + r <= s.x || Gr.x - r >= s.x + s.w) continue;
@@ -710,8 +882,8 @@ function moveGrenade(Gr, dt) {
     else Gr.y = ny;
     if (Gr.rest) Gr.vx *= Math.pow(0.02, h);   // apoyada, rueda y se frena
     for (const Q of players) {
-      if (!Q.alive || Q.ctrl === "off" || Q.slot === Gr.owner || Q.invT > 0) continue;
-      if (Gr.x + r > Q.x - HALF_W && Gr.x - r < Q.x + HALF_W && Gr.y + r > Q.y - hurtH(Q) && Gr.y - r < Q.y) return true;   // le pegó: explota
+      if (!Q.alive || Q.ctrl === "off" || Q.slot === Gr.owner || immune(Q)) continue;
+      const hb = hurtBox(Q); if (Gr.x + r > hb.x0 && Gr.x - r < hb.x1 && Gr.y + r > hb.y0 && Gr.y - r < Q.y) return true;   // le pegó: explota
     }
   }
   Gr.rot += Gr.vx * dt / GRENADE.r;
@@ -723,6 +895,7 @@ function explode(Gr) {
     if (!Q.alive || Q.ctrl === "off" || Q.invT > 0) continue;
     const cx = Q.x, cy = Q.y - BODY_H / 2, d = Math.hypot(cx - Gr.x, cy - Gr.y);
     if (d > R) continue;
+    if (Q.shieldT > 0) { const u = d || 1; shieldPing(Q, cx - (cx - Gr.x) / u * SHIELD.r, cy - (cy - Gr.y) / u * SHIELD.r, Math.sign(cx - Gr.x) || 1); continue; }
     const k = 1 - d / R, dir = Math.sign(cx - Gr.x) || (Math.random() < 0.5 ? -1 : 1);   // adentro del radio, mata de una
     hitPlayer(Q, { vx: dir, x: cx, y: cy, power: Math.max(1, Q.hp), owner: Gr.owner, glow: "255,170,60" }, { knock: GRENADE.knock * (0.45 + 0.55 * k), lift: GRENADE.lift * (0.45 + 0.55 * k) });
   }
@@ -749,7 +922,7 @@ let hitN = 0, shotN = 0;
 //   - Reservado para lo importante: los balazos no tiemblan (ahí van la animación, las partículas, el sonido y el hitstop).
 const CAM = { max: 7, attack: 0.035, decay: 1.6, cooldown: 0.08, weak: 0.3, stack: 0.25, freq: 8 };   // freq: Hz de la sacudida (más dos armónicos, por debajo de 30)
 // intensidad de cada evento (0 a 1) y hacia dónde tira (los aterrizajes, más vertical)
-const CAM_EVENTS = { land: [0.15, 0.3, 1.25], hit: [0, 1, 1], melee: [0.3, 1, 1], death: [0.55, 1, 1], grenade: [0.85, 1, 1], final: [1, 1, 1] };
+const CAM_EVENTS = { land: [0.15, 0.3, 1.25], fall: [0.5, 0.45, 1.35], hit: [0, 1, 1], melee: [0.3, 1, 1], death: [0.55, 1, 1], grenade: [0.85, 1, 1], final: [1, 1, 1] };
 const cam = { a: 0, target: 0, t: Math.random() * 100, weakT: 0, bx: 1, by: 1 };
 function camShake(kind, k = 1) {
   const E = CAM_EVENTS[kind]; if (!E || !CAMERA_FX || reduceMotion) return;
@@ -774,12 +947,110 @@ function camOffset() {   // px de pantalla
   const ny = Math.sin(t * 1.13 + 2.9) * 0.55 + Math.sin(t * 2.07 + 0.8) * 0.3 + Math.sin(t * 2.71 + 4.2) * 0.15;
   return [nx * A * cam.bx, ny * A * cam.by];
 }
-function dust(x, y, n, speed, size, up = 0.25) {
-  const k = S.char;
-  for (let i = 0; i < n; i++) {
-    const side = i % 2 ? 1 : -1, v = speed * k * (0.35 + Math.random() * 0.65);
-    fx.push({ x: x + side * Math.random() * 10 * k, y: y - 2, vx: side * v, vy: -speed * k * up * Math.random(), life: 0.45, t: 0.45 + Math.random() * 0.15,
-              color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: size * k * (0.7 + Math.random() * 0.7), g: 120, drag: 4, round: true, grow: 1.6 });
+// polvo low-poly (Pablo, 2026-10-18; antes, círculos grises): pedazos facetados, polígonos de 5 a 7 lados partidos en
+// triángulos desde el centro, cada cara del tono que le toca según hacia dónde mira (la luz viene de arriba a la
+// izquierda), así al girar titilan como piezas 3D. El color sale de lo que se pisa en la arena (dustTones). DUSTK, por
+// tipo: n pedazos que salen a los costados a v px/s, levantando up; su tamaño (radio, px del juego) y vida; grow, cuánto
+// se inflan; g, la gravedad (negativa: suben); chips, piedritas que saltan y rebotan en el piso; ring, el radio de la
+// onda chata en el piso; rise, bocanadas grandes que suben despacio. heavy es la caída de varios pisos (FALL); air, el
+// doble salto (blanco, en anillo); wall, el salto desde la cornisa
+const DUSTK = {
+  takeoff: { n: 6, v: [60, 150], up: [10, 50], size: [4, 7], life: [0.3, 0.45], grow: 1.5, g: -40 },
+  land: { n: 8, v: [110, 260], up: [0, 35], size: [4, 8], life: [0.35, 0.55], grow: 1.6, g: -25 },
+  hard: { n: 14, v: [200, 430], up: [0, 50], size: [5, 10], life: [0.45, 0.7], grow: 1.7, g: -25, chips: 6, ring: 80 },
+  heavy: { n: 20, v: [260, 580], up: [0, 70], size: [6, 12], life: [0.6, 0.9], grow: 1.8, g: -20, chips: 12, ring: 130, rise: 4 },
+};
+let DUST = null;   // los tonos del polvo de la arena de ahora (se vacía al prearmar)
+function dustTones() {
+  if (DUST) return DUST;
+  // el promedio de la cara de arriba de lo que se pisa (5 y 10 px bajo la línea de los pies), sobre lo prearmado chico
+  let rgb = [150, 150, 158];
+  try {
+    if (baked.back) {
+      const W = 240, H = 135, [, g] = surface(W, H); g.drawImage(baked.back, 0, 0, W, H); g.drawImage(baked.solid, 0, 0, W, H);
+      const d = g.getImageData(0, 0, W, H).data, acc = [0, 0, 0]; let n = 0;
+      for (const so of solids) {
+        if (so.bound || so.obj?.path || so.w < 40) continue;
+        for (let x = so.x + 10; x < so.x + so.w - 10; x += 24) for (const dy of [5, 10]) {
+          const px = Math.round(x / AW * W), py = Math.round((so.y + dy) / AH * H); if (px < 0 || py < 0 || px >= W || py >= H) continue;
+          const i = (py * W + px) * 4; if (d[i + 3] < 200) continue;
+          acc[0] += d[i]; acc[1] += d[i + 1]; acc[2] += d[i + 2]; n++;
+        }
+      }
+      if (n > 8) rgb = acc.map(v => v / n);
+    }
+  } catch (e) { /* sin lienzo: el gris */ }
+  // el polvo: ese color con la mitad de la saturación, un poco de la bruma y bastante más claro
+  const mix = (a, b, f) => a.map((v, i) => Math.round(v + (b[i] - v) * f)), css = c => `rgb(${c.join(",")})`, gray = (rgb[0] + rgb[1] + rgb[2]) / 3;
+  const base = mix(mix(rgb.map(v => v + (gray - v) * 0.5), hazeRGB || [196, 204, 218], 0.15), [236, 231, 222], 0.3);
+  DUST = { light: css(mix(base, [255, 252, 246], 0.6)), mid: css(base), dark: css(mix(base, [46, 46, 60], 0.4)), rgb: base };
+  return DUST;
+}
+const AIR_TONES = { light: "#ffffff", mid: "#e2f4ff", dark: "#a8cde6" };
+const rnd = (a, b) => a + Math.random() * (b - a);
+// un polígono de n lados, irregular, de radio ~1
+function polyShape(n = 5 + Math.floor(Math.random() * 3)) {
+  const a0 = Math.random() * 6.3;
+  return Array.from({ length: n }, (_, i) => { const a = a0 + (i + rnd(-0.3, 0.3)) / n * Math.PI * 2, r = rnd(0.7, 1); return [Math.cos(a) * r, Math.sin(a) * r]; });
+}
+function dustPiece(x, y, vx, vy, size, life, o = {}) {
+  fx.push({ x, y, vx, vy, life, t: life, size, g: o.g ?? 0, drag: o.drag ?? 3.5, poly: polyShape(), tones: o.tones || dustTones(), grow: o.grow ?? 1.5,
+            rot: Math.random() * 6.3, vr: rnd(-4, 4), spin: 0, vs: 0, floor: o.floor ?? null });
+}
+// el polvo dibujado (DUSTART): por tipo, la hoja, sus cuadros (uno tras otro, sin fundido), cuánto dura la secuencia, la
+// escala, si además lleva las piedritas y la onda de código (lo fuerte, para que pese) y si va detrás del personaje (las
+// columnas de h2 y h3 le tapaban la cara justo en el golpe). DUST_DRAWN = false vuelve a los pedazos de código
+const DUST_DRAWN = true;
+const DUST_SEQ = {
+  takeoff: { set: "dust", frames: ["t1", "t2", "t3", "t4"], dur: 0.34, k: 1 },
+  land: { set: "dust", frames: ["l1", "l2", "l3", "l4"], dur: 0.4, k: 1 },
+  hard: { set: "hard", frames: ["h1", "h2", "h3", "h4"], dur: 0.46, k: 0.7, extra: true, back: true },
+  heavy: { set: "hard", frames: ["h1", "h2", "h3", "h4"], dur: 0.62, k: 1, extra: true, back: true },
+};
+const dustTinted = new Map();   // pieza → lienzo teñido con el color del polvo de la arena (se vacía al prearmar)
+function dustImg(set, piece) {
+  const p = DUSTART[set]?.[piece], im = p && IMG[p.src]; if (!im) return null;
+  const key = `${set}/${piece}`;
+  if (!dustTinted.has(key)) {
+    // el gris (~116 de luma) pasa a ser el color del polvo: el medio queda en ese tono y las caras claras y oscuras, a los
+    // costados (multiplicar sin más lo oscurecía)
+    const [c, g] = surface(im.naturalWidth, im.naturalHeight); g.drawImage(im, 0, 0);
+    const d = g.getImageData(0, 0, c.width, c.height), a = d.data, base = dustTones().rgb;
+    for (let i = 0; i < a.length; i += 4) {
+      if (!a[i + 3]) continue;
+      const L = Math.pow((a[i] * 0.299 + a[i + 1] * 0.587 + a[i + 2] * 0.114) / 116, 0.85);
+      a[i] = Math.min(255, base[0] * L); a[i + 1] = Math.min(255, base[1] * L); a[i + 2] = Math.min(255, base[2] * L);
+    }
+    g.putImageData(d, 0, 0); dustTinted.set(key, { im: c, w: p.w / 2, h: p.h / 2 });
+  }
+  return dustTinted.get(key);
+}
+// el polvo dibujado: los cuadros de a uno, apoyados por el centro de abajo; crece apenas y se apaga al final
+function drawDustSheet(E) {
+  const a = Math.max(0, E.t / E.life), u = 1 - a, n = E.sheet.length, Fr = E.sheet[Math.min(n - 1, Math.floor(u * n))], sc = E.k * (1 + 0.08 * u);
+  ctx.save(); ctx.globalAlpha = u < 0.7 ? 1 : 1 - (u - 0.7) / 0.3;
+  ctx.translate(E.x, E.y); ctx.scale(E.flip * sc, sc); ctx.drawImage(Fr.im, -Fr.w / 2, -Fr.h, Fr.w, Fr.h); ctx.restore();
+}
+function lpDust(x, y, kind, vx = 0) {
+  const K = DUSTK[kind], k = S.char / 0.8, T = dustTones(), Sq = DUST_DRAWN && DUST_SEQ[kind];
+  const frames = Sq ? Sq.frames.map(f => dustImg(Sq.set, f)) : null;
+  if (frames && frames.every(Boolean)) {   // el dibujado, apoyado en el piso por el centro de abajo
+    fx.push({ x, y: y + 2, vx: vx * 0.5, vy: 0, g: 0, drag: 3, life: Sq.dur, t: Sq.dur, sheet: frames, k: Sq.k * k, flip: Math.sign(vx) || (Math.random() < 0.5 ? -1 : 1), back: !!Sq.back });
+    if (!Sq.extra) return;
+  } else for (let i = 0; i < K.n; i++) {
+    const side = i % 2 ? 1 : -1, v = rnd(...K.v) * k, r = rnd(...K.size) * k;   // apoyados en el piso, saliendo a los costados
+    dustPiece(x + side * rnd(4, 16) * k, y - r * 0.6, side * v + vx, -rnd(...K.up) * k, r, rnd(...K.life), { g: K.g, grow: K.grow, tones: T });
+  }
+  for (let i = 0; i < (K.chips || 0); i++) {   // piedritas: oscuras, chicas, con peso, rebotan en el piso
+    const side = i % 2 ? 1 : -1;
+    fx.push({ x: x + side * rnd(0, 14), y: y - 3, vx: side * rnd(60, 280) * k, vy: -rnd(180, 420) * k, life: 0.8, t: rnd(0.55, 0.85), size: rnd(2.5, 5) * k,
+              g: 1700, drag: 0.6, poly: polyShape(4 + Math.floor(Math.random() * 2)), tones: { light: T.mid, mid: T.dark, dark: T.dark }, grow: 1, rot: Math.random() * 6.3, vr: rnd(-16, 16), spin: 0, vs: 0, floor: y, solid: true });
+  }
+  if (K.ring) fx.push({ x, y: y - 1, vx: 0, vy: 0, life: 0.3, t: 0.3, r0: 10 * k, r1: K.ring * k, ring: true, tones: T, g: 0 });
+  if (frames && frames.every(Boolean)) return;   // con el dibujado, sin las bocanadas de código
+  for (let i = 0; i < (K.rise || 0); i++) {   // a los costados, no encima del personaje
+    const side = i % 2 ? 1 : -1;
+    dustPiece(x + side * rnd(34, 70) * k, y - rnd(6, 16), side * rnd(30, 90) * k, -rnd(50, 110) * k, rnd(8, 13) * k, rnd(0.75, 1), { g: -10, grow: 1.4, drag: 2.5, tones: T });
   }
 }
 // low-poly (Pablo, 2026-10-17): el fogonazo, el impacto y sus esquirlas en los tonos del equipo (glow "r,g,b"): cada
@@ -861,27 +1132,54 @@ function burst(x, y, color, n, speed, life, size) {
   for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = speed * (0.4 + Math.random() * 0.6);
     fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - speed * 0.3, life, t: life, color, size: size * (0.6 + Math.random() * 0.6), g: 900 }); }
 }
-function puff(x, y, n, a0, a1, v0, v1, life0, life1, size, alpha, vx = 0) {
-  const k = S.char / 0.8;
-  for (let i = 0; i < n; i++) {
-    const side = i % 2 ? 1 : -1, a = (a0 + Math.random() * (a1 - a0)) * Math.PI / 180, v = (v0 + Math.random() * (v1 - v0)) * k;
-    const life = life0 + Math.random() * (life1 - life0), c = Math.random() < 0.5 ? "169,174,200" : "212,215,230";
-    fx.push({ x: x + side * Math.random() * 8 * k, y: y - 2, vx: side * Math.cos(a) * v + vx, vy: -Math.sin(a) * v, life, t: life,
-              color: `rgba(${c},${alpha})`, size: size * k * (0.7 + Math.random() * 0.6), g: 0, drag: 4, round: true, grow: 0.45 });
-  }
-}
 function squash(x, y) { P.sqX = x; P.sqY = y; }
-function land(fallH, vy) {
+// fallH: desde el ápice (cuánto se aplasta); drop: desde lo último que pisó (el daño por caída, FALL)
+function land(fallH, vy, drop = 0) {
   const H = 128 * S.char;
+  if (drop >= FALL.h) return landHeavy(drop);
   if (fallH < JFX.micro * H) { P.landT = 0; P.landKind = null; sfx("step", 0.5); return; }
   const hard = fallH >= JFX.hard * H, s = Math.min(1, fallH / (JFX.hard * H)), half = Math.abs(P.vx) > 20 ? 1 : 0.5;
   squash(1 + JFX.land[0] * s * half, 1 - JFX.land[1] * s * half);
   P.landKind = hard ? "hard" : "soft"; P.landT = hard ? 0.2 : 1 / 12;
   if (hard) {
-    puff(P.x, P.y, 16, 8, 22, 150, 260, 0.4, 0.6, 13, 0.5); puff(P.x, P.y, 5, 60, 85, 60, 120, 0.4, 0.55, 11, 0.45);
+    lpDust(P.x, P.y, "hard", P.vx * 0.2);
     camShake("land");
     sfx("landHard", 0.7); rumble(P, 90, 0.45, 0.3);
-  } else { puff(P.x, P.y, 7, 10, 20, 60, 150, 0.3, 0.5, 10, 0.6); sfx("land", 0.4 + 0.3 * s); }
+  } else { lpDust(P.x, P.y, "land", P.vx * 0.2); sfx("land", 0.4 + 0.3 * s); }
+}
+// la caída de varios pisos: aterrizaje fuerte más largo (agachado FALL.land, plantado y sin control FALL.stun), sacudón,
+// polvo grande y, si no es invulnerable ni tiene escudo, un golpe menos (deja FALL.minHp) con el destello, el retrato
+// golpeado, el sonido del golpe y un −1 que sube
+function landHeavy(drop) {
+  squash(1.3, 0.62); P.landKind = "heavy"; P.landT = FALL.land; P.vx = 0; P.stunT = Math.max(P.stunT, FALL.stun);
+  lpDust(P.x, P.y, "heavy");
+  camShake("fall"); rumble(P, 220, 1, 0.6); sfx("fall");
+  if (G.state !== "play" || P.invT > 0) return;
+  if (P.shieldT > 0) { shieldPing(P, P.x, P.y - 6, P.facing); return; }
+  const lost = P.hp - Math.max(Math.min(P.hp, FALL.minHp), P.hp - FALL.dmg); if (lost <= 0) return;
+  P.hp -= lost; P.hitT = 0.12; P.hudHitT = 0.45;
+  burst(P.x, P.y - BODY_H * 0.35, P.team.color, 8, 240, 0.35, 5);
+  labels.push({ x: P.x, y: P.y - BODY_H, up: HEAD_TAG ? 92 : 46, text: `−${lost}`, color: "#ff5a4e", t: 0 });
+  sfx("hit", 0.9);
+}
+// el escudo frena algo: la burbuja se ilumina, esquirlas de su color salpican hacia atrás (dir: hacia dónde iba el golpe)
+// y suena un tintineo
+const SHIELD_GLOW = "120,225,255";
+function shieldPing(Q, x, y, dir) {
+  Q.shieldHitT = 0.18;
+  shards(x, y, -(dir || 1), SHIELD_GLOW, 5, 260, 0.9, 6, 0.28);
+  sfx("shieldHit", 0.7);
+}
+// se termina: la burbuja se rompe en pedazos que salen para afuera
+function shieldPop(Q) {
+  const cx = Q.x, cy = Q.y - SHIELD.cy, T = lpTones(SHIELD_GLOW), C = SHIELDART.bubble?.crack;
+  if (C && IMG[C.src]) fx.push({ x: cx, y: cy, vx: 0, vy: 0, g: 0, life: 0.16, t: 0.16, img: { im: IMG[C.src], w: C.w / 2, h: C.h / 2 }, grow: 1.22 });   // la rajada se abre y se va
+  for (let k = 0; k < 14; k++) {
+    const a = k / 14 * Math.PI * 2 + Math.random() * 0.3, v = 160 + Math.random() * 140;
+    fx.push({ x: cx + Math.cos(a) * SHIELD.r, y: cy + Math.sin(a) * SHIELD.r, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 80, life: 0.45, t: 0.35 + Math.random() * 0.1,
+              color: T.light, dark: T.dark, size: 7 + Math.random() * 5, g: 600, drag: 3, tri: true, rot: a, vr: (Math.random() * 2 - 1) * 14, spin: Math.random() * 6.3, vs: 12 + Math.random() * 12 });
+  }
+  sfx("shieldOff", 0.7);
 }
 // golpe: destello blanco, empujón en la dirección de la bala y un momento sin control. Colgado, lo despega de la cornisa.
 // push: el empujón de la granada o del golpe de cerca (knock, lift y, el de cerca, stun)
@@ -890,6 +1188,7 @@ function hitPlayer(Q, B, push = null) {
   Q.hp -= B.power; Q.hitT = 0.12; Q.hudHitT = 0.45; Q.stunT = push?.stun ?? COMBAT.stun * (big ? 1.4 : 1); Q.meleeT = 0;
   if (Q.state === "hang" || Q.state === "climb") { Q.state = "air"; Q.hang = Q.climb = null; Q.grabCD = 0.45; }
   Q.onGround = false; Q.jump = { mode: "phys", fixed: true }; Q.crouch = "none"; Q.aim = "none"; Q.landT = 0;
+  if (Q.slide) { Q.slide = null; Q.slideCD = SLIDE.cd; }
   Q.vx = dir * (push ? push.knock : big ? COMBAT.knock2 : COMBAT.knock1); Q.vy = Math.min(Q.vy, -(push ? push.lift : big ? COMBAT.lift2 : COMBAT.lift1));
   if (push?.melee) pow(B.x, B.y, dir, B.glow);   // el golpe de cerca: la estrella, que salpica hacia adelante
   else impact(B.x, B.y, dir, big, B.glow);       // salpica hacia el tirador
@@ -927,11 +1226,11 @@ function pickSpawn(Q) {
 let actx = null, lastShot = 0;
 const audioOn = () => { try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); else if (actx.state === "suspended") actx.resume(); } catch (e) { /* sin audio */ } };
 window.addEventListener("keydown", audioOn); window.addEventListener("pointerdown", audioOn);
-function sfx(kind, vol = 1) {
+function sfx(kind, vol = 1, f = 1) {
   if (!S.sound || !actx || actx.state !== "running") return;
   const t = actx.currentTime;
   if (kind === "shot" || kind === "shot2") { if (t - lastShot < 0.035) return; lastShot = t; }   // cuatro tirando: no se apilan
-  const p = 1 + (Math.random() - 0.5) * 0.1, out = actx.createGain();
+  const p = f * (1 + (Math.random() - 0.5) * 0.1), out = actx.createGain();
   out.gain.value = 0.45 * vol; out.connect(actx.destination);
   const tone = (type, f0, f1, dur, g) => {
     const o = actx.createOscillator(), e = actx.createGain(); o.type = type;
@@ -951,6 +1250,11 @@ function sfx(kind, vol = 1) {
   else if (kind === "double") { tone("triangle", 380, 900, 0.12, 0.2); noise(900, 1.2, 0.22, 0.35, 3200); }
   else if (kind === "land") { tone("sine", 140, 60, 0.08, 0.5); noise(700, 0.9, 0.07, 0.3); }
   else if (kind === "landHard") { tone("sine", 110, 38, 0.2, 0.8); noise(420, 0.7, 0.16, 0.5); }
+  else if (kind === "slide") { noise(1100, 0.6, 0.38, 0.45, 420); noise(3200, 1.4, 0.12, 0.2); }
+  else if (kind === "fall") { tone("sine", 92, 26, 0.34, 1); noise(320, 0.6, 0.3, 0.85, 90); noise(1900, 1, 0.06, 0.35); }   // la caída de varios pisos
+  else if (kind === "shieldOn") { tone("triangle", 440, 1320, 0.22, 0.2); tone("sine", 880, 1760, 0.3, 0.12); noise(5200, 2, 0.2, 0.12, 9000); }
+  else if (kind === "shieldHit") { tone("sine", 1500, 1100, 0.09, 0.22); tone("triangle", 2300, 1900, 0.06, 0.1); }
+  else if (kind === "shieldOff") { tone("triangle", 1100, 300, 0.25, 0.16); noise(4200, 1.5, 0.18, 0.25, 1500); }
   else if (kind === "step") noise(1500, 1.5, 0.035, 0.15);
   else if (kind === "shot") { tone("square", 1100, 320, 0.06, 0.09); noise(3200, 1.2, 0.03, 0.15); }
   else if (kind === "shot2") { tone("sawtooth", 700, 120, 0.12, 0.12); noise(1600, 0.9, 0.08, 0.3); }
@@ -967,6 +1271,7 @@ function sfx(kind, vol = 1) {
   else if (kind === "throw") { noise(900, 0.8, 0.18, 0.35, 2600); }
   else if (kind === "bounce") { tone("sine", 260, 180, 0.05, 0.25); noise(1800, 2, 0.03, 0.2); }
   else if (kind === "tick") tone("square", 1700, 1700, 0.03, 0.06);
+  else if (kind === "fuse") { tone("square", 1450, 1450, 0.045, 0.07); tone("sine", 2900, 2900, 0.03, 0.05); }   // el aguante (f sube la altura)
   else if (kind === "boom") { tone("sine", 120, 30, 0.6, 1); noise(500, 0.5, 0.7, 0.9, 90); noise(2400, 0.8, 0.12, 0.5); }
   else if (kind === "swing") noise(700, 1.1, 0.13, 0.4, 3600);
   else if (kind === "punch") { tone("sine", 190, 55, 0.14, 0.9); noise(900, 0.8, 0.09, 0.6, 300); noise(3600, 1.2, 0.03, 0.35); }
@@ -983,17 +1288,16 @@ function wallJump(H) {
   P.vx = P.facing * WALL_JUMP.vx; P.vy = -FEEL.v0 * WALL_JUMP.vy;
   P.jump = { mode: "phys", fixed: true }; P.wallLockT = WALL_JUMP.lock; P.coyoteT = 99; P.bufferT = 0;
   P.skipLedge = { s: H.s, cx: H.cx, t: WALL_JUMP.regrab };
-  for (let n = 0; n < 9; n++) {
+  for (let n = 0; n < 9; n++) {   // polvo contra la pared
     const v = 190 * S.char * (0.4 + Math.random() * 0.6), a = (Math.random() - 0.5) * 1.4;
-    fx.push({ x: H.cx, y: P.y - (20 + Math.random() * 60) * S.char, vx: P.facing * Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.35, t: 0.3 + Math.random() * 0.1,
-              color: Math.random() < 0.5 ? "#a9aec8" : "#d4d7e6", size: 10 * S.char * (0.7 + Math.random() * 0.6), g: 60, drag: 5, round: true, grow: 1.6 });
+    dustPiece(H.cx, P.y - (20 + Math.random() * 60) * S.char, P.facing * Math.cos(a) * v, Math.sin(a) * v, 6 * S.char * (0.7 + Math.random() * 0.6), 0.3 + Math.random() * 0.1, { g: 60, drag: 5, grow: 1.6 });
   }
 }
 function update(dt) {
   const ctl = P.stunT <= 0;
   if (!ctl) { I.jp = I.dp = false; }
   const left = ctl && I.left, right = ctl && I.right, down = ctl && I.down, jumpHeld = ctl && I.jumpHeld;
-  const fire1 = ctl && I.fire1, fire2 = ctl && I.fire2, firing = fire1 || fire2;
+  const fire1 = ctl && I.fire1, fire2 = TWO_HAND_ON && ctl && I.fire2, firing = fire1 || fire2;
   const dir = (right ? 1 : 0) - (left ? 1 : 0);
   P.grabCD -= dt; P.fireCD -= dt; P.shotT += dt; P.bufferT -= dt; P.idleT += dt; P.wallLockT -= dt;
   if (P.flash) { P.flash.t += dt; if (P.flash.t >= FXT.flashA + FXT.flashB) P.flash = null; }
@@ -1002,6 +1306,7 @@ function update(dt) {
   if (P.onGround || P.state === "hang") { P.canDouble = true; P.flipT = 0; }
   if (P.onGround || P.state === "hang" || P.state === "climb") P.peakY = null;
   P.coyoteT = P.onGround ? 0 : P.coyoteT + dt;
+  if (P.onGround) P.fallY0 = P.y; else if (P.state === "hang") P.fallY0 = P.hang.top;   // de dónde cae (FALL)
 
   // ---- colgado de una cornisa ----
   if (P.state === "hang") {
@@ -1055,7 +1360,7 @@ function update(dt) {
   // facing: el bot mira al que le dispara; si no, hacia donde corre. Recién salido del colgado, no cambia
   if (P.wallLockT > 0 || P.meleeT > 0) { /* trabado (golpeando, no se da vuelta) */ }
   else if (ctl && I.face) P.facing = I.face;
-  else if (dir !== 0 && P.crouch === "none") P.facing = dir;
+  else if (dir !== 0 && P.crouch === "none" && !P.slide) P.facing = dir;
 
   // bajar atravesando: abajo + saltar sobre el puente, una flotante o una repisa
   if (down && I.jp && P.onGround) {
@@ -1064,7 +1369,8 @@ function update(dt) {
   }
 
   // granada con carga: apretado, se prepara (el puño atrás, plantado en el piso) y se llena la barra; al soltar, el tiro
-  // arranca en el cuadro de la salida y la granada sale con la fuerza de la carga. Si le pegan mientras carga, se le cae
+  // arranca en el cuadro de la salida y la granada sale con la fuerza de la carga. Si le pegan mientras carga, se le cae.
+  // Llena, corre el aguante (GRENADE.hold): la luz de la granada, la barra y un pitido que se apuran; al final, explota
   if (P.grenCD > 0) P.grenCD -= dt;
   if (P.throwT > 0) {
     P.throwT += dt;
@@ -1072,10 +1378,19 @@ function update(dt) {
     if (P.throwT >= GRENADE.anim) P.throwT = 0;
   } else if (P.charging) {
     if (!ctl || G.state !== "play") P.charging = false;
-    else if (I.gh) P.charge = Math.min(1, P.charge + dt / GRENADE.charge);
-    else { P.charging = false; P.throwT = Math.max(1e-4, GRENADE.release - 0.01); P.thrown = false; P.grenCD = GRENADE.cooldown; }
-  } else if (ctl && I.gp && (P.grenades > 0 || G.mode === "test") && P.grenCD <= 0 && G.state === "play" && P.crouch !== "hold" && !(P.meleeT > 0)) {
-    P.charging = true; P.charge = 0; P.invT = 0; P.aim = "none";
+    else if (I.gh) {
+      const over = P.charge + dt / GRENADE.charge - 1;
+      P.charge = Math.min(1, P.charge + dt / GRENADE.charge);
+      if (over > 0) {   // llena: lo que sobró del cuadro ya cuenta como aguante (1e-6: el redondeo de sumar dt)
+        P.cookT += Math.min(dt, over * GRENADE.charge);
+        const k = P.cookT / GRENADE.hold;
+        if (k >= 1 - 1e-6) cookOff(P);
+        else if ((P.beepPh += dt) >= P.beepGap) { P.beepPh = 0; P.beepGap = cookGap(k); sfx("fuse", 0.6, 1 + 0.5 * k); }
+      }
+    }
+    else { P.charging = false; P.throwT = Math.max(1e-4, THROW_FROM ?? GRENADE.release - 0.01); P.thrown = false; P.grenCD = GRENADE.cooldown; }
+  } else if (ctl && I.gp && (P.grenades > 0 || G.mode === "test") && P.grenCD <= 0 && G.state === "play" && P.crouch !== "hold" && !(P.meleeT > 0) && !P.slide) {
+    P.charging = true; P.charge = 0; P.cookT = 0; P.beepPh = 1e9; P.beepGap = 0; P.invT = 0; P.aim = "none";
     if (P.crouch === "in") P.crouch = "none";
   }
   I.gp = false;
@@ -1089,21 +1404,47 @@ function update(dt) {
       P.vx = P.onGround ? P.facing * MELEE.lunge : P.facing * Math.max(Math.abs(P.vx), MELEE.lunge * 0.6);
     }
     if (P.meleeT >= MELEE_T.end) P.meleeT = 0;
-  } else if (ctl && I.mp && P.meleeCD <= 0 && G.state === "play" && !throwing) {
+  } else if (ctl && I.mp && P.meleeCD <= 0 && G.state === "play" && !throwing && !P.slide) {
     P.meleeT = 1e-4; P.meleeCD = MELEE.cd; P.meleeHit = new Set(); P.lunged = false; P.invT = 0; P.aim = "none"; P.crouch = "none";
     sfx("swing", 0.7);
   }
   I.mp = false;
   const meleeing = P.meleeT > 0;
-  // agacharse (solo en el piso, sin moverse; tirando o golpeando, no)
-  const wantCrouch = down && P.onGround && !P.jump && !throwing && !meleeing;
+  // deslizarse (SLIDE): con su botón. in: se tira (slide_in), hold: desliza sentado (slide), out: se levanta
+  // (slide_out). Se termina en el aire (se cayó de un borde o saltó), al terminar de levantarse o si le pegan
+  if (P.slideCD > 0) P.slideCD -= dt;
+  if (P.slide && (!P.onGround || P.jump)) { P.slide = null; P.slideCD = SLIDE.cd; }
+  if (!P.slide && SLIDE_SEQ && ctl && I.sl && P.onGround && !P.jump && P.slideCD <= 0 && G.state !== "count" && !throwing && !meleeing) {
+    if (dir) P.facing = dir;   // hacia donde aprieta; sin dirección, hacia donde mira (también parado o agachado)
+    P.slide = { t: 0, phase: "in", out: 0, low: false, dustT: 0 }; P.crouch = "none"; P.aim = "none"; P.landT = 0;
+    P.vx = P.facing * RUN_SPEED * SLIDE.boost; squash(1.12, 0.9);
+    lpDust(P.x, P.y, "takeoff", -P.facing * 80); sfx("slide", 0.7);
+  }
+  if (P.slide) {
+    const L = P.slide; L.t += dt;
+    if (L.phase === "in" && L.t >= SLIDE_SEQ.inT) L.phase = "hold";
+    if (L.phase !== "out" && L.t >= SLIDE.dur) { L.phase = "out"; L.out = 0; }   // se levanta
+    if (L.phase === "out" && (L.out += dt) >= SLIDE_SEQ.outT) { P.slide = null; P.slideCD = SLIDE.cd; P.t = 0; }
+    else if (L.phase !== "out" && (L.dustT -= dt) <= 0) {   // polvo que deja atrás, al ras del piso
+      L.dustT = 0.06;
+      dustPiece(P.x - P.facing * 14, P.y - 3, -P.facing * rnd(40, 110), -rnd(10, 40), rnd(3.5, 6), rnd(0.25, 0.4), { g: -20, grow: 1.6 });
+    }
+  }
+  // agacharse (solo en el piso, sin moverse; tirando, golpeando o deslizando, no)
+  const wantCrouch = down && P.onGround && !P.jump && !throwing && !meleeing && !P.slide;
   if (wantCrouch && P.crouch === "none") { P.crouch = "in"; P.crouchT = 0; P.aim = "none"; }
   if (!wantCrouch && (P.crouch === "in" || P.crouch === "hold")) { P.crouch = "out"; P.crouchT = 0; }
   const crouching = P.crouch !== "none";
   const planted = (fire2 || throwing || meleeing) && P.onGround && !P.jump && !crouching;
 
   const airborne = !P.onGround || P.jump;
-  if (!ctl) P.vx *= Math.exp(-2.5 * dt);   // empujado: sin control, se frena solo
+  if (P.slide && P.slide.phase !== "out") {   // deslizando: del envión a SLIDE.end parejo en SLIDE.dur
+    const k = Math.min(1, P.slide.t / SLIDE.dur);
+    P.vx = P.facing * RUN_SPEED * (SLIDE.boost + (SLIDE.end - SLIDE.boost) * k);
+  } else if (P.slide) {   // levantándose: corre si sigue hacia adelante, si no frena
+    const target = ctl && dir === P.facing ? dir * RUN_SPEED : 0;
+    P.vx += Math.sign(target - P.vx) * Math.min(Math.abs(target - P.vx), (target ? FEEL.accel : FEEL.decel) * dt);
+  } else if (!ctl) P.vx *= Math.exp(-2.5 * dt);   // empujado: sin control, se frena solo
   else {
     const target = P.wallLockT > 0 ? P.facing * WALL_JUMP.vx : crouching || planted ? 0 : dir * RUN_SPEED;
     const speeding = target !== 0 && Math.sign(target) === Math.sign(P.vx || target) && Math.abs(target) > Math.abs(P.vx);
@@ -1116,15 +1457,15 @@ function update(dt) {
   if (P.bufferT > 0 && !planted && (P.onGround || P.coyoteT < FEEL.coyote) && !P.jump && P.crouch !== "in" && P.crouch !== "hold") {
     P.bufferT = 0; P.coyoteT = 99;
     P.onGround = false; P.landT = 0; P.aim = "none"; P.crouch = "none";
-    P.jump = { mode: "phys" }; P.vy = -FEEL.v0;
-    squash(...JFX.takeoff); puff(P.x, P.y, 5, 75, 90, 30, 100, 0.3, 0.45, 9, 0.6, -P.vx * 0.15); sfx("jump", 0.6);
-  } else if (I.jp && !P.onGround && P.canDouble && FLIP.length) {
+    P.jump = { mode: "phys", toff: JFX.takeoffT }; P.vy = -FEEL.v0;
+    squash(...JFX.takeoff); lpDust(P.x, P.y, "takeoff", -P.vx * 0.15); sfx("jump", 0.6);
+  } else if (I.jp && !P.onGround && P.canDouble && (FLIP.length || DBL_BALL)) {
     P.canDouble = false; P.bufferT = 0; P.jump = { mode: "phys" }; P.flipT = 1e-4;
     P.vy = Math.min(P.vy, -FEEL.v0 * DOUBLE_V);
     const rho = dir * 0.6, cr = Math.cos(rho), sr = Math.sin(rho);
     for (let k = 0; k < 12; k++) { const a = Math.PI * (0.15 + 0.7 * k / 11), v = 220 * S.char;
       const vx = Math.cos(a) * v * (k % 2 ? 1 : -1), vy = Math.sin(a) * v * 0.35;
-      fx.push({ x: P.x, y: P.y, vx: vx * cr - vy * sr, vy: vx * sr + vy * cr, life: 0.3, t: 0.3, color: "#e9f6ff", size: 11 * S.char, g: 0, drag: 5, round: true, grow: 1.5 }); }
+      dustPiece(P.x, P.y, vx * cr - vy * sr, vx * sr + vy * cr, 6.5 * S.char, 0.3, { drag: 5, grow: 1.5, tones: AIR_TONES }); }   // el anillo de aire, blanco
     squash(...JFX.dbl); P.flashT = 0.05; sfx("double", 0.6);
   }
   I.jp = false; I.dp = false;
@@ -1133,9 +1474,13 @@ function update(dt) {
   let drawK = 1, drawRot = 0, drawCenter = false;
   if (!P.onGround) {
     if (P.jump && !P.jump.fixed && !jumpHeld && P.vy < -FEEL.cut) P.vy = -FEEL.cut;   // salto variable
-    P.vy = Math.min(FEEL.term, P.vy + (P.vy < 0 ? FEEL.gUp : FEEL.gDown) * dt);
+    // la gravedad con trapecio (Pablo, 2026-10-18): la y avanza con el promedio de la vy de antes y la de después, así
+    // el salto sube lo de la cuenta (v0² / 2·gUp = 192, con el doble 348) a cualquier Hz; con la vy de después (Euler)
+    // daba 183/331 a 60 Hz y 188/341 a 144
+    const vy0 = P.vy;
+    P.vy = Math.min(FEEL.term, vy0 + (vy0 < 0 ? FEEL.gUp : FEEL.gDown) * dt);
     if (P.peakY === null || P.y < P.peakY) P.peakY = P.y;
-    const ny = P.y + P.vy * dt;
+    const ny = P.y + (vy0 + P.vy) / 2 * dt;
     moveX(P.vx * dt, P.y);
     if (P.vy < 0) {
       const cb = ceilingBottom(P.x, P.y - BODY_H, ny - BODY_H);
@@ -1143,7 +1488,7 @@ function update(dt) {
       else P.y = ny;
     } else {
       const top = landingTop(P.x, P.y, ny);
-      if (top !== null) { const fallH = top - (P.peakY ?? top), vy = P.vy; P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.peakY = null; land(fallH, vy); }
+      if (top !== null) { const fallH = top - (P.peakY ?? top), drop = top - (P.fallY0 ?? top), vy = P.vy; P.y = top; P.vy = 0; P.onGround = true; P.jump = null; P.peakY = null; land(fallH, vy, drop); }
       else P.y = ny;
     }
     if (!P.onGround && ctl && !meleeing) { const L = findLedge(); if (L) { P.state = "hang"; P.hang = { t: 0, s: L.s, cx: L.cx, top: L.top, from: { x: P.x, y: P.y } }; P.jump = null; P.vx = P.vy = 0; P.wallLockT = 0; return endPlayer(dt); } }
@@ -1154,8 +1499,21 @@ function update(dt) {
 
   const moving = Math.abs(P.vx) > 20;
   if (!P.onGround || P.jump) {
-    if (P.flipT > 0 && P.flipT < FLIP_DUR) {
-      name = "double_jump"; idx = FLIP[Math.min(FLIP.length - 1, Math.floor(P.flipT / FLIP_DUR * FLIP.length))];
+    if (P.jump?.toff > 0) P.jump.toff -= dt;
+    if (DBL_BALL && P.flipT > 0 && !(firing && P.flipT >= DBL_BALL.busy)) {
+      // el doble salto en bolita: se encoge (double_jump_in), la bolita da una vuelta con el easing del mortal, centrada
+      // en el cuerpo y yendo del centro del último cuadro de la entrada al del primero de la salida, se abre
+      // (double_jump_out) y cae con el último hasta tocar el piso (con los pies donde está el jugador)
+      const B = DBL_BALL, t = P.flipT;
+      if (t < B.inT) { name = "double_jump_in"; idx = B.in[seqAt(B.in, t)][0]; }
+      else if (t < B.inT + B.spin) {
+        const u = (t - B.inT) / B.spin, th = 360 * (1 - (1 - u) ** 2), f = anim("double_jump_ball").f[0];
+        const tx = B.from.x + (B.to.x - B.from.x) * u, ty = B.from.y + (B.to.y - B.from.y) * u;
+        name = "double_jump_ball"; idx = 0; drawRot = th * Math.PI / 180; drawCenter = true;
+        centered = { x: P.x + P.facing * (tx - (f[4] + f[2] / 2 - PIV_X) * S.char), y: P.y + ty - FOOT_SINK - (f[5] + f[3] / 2 - PIV_Y) * S.char };
+      } else { name = "double_jump_out"; idx = B.out[seqAt(B.out, t - B.inT - B.spin)][0]; }
+    } else if (!DBL_BALL && P.flipT > 0 && P.flipT < FLIP_DUR) {
+      name = FLIP_ANIM; idx = FLIP[Math.min(FLIP.length - 1, Math.floor(P.flipT / FLIP_DUR * FLIP.length))];
       if (FLIP_ANG) {
         const u = P.flipT / FLIP_DUR, th = 360 * (1 - (1 - u) ** 2);
         const [fi, fa] = FLIP_ANG.reduce((b, c) => (Math.abs(c[1] - th) < Math.abs(b[1] - th) ? c : b));
@@ -1166,10 +1524,22 @@ function update(dt) {
     } else if (firing) { name = "jump_shoot"; idx = AIR_SHOT; }
     else {
       const [a, b, c, e] = JFX.vy, vy = P.vy;
-      if (vy >= e && FLIP_ANG) { name = "double_jump"; idx = RIGNOW.flipFall; drawK = JFX.dblScale; }
-      else { name = "jump"; idx = vy < a ? JP.rise[0] : vy < b ? (JP.rise[1] ?? JP.apex) : vy < c && P.jump ? JP.apex : (JP.fall[JP.fall.length - 1] ?? JP.apex); }
+      if (vy >= e && FLIP_ANG && (JP.dblFall || P.flipT > 0)) { name = FLIP_ANIM; idx = RIGNOW.flipFall; drawK = JFX.dblScale; }
+      else {
+        name = "jump";
+        idx = JP.takeoff != null && P.jump?.toff > 0 ? JP.takeoff
+          : vy < a ? JP.rise[0] : vy < b ? (JP.rise[1] ?? JP.apex)
+          : !P.jump ? JP.fall
+          : JP.turn == null ? (vy < c ? JP.apex : JP.fall)
+          : vy < JFX.turn[0] ? JP.apex : vy < JFX.turn[1] ? JP.turn : JP.fall;
+      }
     }
     drawY = centered ? centered.y : P.y + anim(name).f[idx][8] * S.char;
+  } else if (P.slide) {   // deslizando: con los pies donde está (slide_in salta un poco, como en el clip)
+    const L = P.slide, Sq = SLIDE_SEQ;
+    if (L.phase === "in") { const k = seqAt(Sq.in, L.t); name = "slide_in"; idx = Sq.in[k][0]; L.low = k >= Sq.low[0]; }
+    else if (L.phase === "hold") { name = "slide"; idx = 0; L.low = true; }
+    else { const k = seqAt(Sq.out, L.out); name = "slide_out"; idx = Sq.out[k][0]; L.low = k <= Sq.low[1]; }
   } else if (crouching) {
     P.crouchT += dt;
     if (P.crouch === "in") { idx = Math.floor(P.crouchT / 0.04); name = "crouch_in"; if (idx >= anim("crouch_in").f.length) { P.crouch = "hold"; P.crouchT = 0; } }
@@ -1181,8 +1551,9 @@ function update(dt) {
     if (moving || firing) P.landT = 0;
     if (P.landT > 0 && !moving) {
       P.landT -= dt;
-      if (P.landKind === "hard") { name = "crouch_out"; idx = Math.min(anim(name).f.length - 1, Math.floor((0.2 - P.landT) / 0.05)); }
-      else { name = "jump"; idx = JP.prep; }
+      // fuerte: crouch_out en 0,2 s; pesado (la caída, FALL.land), el primero, agachado, hasta que quedan 0,2 s
+      if (P.landKind === "hard" || P.landKind === "heavy") { name = "crouch_out"; idx = Math.min(anim(name).f.length - 1, Math.max(0, Math.floor((0.2 - P.landT) / 0.05))); }
+      else { name = "jump"; idx = JP.land; }
     }
     else if (moving) { P.aim = "none"; P.t += dt * Math.abs(P.vx) / 260; name = RUN(); idx = Math.floor(P.t * 12) % anim(name).f.length; }
     else {
@@ -1221,14 +1592,17 @@ function update(dt) {
   P.draw.k = drawK; P.draw.rot = drawRot; P.draw.center = drawCenter;
   if (meleeing && P.meleeT >= MELEE_T.hit0 && P.meleeT < MELEE_T.hit1 && G.state === "play") meleeHits();
 
-  // disparo: sale de la boca del frame que se está mostrando. En la cuenta regresiva no se dispara
+  // disparo: sale de la boca del frame que se está mostrando. En la cuenta regresiva no se dispara. La cadencia es la de
+  // FEEL a cualquier fps: lo que sobró del cuadro pasa al tiro siguiente (hasta un cuadro) y 1e-6 absorbe el redondeo de
+  // restar dt (sin esto, a 60 fps 1/6 s caía en 11 cuadros, 5,45 por segundo, y 1/7 en 9, 6,67)
   const aimedReady = !(P.aimAnim === "in" && P.aim !== "none" && !moving && P.onGround && !crouching);
-  if (firing && !throwing && !meleeing && G.state !== "count" && P.fireCD <= 0 && aimedReady && !(P.flipT > 0 && P.flipT < FLIP_DUR) && P.crouch !== "in" && P.crouch !== "out") {
+  const spinning = P.flipT > 0 && P.flipT < (DBL_BALL ? DBL_BALL.busy : FLIP_DUR);
+  if (firing && !throwing && !meleeing && !P.slide && G.state !== "count" && P.fireCD <= 1e-6 && aimedReady && !spinning && P.crouch !== "in" && P.crouch !== "out") {
     if (P.overheat) { P.fireCD = 0.3; sfx("dry"); steam(P, 3); }   // trabada: clic y vapor, no sale nada
     else {
       const two = fire2 && !moving && P.onGround && !crouching;
       const fr = anim(P.draw.name).f[P.draw.i];
-      fire(fr, P.draw.y, two ? COMBAT.power2 : 1); P.shotT = 0; P.fireCD = two ? FEEL.rate2 : FEEL.rate1;
+      fire(fr, P.draw.y, two ? COMBAT.power2 : 1); P.shotT = 0; P.fireCD = (two ? FEEL.rate2 : FEEL.rate1) + Math.max(-dt, Math.min(0, P.fireCD));
     }
   }
   endPlayer(dt);
@@ -1242,6 +1616,8 @@ function endPlayer(dt) {
   if (P.hudGrenT > 0) P.hudGrenT -= dt;
   if (P.hudHpT > 0) P.hudHpT -= dt;
   if (P.hudHitT > 0) P.hudHitT -= dt;
+  if (P.shieldHitT > 0) P.shieldHitT -= dt;
+  if (P.shieldT > 0 && (P.shieldT -= dt) <= 0) { P.shieldT = 0; shieldPop(P); }
   if (P.dropT > 0 && (P.dropT -= dt) <= 0) P.dropS = null;
   // el arma se enfría: sola después de un rato sin tirar; trabada, hasta 0, largando vapor
   P.heatT += dt;
@@ -1274,22 +1650,31 @@ function updateWorld(dt) {
       B.x += B.vx * dt / steps;
       if (G.state === "play") for (const Q of players) {
         if (!Q.alive || Q.slot === B.owner || Q.invT > 0 || Q.ctrl === "off") continue;
-        if (B.x > Q.x - HALF_W && B.x < Q.x + HALF_W && B.y > Q.y - hurtH(Q) && B.y < Q.y + 2) { hitPlayer(Q, B); dead = true; break; }
+        if (Q.shieldT > 0) {   // con escudo, la bala se apaga en la burbuja
+          if (Math.hypot(B.x - Q.x, B.y - (Q.y - SHIELD.cy)) < SHIELD.r) { shieldPing(Q, B.x, B.y, Math.sign(B.vx)); dead = true; break; }
+          continue;
+        }
+        const hb = hurtBox(Q); if (B.x > hb.x0 && B.x < hb.x1 && B.y > hb.y0 && B.y < hb.y1) { hitPlayer(Q, B); dead = true; break; }
       }
       if (!dead) for (const S2 of solids) if (B.x > S2.x && B.x < S2.x + S2.w && B.y > S2.y && B.y < S2.y + S2.h) { dead = true; impact(B.vx > 0 ? S2.x : S2.x + S2.w, B.y, Math.sign(B.vx), false, B.glow); break; }
     }
     if (dead || B.x < -100 || B.x > AW + 100) bullets.splice(b, 1);
   }
-  for (let i = fx.length - 1; i >= 0; i--) { const E = fx[i]; E.t -= dt; E.vy += E.g * dt; if (E.drag) { const d = Math.exp(-E.drag * dt); E.vx *= d; E.vy *= d; } E.x += E.vx * dt; E.y += E.vy * dt; if (E.vr) { E.rot += E.vr * dt; E.spin += E.vs * dt; } if (E.t <= 0) fx.splice(i, 1); }
+  for (let i = fx.length - 1; i >= 0; i--) {
+    const E = fx[i]; E.t -= dt; E.vy += E.g * dt; if (E.drag) { const d = Math.exp(-E.drag * dt); E.vx *= d; E.vy *= d; } E.x += E.vx * dt; E.y += E.vy * dt; if (E.vr) { E.rot += E.vr * dt; E.spin += E.vs * dt; }
+    if (E.floor != null && E.y > E.floor && E.vy > 0) { E.y = E.floor; E.vy *= -0.32; E.vx *= 0.55; E.vr *= 0.5; }   // las piedritas rebotan en el piso
+    if (E.t <= 0) fx.splice(i, 1);
+  }
 }
 
 /* ---------- power-ups: granadas y salud ---------- */
 // cada tanto aparece uno apoyado en algo que se pisa, con un haz que avisa dónde; flota y late, y al final parpadea y se va.
-// Se agarra tocándolo, si sirve (con las granadas o la salud llenas, queda ahí; en la prueba, siempre)
+// Se agarra tocándolo, siempre: con las granadas o la salud llenas se consume igual y no suma
 const pickups = [], labels = [];   // labels: el texto que sube del que agarró uno
 const PICK_KIND = {
   gren: { glow: "255,196,60", text: "#ffd23a" },
   hp: { glow: "255,120,130", text: "#ff8a8a" },
+  shield: { glow: "120,225,255", text: "#8fe8ff" },
 };
 const pickHeal = () => Math.max(1, Math.round(SET.hp / 3));
 const pickLive = K => K.t >= PICKUP.warn;
@@ -1310,31 +1695,34 @@ function pickupSpot() {
   }
   return null;
 }
+// cuál: al azar entre los tres (sin el de salud si se juega a 1 golpe), primero los que no están ya en la arena
 function spawnPickup() {
-  let kind = Math.random() < 0.5 ? "gren" : "hp";
-  if (SET.hp <= 1) kind = "gren";
-  else if (pickups.some(k => k.kind === kind)) kind = kind === "gren" ? "hp" : "gren";   // si ya hay uno, el otro
+  const kinds = Object.keys(PICK_KIND).filter(k => k !== "hp" || SET.hp > 1), free = kinds.filter(k => !pickups.some(p => p.kind === k));
+  const pool = free.length ? free : kinds, kind = pool[Math.floor(Math.random() * pool.length)];
   const spot = pickupSpot(); if (!spot) return false;
   pickups.push({ kind, x: spot.x, y: spot.y, s: spot.s, t: 0, seed: Math.random() * 6 });
   beams.push({ x: spot.x, y: spot.y, t: 0, glow: PICK_KIND[kind].glow, dur: PICKUP.warn, w: 0.55 });
   sfx("pickSpawn");
   return true;
 }
+// se agarra siempre (Pablo, 2026-10-18): lleno, se consume igual y no suma (en la prueba, con las granadas sin límite, suma)
 function takePickup(Q, K) {
   const test = G.mode === "test";
   let text;
   if (K.kind === "gren") {
-    if (!test && Q.grenades >= GRENADE.count) return false;
-    Q.grenades = GRENADE.count; Q.hudGrenT = 0.8; text = `GRANADAS ×${GRENADE.count}`;
+    if (Q.grenades >= GRENADE.count && !test) text = "GRANADAS LLENAS";
+    else { Q.grenades = GRENADE.count; Q.hudGrenT = 0.8; text = `GRANADAS ×${GRENADE.count}`; }
+  } else if (K.kind === "shield") {   // con escudo, vuelve a empezar
+    Q.shieldT = SHIELD.dur; Q.shieldHitT = 0.18; text = "ESCUDO"; sfx("shieldOn", 0.8);
   } else {
-    if (!test && Q.hp >= SET.hp) return false;
-    const before = Q.hp; Q.hp = Math.min(SET.hp, Q.hp + pickHeal()); Q.hudHpT = 0.8; text = `+${Math.max(1, Q.hp - before)} SALUD`;
+    const before = Q.hp; Q.hp = Math.min(SET.hp, Q.hp + pickHeal());
+    if (Q.hp > before) { Q.hudHpT = 0.8; text = `+${Q.hp - before} SALUD`; } else text = "SALUD LLENA";
   }
   const c = PICK_KIND[K.kind], cy = K.y - PICKUP.lift;
   burst(K.x, cy, `rgb(${c.glow})`, 16, 380, 0.45, 7); burst(K.x, cy, "#ffffff", 8, 260, 0.3, 5);
   for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2;   // anillo de luz
     fx.push({ x: K.x, y: cy, vx: Math.cos(a) * 300, vy: Math.sin(a) * 300, life: 0.3, t: 0.3, color: `rgb(${c.glow})`, size: 12, g: 0, drag: 7, round: true, grow: 1.6, add: true }); }
-  labels.push({ x: Q.x, y: Q.y - BODY_H - 92, text, color: c.text, t: 0 });   // arriba del globito con el número
+  labels.push({ x: Q.x, y: Q.y - BODY_H, up: HEAD_TAG ? 92 : 46, text, color: c.text, t: 0 });   // arriba de la barra del arma (y del número)
   Q.flashT = 0.12; rumble(Q, 90, 0.2, 0.5); sfx("pickup", 0.8);
   return true;
 }
@@ -1363,7 +1751,7 @@ function wantedPickup(Q) {
   let best = null, bc = Infinity;
   for (const K of pickups) {
     if (K.t < PICKUP.warn - 0.3 || PICKUP.warn + PICKUP.life - K.t < 1.5) continue;
-    if (K.kind === "gren" ? Q.grenades >= GRENADE.count : Q.hp >= SET.hp) continue;
+    if (K.kind === "gren" ? Q.grenades >= GRENADE.count : K.kind === "hp" ? Q.hp >= SET.hp : Q.shieldT > 0) continue;
     const c = Math.abs(K.x - Q.x) + 1.6 * Math.abs(K.y - Q.y); if (c < bc) { bc = c; best = K; }
   }
   if (!best || bc > 1500) return null;
@@ -1383,8 +1771,10 @@ function clearShot(x0, y, x1) {
   const a = Math.min(x0, x1), b = Math.max(x0, x1);
   return !solids.some(s => !s.bound && y > s.y && y < s.y + s.h && s.x < b && s.x + s.w > a);
 }
-// por dónde subir hacia el objetivo: debajo de algo que se atraviesa (salta y lo pasa) o al lado de un bloque (salta, se
-// cuelga si no llega y sube). Si ese punto no está en lo que pisa, salta desde el borde, empujando hacia allá
+// por dónde subir hacia el objetivo: debajo de algo que se atraviesa (salta y lo pasa) o al lado de un bloque (salta
+// empujando contra la pared y, con el doble salto en el ápice, pasa el canto; con HANG_ON, si no llega se cuelga y sube).
+// Si ese punto no está en lo que pisa, salta desde el borde, empujando hacia allá. Hasta 320 px: el salto entero sube
+// 192 (v0² / 2·gUp) y el doble en el ápice, 155 más
 function climbGoal(Q, T) {
   const sup = supportAt(Q.x, Q.y, Q);
   let best = null, bestCost = Infinity;
@@ -1414,7 +1804,8 @@ function pickRoam(Q) {
 function botInput(Q, dt) {
   const B = Q.bot, L = BOT_LEVELS[SET.bot], In = blankInput();
   B.thinkT -= dt;
-  if (!B.target || !B.target.alive || B.thinkT <= 0) { B.target = nearestEnemy(Q); B.thinkT = L.think * (0.7 + Math.random() * 0.6); B.goal = null; }
+  // la meta de subida (B.goal) se revisa en el piso; en el aire sigue hasta aterrizar (ver más abajo)
+  if (!B.target || !B.target.alive || B.thinkT <= 0) { B.target = nearestEnemy(Q); B.thinkT = L.think * (0.7 + Math.random() * 0.6); if (Q.onGround) B.goal = null; }
   const T = B.target; if (!T) return In;
   const goalY = B.roam ? B.roam.y : T.y;
   if (Q.state === "hang") { if (goalY - Q.y < 30) { In.jp = true; In.jumpHeld = true; } else In.dp = true; return In; }
@@ -1435,19 +1826,22 @@ function botInput(Q, dt) {
   // (o tiene a alguien encima)
   if (B.roam) {
     const K = B.roam.pick, done = K ? !pickups.includes(K) || (inLine && adx < 200) : supportAt(Q.x, Q.y, Q) === B.roam.s || (inLine && adx < 650);
-    if ((B.roamT -= dt) <= 0 || done) { B.roam = null; B.goal = null; B.lostT = 0; }
+    if ((B.roamT -= dt) <= 0 || done) { B.roam = null; if (Q.onGround) B.goal = null; B.lostT = 0; }
   }
   const D = B.roam || T, gx = D.x - Q.x, gy = D.y - Q.y;   // hacia dónde va: la plataforma elegida o el otro
+  // saltando hacia un canto: en el ápice del primer salto suele quedar a menos de 50 px de la altura del otro, y sin esto
+  // pasaba a "misma altura" y caía sin el doble salto (con el colgado se agarraba del canto). Sigue subiendo hasta aterrizar
+  const climbing = !!B.goal && !Q.onGround;
   let move = 0;
-  if (Math.abs(gy) < 50) {   // a la misma altura: se acomoda a su distancia y se mueve un poco
+  if (Math.abs(gy) < 50 && !climbing) {   // a la misma altura: se acomoda a su distancia y se mueve un poco
     B.goal = null;
     if (B.roam) move = Math.abs(gx) > 30 ? Math.sign(gx) : 0;
     else if (!clearShot(Q.x, my, T.x)) move = Math.sign(dx);   // algo lo tapa (una caja): va hacia el otro y lo salta
-    else if (adx < 130 && Math.abs(dy) < 40 && T.invT <= 0) move = adx > 70 ? Math.sign(dx) : 0;   // encima: se queda a golpear
+    else if (adx < 130 && Math.abs(dy) < 40 && !immune(T)) move = adx > 70 ? Math.sign(dx) : 0;   // encima: se queda a golpear
     else if (adx > B.pref + 140) move = Math.sign(dx); else if (adx < B.pref - 160) move = -Math.sign(dx);
     if (B.strafeT > 0) { B.strafeT -= dt; move = B.strafe; }
     else if (!B.roam && Math.random() < dt * 0.5) { B.strafe = Math.random() < 0.5 ? -1 : 1; B.strafeT = 0.2 + Math.random() * 0.3; }
-  } else if (gy < 0) {       // más arriba: subir
+  } else if (gy < 0 || climbing) {   // más arriba: subir
     if (!B.goal) B.goal = climbGoal(Q, D);
     const g = B.goal;
     if (g) {
@@ -1477,11 +1871,15 @@ function botInput(Q, dt) {
     if (b.owner === Q.slot || B.seen.has(b)) continue;
     if (Math.sign(b.vx) !== Math.sign(Q.x - b.x) || Math.abs(Q.x - b.x) > 280 || b.y < Q.y - BODY_H - 6 || b.y > Q.y) continue;
     B.seen.add(b);
-    if (Q.onGround && Math.random() < L.dodge) { if (b.y < Q.y - BODY_H * COMBAT.crouchH - 4) B.crouchT = 0.35; else { In.jp = true; B.holdJ = 0.25; } }
+    if (Q.onGround && Math.random() < L.dodge) {
+      // si tiene slide y la bala pasa por arriba de su caja baja, se tira hacia el que tiró (le pasa por abajo y se acerca)
+      if (SLIDE_SEQ && Q.slideCD <= 0 && !Q.slide && b.y < Q.y - BODY_H * SLIDE.hurt - 3) { In.sl = true; B.slideDir = Math.sign(b.x - Q.x) || Q.facing; B.slideT = 0.1; }
+      else if (b.y < Q.y - BODY_H * COMBAT.crouchH - 4) B.crouchT = 0.35; else { In.jp = true; B.holdJ = 0.25; }
+    }
   }
   if (B.crouchT > 0) { B.crouchT -= dt; In.down = true; move = 0; }
   // disparo: con el otro en línea un rato (el tiempo de reacción), en ráfagas
-  B.aimT = inLine && T.invT <= 0 ? B.aimT + dt : 0;
+  B.aimT = inLine && !immune(T) ? B.aimT + dt : 0;   // al invulnerable o con escudo no le tira
   const coolGun = !Q.overheat && Q.heat < L.heatCap;   // no la lleva al tope (los fáciles sí)
   if (Q.overheat && Math.abs(dy) < 50 && adx < 500 && !B.roam) move = -Math.sign(dx);   // trabada: se aleja mientras se enfría
   if (B.aimT > L.react) {
@@ -1490,19 +1888,21 @@ function botInput(Q, dt) {
     else if ((B.pauseT -= dt) <= 0) B.burstT = L.burst * (0.6 + Math.random() * 0.8);
   }
   // pegado al otro y a la misma altura, golpe (ahí la bala sale más adelante y no le pega), con el tiempo de reacción
-  const close = adx < 2 * HALF_W + MELEE.reach - 8 && Math.abs(dy) < 40 && T.invT <= 0;
+  const close = adx < 2 * HALF_W + MELEE.reach - 8 && Math.abs(dy) < 40 && !immune(T);
   B.meleeT = close ? (B.meleeT || 0) + dt : 0;
   if (close && B.meleeT > L.react * 0.5 && Q.meleeCD <= 0 && !Q.charging && !(Q.throwT > 0)) { In.mp = true; In.face = Math.sign(dx) || Q.facing; In.fire1 = false; }
   B.grenT = (B.grenT ?? 1.5 + Math.random() * 2) - dt;
   if (B.grenT <= 0) {
-    const fit = Q.grenades > 0 && Q.onGround && G.state === "play" && adx > 160 && adx < 560 && dy > -170 && dy < 90 && T.invT <= 0;
+    const fit = Q.grenades > 0 && Q.onGround && G.state === "play" && adx > 160 && adx < 560 && dy > -170 && dy < 90 && !immune(T);
     if (fit && (!inLine || Math.random() < 0.3)) {   // la carga, según la distancia (con algo de error)
       In.gp = true; In.gh = true; In.face = Math.sign(dx) || Q.facing; move = 0; B.grenT = 2.5 + Math.random() * 3.5;
       B.gHold = Math.max(0, Math.min(1, (adx - 200) / 420 + (Math.random() - 0.5) * 0.2)) * GRENADE.charge + 0.02;
     }
     else B.grenT = 0.35;
   }
+  if (Q.cookT > 0.25) B.gHold = 0;   // nunca se la comen: la sueltan antes de llenarla y, por las dudas, ya con algo de aguante
   if (B.gHold > 0) { B.gHold -= dt; In.gh = true; In.face = Math.sign(dx) || Q.facing; move = 0; }
+  if (B.slideT > 0) { B.slideT -= dt; move = B.slideDir; }   // el slide para esquivar: hacia el que tiró
   In.left = move < 0; In.right = move > 0;
   return In;
 }
@@ -1514,8 +1914,8 @@ function resetPlayer(p, [x, y], inv = 0) {
   Object.assign(p, { x, y, vx: 0, vy: 0, onGround: true, state: "ground", facing: x < AW / 2 ? 1 : -1, aim: "none", aimAnim: null, crouch: "none",
                      jump: null, hang: null, climb: null, landT: 0, flash: null, sqX: 1, sqY: 1, canDouble: true, flipT: 0, peakY: null,
                      hp: SET.hp, alive: true, hitT: 0, stunT: 0, invT: inv, dropS: null, dropT: 0, fireCD: 0, shotT: 1, skipLedge: null, wallLockT: 0,
-                     heat: 0, heatT: 9, overheat: false, respawnT: 0, beam: false, grenades: GRENADE.count, grenCD: 0, throwT: 0, thrown: false, charging: false, charge: 0,
-                     meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0, hudHitT: 0 });
+                     heat: 0, heatT: 9, overheat: false, respawnT: 0, beam: false, grenades: GRENADE.count, grenCD: 0, throwT: 0, thrown: false, charging: false, charge: 0, cookT: 0, beepPh: 0, beepGap: 0,
+                     meleeT: 0, meleeCD: 0, meleeHit: null, lunged: false, hudGrenT: 0, hudHpT: 0, hudHitT: 0, shieldT: 0, shieldHitT: 0, fallY0: y, slide: null, slideCD: 0 });
   p.in = blankInput(); if (p.bot) Object.assign(p.bot, newBot());
 }
 function startMatch() {
@@ -1630,21 +2030,27 @@ const TUNE = [
   ["spawnX", "Sale adelante", 0, 180, 2, "px"], ["spawnY", "Sale arriba", 20, 200, 2, "px"],
   ["releaseFrame", "Cuadro en que sale", 0, THROW_SEQ ? THROW_SEQ.length - 1 : 0, 1, ""],
   ["vx", "Fuerza adelante (carga llena)", 200, 1400, 10, "px/s"], ["vyUp", "Fuerza arriba (carga llena)", 200, 1500, 10, "px/s"],
-  ["charge", "Tiempo de carga", 0.2, 2, 0.05, "s"],
+  ["charge", "Tiempo de carga", 0.2, 2, 0.05, "s"], ["hold", "Aguante con la carga llena", 0.5, 4, 0.05, "s"],
   ["fuse", "Mecha", 0.5, 3, 0.1, "s"], ["bounce", "Rebote", 0, 0.8, 0.05, ""], ["radius", "Radio del daño", 60, 260, 5, "px"],
 ];
 const tuneGet = k => (k === "vyUp" ? -GRENADE.vy : GRENADE[k]);
 const tuneSet = (k, v) => { if (k === "vyUp") GRENADE.vy = -v; else GRENADE[k] = v; if (k === "releaseFrame") updateRelease(); };
 const TUNE_DOC = "tuning/grenade", TUNE_LOCAL = "arena.grenade.v2";
 let tuneDb = null, tuneDirty = false;
-const tuneValues = () => Object.fromEntries(TUNE.map(([k]) => [k, tuneGet(k)]));
-function tuneApply(v) { if (v && typeof v === "object") for (const [k] of TUNE) if (typeof v[k] === "number" && isFinite(v[k])) tuneSet(k, v[k]); }
+// de dónde sale y en qué paso son de cada personaje (RIG grenade): se guardan con el personaje (char) y al cargar sólo
+// valen si es el mismo (los guardados de antes eran del tiro viejo)
+const TUNE_CHAR = ["spawnX", "spawnY", "releaseFrame"];
+const tuneValues = () => ({ ...Object.fromEntries(TUNE.map(([k]) => [k, tuneGet(k)])), char: CHAR_KEY });
+function tuneApply(v) {
+  if (v && typeof v === "object") for (const [k] of TUNE) if (typeof v[k] === "number" && isFinite(v[k]) && (!TUNE_CHAR.includes(k) || v.char === CHAR_KEY)) tuneSet(k, v[k]);
+}
 const tuneStatus = t => { document.getElementById("tuneOut").textContent = t; };
 const tuneWhen = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString("es-AR", { day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" }); };
 function tuneLocal(v) { try { localStorage.setItem(TUNE_LOCAL, JSON.stringify(v)); return true; } catch (e) { return false; } }
 function buildTune() {
   const el = document.getElementById("tune"); el.innerHTML = "";
-  for (const [k, label, min, max, st, unit] of TUNE) {
+  for (const [k, label, min, max0, st, unit] of TUNE) {
+    const max = k === "releaseFrame" && THROW_SEQ ? THROW_SEQ.length - 1 : max0;   // los pasos del tiro del personaje de ahora
     const id = `tune_${k}`, lab = document.createElement("label"); lab.htmlFor = id;
     lab.innerHTML = `<span>${label}</span><output id="${id}_v"></output><input type="range" id="${id}" min="${min}" max="${max}" step="${st}">`;
     const inp = lab.querySelector("input"), out = lab.querySelector("output");
@@ -1683,6 +2089,7 @@ tuneBtn.addEventListener("click", async () => {
 });
 document.getElementById("tuneReset").addEventListener("click", () => {
   for (const [k] of TUNE) tuneSet(k, k === "vyUp" ? -GRENADE_DEFAULT.vy : GRENADE_DEFAULT[k]);
+  Object.assign(GRENADE, RIGNOW.grenade || {}); updateRelease();   // y los de este personaje
   buildTune(); tuneDirty = true; tuneStatus("Volvieron los de fábrica: tocá Guardar para dejarlos");
 });
 // ajustes del fogonazo: los del personaje y el tiro elegidos (el selector de personaje del panel es el mismo del menú), en
@@ -1727,8 +2134,9 @@ function buildFlashTune() {
     el.append(lab);
   }
 }
-segButtons("segFlashKind", FLASH_KINDS, () => flashTab, v => { flashTab = v; buildFlashTune(); });
-document.querySelectorAll("#segFlashKind button").forEach((b, i) => { b.dataset.v = FLASH_KINDS[i][0]; });
+const FLASH_TABS = FLASH_KINDS.filter(([t]) => TWO_HAND_ON || t !== "dos");   // sin el tiro a dos manos, sin su pestaña
+segButtons("segFlashKind", FLASH_TABS, () => flashTab, v => { flashTab = v; buildFlashTune(); });
+document.querySelectorAll("#segFlashKind button").forEach((b, i) => { b.dataset.v = FLASH_TABS[i][0]; });
 { const el = document.getElementById("flashTune");   // mientras se arrastra un control, el panel no cambia de tiro solo
   el.addEventListener("pointerdown", () => { flashDrag = true; });
   for (const ev of ["pointerup", "pointercancel"]) window.addEventListener(ev, () => { flashDrag = false; }); }
@@ -1873,7 +2281,7 @@ function lobbyPads() {
   lobbyHint();
   // qué lee el juego de cada joystick, en vivo: para probar uno nuevo sin empezar la partida
   const txt = pads.map(gp => {
-    const s = padState(gp), act = [s.left && "←", s.right && "→", s.up && "↑", s.down && "↓", s.jump && "salta", s.fire1 && "dispara", s.fire2 && "dos manos", s.gren && "granada", s.melee && "golpe", s.start && "start"].filter(Boolean);
+    const s = padState(gp), act = [s.left && "←", s.right && "→", s.up && "↑", s.down && "↓", s.jump && "salta", s.fire1 && "dispara", s.slide && "desliza", s.gren && "granada", s.melee && "golpe", s.start && "start"].filter(Boolean);
     return `${gp.id.replace(/\s*\(.*$/, "")}${gp.mapping === "standard" ? "" : " (orden de Switch)"}: ${act.join(" ") || "—"}`;
   }).join(" · ");
   if (padTest.textContent !== txt) padTest.textContent = txt;
@@ -1892,7 +2300,9 @@ const artFiles = [...new Set([...Object.values(KIT.pieces), ...Object.values(KIT
   .concat(Object.values(GREN).flatMap(a => Object.values(a).map(p => p.src)))
   .concat(Object.values(HUDART).flatMap(a => Object.values(a).map(p => p.src)))
   .concat(Object.values(PICKART).flatMap(a => Object.values(a).map(p => p.src)))
-  .concat(Object.values(LOWFX).flatMap(a => Object.values(a).map(p => p.src))))];
+  .concat(Object.values(LOWFX).flatMap(a => Object.values(a).map(p => p.src)))
+  .concat(Object.values(SHIELDART).flatMap(a => Object.values(a).map(p => p.src)))
+  .concat(Object.values(DUSTART).flatMap(a => Object.values(a).map(p => p.src))))];
 Promise.all(artFiles.map(src => new Promise((ok, fail) => { const im = new Image(); im.onload = () => { IMG[src] = im; ok(); }; im.onerror = () => fail(src); im.src = src; })))
   .then(() => { artState = "ok"; }, src => { artState = "error"; lobbyMsg.textContent = `No se pudo cargar la arena (${src}).`; });
 function surface(w, h) { const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; return [c, g]; }
@@ -2002,8 +2412,6 @@ function drawPipe(g, pipe) {
   }
   g.restore();
 }
-const W2S = ZOOM;   // px de pantalla por px del juego
-const FLOOR_S = 980 * ZOOM, FLOOR_75 = 475.5, LAYER_Z = ZOOM / 0.75;   // las capas lejanas, achicadas como en kit.html y apoyadas en el piso
 // arena pintada: el fondo es la lámina entera y encima sus piezas pintadas, en el orden del JSON; lo que se pisa,
 // recortes de la lámina en los rectángulos de plate.solid y de cada pieza en los de su front (así el colgado de una mano
 // sigue detrás del canto); el frente, vacío. Del kit no se dibuja nada (sus objetos van aparte, cada cuadro).
@@ -2021,7 +2429,7 @@ function atPiece(g, o, Pc, draw) { g.save(); g.translate(o.x + (o.flip ? Pc.w : 
 // puede ser la imagen graduada: el caché es por imagen. Lo mismo que legged() en prototypes/arena/editor/editor.html
 const LEGGED = new WeakMap();
 function pieceArt(o, Pc, pim) {
-  const L = Pc.legs, s = L ? Math.max(8 - (L[1] - L[0]), Math.round(o.stretch || 0)) : 0;
+  const L = Pc.legs, s = stretchOf(o, Pc);
   if (!s) return [pim, Pc.h];
   let m = LEGGED.get(pim); if (!m) LEGGED.set(pim, (m = new Map()));
   const k = `${L[0]} ${L[1]} ${s}`;
@@ -2050,7 +2458,7 @@ function bakePlate(W, H, sc) {
   baked.front = surface(W, H)[0];
 }
 function bake() {
-  bakedDS = DS; needBake = false;
+  bakedDS = DS; needBake = false; DUST = null; dustTinted.clear();
   const W = cv.width, H = cv.height, sc = DS * W2S;
   if (ARENA.plate && IMG[plateSrc(ARENA)]) return bakePlate(W, H, sc);
   // fondo: cielo, capas, decorado de atrás, relleno de los sólidos y caños
@@ -2204,7 +2612,11 @@ function drawPickup(K) {
   ctx.beginPath(); ctx.roundRect(cx - S2 - 22 * ring, cy - S2 - 22 * ring, (S2 + 22 * ring) * 2, (S2 + 22 * ring) * 2, 8 + 14 * ring);
   ctx.lineWidth = 4 * (1 - ring) + 1; ctx.strokeStyle = `rgba(${c.glow},${0.9 * (1 - ring)})`; ctx.stroke();
   ctx.beginPath(); ctx.roundRect(cx - S2, cy - S2, S2 * 2, S2 * 2, 8 * sc); ctx.lineWidth = 5; ctx.strokeStyle = "#0b0e18"; ctx.stroke();
-  if (K.kind === "gren") {
+  if (K.kind === "shield") {   // placa oscura con borde celeste y el escudo low-poly: la mitad clara, la otra oscura
+    ctx.fillStyle = "#13233a"; ctx.fill();
+    ctx.beginPath(); ctx.roundRect(cx - S2 + 3, cy - S2 + 3, S2 * 2 - 6, S2 * 2 - 6, 5 * sc); ctx.lineWidth = 3; ctx.strokeStyle = c.text; ctx.stroke();
+    shieldGlyph(ctx, cx, cy + 1 * sc, 28 * sc, 1);
+  } else if (K.kind === "gren") {
     ctx.fillStyle = "#1b2234"; ctx.fill();
     ctx.beginPath(); ctx.roundRect(cx - S2 + 3, cy - S2 + 3, S2 * 2 - 6, S2 * 2 - 6, 5 * sc); ctx.lineWidth = 3; ctx.strokeStyle = c.text; ctx.stroke();
     const h = 30 * sc, w = GREN_HUD ? h * GREN_HUD.w / GREN_HUD.h : h * 0.9;
@@ -2225,6 +2637,83 @@ function drawPickup(K) {
   }
   ctx.restore();
 }
+// el escudo de los power-ups y del HUD: un escudo de punta con las dos mitades lisas (clara y oscura) y un brillo, de h de
+// alto con el centro en (x, y). fill: de 0 a 1, cuánto queda (el HUD lo vacía de arriba hacia abajo con el tiempo)
+function shieldGlyph(g, x, y, h, fill) {
+  const w = h * 0.86, top = y - h / 2, P6 = [[0, -0.5], [0.5, -0.36], [0.44, 0.08], [0, 0.5], [-0.44, 0.08], [-0.5, -0.36]].map(([u, v]) => [x + u * w, y + v * h]);
+  const path = () => { g.beginPath(); P6.forEach(([px, py], i) => (i ? g.lineTo(px, py) : g.moveTo(px, py))); g.closePath(); };
+  g.save(); path(); g.lineJoin = "round"; g.lineWidth = Math.max(2, h * 0.16); g.strokeStyle = "#0b0e18"; g.stroke();
+  g.fillStyle = "#24364f"; g.fill(); path(); g.clip();
+  const y0 = top + h * (1 - Math.max(0, Math.min(1, fill)));
+  g.beginPath(); g.rect(x - w, y0, w * 2, h * 2); g.clip();
+  g.fillStyle = "#8fe8ff"; g.fillRect(x - w, top, w, h);   // la mitad clara (la luz viene de la izquierda)
+  g.fillStyle = "#3fb4e0"; g.fillRect(x, top, w, h);
+  g.fillStyle = "rgba(255,255,255,0.75)"; g.beginPath(); g.moveTo(P6[0][0], P6[0][1]); g.lineTo(P6[5][0], P6[5][1]); g.lineTo(x - w * 0.22, y - h * 0.18); g.closePath(); g.fill();
+  g.restore();
+}
+// el escudo del HUD: el dibujo del power-up (PICKART.pickups.shield), apagado lo gastado y entero lo que queda, de abajo
+// hacia arriba; sin el dibujo, el de código
+function shieldIcon(g, x, y, h, fill) {
+  const p = PICKART.pickups?.shield, im = p && IMG[p.src];
+  if (!im) return shieldGlyph(g, x, y, h, fill);
+  const w = h * p.w / p.h, top = y - h / 2;
+  g.save(); g.globalAlpha *= 0.3; g.drawImage(im, x - w / 2, top, w, h); g.restore();
+  g.save(); g.beginPath(); g.rect(x - w, top + h * (1 - Math.max(0, Math.min(1, fill))), w * 2, h + 1); g.clip(); g.drawImage(im, x - w / 2, top, w, h); g.restore();
+}
+// la burbuja del escudo, por código (sin el dibujo de backgrounds/lowpoly_shield): una geodésica low-poly (tres anillos de caras alrededor del medio del cuerpo) que gira despacio,
+// con las caras más claras del lado de la luz (arriba a la izquierda), aristas blancas y el borde celeste. Las de adentro
+// casi transparentes, así se ve el personaje. Al frenar algo se ilumina (shieldHitT); el último SHIELD.blink titila cada
+// vez más rápido, y al agarrarlo se infla
+// la luz prendida del pitido del aguante (un poco más de la mitad del hueco, hasta 70 ms)
+const cookOn = Q => Q.beepPh < Math.min(0.07, Q.beepGap * 0.55);
+// pasado de aguante: la granada de la mano (IN_HAND, en el cuadro de la carga) con la luz prendida en cada pitido, y un
+// halo rojo que crece hasta explotar
+function drawCook(Q) {
+  if (!IN_HAND || Q.draw?.name !== THROW_ANIM) return;
+  const h = handPos(Q), k = Math.min(1, Q.cookT / GRENADE.hold), on = cookOn(Q), art = GREN.grenade && GREN.grenade.on;
+  ctx.save(); ctx.translate(h.x, h.y); ctx.scale(Q.facing, 1); ctx.rotate(IN_HAND[2] * Math.PI / 180);
+  if (on && art && IMG[art.src]) { ctx.scale(-1, 1); ctx.drawImage(IMG[art.src], -art.w / 2, -art.h * 0.58, art.w, art.h); }
+  ctx.globalCompositeOperation = "lighter";
+  ctx.fillStyle = `rgba(255,60,40,${on ? 0.55 : 0.12 + 0.2 * k})`;
+  ctx.beginPath(); ctx.arc(0, 0, GRENADE.r * (1.3 + 1.2 * k) * (on ? 1.25 : 1), 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+function drawShield(Q) {
+  const t = Q.shieldT; if (t <= 0) return;
+  if (t < SHIELD.blink && Math.floor(t / (t < 0.4 ? 0.05 : 0.09)) % 2) return;
+  const age = SHIELD.dur - t, pop = Math.min(1, age / 0.18), k = pop < 1 ? 0.3 + 0.7 * (1 + 2.2 * (pop - 1) ** 3 + 1.2 * (pop - 1) ** 2) : 1;
+  const Bb = SHIELDART.bubble, Pb = Bb && (t < SHIELD.blink ? Bb.crack : Bb.dome);
+  if (Pb && IMG[Pb.src]) {   // el dibujo (backgrounds/lowpoly_shield): entera y, el último segundo, rajada; respira apenas y, al
+    // frenar algo, el mismo dibujo encima, sumado
+    const im = IMG[Pb.src], br = 1 + 0.015 * Math.sin(age * 5), w = Pb.w / 2 * k * br, h = Pb.h / 2 * k * (2 - br), x = Q.x - w / 2, y = Q.y - SHIELD.cy - h / 2;
+    const hit = Math.max(0, Q.shieldHitT / 0.18);
+    ctx.save(); ctx.drawImage(im, x, y, w, h);
+    if (hit > 0) { ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.7 * hit; ctx.drawImage(im, x, y, w, h); }
+    ctx.restore(); return;
+  }
+  const R = SHIELD.r * k, cx = Q.x, cy = Q.y - SHIELD.cy, hit = Math.max(0, Q.shieldHitT / 0.18), spin = age * 0.7, wob = Math.sin(age * 1.9) * R * 0.1;
+  const ring = (n, r, a0, dx) => Array.from({ length: n }, (_, i) => { const a = a0 + i / n * Math.PI * 2; return [cx + dx + Math.cos(a) * r, cy + Math.sin(a) * r]; });
+  const O = ring(10, R, spin, 0), M = ring(10, R * 0.64, spin + Math.PI / 10, wob * 0.6), N = ring(5, R * 0.3, -spin * 0.6, wob), C = [cx + wob * 1.2 - R * 0.05, cy - R * 0.06];
+  const tris = [];
+  for (let i = 0; i < 10; i++) { const j = (i + 1) % 10; tris.push([O[i], O[j], M[i], 1], [M[i], M[j], O[j], 0.8]); }
+  for (let i = 0; i < 10; i++) { const j = (i + 1) % 10; tris.push([M[i], M[j], N[(i >> 1) % 5], 0.45]); }
+  for (let i = 0; i < 5; i++) tris.push([N[i], N[(i + 1) % 5], C, 0.25]);
+  ctx.save();
+  const halo = ctx.createRadialGradient(cx, cy, R * 0.7, cx, cy, R * 1.25);   // el resplandor de afuera
+  halo.addColorStop(0, `rgba(${SHIELD_GLOW},0)`); halo.addColorStop(0.6, `rgba(${SHIELD_GLOW},${0.22 + 0.4 * hit})`); halo.addColorStop(1, `rgba(${SHIELD_GLOW},0)`);
+  ctx.globalCompositeOperation = "lighter"; ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(cx, cy, R * 1.25, 0, Math.PI * 2); ctx.fill();
+  ctx.globalCompositeOperation = "source-over"; ctx.lineJoin = "round";
+  for (const [a, b, c, w] of tris) {
+    const mx = (a[0] + b[0] + c[0]) / 3 - cx, my = (a[1] + b[1] + c[1]) / 3 - cy, d = (-0.6 * mx - 0.8 * my) / (Math.hypot(mx, my) || 1);
+    const al = w * (0.1 + 0.16 * Math.max(0, d) + 0.35 * hit) * k;
+    ctx.fillStyle = d > 0.75 ? `rgba(255,255,255,${al + 0.12})` : d < -0.4 ? `rgba(40,110,170,${al})` : `rgba(${SHIELD_GLOW},${al})`;
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c[0], c[1]); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = `rgba(255,255,255,${(0.16 + 0.3 * w + 0.4 * hit) * k})`; ctx.lineWidth = 1.3; ctx.stroke();
+  }
+  ctx.beginPath(); O.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
+  ctx.strokeStyle = `rgba(${SHIELD_GLOW},${0.85 + 0.15 * hit})`; ctx.lineWidth = 3 + 2 * hit; ctx.stroke();
+  ctx.restore();
+}
 // el barrido del golpe de cerca: una media luna del color del equipo con el filo blanco, que abre de arriba hacia
 // adelante mientras se ve el brazo adelante, y unas líneas de velocidad
 function drawSwing(Q) {
@@ -2240,23 +2729,30 @@ function drawSwing(Q) {
   for (const [yy, l] of [[-18, 26], [2, 38], [20, 22]]) { const x0 = 8 + 30 * k; ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x0 + l, yy); ctx.stroke(); }
   ctx.restore();
 }
-// quién es quién: el círculo con el número y un triangulito que apunta a la cabeza
+// arriba de la cabeza: la carga de la granada o la temperatura del arma y, con HEAD_TAG, quién es quién (el círculo con el
+// número y un triangulito que apunta a la cabeza). Pablo, 2026-10-18: sin el número, los personajes limpios
+const HEAD_TAG = false;
+// Todo desde la cabeza (Q.y − BODY_H) y por HEAD_K: en las arenas grandes queda del mismo tamaño en pantalla
 function drawTag(Q) {
-  const x = Q.x, y = Q.y - BODY_H - 58;
-  ctx.save();
-  ctx.beginPath(); ctx.moveTo(x - 9, y + 13); ctx.lineTo(x + 9, y + 13); ctx.lineTo(x, y + 26); ctx.closePath();
-  ctx.lineJoin = "round"; ctx.lineWidth = 4; ctx.strokeStyle = "#0b0e18"; ctx.stroke(); ctx.fillStyle = Q.team.color; ctx.fill();
-  badge(ctx, x, y, 17, Q);
-  // carga de la granada: amarilla, naranja y roja; llena, titila
+  const x = 0, y = -58;
+  ctx.save(); ctx.translate(Q.x, Q.y - BODY_H); ctx.scale(HEAD_K, HEAD_K);
+  if (HEAD_TAG) {
+    ctx.beginPath(); ctx.moveTo(x - 9, y + 13); ctx.lineTo(x + 9, y + 13); ctx.lineTo(x, y + 26); ctx.closePath();
+    ctx.lineJoin = "round"; ctx.lineWidth = 4; ctx.strokeStyle = "#0b0e18"; ctx.stroke(); ctx.fillStyle = Q.team.color; ctx.fill();
+    badge(ctx, x, y, 17, Q);
+  }
+  // carga de la granada: amarilla, naranja y roja; llena, roja y titila en blanco con el pitido del aguante, y abajo la
+  // mecha (naranja) que se consume
   if (Q.charging) {
-    const W = 58, by = Q.y - BODY_H - 24, full = Q.charge >= 1 && Math.floor(performance.now() / 90) % 2;
-    ctx.fillStyle = "rgba(11,14,24,0.88)"; ctx.fillRect(x - W / 2 - 3, by - 3, W + 6, 13);
-    ctx.fillStyle = full ? "#ffffff" : Q.charge > 0.75 ? "#ff5a2e" : Q.charge > 0.4 ? "#ffb02e" : "#ffd23a";
+    const W = 58, by = -24, cook = Q.cookT > 0, on = cook && cookOn(Q);
+    ctx.fillStyle = "rgba(11,14,24,0.88)"; ctx.fillRect(x - W / 2 - 3, by - 3, W + 6, cook ? 18 : 13);
+    ctx.fillStyle = cook ? (on ? "#ffffff" : "#ff2a1f") : Q.charge > 0.75 ? "#ff5a2e" : Q.charge > 0.4 ? "#ffb02e" : "#ffd23a";
     ctx.fillRect(x - W / 2, by, W * Q.charge, 7);
+    if (cook) { ctx.fillStyle = "#ffb02e"; ctx.fillRect(x - W / 2, by + 10, W * Math.max(0, 1 - Q.cookT / GRENADE.hold), 3); }
   }
   // temperatura del arma, justo arriba de la cabeza: blanca, naranja y roja; trabada, titila
   else if (Q.heat > 0.02 || Q.overheat) {
-    const W = 58, by = Q.y - BODY_H - 24, hot = Q.overheat && Math.floor(performance.now() / 110) % 2;
+    const W = 58, by = -24, hot = Q.overheat && Math.floor(performance.now() / 110) % 2;
     ctx.fillStyle = "rgba(11,14,24,0.88)"; ctx.fillRect(x - W / 2 - 3, by - 3, W + 6, 13);
     ctx.fillStyle = Q.overheat ? (hot ? "#ffffff" : "#ff3b2e") : Q.heat > 0.8 ? "#ff5a2e" : Q.heat > 0.5 ? "#ffb02e" : "#eef0f6";
     ctx.fillRect(x - W / 2, by, W * Math.min(1, Q.heat), 7);
@@ -2269,7 +2765,7 @@ function arc(Q, p, color) {
   const dir = Q.facing, v = grenadeVel(p, dir);
   let x = Q.x + dir * GRENADE.spawnX, y = Q.y - GRENADE.spawnY, vx = v.vx, vy = v.vy; ctx.fillStyle = color;
   for (let t = 0, k = 0; t < GRENADE.fuse; t += 1 / 120, k++) {
-    vy += GRENADE.gravity / 120; x += vx / 120; y += vy / 120;
+    const vy0 = vy; vy = Math.min(1600, vy + GRENADE.gravity / 120); x += vx / 120; y += (vy0 + vy) / 2 / 120;   // como moveGrenade
     if (solids.some(s => x > s.x && x < s.x + s.w && y > s.y && y < s.y + Math.max(s.h, 20))) break;
     if (k % 6 === 0) { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.lineWidth = 2.5; ctx.strokeStyle = "rgba(11,14,24,0.7)"; ctx.stroke(); ctx.fill(); }
   }
@@ -2359,7 +2855,9 @@ function drawMiniHud() {
       const on = alive && h < Q.hp, s0 = a0 - h * seg - HUD2.segGap / 2, s1 = a0 - (h + 1) * seg + HUD2.segGap / 2;
       ctx.beginPath(); ctx.arc(cx, cy, rr, s0, s1, true); ctx.strokeStyle = on ? (hpFlash ? "#ffffff" : Q.team.color) : "#2a3142"; ctx.stroke();
     }
-    // el número arriba, como el marcador de la cabeza
+    // el escudo: arriba a la izquierda, lleno al agarrarlo y vaciándose con el tiempo; el último segundo titila
+    if (alive && Q.shieldT > 0 && !(Q.shieldT < SHIELD.blink && Math.floor(Q.shieldT / 0.09) % 2)) shieldIcon(ctx, cx - R - 1, cy - R + 5, 15, Q.shieldT / SHIELD.dur);
+    // el número arriba (el mismo del marcador de la cabeza, con HEAD_TAG)
     badge(ctx, cx, HUD2.top + 6, 7, Q);
     // las vidas: grande, abajo a la izquierda
     ctx.font = "700 17px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = 4;
@@ -2398,6 +2896,11 @@ function drawHud() {
     const w = G.winner, kills = active().map(p => `${p.team.name} ${p.kills}`).join(" · ");
     banner(w >= 0 ? `¡${TEAM[w].name} gana!` : "Empate", G.t > 1.2 ? `Bajas: ${kills}. Saltar, disparar o Enter: volver al menú` : `Bajas: ${kills}`, w >= 0 ? TEAM[w].color : "#ffffff");
   }
+  if (BALL_TRY) {   // el aviso de la prueba de la bolita (?bolita=1)
+    ctx.font = "700 13px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.lineJoin = "round"; ctx.lineWidth = 4;
+    const txt = DBL_BALL ? "bolita de prueba (?bolita=1)" : "bolita de prueba: este personaje no la tiene";
+    ctx.strokeStyle = "#0b0e18"; ctx.strokeText(txt, 10, VIEW_H - 10); ctx.fillStyle = "#ffd23a"; ctx.fillText(txt, 10, VIEW_H - 10); ctx.textAlign = "center";
+  }
   if (G.toast) {
     ctx.globalAlpha = Math.min(1, G.toast.t / 0.3); ctx.font = "700 20px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.lineJoin = "round"; ctx.lineWidth = 6; ctx.strokeStyle = "#0b0e18";
     ctx.strokeText(G.toast.text, VIEW_W / 2, 70); ctx.fillStyle = G.toast.color; ctx.fillText(G.toast.text, VIEW_W / 2, 70); ctx.globalAlpha = 1;   // debajo de las granadas del HUD
@@ -2421,10 +2924,13 @@ function render() {
   ctx.setTransform(DS * W2S, 0, 0, DS * W2S, ox, oy);
   drawObjects(false);  // los que chocan: cajas y plataformas, delante de lo pintado
   for (const K of pickups) drawPickup(K);
+  for (const E of fx) if (E.sheet && E.back) drawDustSheet(E);   // el polvo fuerte, detrás de los personajes
   if (ready) {
     for (const Q of live) drawShadow(Q);
     for (const Q of live) if (Q.state !== "hang") drawSprite(Q);
     for (const Q of live) drawSwing(Q);
+    for (const Q of live) if (Q.charging && Q.cookT > 0) drawCook(Q);
+    for (const Q of live) drawShield(Q);
   }
   for (const B of bullets) {
     const dir = Math.sign(B.vx), tail = dir > 0 ? Math.max(B.x - B.len, B.x0) : Math.min(B.x + B.len, B.x0), t = B.x - tail;
@@ -2506,6 +3012,33 @@ function render() {
     const a = Math.max(0, E.t / E.life); ctx.globalAlpha = E.round ? a * 0.85 : a; ctx.fillStyle = E.color;
     ctx.globalCompositeOperation = E.add ? "lighter" : "source-over";
     if (E.round) { const sz = E.size * (1 + (E.grow - 1) * (1 - a)); ctx.beginPath(); ctx.arc(E.x, E.y, sz / 2, 0, Math.PI * 2); ctx.fill(); }
+    else if (E.sheet) { if (!E.back) drawDustSheet(E); }   // el polvo dibujado (el de atrás va antes que los personajes)
+    else if (E.img) {   // una imagen que se abre y se apaga desde su centro (la burbuja rajada al romperse)
+      const u = 1 - a, sc = 1 + (E.grow - 1) * u; ctx.globalAlpha = a;
+      ctx.drawImage(E.img.im, E.x - E.img.w * sc / 2, E.y - E.img.h * sc / 2, E.img.w * sc, E.img.h * sc);
+    }
+    else if (E.poly) {   // polvo low-poly: crece rápido, se infla despacio y se apaga; cada cara del tono según adónde mira
+      const u = 1 - a, sc = E.size * (0.55 + 0.45 * Math.min(1, u / 0.15)) * (1 + (E.grow - 1) * u), pts = E.poly, n = pts.length, T = E.tones;
+      ctx.globalAlpha = E.solid ? Math.min(1, a * 3) : Math.min(1, a / 0.45) * 0.95;
+      ctx.save(); ctx.translate(E.x, E.y); ctx.rotate(E.rot); ctx.scale(sc, sc);
+      const ox = -0.12, oy = -0.18;   // el centro de las caras, corrido hacia la luz: las de ese lado quedan más chicas
+      for (let j = 0; j < n; j++) {
+        const [x0, y0] = pts[j], [x1, y1] = pts[(j + 1) % n], fa = Math.atan2((y0 + y1) / 2, (x0 + x1) / 2) + E.rot, d = Math.cos(fa + 2.21);   // 2,21: la luz, arriba a la izquierda
+        ctx.fillStyle = d > 0.3 ? T.light : d < -0.35 ? T.dark : T.mid;
+        ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x0, y0); ctx.lineTo(x1, y1); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
+    else if (E.ring) {   // la onda en el piso: un anillo chato de caras que se abre y se afina
+      const u = 1 - a, r = E.r0 + (E.r1 - E.r0) * (1 - (1 - u) ** 2.2), w = Math.max(1.5, 8 * a), n = 16;
+      ctx.save(); ctx.translate(E.x, E.y); ctx.scale(1, 0.26); ctx.globalAlpha = Math.min(1, a * 1.4) * 0.9;
+      for (let j = 0; j < n; j++) {
+        const a0 = j / n * Math.PI * 2, a1 = (j + 1) / n * Math.PI * 2, front = Math.sin((a0 + a1) / 2) > 0;
+        ctx.fillStyle = front ? (j % 2 ? E.tones.light : E.tones.mid) : (j % 2 ? E.tones.mid : E.tones.dark);
+        ctx.beginPath(); ctx.arc(0, 0, r + w, a0, a1); ctx.arc(0, 0, Math.max(0, r - w), a1, a0, true); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
     else if (E.tri) {   // esquirla low-poly: dos caras; el giro en profundidad (spin) aplasta y da vuelta, y se ve la otra cara
       const c = Math.cos(E.spin), s = E.size;
       ctx.save(); ctx.translate(E.x, E.y); ctx.rotate(E.rot); ctx.scale(1, Math.max(0.15, Math.abs(c)));
@@ -2517,17 +3050,19 @@ function render() {
   }
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
   if (ready) for (const Q of live) drawTag(Q);
-  for (const Lb of labels) {   // lo que agarró: sube y se apaga
+  for (const Lb of labels) {   // lo que agarró (o el −1 de la caída): sube y se apaga; desde la cabeza, por HEAD_K
     const k = Lb.t / 1.1; ctx.globalAlpha = k < 0.6 ? 1 : 1 - (k - 0.6) / 0.4;
+    ctx.save(); ctx.translate(Lb.x, Lb.y); ctx.scale(HEAD_K, HEAD_K);
     ctx.font = "700 30px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = 8; ctx.strokeStyle = "#0b0e18";
-    const ly = Lb.y - 40 * (1 - (1 - Math.min(1, k * 1.6)) ** 2);
-    ctx.strokeText(Lb.text, Lb.x, ly); ctx.fillStyle = Lb.color; ctx.fillText(Lb.text, Lb.x, ly);
+    const ly = -(Lb.up ?? 0) - 40 * (1 - (1 - Math.min(1, k * 1.6)) ** 2);
+    ctx.strokeText(Lb.text, 0, ly); ctx.fillStyle = Lb.color; ctx.fillText(Lb.text, 0, ly);
+    ctx.restore();
   }
   ctx.globalAlpha = 1;
   if (G.state === "play") for (const Q of live) if (Q.ctrl !== "bot" && (Q.charging || (G.mode === "test" && Q === players[0]))) drawThrowPreview(Q, G.mode === "test");
   if (S.debug) {
     for (const Q of live) {
-      ctx.strokeStyle = Q.team.color; ctx.lineWidth = 2; ctx.strokeRect(Q.x - HALF_W, Q.y - hurtH(Q), HALF_W * 2, hurtH(Q));
+      const hb = hurtBox(Q); ctx.strokeStyle = Q.team.color; ctx.lineWidth = 2; ctx.strokeRect(hb.x0, hb.y0, hb.x1 - hb.x0, Q.y - hb.y0);
       if (Q.bot && Q.bot.target) { ctx.setLineDash([8, 8]); ctx.beginPath(); ctx.moveTo(Q.x, Q.y - 50); ctx.lineTo(Q.bot.target.x, Q.bot.target.y - 50); ctx.stroke(); ctx.setLineDash([]); }
       if (Q.bot && Q.bot.goal) { ctx.fillStyle = Q.team.color; ctx.beginPath(); ctx.arc(Q.bot.goal.x, Q.y - 4, 6, 0, Math.PI * 2); ctx.fill(); }
       if (Q.bot && Q.bot.roam && Q.bot.roam.pick) { ctx.setLineDash([3, 6]); ctx.beginPath(); ctx.moveTo(Q.x, Q.y - 50); ctx.lineTo(Q.bot.roam.x, Q.bot.roam.y - PICKUP.lift); ctx.stroke(); ctx.setLineDash([]); }
@@ -2609,7 +3144,7 @@ function setChar(key) {
     if (p.draw.name && anim(p.draw.name)) p.draw.i = Math.min(p.draw.i, anim(p.draw.name).f.length - 1);
   }
   document.querySelectorAll("#segChar button, #segFlashChar button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === key)));
-  buildFlashTune();
+  buildFlashTune(); buildTune();
 }
 let atlasLeft = Object.keys(CHARS).length;
 for (const [key, c] of Object.entries(CHARS)) {

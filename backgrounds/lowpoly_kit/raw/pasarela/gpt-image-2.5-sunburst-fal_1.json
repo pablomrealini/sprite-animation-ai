@@ -1,0 +1,190 @@
+{
+  "set": "lowpoly_kit",
+  "asset": "pasarela",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game level pieces in the exact style of the reference images, the refinery arena of this game: flat-shaded polygons with soft per-face lighting, a few large facets, clean chunky shapes, soft light from the top left, a thin dark contour, no texture noise, no photographic detail. Three-quarter front view from slightly above: the top face of every deck shows as a light flat strip and the front face below it in medium grey; the sides show only at the ends. Palette: light and steel greys, red blocks and clamps, yellow-and-black hazard stripes used sparingly, glowing cyan light strips. No shadow on the ground.\n\nNo characters, people, robots, enemies, turrets, drones or vehicles anywhere.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA 2D platformer tileset sheet with four separate pieces of one low-poly steel walkway like the walkways in the reference images, drawn at the same scale, in a single row, left to right, with wide empty space between them, not touching each other or the image edges. All four share exactly the same deck slab at exactly the same height, and the three pieces with pillars have exactly the same total height. From top to bottom:\n- at the very top, only the thin dark contour of the back edge and the tops of the red blocks;\n- the deck slab, about a third of the piece height: a light grey flat top face (about a tenth of the piece height) whose back edge is one perfectly straight horizontal line, a medium grey front face about one and a half times as tall, and a thin dark shadow strip under the slab;\n- below the slab, half of the piece height of open space with only straight vertical steel pillars: no diagonal braces, no X braces, no cross beams;\n- at the bottom, a wide steel foot under each pillar.\n1. The left end, narrow (about two fifths as wide as tall): the slab ends in a beveled end wrapped by a red block, with one vertical pillar and its foot right under that red block.\n2. A straight middle segment, about 1.3 times wider than tall, that tiles seamlessly left to right: one red block wrapping the slab in its center and one vertical pillar with its foot under it. Its left and right edges are cut perfectly straight and vertical through the plain slab, like a slice of a longer walkway: no end cap, bevel, block, pillar or contour at the cut, and the slab looks exactly the same at both edges.\n3. A second middle segment with exactly the same width, slab and cut edges, with no pillar and no red block: a short yellow-and-black hazard stripe panel and a small glowing cyan light strip on the front face of the slab, and nothing below the slab.\n4. The right end, the mirror image of the left end.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowkit",
+    "empty",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    },
+    {
+      "file": "backgrounds/lowpoly_kit/refs/pasarela_arriba_izq_47ef47dd_FFFFFF.png",
+      "sha256": "fd0c9b4c8bcdfc01d9285138acc9ff5a49b77162ae88c81d8dc6eaaddd38b164"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/lamina.webp",
+      "sha256": "0c04bf69ba32d885f098269a3abcd4d84673deb74e858735d7a6b589ebfe086d"
+    },
+    {
+      "file": "prototypes/arena/arenas/refineria_lowpoly/pasarela_arriba_izq.png",
+      "sha256": "47ef47ddb9dab2371286f347ff4b3697a49fdef3d40665fcd51e66ee0fc72ce1"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1724,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15108-293f-7a60-b0e2-408b319e67bb",
+  "created": "2026-10-18T22:01:30+00:00",
+  "sha256": "af37097195b0331626f7b39226acc5df3da29555c78ad31b8587461e80c21397",
+  "post": {
+    "file": "backgrounds/lowpoly_kit/post/pasarela/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8692,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "pasarela_punta_izq": [
+        65,
+        522,
+        436,
+        998
+      ],
+      "pasarela_medio_a": [
+        580,
+        522,
+        1233,
+        998
+      ],
+      "pasarela_medio_b": [
+        1342,
+        522,
+        1983,
+        704
+      ],
+      "pasarela_punta_der": [
+        2126,
+        522,
+        2500,
+        998
+      ]
+    },
+    "trim": {
+      "pasarela_punta_izq": [
+        0,
+        0,
+        371,
+        476
+      ],
+      "pasarela_medio_a": [
+        0,
+        0,
+        601,
+        476
+      ],
+      "pasarela_medio_b": [
+        0,
+        0,
+        590,
+        182
+      ],
+      "pasarela_punta_der": [
+        0,
+        0,
+        374,
+        476
+      ]
+    },
+    "files": {
+      "pasarela_punta_izq": {
+        "file": "pasarela_punta_izq.png",
+        "w": 371,
+        "h": 476
+      },
+      "pasarela_medio_a": {
+        "file": "pasarela_medio_a.png",
+        "w": 601,
+        "h": 476
+      },
+      "pasarela_medio_b": {
+        "file": "pasarela_medio_b.png",
+        "w": 590,
+        "h": 182
+      },
+      "pasarela_punta_der": {
+        "file": "pasarela_punta_der.png",
+        "w": 374,
+        "h": 476
+      }
+    },
+    "seam": {
+      "pasarela_medio_a:x": {
+        "before": {
+          "axis": "x",
+          "score": 2.09,
+          "peak": 9.57,
+          "verdict": "warn"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 52,
+          "cut_error": 4e-05,
+          "cut_x": [
+            2,
+            46
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.07,
+          "peak": 0.24,
+          "verdict": "ok"
+        }
+      },
+      "pasarela_medio_b:x": {
+        "before": {
+          "axis": "x",
+          "score": 12.35,
+          "peak": 31.62,
+          "verdict": "fail"
+        },
+        "fix": {
+          "method": "cut",
+          "overlap_px": 51,
+          "cut_error": 0.00102,
+          "cut_x": [
+            2,
+            45
+          ]
+        },
+        "after": {
+          "axis": "x",
+          "score": 0.14,
+          "peak": 0.24,
+          "verdict": "ok"
+        }
+      }
+    }
+  }
+}

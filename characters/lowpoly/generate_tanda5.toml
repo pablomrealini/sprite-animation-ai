@@ -1,0 +1,33 @@
+# Tanda 5 del low-poly (2026-10-18): el slide en una sola toma directa, sin pose fija (Pablo: "¿por qué no pedimos
+# otro video de slide directamente con mejor prompt?"). Desde la zancada de correr con el arma apagada, como la tanda 3,
+# y termina en la misma zancada: entrada, sostenido y salida salen del mismo clip y empalman con run_gun.
+# El prompt (prompts/slide_directo.txt) corrige lo que falló:
+#   tanda3 slide_1   se tiró de panza, como un clavado, y disparó   → "on his hip and the back of his thighs, never on
+#                                                                     his belly and never head first"
+#   tanda3 slide_2   sentado con las piernas abiertas               → piernas juntas, una al lado de la otra, "never
+#                                                                     spread apart"; el torso echado atrás, bajo
+#   tanda4           piernas estiradas de más                        → "short and thick ... the same length as in the
+#                    (y dispara si arranca quieto con el arma)          running pose"; arranca corriendo, no quieto
+#   las manos        Pablo: "las dos están mal"                      → las dos manos en la pistola, contra el pecho,
+#                                                                     codos doblados; sin mano apoyada en el piso
+# 4 s: alcanza para dos pasos, la caída, ~1 s deslizando y la subida; con 5 s Kling rellena inventando.
+#   uv run --project pipeline spritepipe bakeoff characters/lowpoly/generate_tanda5.toml --dry-run
+
+[bakeoff]
+models = ["kling-o3-std"]
+clips_per_model = 4
+duration = 4
+aspect_ratio = "16:9"
+resolution = "720p"
+audio = false
+max_usd = 1.5
+max_parallel = 4
+game_fps = 12
+out_dir = "clips/tanda5"
+
+[[animation]]
+name = "slide"            # slide_in, slide (sostenido) y slide_out, del mismo clip
+pose = "poses/correr_apagada_dullmagenta_16x9.png"
+prompt = "prompts/slide_directo.txt"
+kind = "oneshot"
+last_frame = true

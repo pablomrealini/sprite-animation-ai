@@ -1,0 +1,66 @@
+# Los fondos de las arenas grandes (A2, pedido de Pablo, 2026-10-18): 2496 × 1404 px del juego, sin nada pisable salvo
+# el piso, para armar encima la arena con el kit de backgrounds/lowpoly_kit. Medidas: prototypes/arena/editor/
+# kit_medidas.md. Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/lowpoly_fondos/gen.toml --dry-run
+#
+# Es la Refinería low-poly en una toma más abierta: los detalles a la misma medida en px del juego, no la misma imagen
+# agrandada. Para eso, la guía refs/guia_abierta.webp (2752 × 1536, lo que devuelve Nano Banana 2.1 a 2K 16:9): el fondo
+# sin pasarelas de la Refinería (prototypes/arena/arenas/refineria_lowpoly/fondo.webp) agrandado × 1,094, que es lo
+# que se achica después para llevarla a 1404 de alto. Así queda a escala 1:1 y centrado, con la línea de los pies del
+# piso en y 1383, que pasa a 1264. Todo lo demás va en magenta y el modelo lo rellena. También están en magenta la
+# columna del centro, que tiene tope pisable, las dos paredes de máquinas, que quedarían a 300–600 px del borde, dentro
+# de la zona de juego, y el caño suelto del piso de la derecha, por la simetría.
+# El post lleva cada opción a 1404 de alto (2516 × 1404). La entrega recorta 10 px por lado (2496 × 1404) y la pasa a
+# WebP.
+# Arriba a la derecha (x > 1876, y < 195 en el juego) va el HUD: cielo liso.
+#
+# Generadas el 2026-10-18 (US$0,18). Elegida la 3: las paredes de los costados son angostas (~290 px) y verticales, sin
+# repisas que parezcan pisables, y casi simétrica (torre a la izquierda, chimenea a la derecha). La 1 tiene paredes de
+# ~430 px con repisas claras; la 2, un hombro claro en las paredes. En las tres, el piso y el centro quedaron en su lugar
+# (la Refinería a escala 1:1, corrida 1 px). Bajo el HUD de la 3 quedan una punta de nube y el tope de la pared
+# derecha. Entrega: entrega/abierta_3.webp, 2496 × 1404 y 138 KB, con la línea de los pies del piso en y 1264 y la
+# Refinería centrada (x 288 – 2208). La arma backgrounds/lowpoly_kit/entrega.py.
+
+[gen]
+models = ["nano-banana-2.1"]
+images_per_asset = 3      # tres opciones para elegir
+max_usd = 1
+max_parallel = 3
+quality = "high"
+resolution = "2K"
+seed = 7
+
+[styles]
+empty = "No characters, people, robots, enemies, turrets, drones or vehicles anywhere."
+no_text = "No text, letters, numbers, logos or user interface (health bars, counters, icons) anywhere."
+
+[[asset]]
+name = "abierta"
+style = ["empty", "no_text"]
+prompt = """
+Edit the reference image: it is a wider shot of a low-poly refinery arena, with the camera pulled back. Fill every \
+solid magenta (#FF00FF) area so that no magenta is left, continuing the scene in exactly the same flat-shaded \
+low-poly style, colors and haze, and at the same scale of detail as the visible part: the towers, tanks, pipes, \
+windows, lights and clouds you add are the same size as the ones already there, never bigger.
+- The floor walkway along the bottom continues straight across the full width, at exactly the same height and with \
+the same look: the light grey flat top face with red blocks along its front edge, the dark grey front below it with \
+red pipes and cyan light strips.
+- Above the floor, the magenta areas in the middle become more of the hazy blue background refinery: faceted towers, \
+tanks, chimneys and red pipes, bluer and with less contrast the further back, continuing what is visible. Where the \
+magenta column is in the center there is only background now, down to the floor.
+- At the far left and right edges, filling the magenta bands there, two tall low-poly machinery walls close the \
+scene (gray steel panels, red pipes, cyan lights), mirror images of each other, rising from the floor and ending \
+below the top edge.
+- The top band is a soft blue sky with a few low-poly clouds; the top right corner is plain open sky with no clouds.
+Nothing walkable above the floor: no walkways, platforms, ledges, catwalks, bridges, stairs, crates or columns with a \
+flat top in the foreground; only the distant background refinery, hazy and blue. The scene is nearly symmetric left \
+to right. Keep the visible part exactly as it is: the floor, the background refinery and the sky stay at the same \
+positions and sizes.
+"""
+refs = ["refs/guia_abierta.webp"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+height = 1404             # 2752 × 1536 → 2516 × 1404; la entrega recorta 10 px por lado

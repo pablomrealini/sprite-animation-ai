@@ -1,0 +1,32 @@
+{
+ "throw": {
+  "0": "pose de arranque: ya agachado y abierto, no es el idle",
+  "1": "cara borrosa; los pies se corren 20 px",
+  "3": "mancha roja en la mano que pasa",
+  "5": "el puño arriba: el primer amague, no tira",
+  "10": "mancha en el puño contra el pecho",
+  "11": "cabeza corrida, algo borroso",
+  "13": "mancha roja en el puño",
+  "17": "algo borroso",
+  "18": "juego: puño atrás. Limpio",
+  "19": "juego: SE SOSTIENE al cargar, y el puño es una mancha naranja",
+  "20": "juego: sale. Limpio",
+  "21": "limpio",
+  "22": "da un paso adelante (la cabeza +26 px)",
+  "23": "sigue caminando y gira de perfil (cabeza +7)",
+  "24": "borroso, el arma manchada (cabeza +6); vuelve de golpe al idle"
+ },
+ "double_jump": {
+  "0": "no se usa",
+  "1": "limpio",
+  "2": "limpio",
+  "3": "juego 95°: de espaldas a cámara (sólo el casco) y las piernas hechas humo",
+  "4": "juego 180°: la cara se lee, las piernas borrosas",
+  "5": "deshecho (el juego ya lo saltea)",
+  "6": "limpio",
+  "7": "algo de mancha en las botas",
+  "8": "limpio (también la caída)",
+  "9": "no se usa",
+  "10": "borroso, la cara corrida (no se usa)"
+ }
+}

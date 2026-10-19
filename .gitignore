@@ -60,3 +60,12 @@ characters/lowpoly/3d/**
 !characters/lowpoly/3d/out/personaje/basic_animations__running_glb.glb
 !characters/lowpoly/3d/out/personaje/basic_animations__walking_glb.glb
 !characters/lowpoly/3d/out/arma/model_glb.glb
+
+# hojas de revisión del low-poly (characters/lowpoly/revision/): se rearman con los scripts (revisar.py, arma_correr.py,
+# hoja_poses.py, video_verde.py…); al repo van las notas (.md y .json). Las vistas previas del juego, lo mismo.
+characters/lowpoly/revision/**/*.png
+characters/lowpoly/revision/**/*.jpg
+characters/lowpoly/revision/**/*.mp4
+prototypes/arena/vistas_previas/
+# respaldos que deja el editor al guardar
+prototypes/arena/arenas/.respaldo/

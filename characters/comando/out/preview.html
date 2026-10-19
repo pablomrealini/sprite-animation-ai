@@ -20,7 +20,7 @@ main { padding:16px; display:grid; gap:16px; grid-template-columns:repeat(auto-f
 .card h2 { font-size:14px; margin:0 0 6px; display:flex; justify-content:space-between; }
 .card h2 span { color:var(--muted); font-weight:400; }
 .stage { overflow:auto; border-radius:6px; }
-canvas { display:block; margin:auto; image-rendering:pixelated; }
+canvas { display:block; margin:auto; max-width:100%; height:auto; }   /* un cuadro más ancho que la tarjeta se achica al ancho */
 .meta { color:var(--muted); font-size:12px; margin-top:6px; font-variant-numeric:tabular-nums; }
 </style>
 </head>
@@ -52,7 +52,10 @@ function checker(ctx, w, h, s) {
 
 function build() {
   const V = DATA.variants[variantSel.value];
-  images = V.pages.map(src => { const im = new Image(); im.src = src; return im; });
+  // el atlas siempre fresco: se rearma con los mismos nombres y el navegador mostraba las páginas viejas cortadas con
+  // las coordenadas nuevas
+  const fresh = Date.now();
+  images = V.pages.map(src => { const im = new Image(); im.src = `${src}?v=${fresh}`; return im; });
   const grid = $('grid'); grid.innerHTML = ''; cards = [];
   for (const [name, anim] of Object.entries(V.animations)) {
     const card = document.createElement('div'); card.className = 'card';
@@ -68,6 +71,7 @@ function build() {
 function draw(c) {
   const z = +$('zoom').value, V = c.V, cw = V.canvas.w, ch = V.canvas.h;
   const cv = c.canvas; if (cv.width !== cw * z) { cv.width = cw * z; cv.height = ch * z; }
+  cv.style.imageRendering = DATA.style === 'pixel' ? 'pixelated' : 'auto';   // pixelado sólo el pixel art; el resto, suave al achicar
   const ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = DATA.style !== 'pixel';
   const bg = $('bgsel').value;
   if (bg === 'checker') checker(ctx, cv.width, cv.height, 8 * z); else { ctx.fillStyle = bg; ctx.fillRect(0, 0, cv.width, cv.height); }

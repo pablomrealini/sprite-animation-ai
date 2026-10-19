@@ -252,3 +252,15 @@ def test_clear_removes_the_clouds_cut_by_the_edge_and_keeps_the_rest():
     assert bgpost.seam_score(out)["verdict"] == "ok"
     assert (np.abs(out[:, :150].astype(int) - img[:, 600:601].astype(int)).max()) <= 2  # ahí quedó el degradé
     assert (out[:, 360:540] == img[:, 360:540]).all()  # la nube de adentro, intacta
+
+
+def test_alpha_report_ignores_a_faint_halo_on_the_border():
+    # un recorte con un halo de alfa 1 hasta el borde (lo deja el modelo): no está cortado; con alfa de verdad, sí
+    rgba = np.zeros((200, 200, 4), np.uint8)
+    rgba[60:140, 60:140] = (200, 40, 40, 255)
+    frame = np.ones((200, 200), bool); frame[3:-3, 3:-3] = False
+    rgba[frame, 3] = 1            # el halo, en los 3 px del borde
+    assert bgpost.alpha_report(rgba, "cutout")["verdict"] == "ok"
+    rgba[100:110, :60, 3] = 200   # un brazo que sale por la izquierda
+    rep = bgpost.alpha_report(rgba, "cutout")
+    assert rep["verdict"] == "warn" and "left" in rep["flags"][0]

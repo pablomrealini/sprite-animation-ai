@@ -66,6 +66,9 @@ dialog input { width: 100%; margin-bottom: 4px; }
 .sl input[type=range] { width: 100%; accent-color: var(--acc); }
 .sl .val { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); }
 input[type=color] { width: 38px; height: 24px; padding: 0 2px; background: #0f141d; border: 1px solid var(--line); border-radius: 5px; }
+aside details > summary { cursor: pointer; margin: 10px 0 6px; font-size: 12px; color: var(--dim); font-weight: 600; }
+button.warn { border-color: #6b4a2a; color: #ffd9a8; }
+.sym div.bad { color: #ffc2c2; }
 @media (max-width: 900px) { main { grid-template-columns: 1fr; grid-template-rows: 1fr 42vh; } aside { border-left: 0; border-top: 1px solid var(--line); } }
 </style>
 </head>
@@ -82,6 +85,7 @@ input[type=color] { width: 38px; height: 24px; padding: 0 2px; background: #0f14
     <input id="file" type="file" accept=".json,application/json" hidden>
   </div>
   <div class="grp"><button id="bUndo" title="Deshacer (⌘Z)">↶</button><button id="bRedo" title="Rehacer (⇧⌘Z)">↷</button></div>
+  <div class="grp"><button id="bMirror" title="Espejo (E): mover, estirar, borrar o cambiar algo hace lo mismo con su pareja del otro lado (lo que está en el eje queda centrado)">⇋ Espejo</button></div>
   <div class="grp"><span class="lbl">Grilla</span><span id="gridSeg"></span></div>
   <div class="grp"><span class="lbl">Ver</span><span id="showSeg"></span><button id="bAnim" title="Mover las plataformas por su recorrido">▶ Animar</button></div>
   <div class="grp"><button id="bZoomOut">−</button><button id="bFit" title="Ajustar (0)">Ajustar</button><button id="bZoomIn">+</button></div>
@@ -101,13 +105,19 @@ input[type=color] { width: 38px; height: 24px; padding: 0 2px; background: #0f14
         <div><kbd>⌘D</kbd> duplicar</div>
         <div><kbd>F</kbd> espejar</div>
         <div><kbd>M</kbd> copia simétrica</div>
+        <div><kbd>E</kbd> modo espejo</div>
         <div><kbd>L</kbd> patas hasta abajo</div>
         <div><kbd>←→↑↓</kbd> 1 px (<kbd>⇧</kbd> grilla)</div>
         <div><kbd>⌘Z</kbd> deshacer</div>
         <div><kbd>G</kbd> grilla</div>
         <div><kbd>0</kbd> ajustar</div>
         <div><kbd>P</kbd> probar (<kbd>Esc</kbd> vuelve)</div>
-        <div><kbd>espacio</kbd>+arrastrar: mover la vista</div>
+        <div><kbd>⌘A</kbd> elegir todo</div>
+        <div><kbd>⇧</kbd>+clic: sumar o sacar</div>
+        <div>arrastrar en vacío: recuadro</div>
+        <div>doble clic: todo ese piso</div>
+        <div><kbd>⇧</kbd> arrastrando: sólo un eje</div>
+        <div><kbd>espacio</kbd>, rueda o botón derecho: mover la vista</div>
         <div><kbd>⌘</kbd>+rueda o pellizco: zoom</div>
       </div>
     </section>
@@ -123,11 +133,33 @@ __COLOR_JS__
 // datos que pone build.py: las piezas del kit (las mismas medidas que en el juego), un ranger parado y las arenas de
 // cuando se armó (respaldo para abrir la página sin servidor; con serve.py se leen de disco cada vez)
 const KIT = __KIT_DATA__, RANGER = __RANGER_DATA__, BUILT = __ARENA_DATA__, LUT_RAW = __LUT_DATA__;
-const AW = 1920, AH = 1080;
+// las reglas del juego que importan para armar una arena, tal cual están en src.html (las lee build.py: FEEL, DOUBLE_V,
+// HANG_ON, FALL y HUD2). La que falta viene en null y se usa la de respaldo, la de cuando se escribió esto
+const GAME = __GAME_DATA__;
+// los kits de piezas (arenas/<kit>/kit.json, los arma editor/kit.py): con serve.py se leen de disco; estos, de cuando se
+// armó el editor, son el respaldo. Una pieza del kit se copia a la arena al ponerla (pieces), como las de otra arena
+const KITS_BUILT = __KITS_DATA__;
+let KITS = KITS_BUILT || {};
+const OVERLAP = 2;   // los tramos que se ponen uno al lado del otro se enciman esto: los bordes tienen alfa 252, no 255
+// el tamaño del mundo de la arena abierta (su size; sin él, 1920 × 1080), como en el juego (setWorld en src.html). Las
+// nuevas salen de 2496 × 1404, la escala de Pablo del 2026-10-18 (el personaje se ve 1/1,3 y hay 1,69 veces más lugar)
+const SIZE_DEFAULT = [1920, 1080], SIZE_NEW = [2496, 1404];
+let AW = SIZE_DEFAULT[0], AH = SIZE_DEFAULT[1];
 const BRIDGE_H = 26, BODY_H = 112 * 0.8, WALL_GAP = 30;   // como en src.html: lo que se atraviesa, el cuerpo, las paredes
-// el alcance: la física del ranger (FEEL de src.html) y lo medido en el juego (alturas). Se pueden cambiar en el panel
-const PHYS = { run: 300, v0: 1067, gUp: 2963, gDown: 4898, dbl: 0.9, term: 1400, h1: 192, h2: 333, hang: 325, halfW: 16 };
-const ARENA_DIR = "../../arenas/", GAME = "../../dist/index.html?arena=editor";
+// el alcance: la física del juego (FEEL y DOUBLE_V de src.html), integrada como el juego: trapecio (el promedio de la
+// velocidad de antes y la de después en cada paso). Así el salto mide lo mismo a cualquier frecuencia: simple 192,1 y
+// doble 347,7 a 60, 120 y 144 Hz (Programación, 2026-10-18; antes el juego sumaba la velocidad de después y daba 183 /
+// 331 a 60 Hz). Las alturas (h1, h2) salen de esa cuenta en buildEnv; en el panel se pueden pisar para probar
+const FEEL_G = { run: 300, v0: 1067, gUp: 2963, gDown: 4898, term: 1400, ...((GAME && GAME.FEEL) || {}) };
+const PHYS = { run: FEEL_G.run, v0: FEEL_G.v0, gUp: FEEL_G.gUp, gDown: FEEL_G.gDown, dbl: (GAME && GAME.DOUBLE_V) || 0.9, term: FEEL_G.term,
+               h1: null, h2: null, hang: 325, halfW: 16 };
+// HANG_ON de src.html: con el colgado apagado (Pablo, 2026-10-18) no hay ganchos, el alcance sale del salto y el doble,
+// y el panel no muestra nada del colgado (de qué borde se cuelga, los recortes de adelante)
+const HANG_ON = GAME && typeof GAME.HANG_ON === "boolean" ? GAME.HANG_ON : false;
+const FALL_H = (GAME && GAME.FALL && GAME.FALL.h) || 560;   // caer esto o más saca vida (FALL.h de src.html)
+const HUD2 = (GAME && GAME.HUD2) || { r: 18, gap: 60, right: 14, top: 8, ring: 4 };   // el HUD chico, en px de la vista de 960
+const PU_MARGIN = 90;   // los power-ups no salen a menos de esto de las paredes (pickupSpot de src.html)
+const ARENA_DIR = "../../arenas/", GAME_URL = "../../dist/index.html?arena=editor";
 const SERVED = location.protocol.startsWith("http");
 const COL = { ok: "#4ade80", bad: "#ff5a5a", warn: "#ffd23f", acc: "#3fd6e8", front: "#ffb648" };
 const $ = id => document.getElementById(id);
@@ -135,12 +167,17 @@ const cv = $("cv"), g = cv.getContext("2d");
 
 /* ---------- estado ---------- */
 let ARENAS = {}, key = "", A = null;
-let sel = null;            // {t: "obj" | "spawn" | "solid" | "front" | "pt", i, j}
+let DISK = new Map();      // las arenas como están en disco (JSON normalizado), para saber qué cambió
+let sel = null;            // {t: "obj" | "spawn" | "solid" | "front" | "pt", i, j}: la que se ve en el panel
+let group = [];            // lo elegido junto (⇧ + clic, recuadro, doble clic, ⌘A): [{t, i}], con sel adentro
+let mirror = false;        // Espejo (E): lo que se hace con algo se repite en su pareja del otro lado
+let box = null;            // el recuadro de elegir, mientras se arrastra (px del mundo)
 let dirty = false, saved = "";   // saved: la arena como está en disco (o como se abrió)
 const hist = { undo: [], redo: [] };
 const view = { k: 0.5, x: 0, y: 0 };
 let grid = 16, anim = false, animT = 0, spaceDown = false, mouse = null;
-const show = { col: true, reach: true, spawns: true, paths: true };
+const show = { col: true, reach: true, spawns: true, paths: true, guides: true };
+let guideStep = 200;       // las guías de pisos: cada cuánto, desde el piso (el simple llega a 192)
 
 /* ---------- imágenes ---------- */
 const IMG = new Map();
@@ -256,7 +293,8 @@ function objBox(o, at = objAt(o)) {
 const flipLedge = l => (l === "left" ? "right" : l === "right" ? "left" : l);
 function baseSolid(s) {
   if (s.kind === "bridge") return { ...s, h: BRIDGE_H, oneWay: true };
-  return { ...s, h: s.h ?? 60, ground: s.y >= 900, noLedge: s.noLedge ?? (s.kind === "box" || s.y >= 900) };
+  const ground = s.ground ?? s.y >= AH - 200;   // el piso: a 200 px del borde de abajo o menos (900 en 1920 × 1080), como en el juego
+  return { ...s, h: s.h ?? 60, ground, noLedge: s.noLedge ?? (s.kind === "box" || ground) };
 }
 function objSolids(o, at = objAt(o)) {
   const d = def(o.piece); if (!d) return [];
@@ -319,7 +357,8 @@ function along(p, L, s) {
   return p[p.length - 1];
 }
 function pathPos(o, t) {
-  const p = o.move.path, L = pathLens(p), tot = L.reduce((a, b) => a + b, 0), sp = o.move.speed || 120, w = o.move.wait ?? 0.5, T = tot / sp;
+  const p = o.move.path, L = pathLens(p), tot = L.reduce((a, b) => a + b, 0), sp = o.move.speed ?? 120, w = o.move.wait ?? 0.5, T = tot / sp;
+  if (!(sp > 0) || !tot) return p[0];   // speed 0 vale 0 (FORMATO.md): se queda en el primer punto
   let u = t % (2 * T + 2 * w);
   if (u < w) return p[0]; u -= w;
   if (u < T) return along(p, L, u * sp); u -= T;
@@ -335,9 +374,10 @@ function samplePath(p, step) {
 // mueven, una por cada tramo de su recorrido)
 function world() {
   const solids = [], surfs = [];
-  A.solids.forEach((s, i) => solids.push({ ...baseSolid(s), own: "s" + i, ref: { t: "solid", i }, name: solidName(s, i) }));
+  // src y sj: de qué sólido o qué objeto del JSON sale cada uno (el objeto mismo, que no cambia al borrar o duplicar otros)
+  A.solids.forEach((s, i) => solids.push({ ...baseSolid(s), own: "s" + i, ref: { t: "solid", i }, src: s, sj: 0, name: solidName(s, i) }));
   A.objects.forEach((o, i) => objSolids(o).forEach((s, j, all) =>
-    solids.push({ ...s, own: moving(o) ? "o" + i : `o${i}.${j}`, ref: { t: "obj", i }, name: objName(o) + (all.length > 1 ? ` #${j + 1}` : ""), moving: moving(o) })));
+    solids.push({ ...s, own: moving(o) ? "o" + i : `o${i}.${j}`, ref: { t: "obj", i }, src: o, sj: j, name: objName(o) + (all.length > 1 ? ` #${j + 1}` : ""), moving: moving(o) })));
   for (const p of A.platforms || []) {   // las del formato viejo (Fundición): sólo para ver la colisión y el alcance
     const K = KIT.pieces["platforms/" + p.piece]; if (!K) continue;
     const x = p.piece === "ledge" ? (p.wall === "left" ? p.x : p.x - K.w) : p.cx - K.w / 2;
@@ -348,33 +388,34 @@ function world() {
   A.objects.forEach((o, i) => {
     if (!moving(o)) return;
     const base = solids.find(s => s.own === "o" + i);
-    samplePath(o.move.path, 24).forEach((pt, k) => objSolids(o, pt).forEach(s => surfs.push({ ...s, own: "o" + i, ref: { t: "obj", i }, name: base?.name || objName(o), moving: true, sample: k, hangL: false, hangR: false })));
+    ((o.move.speed ?? 120) > 0 ? samplePath(o.move.path, 24) : [o.move.path[0]]).forEach((pt, k) => objSolids(o, pt).forEach(s => surfs.push({ ...s, own: "o" + i, ref: { t: "obj", i }, name: base?.name || objName(o), moving: true, sample: k, hangL: false, hangR: false })));
   });
   return { solids, surfs };
 }
 // de qué bordes se puede colgar (findLedge): el lado del JSON, lejos de las paredes y sin nada encima
 function hangEdges(s, solids) {
-  if (s.noLedge || s.moving) return [false, false];
+  if (!HANG_ON || s.noLedge || s.moving) return [false, false];
   const side = s.ledge || "both";
   const free = cx => cx >= WALL_GAP && cx <= AW - WALL_GAP && !solids.some(o => o !== s && !o.ground && !o.moving && o.x < cx + 40 && o.x + o.w > cx - 40 && o.y < s.y && o.y + o.h > s.y - BODY_H);
   return [(side === "both" || side === "left") && free(s.x), (side === "both" || side === "right") && free(s.x + s.w)];
 }
-function solidName(s, i) { return s.kind === "walk" && s.y >= 900 ? "Piso" : s.kind === "bridge" ? `Puente ${i + 1}` : s.kind === "box" ? `Caja ${i + 1}` : `Bloque ${i + 1}`; }
+function solidName(s, i) { return s.kind === "walk" && (s.ground ?? s.y >= AH - 200) ? "Piso" : s.kind === "bridge" ? `Puente ${i + 1}` : s.kind === "box" ? `Caja ${i + 1}` : `Bloque ${i + 1}`; }
 function objName(o) { return o.piece.replace(/^(platforms|small_props|landmarks)\//, ""); }
 
 /* ---------- alcance ---------- */
 // para cada altura h (px por encima de los pies al saltar; negativa, por debajo), la distancia más larga a la que se cae
-// en esa altura corriendo a PHYS.run: salto simple y salto + doble (el doble apretado en el mejor momento). La forma sale
-// de la física del juego; la altura máxima, de lo medido (h1, h2)
-const ENV = { lo: -1200, hi: 420, X1: null, X2: null };
+// en esa altura corriendo a PHYS.run: salto simple y salto + doble (el doble apretado en el mejor momento). Todo sale de
+// la física del juego; si en el panel se pisa la altura (h1, h2), la curva se achata o se estira hasta ahí
+const ENV = { lo: -1200, hi: 420, X1: null, X2: null, p1: 0, p2: 0 };
+const SIM_HZ = 60;   // con trapecio da lo mismo a cualquier frecuencia: 60 alcanza
 function buildEnv() {
-  const n = ENV.hi - ENV.lo + 1, dt = 1 / 480;
+  const n = ENV.hi - ENV.lo + 1, dt = 1 / SIM_HZ;
   const fly = (t2, out) => {
     let x = 0, h = 0, vy = -PHYS.v0, t = 0, dbl = t2 >= 0, peak = 0;
     while (t < 4 && h > ENV.lo) {
       if (dbl && t >= t2) { vy = Math.min(vy, -PHYS.v0 * PHYS.dbl); dbl = false; }
-      vy = Math.min(PHYS.term, vy + (vy < 0 ? PHYS.gUp : PHYS.gDown) * dt);
-      const prev = h; h -= vy * dt; x += PHYS.run * dt; t += dt; peak = Math.max(peak, h);
+      const vy0 = vy; vy = Math.min(PHYS.term, vy0 + (vy0 < 0 ? PHYS.gUp : PHYS.gDown) * dt);
+      const prev = h; h -= (vy0 + vy) / 2 * dt; x += PHYS.run * dt; t += dt; peak = Math.max(peak, h);
       if (vy > 0) for (let k = Math.ceil(h); k <= Math.floor(prev); k++) { const i = k - ENV.lo; if (i >= 0 && i < n && x > out[i]) out[i] = x; }
     }
     return peak;
@@ -382,6 +423,9 @@ function buildEnv() {
   const r1 = new Float32Array(n).fill(-1), r2 = new Float32Array(n).fill(-1);
   const p1 = fly(-1, r1);
   let p2 = 0; for (let t2 = 0; t2 < 1.2; t2 += 1 / 120) p2 = Math.max(p2, fly(t2, r2));
+  ENV.p1 = Math.round(p1); ENV.p2 = Math.round(p2);
+  if (PHYS.h1 == null) PHYS.h1 = ENV.p1;
+  if (PHYS.h2 == null) PHYS.h2 = ENV.p2;
   ENV.X1 = scaleEnv(r1, p1, PHYS.h1); ENV.X2 = scaleEnv(r2, p2, PHYS.h2);
 }
 function scaleEnv(raw, peak, cap) {   // la misma curva, achatada (o estirada) hasta la altura medida
@@ -411,7 +455,7 @@ function link(a, b) {
   if (dy <= PHYS.h2 && d <= envAt(ENV.X2, dy)) return { c: 1.8, how: "doble" };
   return null;
 }
-// desde el piso (lo que está a 900 o más), el camino más fácil a cada superficie
+// desde el piso (lo que está a AH − 200 o más), el camino más fácil a cada superficie
 function reach(W) {
   const S = W.surfs, n = S.length, cost = new Array(n).fill(Infinity), how = new Array(n).fill(null), from = new Array(n).fill(-1), done = new Array(n).fill(false);
   let roots = S.map((s, i) => i).filter(i => S[i].ground);
@@ -442,9 +486,230 @@ function snapObj(o, at) {
   if (d.painted) {
     const s0 = (d.p.solids || [])[0], fy = s0 ? s0.y : 0;
     const offs = [0, d.w]; if (s0) { const sx = o.flip ? d.w - s0.x - s0.w : s0.x; offs.push(sx, sx + s0.w); }
-    return [snapX(at[0], offs), snapV(at[1] + fy) - fy];
+    return neighborSnap(o, at, d, fy) || [snapX(at[0], offs), snapV(at[1] + fy) - fy];
   }
   return [snapX(at[0], [-d.w / 2, 0, d.w / 2]), snapV(at[1])];
+}
+
+// el imán entre piezas pintadas: cerca (10 px de pantalla) del borde de otra quieta con la línea de los pies a la misma
+// altura, se pega a su lado, encimada OVERLAP px, con la misma línea de los pies. Lo que se mueve junto no cuenta
+function neighborSnap(o, at, d, fy) {
+  if (!A) return null;
+  const T = 10 / view.k, feetOf = q => { const dq = def(q.piece); return dq && dq.painted ? ((dq.p.solids || [])[0] || { y: null }).y : null; };
+  let best = null, be = T;
+  A.objects.forEach((q, i) => {
+    if (q === o || moving(q) || inGroup({ t: "obj", i })) return;
+    const dq = def(q.piece), qf = feetOf(q); if (!dq || !dq.painted || qf == null) return;
+    const ey = Math.abs(at[1] + fy - (q.y + qf)); if (ey > T) return;
+    for (const cx of [q.x + dq.w - OVERLAP, q.x - d.w + OVERLAP]) { const e = Math.abs(at[0] - cx) + ey * 0.5; if (Math.abs(at[0] - cx) < T && e < be) { be = e; best = [cx, q.y + qf - fy]; } }
+  });
+  return best;
+}
+
+/* ---------- lo elegido: uno, o varios juntos ---------- */
+// cada cosa se nombra {t, i}: t es la lista (obj, spawn, solid, front) e i su lugar. Las cuentas que tienen que
+// sobrevivir a borrar o duplicar (parejas, spawns que siguen) usan el objeto mismo, no el número
+const ARR = { obj: () => A.objects, spawn: () => A.spawns, solid: () => A.solids, front: () => (A.plate && A.plate.solid) || [] };
+const itemOf = r => ARR[r.t]()[r.i];
+const sameRef = (a, b) => !!a && !!b && a.t === b.t && a.i === b.i;
+const inGroup = r => group.some(q => sameRef(q, r));
+// lo que se mueve o se cambia: el grupo; o lo elegido solo (de un punto del recorrido, su objeto)
+function picked() {
+  if (group.length) return group;
+  if (!sel) return [];
+  return [{ t: sel.t === "pt" ? "obj" : sel.t, i: sel.i }];
+}
+function selectOnly(r) { sel = r; group = r && r.t !== "pt" && r.t !== "handle" ? [{ t: r.t, i: r.i }] : []; }
+// un clic: eso solo, o toda su tira (una pasarela por tramos); con ⌥, sólo esa pieza
+function pickOne(r, single = false) {
+  selectOnly(r);
+  if (!single && r && r.t === "obj") { const T = tiraOf(A.objects[r.i]); if (T && T.length > 1) group = T; }
+}
+function toggleSel(r) {
+  if (inGroup(r)) { group = group.filter(q => !sameRef(q, r)); sel = group[group.length - 1] || null; }
+  else { if (!group.length && sel && sel.t !== "pt") group = [{ t: sel.t, i: sel.i }]; group.push({ t: r.t, i: r.i }); sel = r; }
+}
+// después de borrar o duplicar: los números de lo elegido, desde los objetos
+function rebind(items) {
+  group = items.filter(x => ARR[x.t]().includes(x.it)).map(x => ({ t: x.t, i: ARR[x.t]().indexOf(x.it) }));
+  sel = group[0] || null;
+}
+function selectAll() {
+  group = [];
+  A.objects.forEach((o, i) => group.push({ t: "obj", i }));
+  if (show.spawns) A.spawns.forEach((s, i) => group.push({ t: "spawn", i }));
+  if (show.col) A.solids.forEach((s, i) => { if (!baseSolid(s).ground) group.push({ t: "solid", i }); });
+  sel = group[0] || null;
+}
+function boxOf(r) {
+  const it = itemOf(r); if (!it) return null;
+  if (r.t === "obj") return objBox(it);
+  if (r.t === "spawn") return { x: it[0] - 16, y: it[1] - 104, w: 32, h: 104 };
+  if (r.t === "solid") { const s = baseSolid(it); return { x: s.x, y: s.y, w: s.w, h: Math.min(s.h, 200) }; }
+  if (r.t === "front") return { x: it[0], y: it[1], w: it[2], h: it[3] };
+  return null;
+}
+// el recuadro: lo que lo toca (los sólidos, por su línea de los pies; el piso, nunca)
+function inBox(b) {
+  const out = [], over = (x, y, w, h) => x < b.x + b.w && x + w > b.x && y < b.y + b.h && y + h > b.y;
+  A.objects.forEach((o, i) => { const q = objBox(o); if (over(q.x, q.y, q.w, q.h)) out.push({ t: "obj", i }); });
+  if (show.spawns) A.spawns.forEach(([x, y], i) => { if (over(x - 16, y - 104, 32, 104)) out.push({ t: "spawn", i }); });
+  if (show.col) A.solids.forEach((s, i) => { const q = baseSolid(s); if (!q.ground && over(q.x, q.y - 4, q.w, 8)) out.push({ t: "solid", i }); });
+  if (show.col && HANG_ON) ARR.front().forEach(([x, y, w, h], i) => { if (over(x, y, w, h)) out.push({ t: "front", i }); });
+  return out;
+}
+// todo lo de un piso: lo que se pisa a esa altura (±8 px), de los dos lados, y los spawns parados ahí
+function floorY(r) {
+  const it = itemOf(r); if (!it) return null;
+  if (r.t === "spawn") return it[1];
+  if (r.t === "solid") return it.y;
+  if (r.t === "obj") { const s = world().solids.find(q => q.src === it && !q.moving); return s ? s.y : null; }
+  return null;
+}
+function selectFloor(r) {
+  const y = floorY(r); if (y == null) return;
+  const Wd = world(), near = v => Math.abs(v - y) <= 8, out = [];
+  A.objects.forEach((o, i) => { if (Wd.solids.some(s => s.src === o && !s.moving && near(s.y))) out.push({ t: "obj", i }); });
+  A.solids.forEach((s, i) => { const q = baseSolid(s); if (!q.ground && near(q.y)) out.push({ t: "solid", i }); });
+  A.spawns.forEach(([, sy], i) => { if (near(sy)) out.push({ t: "spawn", i }); });
+  group = out.length ? out : [{ t: r.t, i: r.i }];
+  sel = group.find(q => sameRef(q, r)) || group[0];
+  toast(`El piso de y ${Math.round(y)}: ${group.length} ${group.length === 1 ? "cosa" : "cosas"}`);
+}
+
+/* ---------- simetría: la pareja del otro lado ---------- */
+// sin cambiar el formato: la pareja de algo es lo que está espejado contra el medio de la arena (±MIRROR_TOL px), de la
+// misma clase (la misma pieza, o la de nombre _izq ↔ _der; el mismo kind). Lo que está en el eje es pareja de sí mismo.
+// En las pintadas se compara lo que se pisa (su primer sólido), porque las dos mitades pueden medir distinto de caja
+const MIRROR_TOL = 6;
+function spanOf(t, it) {
+  if (t === "obj") {
+    const d = def(it.piece), at = moving(it) ? it.move.path[0] : [it.x, it.y];
+    if (d && d.painted) {
+      const s = (d.p.solids || [])[0];
+      if (s) { const x0 = at[0] + (it.flip ? d.w - s.x - s.w : s.x); return { x0, x1: x0 + s.w, y: at[1] }; }
+      return { x0: at[0], x1: at[0] + d.w, y: at[1] };
+    }
+    return { x0: at[0], x1: at[0], y: at[1] };   // del kit: el centro
+  }
+  if (t === "spawn") return { x0: it[0], x1: it[0], y: it[1] };
+  if (t === "solid") return { x0: it.x, x1: it.x + it.w, y: it.y };
+  return { x0: it[0], x1: it[0] + it[2], y: it[1] };   // front
+}
+const sideSwap = n => n.replace(/izq/g, "\u0001").replace(/der/g, "izq").replace(/\u0001/g, "der");
+function canPair(t, a, b) {
+  if (t === "obj") return (a.piece === b.piece || sideSwap(a.piece) === b.piece) && moving(a) === moving(b) && (!moving(a) || a.move.path.length === b.move.path.length);
+  if (t === "solid") return (a.kind || "") === (b.kind || "");
+  return true;
+}
+function partnerOf(r) {
+  const arr = ARR[r.t](), a = arr[r.i]; if (!a) return null;
+  const sa = spanOf(r.t, a); let best = null, be = Infinity;
+  arr.forEach((b, j) => {
+    if (!canPair(r.t, a, b)) return;
+    const sb = spanOf(r.t, b), e0 = sb.x0 - (AW - sa.x1), e1 = sb.x1 - (AW - sa.x0), ey = sb.y - sa.y;
+    if (Math.abs(e0) > MIRROR_TOL || Math.abs(e1) > MIRROR_TOL || Math.abs(ey) > MIRROR_TOL) return;
+    const e = Math.abs(e0) + Math.abs(e1) + Math.abs(ey);
+    if (e < be) { be = e; best = { t: r.t, i: j, self: j === r.i, off: [e0, ey] }; }
+  });
+  return best;
+}
+// qué se mueve de verdad y qué lo copia: con Espejo, de cada pareja elegida se mueve una mitad y la otra la sigue
+function plan(refs) {
+  if (!mirror) return { movers: refs, pairs: [] };
+  const taken = new Set(), movers = [], pairs = [];
+  for (const r of refs) {
+    if (taken.has(r.t + ":" + r.i)) continue;
+    taken.add(r.t + ":" + r.i); movers.push(r);
+    const q = partnerOf(r); if (!q) continue;
+    if (!q.self) taken.add(q.t + ":" + q.i);
+    const m = itemOf(r), p = itemOf(q);
+    pairs.push({ t: r.t, m, p, off: q.off, self: q.self, flipRel: r.t === "obj" && !!m.flip !== !!p.flip });
+  }
+  return { movers, pairs };
+}
+// la pareja p queda como el espejo de m, con el mismo corrimiento que tenía (off: [x, y], casi siempre 0 o 1 px)
+function relX0(t, it) { const base = t === "obj" ? (moving(it) ? it.move.path[0][0] : it.x) : t === "solid" ? it.x : it[0]; return spanOf(t, it).x0 - base; }
+function mirrorApply(P) {
+  const { t, m, p, off } = P;
+  if (P.self) return;   // en el eje: no tiene otra mitad (el arrastre la deja centrada)
+  if (t === "spawn") { p[0] = Math.round(AW - m[0] + off[0]); p[1] = m[1] + off[1]; return; }
+  if (t === "front") { p[0] = AW - m[0] - m[2] + off[0]; p[1] = m[1] + off[1]; p[2] = m[2]; p[3] = m[3]; return; }
+  if (t === "solid") {
+    p.x = AW - m.x - m.w + off[0]; p.y = m.y + off[1]; p.w = m.w; p.kind = m.kind;
+    if (m.h != null) p.h = m.h; else delete p.h;
+    if (m.ledge) p.ledge = flipLedge(m.ledge); else delete p.ledge;
+    return;
+  }
+  const sm = spanOf("obj", m), rm = relX0("obj", m), rp = relX0("obj", p), w = sm.x1 - sm.x0;
+  const mx = cx => Math.round(AW - (cx + rm + w) + off[0] - rp);   // la esquina (o el centro, en las del kit) de la pareja
+  if (moving(m)) { p.move = { ...clean(m.move), path: m.move.path.map(([x, y]) => [mx(x), y + off[1]]) }; [p.x, p.y] = p.move.path[0]; }
+  else { delete p.move; p.x = mx(m.x); p.y = m.y + off[1]; }
+  if (legsOf(def(p.piece))) { if (m.stretch) p.stretch = m.stretch; else delete p.stretch; }
+  if (m.piece === p.piece) { const f = P.flipRel ? !m.flip : !!m.flip; if (f) p.flip = true; else delete p.flip; }
+  if (m.ledge) p.ledge = flipLedge(m.ledge); else delete p.ledge;
+  if (m.solid === false) p.solid = false; else delete p.solid;
+  if (m.layer) p.layer = m.layer; else delete p.layer;
+}
+// lo que no tiene pareja (para "Revisar simetría")
+function unpaired() {
+  const out = [];
+  for (const t of ["obj", "solid", "spawn", ...(HANG_ON ? ["front"] : [])]) ARR[t]().forEach((it, i) => { if (!partnerOf({ t, i })) out.push({ t, i }); });
+  return out;
+}
+function refName(r) {
+  const it = itemOf(r); if (!it) return "?";
+  if (r.t === "obj") return `${objName(it)} · y ${Math.round(moving(it) ? it.move.path[0][1] : it.y)}`;
+  if (r.t === "spawn") return `Spawn ${r.i + 1} · ${it[0]}, ${it[1]}`;
+  if (r.t === "solid") return `${solidName(it, r.i)} · y ${it.y}`;
+  return `Recorte ${r.i + 1}`;
+}
+
+/* ---------- los spawns siguen a lo que pisan ---------- */
+// antes de un cambio se anota sobre qué está parado cada spawn (el sólido, por su objeto); después, si eso se movió,
+// el spawn se corre lo mismo. Los que se cambian a mano (elegidos, o pareja de uno elegido) no
+function spawnSurface(x, y, Wd = W) { return Wd.solids.find(s => !s.moving && x + PHYS.halfW > s.x && x - PHYS.halfW < s.x + s.w && Math.abs(s.y - y) < 1.5); }
+function carryStart(skip) {
+  const Wd = world();
+  return A.spawns.map(sp => {
+    if (skip.has(sp)) return null;
+    const s = spawnSurface(sp[0], sp[1], Wd);
+    return s && s.src ? { sp, at: [...sp], src: s.src, sj: s.sj, x: s.x, y: s.y } : null;
+  }).filter(Boolean);
+}
+function carryApply(cs) {
+  if (!cs.length) return;
+  const Wd = world();
+  for (const c of cs) {
+    if (!A.spawns.includes(c.sp)) continue;
+    const s = Wd.solids.find(q => q.src === c.src && q.sj === c.sj && !q.moving); if (!s) continue;
+    c.sp[0] = Math.round(c.at[0] + s.x - c.x); c.sp[1] = Math.round(c.at[1] + s.y - c.y);
+  }
+}
+// lo que hace cada cambio además de lo suyo: las parejas (con Espejo) y los spawns que siguen
+function editCtx(refs = picked()) {
+  // lo que se agarró va primero: es la mitad que se mueve (la otra la sigue espejada)
+  if (sel) refs = [...refs.filter(r => sameRef(r, sel)), ...refs.filter(r => !sameRef(r, sel))];
+  const pl = plan(refs), skip = new Set();
+  for (const r of refs) if (r.t === "spawn") skip.add(itemOf(r));
+  for (const P of pl.pairs) if (P.t === "spawn") skip.add(P.p);
+  return { ...pl, carry: carryStart(skip) };
+}
+function applyCtx(c) {
+  for (const P of c.pairs) if (ARR[P.t]().includes(P.m) && ARR[P.t]().includes(P.p)) mirrorApply(P);
+  carryApply(c.carry);
+}
+// mover lo elegido: del estado de antes (o0) más dx, dy
+function moveItem(r, dx, dy) {
+  const it = itemOf(r);
+  if (r.t === "obj") { if (moving(it)) { it.move.path = it.move.path.map(([x, y]) => [x + dx, y + dy]); [it.x, it.y] = it.move.path[0]; } else { it.x += dx; it.y += dy; } }
+  else if (r.t === "solid") { it.x += dx; it.y += dy; }
+  else { it[0] += dx; it[1] += dy; }   // spawn, front
+}
+function restore(r, o0) {
+  const it = itemOf(r);
+  if (Array.isArray(it)) it.splice(0, it.length, ...o0);
+  else { for (const k of Object.keys(it)) delete it[k]; Object.assign(it, clean(o0)); }
 }
 
 /* ---------- vista ---------- */
@@ -469,6 +734,7 @@ const toWorld = e => { const r = cv.getBoundingClientRect(); return [(e.clientX 
 
 /* ---------- dibujo ---------- */
 let W = null, R = null;   // el mundo y el alcance del último cuadro
+const plateWarned = new Set();   // las láminas que no miden lo que la arena (se avisa una vez)
 function rgba(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
 function drawPiece(o, at, alpha = 1, tint = null) {
   const d = def(o.piece), b = objBox(o, at);
@@ -518,6 +784,9 @@ function render() {
   if (JSON.stringify(A.color || null) + noColor !== colorKey && !gradeLow) regrade();   // deshacer, otra arena…
   if (A.plate && A.plate.src) {
     const e = img(ARENA_DIR + A.plate.src);
+    if (e.ok && !plateWarned.has(e.im.src) && (e.im.naturalWidth !== AW || e.im.naturalHeight !== AH)) {
+      plateWarned.add(e.im.src); toast(`La lámina mide ${e.im.naturalWidth} × ${e.im.naturalHeight} y la arena ${AW} × ${AH}: el juego la estira`);
+    }
     if (e.ok) {
       const bg = graded(e, "fondo"), fg = graded(e, "plataformas");
       g.drawImage(bg, 0, 0, AW, AH);
@@ -541,11 +810,17 @@ function render() {
   g.fillStyle = "rgba(6,8,12,.72)";
   g.fillRect(-4000, -4000, 8000 + AW, 4000); g.fillRect(-4000, AH, 8000 + AW, 4000); g.fillRect(-4000, 0, 4000, AH); g.fillRect(AW, 0, 4000, AH);
   drawGrid();
+  if (show.guides) drawGuides();
   if (show.paths) drawPaths();
   if (show.col) drawCollision();
   if (show.reach) drawReach();
   if (show.spawns) drawSpawns();
+  if (mirror) drawMirror();
   drawSelection();
+  if (box) {
+    g.save(); g.fillStyle = rgba(COL.acc, 0.08); g.fillRect(box.x, box.y, box.w, box.h);
+    g.setLineDash([5 / view.k, 4 / view.k]); g.strokeStyle = rgba(COL.acc, 0.9); g.lineWidth = 1.2 / view.k; g.strokeRect(box.x, box.y, box.w, box.h); g.restore();
+  }
   g.strokeStyle = "rgba(255,255,255,.35)"; g.lineWidth = 1 / view.k; g.strokeRect(0, 0, AW, AH);
   status();
   if (anim) { animT += 1 / 60; draw(); }
@@ -561,6 +836,62 @@ function drawGrid() {
   for (let y = 0; y <= AH; y += 128) { g.moveTo(0, y); g.lineTo(AW, y); }
   g.strokeStyle = "rgba(255,255,255,.13)"; g.stroke(); g.restore();
 }
+// las guías de la escala: los pisos cada guideStep desde el piso, lo que tapa el HUD, el margen de los power-ups y las
+// caídas que sacan vida (FALL_H o más, desde un borde o atravesando hacia abajo)
+function mainFloor(Wd = W) { const g0 = Wd.solids.filter(s => s.ground && !s.moving).sort((a, b) => b.w - a.w)[0]; return g0 ? g0.y : AH - 140; }
+function hudRect(n = 4) {   // el HUD chico con n jugadores (drawMiniHud de src.html), de la vista de 960 al mundo
+  const s = AW / 960, R = HUD2.r + HUD2.ring, w = HUD2.right + 2 * R + (n - 1) * HUD2.gap + 10, h = HUD2.top + 12 + 2 * HUD2.r + 3 + 17;
+  return { x: AW - w * s, y: 0, w: w * s, h: h * s };
+}
+function falls(Wd = W) {
+  const out = [], st = Wd.solids.filter(s => !s.moving);
+  const below = (x, y, self) => st.filter(s => s !== self && s.y > y + 4 && x >= s.x && x <= s.x + s.w).sort((a, b) => a.y - b.y)[0];
+  for (const s of st) {
+    if (s.ground) continue;
+    const xs = [];
+    if (s.x - 20 > 0) xs.push(s.x - 20);                 // caminando más allá del borde
+    if (s.x + s.w + 20 < AW) xs.push(s.x + s.w + 20);
+    if (s.oneWay) xs.push(s.x + s.w / 2);                 // atravesándola hacia abajo
+    const seen = new Set();   // una marca por cada lugar donde se cae (desde esta superficie)
+    for (const x of xs) { const q = below(x, s.y, s); if (q && q.y - s.y >= FALL_H && !seen.has(q)) { seen.add(q); out.push({ x, y0: s.y, y1: q.y, drop: Math.round(q.y - s.y) }); } }
+  }
+  return out;
+}
+function drawGuides() {
+  const fy = mainFloor();
+  g.save(); g.setLineDash([10 / view.k, 8 / view.k]); g.lineWidth = 1 / view.k; g.strokeStyle = "rgba(255,255,255,.28)";
+  for (let k = 1, y = fy - guideStep; y > 20; k++, y -= guideStep) {
+    g.beginPath(); g.moveTo(0, y); g.lineTo(AW, y); g.stroke();
+    text(`piso ${k} · +${k * guideStep}`, AW - 6, y - 5, "rgba(255,255,255,.6)", 10, "right");
+  }
+  // el margen de los power-ups
+  g.strokeStyle = "rgba(255,210,63,.35)";
+  for (const x of [PU_MARGIN, AW - PU_MARGIN]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, fy); g.stroke(); }
+  g.restore();
+  text(`power-ups ≥ ${PU_MARGIN}`, PU_MARGIN + 4, 16, "rgba(255,210,63,.75)", 10);
+  // el HUD con 4 jugadores
+  const H = hudRect();
+  g.save(); g.fillStyle = "rgba(255,90,90,.13)"; g.fillRect(H.x, H.y, H.w, H.h);
+  g.setLineDash([6 / view.k, 4 / view.k]); g.strokeStyle = "rgba(255,90,90,.7)"; g.lineWidth = 1.2 / view.k; g.strokeRect(H.x, H.y, H.w, H.h); g.restore();
+  text("HUD (4 jugadores)", H.x + 6, H.y + H.h - 8, "#ffb3b3", 11);
+  // las caídas que sacan vida
+  for (const f of falls()) {
+    line(f.x, f.y0, f.x, f.y1, "rgba(255,90,90,.85)", 1.6, [4, 4]);
+    g.save(); g.fillStyle = "rgba(255,90,90,.9)"; const a = 7 / view.k;
+    g.beginPath(); g.moveTo(f.x, f.y1); g.lineTo(f.x - a, f.y1 - 1.6 * a); g.lineTo(f.x + a, f.y1 - 1.6 * a); g.fill(); g.restore();
+    text(`−1 · ${f.drop}`, f.x + 6, (f.y0 + f.y1) / 2, "#ffb3b3", 11);
+  }
+}
+// con Espejo: el eje, y lo que no tiene pareja marcado en violeta
+function drawMirror() {
+  line(AW / 2, 0, AW / 2, AH, "rgba(167,139,250,.55)", 1.2, [12, 6]);
+  for (const r of unpaired()) {
+    const b = boxOf(r); if (!b) continue;
+    g.save(); g.setLineDash([3 / view.k, 3 / view.k]); g.strokeStyle = "rgba(232,121,249,.95)"; g.lineWidth = 1.5 / view.k;
+    g.strokeRect(b.x - 4, b.y - 4, b.w + 8, b.h + 8); g.restore();
+    text("sin pareja", b.x, b.y - 8, "#f0abfc", 10);
+  }
+}
 function ownOk(own) { const b = R.byOwn.get(own); return !b || b.ok; }
 function drawCollision() {
   for (const s of W.solids) {
@@ -572,7 +903,8 @@ function drawCollision() {
     for (const [ok, cx] of [[s.hangL, s.x], [s.hangR, s.x + s.w]]) if (ok) hangMark(cx, s.y);
     text(String(Math.round(s.y)), Math.max(4, x0 + 4), s.y - 6, c, 10);
   }
-  // lo que va delante del colgado: recortes de la lámina y de las piezas
+  // lo que va delante del colgado: recortes de la lámina y de las piezas (sin colgado no hace nada: no se dibuja)
+  if (!HANG_ON) return;
   g.save(); g.setLineDash([4 / view.k, 3 / view.k]); g.strokeStyle = rgba(COL.front, 0.75); g.lineWidth = 1 / view.k;
   for (const [x, y, w, h] of (A.plate && A.plate.solid) || []) g.strokeRect(x, y, w, h);
   for (const o of A.objects) for (const [x, y, w, h] of frontRects(o)) g.strokeRect(x, y, w, h);
@@ -644,10 +976,9 @@ function drawPaths() {
       g.fillStyle = sel && sel.t === "pt" && sel.i === i && sel.j === j ? "#fff" : COL.acc; g.fill();
       g.lineWidth = 1.5 / view.k; g.strokeStyle = "#06222a"; g.stroke();
     });
-    text(`${o.move.speed || 120} px/s · ${String(o.move.wait ?? 0.5).replace(".", ",")} s`, p[0][0] + 10, p[0][1] + 20, COL.acc, 11);
+    text(`${o.move.speed ?? 120} px/s · ${String(o.move.wait ?? 0.5).replace(".", ",")} s`, p[0][0] + 10, p[0][1] + 20, COL.acc, 11);
   });
 }
-function spawnSurface(x, y) { return W.solids.find(s => !s.moving && x + PHYS.halfW > s.x && x - PHYS.halfW < s.x + s.w && Math.abs(s.y - y) < 1.5); }
 function drawSpawns() {
   const e = RANGER && img(RANGER.src);
   (A.spawns || []).forEach(([x, y], i) => {
@@ -660,6 +991,16 @@ function drawSpawns() {
   });
 }
 function drawSelection() {
+  // el grupo (celeste) y, con Espejo, las parejas que van a seguir (violeta)
+  if (group.length > 1 || mirror) {
+    const { pairs } = plan(picked());
+    g.save(); g.lineWidth = 1.2 / view.k; g.setLineDash([5 / view.k, 4 / view.k]);
+    g.strokeStyle = rgba(COL.acc, 0.95);
+    for (const r of group) { if (sameRef(r, sel)) continue; const b = boxOf(r); if (b) g.strokeRect(b.x - 2, b.y - 2, b.w + 4, b.h + 4); }
+    g.strokeStyle = "rgba(167,139,250,.95)";
+    for (const P of pairs) { if (P.self) continue; const i = ARR[P.t]().indexOf(P.p), b = i >= 0 && boxOf({ t: P.t, i }); if (b) g.strokeRect(b.x - 3, b.y - 3, b.w + 6, b.h + 6); }
+    g.restore();
+  }
   if (!sel) return;
   g.save(); g.lineWidth = 1.5 / view.k; g.setLineDash([6 / view.k, 4 / view.k]); g.strokeStyle = "#fff";
   const b = selBox(); if (b) g.strokeRect(b.x - 2, b.y - 2, b.w + 4, b.h + 4);
@@ -682,7 +1023,7 @@ function selBox() {
   return null;
 }
 function handles() {   // para estirar: los sólidos de la base, los recortes de adelante y las patas de una pintada
-  if (!sel) return [];
+  if (!sel || group.length > 1) return [];
   if (sel.t === "obj" && legsOf(def(A.objects[sel.i].piece))) { const b = objBox(A.objects[sel.i]); return [{ x: b.x + b.w / 2, y: b.y + b.h, k: "legs" }]; }
   if (sel.t === "solid") { const s = baseSolid(A.solids[sel.i]), hs = [{ x: s.x, y: s.y, k: "l" }, { x: s.x + s.w, y: s.y, k: "r" }]; if (!s.oneWay) hs.push({ x: s.x + s.w / 2, y: s.y + Math.min(s.h, 200), k: "b" }); return hs; }
   if (sel.t === "front") { const [x, y, w, h] = A.plate.solid[sel.i]; return [{ x, y: y + h / 2, k: "l" }, { x: x + w, y: y + h / 2, k: "r" }, { x: x + w / 2, y, k: "t" }, { x: x + w / 2, y: y + h, k: "b" }]; }
@@ -690,7 +1031,8 @@ function handles() {   // para estirar: los sólidos de la base, los recortes de
 }
 function status() {
   const m = mouse ? `x ${Math.round(mouse[0])} · y ${Math.round(mouse[1])}` : "";
-  $("status").textContent = [m, `zoom ${Math.round(view.k * 100)}%`, dirty ? "cambios sin guardar" : ""].filter(Boolean).join("   ·   ");
+  $("status").textContent = [m, `${AW} × ${AH}`, `zoom ${Math.round(view.k * 100)}%`, group.length > 1 ? `${group.length} elegidos` : "",
+    mirror ? "espejo" : "", dirty ? "cambios sin guardar" : ""].filter(Boolean).join("   ·   ");
 }
 
 /* ---------- elegir con el mouse ---------- */
@@ -717,34 +1059,60 @@ function hit(wx, wy) {
   for (const i of [...front, ...painted, ...back]) if (hitObj(A.objects[i], wx, wy)) return { t: "obj", i };
   if (show.col) {
     for (let i = A.solids.length - 1; i >= 0; i--) { const s = baseSolid(A.solids[i]); if (wx >= s.x && wx <= s.x + s.w && wy >= s.y - tol && wy <= s.y + Math.max(tol, Math.min(s.h, 40))) return { t: "solid", i }; }
-    const F = (A.plate && A.plate.solid) || [];
+    const F = HANG_ON ? ARR.front() : [];
     for (let i = F.length - 1; i >= 0; i--) { const [x, y, w, h] = F[i]; if (wx >= x && wx <= x + w && wy >= y && wy <= y + h) return { t: "front", i }; }
   }
   return null;
 }
 
 /* ---------- arrastrar ---------- */
+// en vacío: el recuadro de elegir (con ⇧ suma). La vista se mueve con espacio, el botón del medio o el derecho, o la rueda
 let drag = null;
 cv.addEventListener("pointerdown", e => {
   cv.setPointerCapture(e.pointerId);
   const [wx, wy, sx, sy] = toWorld(e);
   if (e.button === 1 || e.button === 2 || spaceDown) { drag = { pan: true, sx, sy, vx: view.x, vy: view.y }; return; }
   const h = hit(wx, wy);
-  if (!h) { sel = null; changedSel(); drag = { pan: true, sx, sy, vx: view.x, vy: view.y }; return; }
-  if (h.t !== "handle") { sel = h; changedSel(); }
-  drag = { h, wx, wy, before: JSON.stringify(A), orig: JSON.parse(JSON.stringify(target())), moved: false, standing: h.t === "obj" ? standing() : [] };
+  if (!h) { drag = { box: true, x0: wx, y0: wy, add: e.shiftKey }; box = null; return; }
+  let was = false;
+  if (h.t === "handle") { /* estirar lo elegido */ }
+  else if (e.shiftKey && h.t !== "pt") { toggleSel(h); changedSel(); if (!inGroup(h)) { drag = null; return; } }
+  else if (h.t !== "pt" && inGroup(h) && !e.altKey) { sel = h; was = true; changedSel(); }   // uno del grupo: se arrastra todo
+  else { pickOne(h, e.altKey); changedSel(); }
+  const ctx = editCtx();
+  drag = { h, wx, wy, was, before: JSON.stringify(A), orig: JSON.parse(JSON.stringify(target())), moved: false, ctx,
+           refs: ctx.movers, origs: ctx.movers.map(r => clean(itemOf(r))), standing: standing() };
 });
 cv.addEventListener("pointermove", e => {
   const [wx, wy, sx, sy] = toWorld(e); mouse = [wx, wy];
   if (!drag) { const h = !spaceDown && hit(wx, wy); cv.style.cursor = spaceDown ? "grab" : h && h.k === "legs" ? "ns-resize" : h ? "move" : "default"; status(); return; }
   if (drag.pan) { view.x = drag.vx + sx - drag.sx; view.y = drag.vy + sy - drag.sy; cv.style.cursor = "grabbing"; draw(); return; }
+  if (drag.box) { box = { x: Math.min(drag.x0, wx), y: Math.min(drag.y0, wy), w: Math.abs(wx - drag.x0), h: Math.abs(wy - drag.y0) }; cv.style.cursor = "crosshair"; draw(); return; }
   const dx = wx - drag.wx, dy = wy - drag.wy;
   if (!drag.moved && Math.hypot(dx, dy) * view.k < 3) return;
-  drag.moved = true; applyDrag(dx, dy); draw();
+  drag.moved = true; applyDrag(dx, dy, e.shiftKey); draw();
 });
 cv.addEventListener("pointerup", () => {
-  if (drag && !drag.pan && drag.moved) { if (sel && sel.t === "spawn") settleSpawn(sel.i); if (sel && sel.t === "obj") settleObj(sel.i); commit(drag.before); }
+  if (drag && drag.box) {
+    if (box && Math.max(box.w, box.h) * view.k > 4) {
+      const got = inBox(box);
+      if (drag.add) { for (const r of got) if (!inGroup(r)) group.push(r); }
+      else group = got;
+      sel = group[group.length - 1] || null;
+    } else if (!drag.add) { sel = null; group = []; }
+    box = null; drag = null; cv.style.cursor = "default"; changedSel(); return;
+  }
+  if (drag && !drag.pan && drag.moved) {
+    if (drag.refs.length === 1 && sel && sel.t === "spawn") settleSpawn(sel.i);
+    if (drag.refs.length === 1 && sel && sel.t === "obj") settleObj(sel.i);
+    applyCtx(drag.ctx);
+    commit(drag.before);
+  } else if (drag && drag.was && !drag.moved) { pickOne(drag.h); changedSel(); }   // clic sin mover en uno del grupo: sólo ese (o su tira)
   drag = null; cv.style.cursor = "default";
+});
+cv.addEventListener("dblclick", e => {
+  const [wx, wy] = toWorld(e), h = hit(wx, wy);
+  if (h && h.t !== "handle" && h.t !== "pt") { selectFloor(h); changedSel(); }
 });
 cv.addEventListener("contextmenu", e => e.preventDefault());
 function target() {
@@ -755,25 +1123,36 @@ function target() {
   if (sel.t === "front") return A.plate.solid[sel.i];
   return null;
 }
-function applyDrag(dx, dy) {
+// el corrimiento con la grilla y los imanes, de lo que se agarró (o0: como estaba). En el eje que casi no se movió (menos
+// de 3 px de pantalla) no hay imán: subir algo derecho no le corre la x
+function snapDelta(t, it, o0, dx, dy) {
+  const tol = 3 / view.k, keep = (d, v) => (Math.abs(d) < tol ? 0 : v);
+  if (t === "obj") {
+    const [px, py] = moving(o0) ? o0.move.path[0] : [o0.x, o0.y], [nx, ny] = snapObj(it, [px + dx, py + dy]);
+    return [keep(dx, nx - px), keep(dy, ny - py)];
+  }
+  if (t === "spawn") return [keep(dx, snapV(o0[0] + dx) - o0[0]), keep(dy, Math.round(o0[1] + dy) - o0[1])];
+  if (t === "solid") return [keep(dx, snapX(o0.x + dx, [0, o0.w]) - o0.x), keep(dy, snapV(o0.y + dy) - o0.y)];
+  return [keep(dx, snapX(o0[0] + dx, [0, o0[2]]) - o0[0]), keep(dy, snapV(o0[1] + dy) - o0[1])];   // front
+}
+function applyDrag(dx, dy, lock = false) {
   const o0 = drag.orig, h = drag.h;
-  if (h.t === "handle") return resizeDrag(h.k, o0, dx, dy);
-  if (sel.t === "obj") {
-    const o = A.objects[sel.i];
-    if (moving(o)) {   // las que se mueven: todo el recorrido junto
-      const [px, py] = o0.move.path[0], [nx, ny] = snapObj(o, [px + dx, py + dy]);
-      o.move.path = o0.move.path.map(([x, y]) => [x + nx - px, y + ny - py]); [o.x, o.y] = o.move.path[0];
-    } else { [o.x, o.y] = snapObj(o, [o0.x + dx, o0.y + dy]); followLegs(sel.i, drag.standing); }
-  } else if (sel.t === "pt") {
+  if (lock) { if (Math.abs(dx) > Math.abs(dy)) dy = 0; else dx = 0; }   // ⇧: sólo un eje
+  if (h.t === "handle") resizeDrag(h.k, o0, dx, dy);
+  else if (sel.t === "pt") {
     const o = A.objects[sel.i], [x0, y0] = o0.move.path[sel.j];
     o.move.path[sel.j] = snapObj(o, [x0 + dx, y0 + dy]); if (sel.j === 0) [o.x, o.y] = o.move.path[0];
-  } else if (sel.t === "spawn") {
-    A.spawns[sel.i] = [snapV(o0[0] + dx), Math.round(o0[1] + dy)];
-  } else if (sel.t === "solid") {
-    const s = A.solids[sel.i]; s.x = snapX(o0.x + dx, [0, o0.w]); s.y = snapV(o0.y + dy);
-  } else if (sel.t === "front") {
-    const r = A.plate.solid[sel.i]; r[0] = snapX(o0[0] + dx, [0, o0[2]]); r[1] = snapV(o0[1] + dy);
+  } else {
+    // todo lo elegido se corre lo mismo que lo que se agarró; lo que está en el eje (con Espejo) sólo sube o baja
+    const g0 = drag.refs.findIndex(r => sameRef(r, sel)), [mx, my] = snapDelta(sel.t, itemOf(sel), g0 >= 0 ? drag.origs[g0] : o0, dx, dy);
+    const selfs = new Set(drag.ctx.pairs.filter(P => P.self).map(P => P.m));
+    drag.refs.forEach((r, k) => { restore(r, drag.origs[k]); moveItem(r, selfs.has(itemOf(r)) ? 0 : mx, my); });
+    if (legsFollow) for (const i of new Set([...drag.refs.filter(r => r.t === "obj").map(r => r.i), ...drag.standing])) {
+      const o = A.objects[i]; if (moving(o)) continue;
+      const gr = groundStretch(i); if (gr) setStretch(o, gr.s);
+    }
   }
+  applyCtx(drag.ctx);
 }
 function resizeDrag(k, o0, dx, dy) {
   if (k === "legs") {   // el tirador de abajo de una pintada: las patas, con imán a lo de abajo (a 10 px de pantalla)
@@ -818,94 +1197,185 @@ function commit(before) {
   hist.undo.push(before); if (hist.undo.length > 300) hist.undo.shift(); hist.redo.length = 0;
   dirty = JSON.stringify(A) !== saved; keepWip(); changed();
 }
-function edit(fn) { const before = JSON.stringify(A); fn(); commit(before); }
-function changed() { draw(); inspect(); colorPanel(); reachPanel(); topbar(); }
+// un cambio: lo suyo, y además (salvo raw) las parejas con Espejo y los spawns que siguen a lo que pisan. raw: lo que no
+// es mover o cambiar lo elegido (la colisión de una pieza, el color, el nombre) o que ya se ocupa de las parejas
+function edit(fn, { raw = false } = {}) { const before = JSON.stringify(A), c = raw ? null : editCtx(); fn(); if (c) applyCtx(c); commit(before); }
+let palKey = null;   // la paleta se rearma sólo si cambian las piezas pintadas de la arena
+function changed() {
+  const pk = Object.keys((A && A.pieces) || {}).join("|");
+  if (pk !== palKey) palette();
+  draw(); inspect(); colorPanel(); reachPanel(); topbar();
+}
 function changedSel() { draw(); inspect(); }
 function undo() { if (!hist.undo.length) return; hist.redo.push(JSON.stringify(A)); A = JSON.parse(hist.undo.pop()); fixSel(); dirty = JSON.stringify(A) !== saved; keepWip(); changed(); }
 function redo() { if (!hist.redo.length) return; hist.undo.push(JSON.stringify(A)); A = JSON.parse(hist.redo.pop()); fixSel(); dirty = JSON.stringify(A) !== saved; keepWip(); changed(); }
 function fixSel() {
+  group = group.filter(r => itemOf(r) !== undefined);
   if (!sel) return;
   const arr = { obj: A.objects, pt: A.objects, spawn: A.spawns, solid: A.solids, front: A.plate && A.plate.solid }[sel.t];
-  if (!arr || !arr[sel.i] || (sel.t === "pt" && !moving(arr[sel.i]))) sel = null;
+  if (!arr || !arr[sel.i] || (sel.t === "pt" && !moving(arr[sel.i]))) sel = group[0] || null;
 }
 
 /* ---------- acciones ---------- */
+// borrar lo elegido (con Espejo, también las parejas). Un punto de un recorrido: ese punto
 function del() {
-  if (!sel) return;
-  edit(() => {
-    if (sel.t === "obj") A.objects.splice(sel.i, 1);
-    else if (sel.t === "pt") { const p = A.objects[sel.i].move.path; if (p.length > 2) p.splice(sel.j, 1); else delete A.objects[sel.i].move; }
-    else if (sel.t === "spawn") A.spawns.splice(sel.i, 1);
-    else if (sel.t === "solid") A.solids.splice(sel.i, 1);
-    else if (sel.t === "front") A.plate.solid.splice(sel.i, 1);
-    sel = null;
-  });
+  if (!sel && !group.length) return;
+  if (sel && sel.t === "pt") {
+    edit(() => { const o = A.objects[sel.i], p = o.move.path; if (p.length > 2) p.splice(sel.j, 1); else delete o.move; sel = { t: "obj", i: sel.i }; group = [{ t: "obj", i: sel.i }]; });
+    return;
+  }
+  const { movers, pairs } = editCtx(), kill = [...movers.map(r => [r.t, itemOf(r)]), ...pairs.filter(P => !P.self).map(P => [P.t, P.p])];
+  edit(() => { for (const [t, it] of kill) { const arr = ARR[t](), k = arr.indexOf(it); if (k >= 0) arr.splice(k, 1); } sel = null; group = []; }, { raw: true });
 }
+// una copia de algo, corrida dx, dy (las del recorrido, con todo el recorrido)
+function copyOf(t, it, dx, dy) {
+  const c = clean(it);
+  if (t === "obj") { c.x += dx; c.y += dy; if (c.move && c.move.path) c.move.path = c.move.path.map(([x, y]) => [x + dx, y + dy]); }
+  else if (t === "solid") { c.x += dx; c.y += dy; }
+  else { c[0] += dx; c[1] += dy; }
+  return c;
+}
+function insertAfter(t, it, c) { const arr = ARR[t](), k = arr.indexOf(it); arr.splice(k < 0 ? arr.length : k + 1, 0, c); }
+// duplicar lo elegido, corrido a la derecha (los sólidos y lo que está en el eje, para arriba). Con Espejo, la pareja
+// también, corrida para el otro lado
 function dup() {
-  if (!sel) return;
-  const off = Math.max(grid, 8) * 2;
+  if (!sel && !group.length) return;
+  const { movers, pairs } = editCtx(), off = Math.max(grid, 8) * 2, made = [], byM = new Map(pairs.map(P => [P.m, P])), rt = retira();
+  const items = movers.map(r => ({ t: r.t, it: itemOf(r) }));   // los objetos antes de insertar: los números se corren
   edit(() => {
-    if (sel.t === "obj" || sel.t === "pt") {
-      const o = JSON.parse(JSON.stringify(A.objects[sel.i])); o.x += off;
-      if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [x + off, y]);
-      A.objects.splice(sel.i + 1, 0, o); sel = { t: "obj", i: sel.i + 1 };
-    } else if (sel.t === "spawn") { const [x, y] = A.spawns[sel.i]; A.spawns.push([x + off * 2, y]); sel = { t: "spawn", i: A.spawns.length - 1 }; }
-    else if (sel.t === "solid") { const s = { ...A.solids[sel.i] }; s.y -= off * 4; A.solids.push(s); sel = { t: "solid", i: A.solids.length - 1 }; }
-    else if (sel.t === "front") { const r = [...A.plate.solid[sel.i]]; r[0] += off; A.plate.solid.push(r); sel = { t: "front", i: A.plate.solid.length - 1 }; }
-  });
+    for (const r of items) {
+      const it = r.it, P = byM.get(it), up = r.t === "solid" || (P && P.self);
+      const c = rt(copyOf(r.t, it, up ? 0 : r.t === "spawn" ? off * 2 : off, up ? -off * 4 : 0));
+      insertAfter(r.t, it, c); made.push({ t: r.t, it: c });
+      if (P && !P.self) { const c2 = rt(clean(P.p)); mirrorApply({ ...P, m: c, p: c2 }); insertAfter(r.t, P.p, c2); made.push({ t: r.t, it: c2 }); }
+    }
+  }, { raw: true });
+  rebind(made); sel = group[0] || null; changedSel();
 }
+function flipObj(o) { o.flip = !o.flip; if (!o.flip) delete o.flip; if (o.ledge) o.ledge = flipLedge(o.ledge); }
 function flip() {
-  if (!sel || (sel.t !== "obj" && sel.t !== "pt")) return;
-  edit(() => { const o = A.objects[sel.i]; o.flip = !o.flip; if (!o.flip) delete o.flip; if (o.ledge) o.ledge = flipLedge(o.ledge); });
+  const refs = picked().filter(r => r.t === "obj"); if (!refs.length) return;
+  const { movers, pairs } = editCtx(refs), byM = new Map(pairs.map(P => [P.m, P]));
+  edit(() => { for (const r of movers) { const o = itemOf(r), P = byM.get(o); flipObj(o); if (P && !P.self && P.p.piece === o.piece) flipObj(P.p); } }, { raw: true });
 }
-// la copia del otro lado de la arena, espejada (las arenas son simétricas)
+// la copia del otro lado de la arena, espejada (las arenas son simétricas), de cada cosa elegida
+// las piezas con "espejo" (las del kit) no se espejan: la copia es la misma pieza (las simétricas, así la luz sigue
+// viniendo de la izquierda) o la del otro lado (las puntas). Lo que se pisa queda justo espejado
+function mirroredCopy(t, it) {
+  if (t === "obj") {
+    const o = clean(it), d = def(o.piece), w = d && d.painted ? d.w : 0, esp = d && d.painted && d.p.espejo;
+    if (esp) {
+      const sm = spanOf("obj", it), relM = relX0("obj", it), sw = sm.x1 - sm.x0;
+      if (esp !== "mismo") { const n = ensurePiece(esp); if (n) o.piece = n; }
+      const tmp = { ...o, x: 0, y: 0 }; delete tmp.move;
+      const relP = spanOf("obj", tmp).x0, mx = cx => Math.round(AW - (cx + relM + sw) - relP);
+      o.x = mx(o.x); if (o.ledge) o.ledge = flipLedge(o.ledge);
+      if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [mx(x), y]);
+      return o;
+    }
+    o.x = AW - o.x - w; flipObj(o);
+    if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [AW - x - w, y]);
+    return o;
+  }
+  if (t === "spawn") return [AW - it[0], it[1]];
+  if (t === "solid") { const s = clean(it); s.x = AW - s.x - s.w; if (s.ledge) s.ledge = flipLedge(s.ledge); return s; }
+  const [x, y, w, h] = it; return [AW - x - w, y, w, h];
+}
+// las copias de una tira forman otra tira
+function retira() { const m = new Map(); return o => { if (o && o.tira) { if (!m.has(o.tira)) m.set(o.tira, newTira()); o.tira = m.get(o.tira); } return o; }; }
 function mirrorCopy() {
-  if (!sel) return;
-  edit(() => {
-    if (sel.t === "obj" || sel.t === "pt") {
-      const o = JSON.parse(JSON.stringify(A.objects[sel.i])), d = def(o.piece);
-      o.x = d && d.painted ? AW - o.x - d.w : AW - o.x; o.flip = !o.flip; if (!o.flip) delete o.flip; if (o.ledge) o.ledge = flipLedge(o.ledge);
-      if (o.move && o.move.path) o.move.path = o.move.path.map(([x, y]) => [AW - x - (d && d.painted ? d.w : 0), y]);
-      A.objects.splice(sel.i + 1, 0, o); sel = { t: "obj", i: sel.i + 1 };
-    } else if (sel.t === "spawn") { const [x, y] = A.spawns[sel.i]; A.spawns.push([AW - x, y]); sel = { t: "spawn", i: A.spawns.length - 1 }; }
-    else if (sel.t === "solid") { const s = { ...A.solids[sel.i] }; s.x = AW - s.x - s.w; if (s.ledge) s.ledge = flipLedge(s.ledge); A.solids.push(s); sel = { t: "solid", i: A.solids.length - 1 }; }
-    else if (sel.t === "front") { const [x, y, w, h] = A.plate.solid[sel.i]; A.plate.solid.push([AW - x - w, y, w, h]); sel = { t: "front", i: A.plate.solid.length - 1 }; }
-  });
+  const refs = picked(); if (!refs.length) return;
+  const made = [], rt = retira();
+  const items = refs.map(r => ({ t: r.t, it: itemOf(r) }));   // los objetos antes de insertar: los números se corren
+  edit(() => { for (const { t, it } of items) { const c = rt(mirroredCopy(t, it)); insertAfter(t, it, c); made.push({ t, it: c }); } }, { raw: true });
+  rebind(made); changedSel();
 }
+// las flechas: todo lo elegido (con Espejo, la pareja para el otro lado; lo del eje sólo sube o baja). Un punto: ese
 function nudge(dx, dy) {
-  if (!sel) return;
+  if (!sel && !group.length) return;
   edit(() => {
-    if (sel.t === "obj") { const o = A.objects[sel.i]; if (moving(o)) { o.move.path = o.move.path.map(([x, y]) => [x + dx, y + dy]); [o.x, o.y] = o.move.path[0]; } else { const st = standing(); o.x += dx; o.y += dy; followLegs(sel.i, st); } }
-    else if (sel.t === "pt") { const o = A.objects[sel.i], p = o.move.path[sel.j]; p[0] += dx; p[1] += dy; if (sel.j === 0) [o.x, o.y] = p; }
-    else if (sel.t === "spawn") { A.spawns[sel.i][0] += dx; A.spawns[sel.i][1] += dy; }
-    else if (sel.t === "solid") { A.solids[sel.i].x += dx; A.solids[sel.i].y += dy; }
-    else if (sel.t === "front") { A.plate.solid[sel.i][0] += dx; A.plate.solid[sel.i][1] += dy; }
+    if (sel && sel.t === "pt") { const o = A.objects[sel.i], p = o.move.path[sel.j]; p[0] += dx; p[1] += dy; if (sel.j === 0) [o.x, o.y] = p; return; }
+    const { movers, pairs } = editCtx(), selfs = new Set(pairs.filter(P => P.self).map(P => P.m)), st = standing();
+    for (const r of movers) moveItem(r, selfs.has(itemOf(r)) ? 0 : dx, dy);
+    if (legsFollow) for (const i of new Set([...movers.filter(r => r.t === "obj").map(r => r.i), ...st])) {
+      const o = A.objects[i]; if (moving(o)) continue;
+      const gr = groundStretch(i); if (gr) setStretch(o, gr.s);
+    }
   });
 }
 function reorder(dir) {   // las pintadas se dibujan en el orden del JSON: adelante es más tarde
   if (!sel || sel.t !== "obj") return;
   const j = sel.i + dir; if (j < 0 || j >= A.objects.length) return;
-  edit(() => { const [o] = A.objects.splice(sel.i, 1); A.objects.splice(j, 0, o); sel = { t: "obj", i: j }; });
+  edit(() => { const [o] = A.objects.splice(sel.i, 1); A.objects.splice(j, 0, o); selectOnly({ t: "obj", i: j }); }, { raw: true });
 }
 function viewCenter() { const r = cv.getBoundingClientRect(); return [(r.width / 2 - view.x) / view.k, (r.height / 2 - view.y) / view.k]; }
-function addPiece(name, at = viewCenter()) {
-  const d = def(name); if (!d) return;
+// una pieza de otra arena: su definición se copia a esta (con la misma imagen; si ya hay otra con ese nombre, con otro)
+function importPiece(name, p) {
+  A.pieces = A.pieces || {};
+  const same = Object.entries(A.pieces).find(([, q]) => q.src === p.src);
+  if (same) return same[0];
+  let n = name; for (let k = 2; A.pieces[n]; k++) n = `${name}_${k}`;
+  const q = clean(p); delete q.grupo;
+  A.pieces[n] = q; return n;
+}
+// de dónde sale una pieza que no es de esta arena: {kit} o {arena}
+const sourceDef = (name, from) => (from && from.kit ? KITS[from.kit] && KITS[from.kit].pieces[name] : from && ARENAS[from.arena] && ARENAS[from.arena].pieces && ARENAS[from.arena].pieces[name]) || null;
+// una pieza por nombre: la de esta arena, o (si no está) la de un kit, que se copia
+function ensurePiece(name) {
+  if (A.pieces && A.pieces[name]) return name;
+  for (const [k, kit] of Object.entries(KITS)) if (kit.pieces && kit.pieces[name]) return importPiece(name, kit.pieces[name]);
+  return null;
+}
+function addPiece(name, at = viewCenter(), from = null) {
+  if (typeof from === "string") from = { arena: from };
+  const src = from ? sourceDef(name, from) : null;
+  if (from ? !src : !def(name)) return;
   edit(() => {
+    if (src) name = importPiece(name, src);
+    const d = def(name); if (!d) return;
     const o = { piece: name };
     if (name.startsWith("landmarks/")) { o.solid = false; o.layer = "back"; }
     const pos = d.painted ? [at[0] - d.w / 2, at[1] - d.h / 2] : at;
     [o.x, o.y] = snapObj(o, pos);
-    A.objects.push(o); sel = { t: "obj", i: A.objects.length - 1 }; settleObj(sel.i);
-  });
+    if (d.painted && d.p.deco) { A.objects.unshift(o); selectOnly({ t: "obj", i: 0 }); }   // el decorado, detrás de todo
+    else { A.objects.push(o); selectOnly({ t: "obj", i: A.objects.length - 1 }); settleObj(sel.i); }
+  }, { raw: true });
+  if (from && from.arena) toast(`${name}: la pieza de ${ARENAS[from.arena].name || from.arena}, ahora también de esta arena`);
 }
-function addSpawn() { edit(() => { const [x, y] = viewCenter(); A.spawns = A.spawns || []; A.spawns.push([snapV(x), Math.round(y)]); sel = { t: "spawn", i: A.spawns.length - 1 }; settleSpawn(sel.i); }); }
-function addSolid() { edit(() => { const [x, y] = viewCenter(); A.solids.push({ kind: "bridge", x: snapV(x - 120), y: snapV(y), w: 240, ledge: "both" }); sel = { t: "solid", i: A.solids.length - 1 }; }); }
-function addFront() { edit(() => { const [x, y] = viewCenter(); A.plate = A.plate || { src: "", solid: [] }; A.plate.solid = A.plate.solid || []; A.plate.solid.push([snapV(x - 60), snapV(y - 20), 120, 40]); sel = { t: "front", i: A.plate.solid.length - 1 }; }); }
+// una tira: piezas una al lado de la otra (encimadas OVERLAP px), con la misma línea de los pies y la misma "tira", que se
+// elige y se mueve junta. Pasarela: punta + medios + punta; caño: tramos del horizontal. medios: "a", "b" o "ab" (alternados)
+let tiraN = 2, tiraMedios = "ab", canoN = 3;
+const newTira = () => "t" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
+function buildTira(kind) {
+  const names = kind === "pasarela"
+    ? ["pasarela_punta_izq", ...Array.from({ length: tiraN }, (_, k) => `pasarela_medio_${tiraMedios === "ab" ? (k % 2 ? "b" : "a") : tiraMedios}`), "pasarela_punta_der"]
+    : Array.from({ length: canoN }, () => "deco_cano_h");
+  const made = [], id = newTira();
+  edit(() => {
+    const ps = names.map(ensurePiece); if (ps.some(n => !n)) return;
+    const ds = ps.map(def), total = ds.reduce((t, d) => t + d.w, 0) - OVERLAP * (ds.length - 1), [cx, cy] = viewCenter();
+    const feet = d => ((d.p.solids || [])[0] || { y: 0 }).y;
+    let x = Math.round(cx - total / 2); const fy = snapV(cy);
+    ps.forEach((n, k) => {
+      const o = { piece: n, x, y: fy - feet(ds[k]), tira: id };
+      if (ds[k].p.deco) A.objects.unshift(o); else A.objects.push(o);
+      made.push({ t: "obj", it: o }); x += ds[k].w - OVERLAP;
+    });
+    if (legsFollow) for (const m of made) { const i = A.objects.indexOf(m.it), r = groundStretch(i); if (r) setStretch(m.it, r.s); }
+  }, { raw: true });
+  rebind(made); changedSel();
+  if (!made.length) toast("Falta alguna pieza del kit (¿se corrió editor/kit.py?)");
+}
+// las de la misma tira que o (para elegirlas juntas)
+const tiraOf = o => (o && o.tira ? A.objects.map((q, i) => (q.tira === o.tira ? { t: "obj", i } : null)).filter(Boolean) : null);
+function addSpawn() { edit(() => { const [x, y] = viewCenter(); A.spawns = A.spawns || []; A.spawns.push([snapV(x), Math.round(y)]); selectOnly({ t: "spawn", i: A.spawns.length - 1 }); settleSpawn(sel.i); }, { raw: true }); }
+function addSolid() { edit(() => { const [x, y] = viewCenter(); A.solids.push({ kind: "bridge", x: snapV(x - 120), y: snapV(y), w: 240 }); selectOnly({ t: "solid", i: A.solids.length - 1 }); }, { raw: true }); }
+function addFront() { edit(() => { const [x, y] = viewCenter(); A.plate = A.plate || { src: "", solid: [] }; A.plate.solid = A.plate.solid || []; A.plate.solid.push([snapV(x - 60), snapV(y - 20), 120, 40]); selectOnly({ t: "front", i: A.plate.solid.length - 1 }); }, { raw: true }); }
 function addPoint() {
   if (!sel || (sel.t !== "obj" && sel.t !== "pt")) return;
   edit(() => {
     const o = A.objects[sel.i];
-    if (!moving(o)) { o.move = { path: [[o.x, o.y], [o.x, o.y - 192]], speed: o.move?.speed || 80, wait: o.move?.wait ?? 1 }; sel = { t: "pt", i: sel.i, j: 1 }; return; }
+    if (!moving(o)) { o.move = { path: [[o.x, o.y], [o.x, o.y - 192]], speed: o.move?.speed ?? 80, wait: o.move?.wait ?? 1 }; sel = { t: "pt", i: sel.i, j: 1 }; return; }
     const p = o.move.path, [x, y] = p[p.length - 1]; p.push([x, y - 160]); sel = { t: "pt", i: sel.i, j: p.length - 1 };
   });
 }
@@ -925,15 +1395,17 @@ window.addEventListener("keydown", e => {
   if (mod && k.toLowerCase() === "y") { e.preventDefault(); redo(); return; }
   if (mod && k.toLowerCase() === "d") { e.preventDefault(); dup(); return; }
   if (mod && k.toLowerCase() === "s") { e.preventDefault(); save(); return; }
+  if (mod && k.toLowerCase() === "a") { e.preventDefault(); selectAll(); changedSel(); return; }
   if (mod) return;
   if (k === "Delete" || k === "Backspace") { e.preventDefault(); del(); }
   else if (k === "f" || k === "F") flip();
   else if (k === "m" || k === "M") mirrorCopy();
+  else if (k === "e" || k === "E") toggleMirror();
   else if (k === "l" || k === "L") toGround();
   else if (k === "g" || k === "G") { grid = grid === 16 ? 8 : grid === 8 ? 0 : 16; topbar(); draw(); }
   else if (k === "0") fit();
   else if (k === "p" || k === "P") play();
-  else if (k === "Escape") { sel = null; changedSel(); }
+  else if (k === "Escape") { sel = null; group = []; changedSel(); }
   else if (k.startsWith("Arrow")) { e.preventDefault(); const s = e.shiftKey ? Math.max(grid, 8) : 1; nudge(k === "ArrowLeft" ? -s : k === "ArrowRight" ? s : 0, k === "ArrowUp" ? -s : k === "ArrowDown" ? s : 0); }
 });
 window.addEventListener("keyup", e => { if (e.key === " ") { spaceDown = false; cv.style.cursor = "default"; } });
@@ -951,14 +1423,15 @@ function el(tag, attrs = {}, ...kids) {
   return e;
 }
 const r1 = v => Math.round(v * 10) / 10;
-function num(label, get, set, step = 1, title = "") {
+// raw: lo que no es de lo elegido sino de la pieza (cambia en todas las copias): sin parejas ni spawns que siguen
+function num(label, get, set, step = 1, title = "", raw = false) {
   const i = el("input", { type: "number", step, value: r1(get()), title });
-  i.addEventListener("change", () => { const v = parseFloat(i.value); if (Number.isFinite(v)) edit(() => set(v)); });
+  i.addEventListener("change", () => { const v = parseFloat(i.value); if (Number.isFinite(v)) edit(() => set(v), { raw }); });
   return el("label", { class: "f" }, el("span", {}, label), i);
 }
-function pick(label, options, get, set) {
+function pick(label, options, get, set, raw = false) {
   const s = el("select", {}, options.map(([v, t]) => el("option", { value: v }, t))); s.value = get();
-  s.addEventListener("change", () => edit(() => set(s.value)));
+  s.addEventListener("change", () => edit(() => set(s.value), { raw }));
   return el("label", { class: "f" }, el("span", {}, label), s);
 }
 function check(label, get, set) {
@@ -971,32 +1444,38 @@ const LEDGES = [["both", "los dos bordes"], ["left", "sólo el izquierdo"], ["ri
 function inspect() {
   const box = $("secSel"); box.replaceChildren();
   if (!A) return;
+  if (group.length > 1) return groupPanel(box);
   if (!sel) return arenaPanel(box);
   const actions = el("div", { class: "row" }, btn("Duplicar", dup, "⌘D"), btn("Copia simétrica", mirrorCopy, "M: la misma del otro lado, espejada"), btn("Borrar", del, "⌫"));
+  // la pareja del otro lado (con Espejo la sigue) y el piso entero
+  const pr = partnerOf({ t: sel.t === "pt" ? "obj" : sel.t, i: sel.i });
+  const pairInfo = el("div", { class: "note" }, pr ? (pr.self ? "En el eje: es su propia pareja." : `Pareja: ${refName(pr)}${pr.off[0] || pr.off[1] ? ` (corrida ${pr.off[0]}, ${pr.off[1]} px)` : ""}.`) : "Sin pareja del otro lado.",
+    mirror && pr && !pr.self ? " Con Espejo la sigue." : "");
+  const floorBtn = sel.t !== "pt" && sel.t !== "front" ? el("div", { class: "row" }, btn("Elegir todo el piso", () => { selectFloor({ t: sel.t, i: sel.i }); changedSel(); }, "doble clic: todo lo que se pisa a esta altura, de los dos lados, y sus spawns")) : null;
   if (sel.t === "obj" || sel.t === "pt") {
     const o = A.objects[sel.i], d = def(o.piece);
     box.append(el("h3", {}, d && d.painted ? "Pieza pintada" : "Objeto del kit"), el("div", { class: "kv" }, el("b", {}, o.piece), d ? ` · ${Math.round(d.w)} × ${Math.round(d.h)}` : " · no está en esta arena"));
     if (moving(o)) box.append(el("div", { class: "note" }, "Se mueve: la posición es la del primer punto del recorrido."));
     else box.append(el("div", { class: "row" }, num("x", () => o.x, v => { const st = standing(); o.x = v; followLegs(sel.i, st); }), num("y", () => o.y, v => { const st = standing(); o.y = v; followLegs(sel.i, st); })),
       el("div", { class: "note" }, d && d.painted ? "x, y: la esquina de arriba a la izquierda de la pieza." : d && d.plat ? "x: el centro; y: lo que se pisa." : "x: el centro; y: la base."));
-    box.append(el("div", { class: "row" }, btn(o.flip ? "Espejada ✓" : "Espejar", flip, "F"), btn("Atrás", () => reorder(-1), "se dibuja antes"), btn("Adelante", () => reorder(1), "se dibuja después")), actions);
+    box.append(el("div", { class: "row" }, btn(o.flip ? "Espejada ✓" : "Espejar", flip, "F"), btn("Atrás", () => reorder(-1), "se dibuja antes"), btn("Adelante", () => reorder(1), "se dibuja después")), actions, pairInfo, floorBtn);
     // el recorrido (ida y vuelta, con pausa en las puntas): plataformas del kit y piezas pintadas
     const route = () => {
       box.append(el("h4", {}, "Recorrido"));
       if (moving(o)) {
-        box.append(el("div", { class: "row" }, num("px/s", () => o.move.speed || 120, v => (o.move.speed = Math.max(10, v)), 5), num("pausa s", () => o.move.wait ?? 0.5, v => (o.move.wait = Math.max(0, v)), 0.1)));
+        box.append(el("div", { class: "row" }, num("px/s", () => o.move.speed ?? 120, v => (o.move.speed = Math.max(0, v)), 5, "0: no se mueve"), num("pausa s", () => o.move.wait ?? 0.5, v => (o.move.wait = Math.max(0, v)), 0.1)));
         o.move.path.forEach((p, j) => box.append(el("div", { class: "row" }, el("span", { class: "kv" }, `punto ${j + 1}`), num("x", () => p[0], v => { p[0] = v; if (j === 0) o.x = v; }), num("y", () => p[1], v => { p[1] = v; if (j === 0) o.y = v; }))));
         box.append(el("div", { class: "row" }, btn("+ Punto", addPoint), btn("Quieta", () => edit(() => { delete o.move; sel = { t: "obj", i: sel.i }; }))));
-        if (d.painted) box.append(el("div", { class: "note" }, "Cada punto es la esquina de arriba a la izquierda de la pieza (en el lienzo se marca en su línea de los pies). Mientras se mueve no se cuelga de ella."));
+        if (d.painted) box.append(el("div", { class: "note" }, "Cada punto es la esquina de arriba a la izquierda de la pieza (en el lienzo se marca en su línea de los pies)." + (HANG_ON ? " Mientras se mueve no se cuelga de ella." : "")));
       } else box.append(el("div", { class: "row" }, btn("Que se mueva", addPoint, "agrega un recorrido de ida y vuelta")));
     };
     if (d && d.painted) {
-      if (!moving(o)) box.append(pick("Colgarse de", [["", "lo de la pieza"], ...LEDGES], () => o.ledge || "", v => { if (v) o.ledge = v; else delete o.ledge; }));
+      if (HANG_ON && !moving(o)) box.append(pick("Colgarse de", [["", "lo de la pieza"], ...LEDGES], () => o.ledge || "", v => { if (v) o.ledge = v; else delete o.ledge; }));
       box.append(el("h4", {}, "Colisión de la pieza (cambia en todas las copias)"));
       (d.p.solids || []).forEach((s, j) => box.append(el("div", { class: "row" },
-        pick("", [["bridge", "puente"], ["walk", "bloque"]], () => s.kind || "bridge", v => (s.kind = v)),
-        num("x", () => s.x, v => (s.x = v)), num("pies", () => s.y, v => (s.y = v), 1, "la línea de los pies (el borde de atrás de la cara de arriba), desde arriba de la pieza"), num("ancho", () => s.w, v => (s.w = v)),
-        pick("cuelga", LEDGES, () => s.ledge || "both", v => (s.ledge = v)))));
+        pick("", [["bridge", "puente"], ["walk", "bloque"]], () => s.kind || "bridge", v => (s.kind = v), true),
+        num("x", () => s.x, v => (s.x = v), 1, "", true), num("pies", () => s.y, v => (s.y = v), 1, "la línea de los pies (el borde de atrás de la cara de arriba), desde arriba de la pieza", true), num("ancho", () => s.w, v => (s.w = v), 1, "", true),
+        HANG_ON ? pick("cuelga", LEDGES, () => s.ledge || "both", v => (s.ledge = v), true) : null)));
       route();
       const L = legsOf(d);
       if (L) {
@@ -1007,45 +1486,61 @@ function inspect() {
             btn("Que llegue abajo", toGround, r ? `L: hasta ${r.on.name} (y ${Math.round(r.on.y)}), estirar ${r.s}` : "no hay nada debajo de las patas")),
           check("al moverla, las patas siguen hasta abajo", () => legsFollow, v => (legsFollow = v)),
           el("div", { class: "row" }, el("span", { class: "kv" }, "franja"),
-            num("desde", () => L[0], v => (L[0] = Math.max(0, Math.min(Math.round(v), L[1] - LEGS_MIN))), 1, "la primera fila de la franja, desde arriba de la pieza: abajo de la losa"),
-            num("hasta", () => L[1], v => (L[1] = Math.min(d.h, Math.max(Math.round(v), L[0] + LEGS_MIN))), 1, "la fila donde empiezan los pies, que no se estiran"),
-            num("hueco", () => d.p.legsGap || 0, v => (d.p.legsGap = Math.round(v)), 1, "cuántos px por encima de la línea de los pies de lo de abajo terminan las patas")),
+            num("desde", () => L[0], v => (L[0] = Math.max(0, Math.min(Math.round(v), L[1] - LEGS_MIN))), 1, "la primera fila de la franja, desde arriba de la pieza: abajo de la losa", true),
+            num("hasta", () => L[1], v => (L[1] = Math.min(d.h, Math.max(Math.round(v), L[0] + LEGS_MIN))), 1, "la fila donde empiezan los pies, que no se estiran", true),
+            num("hueco", () => d.p.legsGap || 0, v => (d.p.legsGap = Math.round(v)), 1, "cuántos px por encima de la línea de los pies de lo de abajo terminan las patas", true)),
           el("div", { class: "note" }, "Se estira la franja (en celeste): lo de arriba y los pies quedan igual. La franja y el hueco cambian en todas las copias."));
-      } else box.append(el("div", { class: "row" }, btn("+ Patas", () => edit(() => { d.p.legs = [Math.round(d.h * 0.45), Math.round(d.h * 0.85)]; d.p.legsGap = 0; }), "marcar la franja de las patas de esta pieza, para estirarlas")));
+      } else box.append(el("div", { class: "row" }, btn("+ Patas", () => edit(() => { d.p.legs = [Math.round(d.h * 0.45), Math.round(d.h * 0.85)]; d.p.legsGap = 0; }, { raw: true }), "marcar la franja de las patas de esta pieza, para estirarlas")));
     } else if (d && d.plat) {
-      box.append(pick("Colgarse", [["both", "de los bordes"], ["none", "no"]], () => (o.ledge === "none" ? "none" : "both"), v => { if (v === "none") o.ledge = "none"; else delete o.ledge; }));
+      if (HANG_ON) box.append(pick("Colgarse", [["both", "de los bordes"], ["none", "no"]], () => (o.ledge === "none" ? "none" : "both"), v => { if (v === "none") o.ledge = "none"; else delete o.ledge; }));
       route();
     } else if (d) {
-      box.append(el("div", { class: "row" }, check("choca", () => o.solid !== false, v => { if (v) delete o.solid; else o.solid = false; }), check("atrás (oscura)", () => o.layer === "back", v => { if (v) o.layer = "back"; else delete o.layer; })));
+      box.append(el("div", { class: "row" }, check("choca", () => o.solid !== false && o.layer !== "back", v => { if (v) { delete o.solid; delete o.layer; } else o.solid = false; }), check("atrás (oscura, no choca)", () => o.layer === "back", v => { if (v) o.layer = "back"; else delete o.layer; })));
     }
   } else if (sel.t === "spawn") {
     const p = A.spawns[sel.i];
     box.append(el("h3", {}, `Spawn ${sel.i + 1}`), el("div", { class: "row" }, num("x", () => p[0], v => (p[0] = v)), num("y", () => p[1], v => (p[1] = v))),
-      el("div", { class: "note" }, "Al soltarlo se apoya en lo que tiene abajo."), actions);
+      el("div", { class: "note" }, "Al soltarlo se apoya en lo que tiene abajo. Si lo que pisa se mueve, va con eso."), actions, pairInfo, floorBtn);
   } else if (sel.t === "solid") {
     const s = A.solids[sel.i];
     box.append(el("h3", {}, "Sólido de la lámina"), el("div", { class: "row" },
       pick("", [["bridge", "puente (se atraviesa)"], ["walk", "bloque"], ["box", "caja"]], () => s.kind, v => { s.kind = v; if (v !== "bridge" && s.h == null) s.h = 60; }),
       num("x", () => s.x, v => (s.x = v)), num("y", () => s.y, v => (s.y = v), 1, "la línea de los pies"), num("ancho", () => s.w, v => (s.w = Math.max(4, v))),
       s.kind !== "bridge" ? num("alto", () => s.h ?? 60, v => (s.h = Math.max(4, v))) : null,
-      pick("cuelga", LEDGES, () => s.ledge || "both", v => { if (v === "both") delete s.ledge; else s.ledge = v; })),
-      el("div", { class: "note" }, "Lo fijo de la lámina (piso, la columna). La y es la línea de los pies: el borde de atrás de la cara de arriba pintada."), actions);
+      HANG_ON ? pick("cuelga", LEDGES, () => s.ledge || "both", v => { if (v === "both") delete s.ledge; else s.ledge = v; }) : null),
+      el("div", { class: "note" }, "Lo fijo de la lámina (piso, la columna). La y es la línea de los pies: el borde de atrás de la cara de arriba pintada."), actions, pairInfo, floorBtn);
   } else if (sel.t === "front") {
     const r = A.plate.solid[sel.i];
     box.append(el("h3", {}, "Recorte delante del colgado"), el("div", { class: "row" }, num("x", () => r[0], v => (r[0] = v)), num("y", () => r[1], v => (r[1] = v)), num("ancho", () => r[2], v => (r[2] = v)), num("alto", () => r[3], v => (r[3] = v))),
-      el("div", { class: "note" }, "Ese pedazo de la lámina se dibuja delante del que está colgado (la mano queda detrás del canto)."), actions);
+      el("div", { class: "note" }, "Ese pedazo de la lámina se dibuja delante del que está colgado (la mano queda detrás del canto)."), actions, pairInfo);
   }
 }
 function arenaPanel(box) {
   const used = name => A.objects.filter(o => o.piece === name).length;
   box.append(el("h3", {}, "Arena"),
-    el("label", { class: "f", style: "display:flex" }, el("span", {}, "Nombre"), el("input", { type: "text", value: A.name || "", onchange: e => edit(() => (A.name = e.target.value)) })),
-    el("label", { class: "f", style: "display:flex" }, el("span", {}, "Lámina"), el("input", { type: "text", value: (A.plate && A.plate.src) || "", title: "la imagen de fondo, en prototypes/arena/arenas/", onchange: e => edit(() => { A.plate = A.plate || { solid: [] }; A.plate.src = e.target.value; }) })),
-    el("div", { class: "note" }, `${A.solids.length} sólidos fijos · ${A.objects.length} objetos · ${(A.spawns || []).length} spawns · ${((A.plate && A.plate.solid) || []).length} recortes delante del colgado`),
-    el("div", { class: "row" }, btn("+ Spawn", addSpawn), btn("+ Sólido", addSolid, "un puente para calcar algo fijo de la lámina"), btn("+ Recorte delante", addFront)));
+    el("label", { class: "f", style: "display:flex" }, el("span", {}, "Nombre"), el("input", { type: "text", value: A.name || "", onchange: e => edit(() => (A.name = e.target.value), { raw: true }) })),
+    el("label", { class: "f", style: "display:flex" }, el("span", {}, "Lámina"), el("input", { type: "text", value: (A.plate && A.plate.src) || "", title: "la imagen de fondo, en prototypes/arena/arenas/", onchange: e => edit(() => { A.plate = A.plate || { solid: [] }; A.plate.src = e.target.value; }, { raw: true }) })),
+    el("div", { class: "note" }, `${A.solids.length} sólidos fijos · ${A.objects.length} objetos · ${(A.spawns || []).length} spawns` + (HANG_ON ? ` · ${ARR.front().length} recortes delante del colgado` : "")),
+    el("div", { class: "row" }, btn("+ Spawn", addSpawn), btn("+ Sólido", addSolid, "un puente para calcar algo fijo de la lámina"), HANG_ON ? btn("+ Recorte delante", addFront) : null));
+  if (dirty) box.append(el("div", { class: "row" }, el("span", { class: "kv" }, DISK.has(key) ? "Cambios sin guardar (quedan en este navegador)." : "Arena nueva, sin guardar."),
+    el("button", { class: "warn", onclick: discard, title: DISK.has(key) ? "volver a lo que está en disco" : "sacarla de la lista" }, "Descartar cambios")));
   const pcs = Object.keys(A.pieces || {});
   if (pcs.length) box.append(el("div", { class: "note" }, "Piezas pintadas: " + pcs.map(p => `${p} (${used(p)})`).join(", ")));
-  box.append(el("h4", {}, "Nota"), el("textarea", { onchange: e => edit(() => (A.note = e.target.value)) }, A.note || ""));
+  // la simetría: lo que no tiene pareja del otro lado (con Espejo, marcado en violeta en el lienzo)
+  const un = unpaired();
+  box.append(el("h4", {}, "Simetría"), el("div", { class: "note" }, un.length ? `${un.length} sin pareja del otro lado:` : "Todo tiene su pareja del otro lado (o está en el eje)."));
+  if (un.length) box.append(el("div", { class: "reach sym" }, un.map(r => el("div", { class: "bad", onclick: () => { selectOnly(r); changedSel(); } }, el("i"), el("span", {}, refName(r))))));
+  box.append(el("h4", {}, "Nota"), el("textarea", { onchange: e => edit(() => (A.note = e.target.value), { raw: true }) }, A.note || ""));
+}
+// varios elegidos: lo que se puede hacer con todos
+function groupPanel(box) {
+  const n = t => group.filter(r => r.t === t).length, parts = [["obj", "piezas"], ["solid", "sólidos"], ["spawn", "spawns"], ["front", "recortes"]].map(([t, w]) => n(t) ? `${n(t)} ${w}` : "").filter(Boolean);
+  const { pairs } = plan(picked()), follow = pairs.filter(P => !P.self).length;
+  box.append(el("h3", {}, `${group.length} elegidos`), el("div", { class: "kv" }, parts.join(" · ")),
+    el("div", { class: "note" }, "Arrastrá cualquiera para mover todo (⇧: un solo eje); las flechas mueven todo. Los spawns parados en lo que se mueve van con eso."
+      + (mirror ? ` Con Espejo: ${follow} ${follow === 1 ? "pareja sigue" : "parejas siguen"} del otro lado.` : "")),
+    el("div", { class: "row" }, btn("Duplicar", dup, "⌘D"), btn("Copia simétrica", mirrorCopy, "M"), n("obj") ? btn("Espejar", flip, "F") : null, btn("Borrar", del, "⌫")),
+    el("div", { class: "row" }, btn("Elegir sólo el primero", () => { selectOnly(group[0]); changedSel(); })));
 }
 
 /* ---------- panel: el color ---------- */
@@ -1102,39 +1597,97 @@ function reachPanel() {
   rows.sort((a, b) => b.y - a.y || a.s.x - b.s.x);
   const bad = rows.filter(r => !r.b.ok).length, sp = (A.spawns || []).filter(([x, y]) => { const s = Wd.solids.find(q => !q.moving && x + 16 > q.x && x - 16 < q.x + q.w && Math.abs(q.y - y) < 1.5); return !s || !Rd.byOwn.get(s.own)?.ok; }).length;
   box.append(el("h3", {}, "Alcance"), el("div", { class: "note" }, bad || sp ? `${bad} superficies sin llegar${sp ? `, ${sp} spawns mal parados` : ""}.` : "Se llega a todo desde el piso."));
-  box.append(el("div", { class: "reach" }, rows.map(r => el("div", { class: r.b.ok ? "ok" : "bad", onclick: () => { if (r.s.ref) { sel = { ...r.s.ref }; changedSel(); } } },
+  box.append(el("div", { class: "reach" }, rows.map(r => el("div", { class: r.b.ok ? "ok" : "bad", onclick: () => { if (r.s.ref) { selectOnly({ ...r.s.ref }); changedSel(); } } },
     el("i"), el("span", {}, r.s.name), el("small", {}, `${Math.round(r.y)}${r.s.moving ? "↕" : ""} · ${r.how}`)))));
-  box.append(el("div", { class: "note" }, el("span", { class: "sw", style: `background:${COL.ok}` }), "S simple ", el("span", { class: "sw", style: "background:#a78bfa" }), "D doble ", el("span", { class: "sw", style: `background:${COL.warn}` }), "C colgado (gancho amarillo: de ahí se cuelga)"));
+  box.append(el("div", { class: "note" }, el("span", { class: "sw", style: `background:${COL.ok}` }), "S simple ", el("span", { class: "sw", style: "background:#a78bfa" }), "D doble ", ...(HANG_ON ? [el("span", { class: "sw", style: `background:${COL.warn}` }), "C colgado (gancho amarillo: de ahí se cuelga)"] : ["(sin colgado: HANG_ON apagado en el juego)"])));
+  // las caídas que sacan vida (las guías las muestran en el lienzo)
+  const fl = falls(Wd);
+  box.append(el("div", { class: "note" }, fl.length ? `${fl.length} ${fl.length === 1 ? "caída saca" : "caídas sacan"} vida (${FALL_H} px o más, desde un borde o atravesando; en rojo con las guías).` : `Ninguna caída de ${FALL_H} px o más.`));
+  // la física: la del juego (src.html, al armar el editor). Se puede pisar para probar; no es parte de la arena ni del deshacer
+  const fromGame = !!(GAME && GAME.FEEL);
   const ph = el("div", { class: "row" },
-    num("simple", () => PHYS.h1, v => { PHYS.h1 = v; buildEnv(); }, 1, "alto del salto simple"),
-    num("doble", () => PHYS.h2, v => { PHYS.h2 = v; buildEnv(); }, 1, "alto con el doble"),
-    num("colgado", () => PHYS.hang, v => { PHYS.hang = v; buildEnv(); }, 1, "el borde más alto del que se cuelga, sobre los pies"),
-    num("px/s", () => PHYS.run, v => { PHYS.run = v; buildEnv(); }, 10, "corriendo"));
-  // la física no es parte de la arena: no entra en deshacer
+    num("simple", () => PHYS.h1, v => { PHYS.h1 = v; buildEnv(); }, 1, `alto del salto simple (el juego: ${ENV.p1})`),
+    num("doble", () => PHYS.h2, v => { PHYS.h2 = v; buildEnv(); }, 1, `alto con el doble en el ápice (el juego: ${ENV.p2})`),
+    HANG_ON ? num("colgado", () => PHYS.hang, v => { PHYS.hang = v; buildEnv(); }, 1, "el borde más alto del que se cuelga, sobre los pies") : null,
+    num("px/s", () => PHYS.run, v => { PHYS.run = v; PHYS.h1 = PHYS.h2 = null; buildEnv(); }, 10, "corriendo"),
+    btn("Las del juego", () => { PHYS.run = FEEL_G.run; PHYS.h1 = PHYS.h2 = null; buildEnv(); reachPanel(); draw(); }, "volver a la física de src.html"));
   ph.querySelectorAll("input").forEach(i => i.addEventListener("change", () => { reachPanel(); draw(); }, true));
-  box.append(el("details", {}, el("summary", { class: "note", style: "cursor:pointer" }, `Física: simple ${PHYS.h1}, doble ${PHYS.h2}, colgado ${PHYS.hang}, ~${Math.round(envAt(ENV.X1, 0))} de distancia corriendo`), ph));
+  const changedPhys = PHYS.h1 !== ENV.p1 || PHYS.h2 !== ENV.p2 || PHYS.run !== FEEL_G.run;
+  box.append(el("details", {}, el("summary", { class: "note", style: "cursor:pointer" },
+    `Física${changedPhys ? " (cambiada a mano)" : fromGame ? " del juego" : " de respaldo (no se pudo leer src.html)"}: simple ${PHYS.h1}, doble ${PHYS.h2}${HANG_ON ? `, colgado ${PHYS.hang}` : ""}, ${PHYS.run} px/s, ~${Math.round(envAt(ENV.X1, 0))} de distancia`), ph));
+  // las guías de pisos
+  const gs = el("input", { type: "number", step: 8, value: guideStep, title: "cada cuántos px desde el piso van las guías de pisos" });
+  gs.addEventListener("change", () => { const v = parseFloat(gs.value); if (v >= 40) { guideStep = Math.round(v); draw(); } });
+  box.append(el("div", { class: "row" }, el("label", { class: "f" }, el("span", {}, "Guías: pisos cada"), gs, el("span", {}, "px"))));
 }
 
 /* ---------- panel: piezas ---------- */
+// las piezas pintadas de las otras arenas que esta no tiene (por imagen), agrupadas por la arena dueña de la carpeta de
+// la imagen; si esa arena la usa, su definición (la colisión y las patas de la original)
+function library() {
+  const have = new Set([...Object.values(A.pieces || {}).map(p => p.src), ...Object.values(KITS).flatMap(k => Object.values(k.pieces || {}).map(p => p.src))]), bySrc = new Map();
+  for (const [k, a] of Object.entries(ARENAS)) {
+    if (k === key) continue;
+    for (const [n, p] of Object.entries(a.pieces || {})) {
+      if (!p || !p.src || have.has(p.src)) continue;
+      const dir = p.src.split("/")[0], cur = bySrc.get(p.src);
+      if (!cur || (k === dir && cur.from !== dir)) bySrc.set(p.src, { n, p, from: k, owner: ARENAS[dir] && dir !== key ? dir : k });
+    }
+  }
+  const out = new Map();
+  for (const x of bySrc.values()) { if (!out.has(x.owner)) out.set(x.owner, []); out.get(x.owner).push(x); }
+  return out;
+}
 function palette() {
   const box = $("secPal"); box.replaceChildren();
+  palKey = Object.keys((A && A.pieces) || {}).join("|");
   if (!A) return;
-  const item = (name, src, label) => el("div", { class: "it", draggable: "true", title: `${name} (clic: al centro de la vista; o arrastrala al lienzo)`,
-    onclick: () => addPiece(name), ondragstart: e => e.dataTransfer.setData("text/x-piece", name) }, el("img", { src, alt: "" }), el("span", {}, label));
+  const fromName = f => (f.kit ? (KITS[f.kit] && KITS[f.kit].name) || f.kit : (ARENAS[f.arena] && ARENAS[f.arena].name) || f.arena);
+  const item = (name, src, label, from = null) => el("div", { class: "it", draggable: "true", title: `${name}${from ? ` (de ${fromName(from)}: al ponerla se copia a esta arena)` : ""} (clic: al centro de la vista; o arrastrala al lienzo)`,
+    onclick: () => addPiece(name, viewCenter(), from), ondragstart: e => e.dataTransfer.setData("text/x-piece", JSON.stringify({ name, from })) }, el("img", { src, alt: "" }), el("span", {}, label));
   const painted = Object.entries(A.pieces || {});
   box.append(el("h3", {}, "Piezas"));
   if (painted.length) box.append(el("h4", {}, "Pintadas de esta arena"), el("div", { class: "pal" }, painted.map(([n, p]) => item(n, ARENA_DIR + p.src, n))));
+  // los kits (el low-poly): arriba, armar tiras; después, las piezas por grupo
+  for (const [kk, kit] of Object.entries(KITS)) {
+    const det = el("details", { open: true }, el("summary", {}, kit.name || kk));
+    if (kit.pieces && kit.pieces.pasarela_punta_izq) {
+      const nIn = el("input", { type: "number", min: 0, max: 12, step: 1, value: tiraN, title: "cuántos medios de 256 entre las dos puntas" });
+      nIn.addEventListener("change", () => { tiraN = Math.max(0, Math.min(12, Math.round(+nIn.value || 0))); nIn.value = tiraN; });
+      const mSel = el("select", { title: "qué medios" }, [["ab", "a y b alternados"], ["a", "sólo a (con pilar)"], ["b", "sólo b (sin pilar)"]].map(([v, t]) => el("option", { value: v }, t)));
+      mSel.value = tiraMedios; mSel.addEventListener("change", () => (tiraMedios = mSel.value));
+      const cIn = el("input", { type: "number", min: 1, max: 20, step: 1, value: canoN, title: "cuántos tramos de 256" });
+      cIn.addEventListener("change", () => { canoN = Math.max(1, Math.min(20, Math.round(+cIn.value || 1))); cIn.value = canoN; });
+      det.append(el("h4", {}, "Armar (una al lado de la otra; se eligen y se mueven juntas, ⌥ + clic: una sola)"),
+        el("div", { class: "row" }, btn("+ Pasarela", () => buildTira("pasarela"), "punta + medios + punta: 226 + 256 por medio"), el("label", { class: "f" }, nIn, el("span", {}, "medios")), mSel),
+        kit.pieces.deco_cano_h ? el("div", { class: "row" }, btn("+ Caño horizontal", () => buildTira("cano"), "tramos del caño de 256, uno al lado del otro (decorado)"), el("label", { class: "f" }, cIn, el("span", {}, "tramos"))) : null);
+    }
+    const groups = new Map();
+    for (const [n, q] of Object.entries(kit.pieces || {})) { const g = q.grupo || "Piezas"; if (!groups.has(g)) groups.set(g, []); groups.get(g).push([n, q]); }
+    for (const [gname, list] of groups) det.append(el("h4", {}, gname), el("div", { class: "pal" }, list.map(([n, q]) => item(n, ARENA_DIR + q.src, n.replace(/^(pasarela|deco)_/, ""), { kit: kk }))));
+    if ((kit.fondos || []).length) det.append(el("div", { class: "note" }, `Fondos: ${kit.fondos.map(f => `${f.src} (${f.size.join(" × ")})`).join(", ")}. Se eligen al crear una arena nueva, o en "Lámina".`));
+    box.append(det);
+  }
+  const lib = library();
+  if (lib.size) {
+    const det = el("details", {}, el("summary", {}, "De otras arenas"));
+    for (const [k, list] of lib) det.append(el("h4", {}, ARENAS[k].name || k), el("div", { class: "pal" }, list.map(({ n, p, from }) => item(n, ARENA_DIR + p.src, n, { arena: from }))));
+    box.append(det);
+  }
+  // el kit 2D del ranger (Fundición): otro estilo, plegado
+  const kit = el("details", {}, el("summary", {}, "Kit 2D del ranger (Fundición)"));
   const groups = [["Plataformas", "platforms/"], ["Cajas y cosas", "small_props/"], ["Grandes (decorado)", "landmarks/"]];
   for (const [t, pre] of groups) {
     const names = Object.keys(KIT.pieces).filter(n => n.startsWith(pre)); if (!names.length) continue;
-    box.append(el("h4", {}, t), el("div", { class: "pal" }, names.map(n => item(n, KIT.pieces[n].src, n.slice(pre.length)))));
+    kit.append(el("h4", {}, t), el("div", { class: "pal" }, names.map(n => item(n, KIT.pieces[n].src, n.slice(pre.length)))));
   }
+  box.append(kit);
 }
 cv.addEventListener("dragover", e => e.preventDefault());
 cv.addEventListener("drop", e => {
   e.preventDefault();
-  const name = e.dataTransfer.getData("text/x-piece"), [wx, wy] = toWorld(e);
-  if (name) return addPiece(name, [wx, wy]);
+  const raw = e.dataTransfer.getData("text/x-piece"), [wx, wy] = toWorld(e);
+  if (raw) { let d = null; try { d = JSON.parse(raw); } catch (err) { d = { name: raw }; } return addPiece(d.name, [wx, wy], d.from || null); }
   const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) importFile(f);
 });
 
@@ -1145,18 +1698,24 @@ function seg(id, items, get, set) {
 }
 function topbar() {
   seg("gridSeg", [[0, "No"], [8, "8"], [16, "16"]], v => grid === v, v => (grid = v));
-  seg("showSeg", [["col", "Colisión"], ["reach", "Alcance"], ["spawns", "Spawns"], ["paths", "Recorridos"]], v => show[v], v => (show[v] = !show[v]));
+  seg("showSeg", [["col", "Colisión"], ["reach", "Alcance"], ["spawns", "Spawns"], ["paths", "Recorridos"], ["guides", "Guías"]], v => show[v], v => (show[v] = !show[v]));
+  $("bMirror").classList.toggle("on", mirror);
   $("bAnim").classList.toggle("on", anim); $("bAnim").textContent = anim ? "■ Animar" : "▶ Animar";
   $("bPlay").textContent = playing ? "◀ Editar" : "▶ Probar"; $("bPlay").classList.toggle("on", !!playing);
   $("bUndo").disabled = !hist.undo.length; $("bRedo").disabled = !hist.redo.length;
   $("bSave").textContent = dirty ? "Guardar •" : "Guardar"; $("bSave").disabled = $("bSaveAs").disabled = !SERVED;
-  const s = $("arenaSel"); s.replaceChildren(...Object.entries(ARENAS).map(([k, a]) => el("option", { value: k }, `${a.name || k}  (${k})`)), el("option", { value: "+" }, "＋ Nueva…")); s.value = key;
+  // las que tienen cambios sin guardar en este navegador, con •
+  const s = $("arenaSel"), wip = new Set(drafts().map(d => d.key));
+  s.replaceChildren(...Object.entries(ARENAS).map(([k, a]) => el("option", { value: k }, `${a.name || k}  (${k})${wip.has(k) ? "  • sin guardar" : ""}`)), el("option", { value: "+" }, "＋ Nueva…")); s.value = key;
 }
-$("arenaSel").addEventListener("change", async e => {
-  const v = e.target.value;
-  if (dirty && !(await ask("Hay cambios sin guardar en esta arena. ¿Cambiar igual y perderlos?", { ok: "Cambiar" }))) { e.target.value = key; return; }
+function toggleMirror() { mirror = !mirror; topbar(); changedSel(); status(); toast(mirror ? "Espejo: lo que hagas se repite en la pareja del otro lado" : "Espejo apagado"); }
+$("bMirror").onclick = toggleMirror;
+// cambiar de arena no pierde nada: lo no guardado de cada una queda en su borrador
+$("arenaSel").addEventListener("change", e => {
+  const v = e.target.value, was = key, had = dirty;
   if (v === "+") return newArena();
-  openArena(v, ARENAS[v]);
+  openArena(v);
+  if (had) toast(`Los cambios de ${was} quedan sin guardar en este navegador (• en la lista)`);
 });
 $("bUndo").onclick = undo; $("bRedo").onclick = redo;
 $("bFit").onclick = fit;
@@ -1191,17 +1750,25 @@ function fmt(v, ind = 0, depth = 0) {
   return compact(v);
 }
 function normalize(a) {
-  a.size = a.size || [AW, AH]; a.solids = a.solids || []; a.objects = a.objects || []; a.spawns = a.spawns || [];
+  a.size = Array.isArray(a.size) && a.size[0] > 0 && a.size[1] > 0 ? a.size : [...SIZE_DEFAULT]; a.solids = a.solids || []; a.objects = a.objects || []; a.spawns = a.spawns || [];
   if (a.plate && !a.plate.solid) a.plate.solid = [];
   return a;
 }
+// abre una arena: si en este navegador quedó un borrador suyo sin guardar, ése (fresh: la que se pasa, sin mirar el
+// borrador: una arena nueva, un archivo importado, descartar). saved es la de disco; sin disco (nueva), ""
 // (no se llama "open": pisaría window.open y "Probar en el juego" abriría una arena llamada about:blank)
-function openArena(k, arena) {
-  key = k; A = normalize(clean(arena)); sel = null; dirty = false; saved = JSON.stringify(A); hist.undo.length = hist.redo.length = 0;
+function openArena(k, arena = ARENAS[k], fresh = false) {
+  const d = fresh ? null : draftOf(k), disk = DISK.has(k) ? JSON.parse(DISK.get(k)) : null;
+  const a = clean(d && d.arena ? d.arena : arena);
+  // lo que en disco se le agregó después a una pieza (las patas) completa la del borrador
+  if (d && disk) for (const [n, q] of Object.entries(disk.pieces || {})) { const w = a.pieces && a.pieces[n]; if (w) for (const f in q) if (!(f in w)) w[f] = q[f]; }
+  key = k; A = normalize(a); [AW, AH] = A.size; sel = null; group = []; hist.undo.length = hist.redo.length = 0;
+  saved = DISK.get(k) ?? ""; dirty = JSON.stringify(A) !== saved;
   history.replaceState(null, "", "#" + k);
   if (A.plate && A.plate.src) img(ARENA_DIR + A.plate.src);
   for (const p of Object.values(A.pieces || {})) img(ARENA_DIR + p.src);
-  palette(); changed(); dirty = false; keepWip(); topbar(); fit();
+  palette(); changed(); keepWip(); topbar(); fit();
+  if (d && dirty) toast(`Volvieron los cambios sin guardar de ${k} (del ${new Date(d.t).toLocaleString("es-AR", { day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" })})`);
 }
 function importFile(f) {
   const rd = new FileReader();
@@ -1209,9 +1776,10 @@ function importFile(f) {
     let a;
     try { a = JSON.parse(rd.result); if (!a.solids) throw new Error("no tiene solids"); }
     catch (err) { return toast(`No es una arena: ${err.message}`); }
-    if (dirty && !(await ask("Hay cambios sin guardar. ¿Abrir el archivo igual y perderlos?", { ok: "Abrir" }))) return;
     const k = keyOf(f.name.replace(/\.json$/i, ""));
-    ARENAS[k] = a; openArena(k, a); saved = ""; dirty = true; keepWip(); topbar(); toast(`Abierto ${f.name}: con Guardar queda en arenas/${k}.json`);
+    if (draftOf(k) && !(await ask(`${k} tiene cambios sin guardar en este navegador. ¿Abrir el archivo igual y perderlos?`, { ok: "Abrir" }))) return;
+    if (!DISK.has(k)) ARENAS[k] = a;
+    openArena(k, a, true); keepWip(); topbar(); toast(`Abierto ${f.name}: con Guardar queda en arenas/${k}.json`);
   };
   rd.readAsText(f);
 }
@@ -1220,9 +1788,16 @@ const keyOf = s => s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u03
 async function newArena() {
   const k = keyOf((await ask("Nombre del archivo de la arena nueva (queda en prototypes/arena/arenas/<nombre>.json):", { input: "nueva", ok: "Seguir" })) || "");
   if (!k) { topbar(); return; }
-  const src = (await ask("La lámina: una imagen de 1920 × 1080 en prototypes/arena/arenas/ (vacío: una arena del kit, sin lámina).", { input: "", ok: "Crear" })) ?? "";
-  const a = { name: k, note: "", size: [AW, AH], seed: 1, ...(src ? { plate: { src, solid: [] } } : {}), solids: [{ kind: "walk", x: -40, y: 940, w: 2000, h: 200, fill: "full" }], objects: [], spawns: [[480, 940], [1440, 940]], decor: [], pipes: [] };
-  ARENAS[k] = a; openArena(k, a); saved = ""; dirty = true; keepWip(); topbar();
+  if (ARENAS[k]) { toast(`Ya hay una arena ${k}: elegí otro nombre`); topbar(); return; }
+  const sz = (await ask(`El tamaño del mundo, ancho × alto en px del juego (${SIZE_NEW.join(" × ")}: la escala nueva; ${SIZE_DEFAULT.join(" × ")}: la de antes, el personaje más grande):`, { input: SIZE_NEW.join(" × "), ok: "Seguir" })) ?? "";
+  const m = sz.match(/(\d+)\D+(\d+)/), size = m && +m[1] >= 640 && +m[2] >= 360 ? [+m[1], +m[2]] : [...SIZE_NEW];
+  // la lámina: de las de los kits, la que mide eso (el fondo de 2496 × 1404 del kit low-poly) va de entrada
+  const fondos = Object.values(KITS).flatMap(k => k.fondos || []), fit0 = fondos.find(f => f.size && f.size[0] === size[0] && f.size[1] === size[1]);
+  const src = (await ask(`La lámina: una imagen de ${size.join(" × ")} en prototypes/arena/arenas/ (vacío: sin lámina, con el kit 2D del ranger).${fondos.length ? ` De los kits: ${fondos.map(f => `${f.src} (${f.size.join(" × ")})`).join(", ")}.` : ""}`, { input: fit0 ? fit0.src : "", ok: "Crear" })) ?? "";
+  const fo = fondos.find(f => f.src === src);
+  const gy = fo && fo.piso ? fo.piso : size[1] - 140;   // el piso, a 140 del borde de abajo (940 en 1080; 1264 en 1404)
+  const a = { name: k, note: "", size, seed: 1, ...(src ? { plate: { src, solid: [] } } : {}), solids: [{ kind: "walk", x: -40, y: gy, w: size[0] + 80, h: 200, fill: "full" }], objects: [], spawns: [[Math.round(size[0] / 4), gy], [Math.round(size[0] * 3 / 4), gy]], decor: [], pipes: [] };
+  ARENAS[k] = a; openArena(k, a, true); topbar();
 }
 // guardar: escribe arenas/<nombre>.json (la que está abierta). Guardar como: con otro nombre, una arena nueva
 async function save(k = key) {
@@ -1231,9 +1806,11 @@ async function save(k = key) {
   try {
     const r = await (await fetch("/api/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: k, arena: clean(A) }) })).json();
     if (!r.ok) throw new Error(r.error);
-    key = k; ARENAS[key] = clean(A); saved = JSON.stringify(A); dirty = false; keepWip(); history.replaceState(null, "", "#" + key);
-    topbar(); status();
-    toast(`Guardada en ${r.file}.${k.includes("/") ? "" : " En el menú del juego aparece cuando se arma de nuevo; para probarla ya, \"Probar en el juego\"."}`);
+    // guardada con otro nombre: los cambios ya no son de la de antes (su borrador se va; si no estaba en disco, ella también)
+    if (k !== key) { try { localStorage.removeItem(WIP + key); } catch (err) { /* nada */ } if (!DISK.has(key)) delete ARENAS[key]; }
+    key = k; ARENAS[key] = clean(A); saved = JSON.stringify(A); DISK.set(key, saved); dirty = false; keepWip(); history.replaceState(null, "", "#" + key);
+    topbar(); status(); inspect();
+    toast(`Guardada en ${r.file}.${r.backup ? ` La anterior quedó en ${r.backup}.` : ""}${k.includes("/") ? "" : " En el menú del juego aparece cuando se arma de nuevo; para probarla ya, \"Probar\"."}`);
     return true;
   } catch (err) { toast(`No se pudo guardar: ${err.message}`); return false; }
 }
@@ -1246,10 +1823,35 @@ async function saveAs() {
   if (ARENAS[k] && k !== key && !(await ask(`Ya existe arenas/${k}.json. ¿La pisás?`, { ok: "Pisarla" }))) return false;
   return save(k);
 }
-// lo que se está editando y no se guardó queda en este navegador: si la página se recarga, vuelve
-const WIP = "arena-editor-wip";
+// lo que se está editando y no se guardó queda en este navegador, un borrador por arena ("arena-editor-wip:<arena>"):
+// si la página se recarga o se vuelve a esa arena, vuelve. Abrir otra no lo toca. (Antes había uno solo,
+// "arena-editor-wip", que se borraba al abrir otra arena: el arranque lo pasa al de su arena)
+const WIP_OLD = "arena-editor-wip", WIP = "arena-editor-wip:";
 function keepWip() {
-  try { if (dirty) localStorage.setItem(WIP, JSON.stringify({ key, arena: clean(A), t: Date.now() })); else localStorage.removeItem(WIP); } catch (err) { /* sin localStorage */ }
+  try { if (dirty) localStorage.setItem(WIP + key, JSON.stringify({ key, arena: clean(A), t: Date.now() })); else localStorage.removeItem(WIP + key); } catch (err) { /* sin localStorage */ }
+}
+function draftOf(k) { try { return JSON.parse(localStorage.getItem(WIP + k) || "null"); } catch (err) { return null; } }
+function drafts() {
+  const out = [];
+  try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(WIP)) { const d = JSON.parse(localStorage.getItem(k) || "null"); if (d && d.key && d.arena) out.push(d); } } } catch (err) { /* nada */ }
+  return out;
+}
+function migrateWip() {
+  try {
+    const old = JSON.parse(localStorage.getItem(WIP_OLD) || "null");
+    if (old && old.key && old.arena && !localStorage.getItem(WIP + old.key)) localStorage.setItem(WIP + old.key, JSON.stringify(old));
+    localStorage.removeItem(WIP_OLD);
+  } catch (err) { /* nada */ }
+}
+// descartar: vuelve a lo que está en disco (una arena nueva sin guardar sale de la lista)
+async function discard() {
+  if (!dirty) return;
+  const onDisk = DISK.has(key);
+  if (!(await ask(onDisk ? `¿Descartar los cambios sin guardar de ${key} y volver a lo que está en disco?` : `${key} no está guardada. ¿Descartarla entera?`, { ok: "Descartar" }))) return;
+  try { localStorage.removeItem(WIP + key); } catch (err) { /* nada */ }
+  if (onDisk) return openArena(key, JSON.parse(DISK.get(key)), true);
+  delete ARENAS[key];
+  openArena(ARENAS.refineria_lowpoly ? "refineria_lowpoly" : Object.keys(ARENAS)[0]);
 }
 // un cartel propio en vez de confirm/prompt (el navegador del panel de Claude no siempre los muestra)
 function ask(msg, { input = null, ok = "Aceptar", cancel = "Cancelar" } = {}) {
@@ -1281,7 +1883,7 @@ async function play(newTab = false) {
       }
     } catch (err) { /* sin servidor del editor: se abre igual */ }
   }
-  const url = new URL(GAME, location.href).href;
+  const url = new URL(GAME_URL, location.href).href;
   if (newTab) { if (!window.open(url, "arena-juego")) toast("El navegador no dejó abrir otra pestaña"); return; }
   const fr = $("playFrame"), spawn = sel && sel.t === "spawn" ? sel.i : -1;
   playing = { started: false, timer: 0 };
@@ -1311,12 +1913,11 @@ let toastT = 0;
 function toast(s) { const t = $("toast"); t.textContent = s; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 3500); }
 window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
 
-// #nombre en la dirección: abre esa arena (también al cambiarlo a mano)
-window.addEventListener("hashchange", async () => {
+// #nombre en la dirección: abre esa arena (también al cambiarlo a mano). Lo no guardado de la otra queda en su borrador
+window.addEventListener("hashchange", () => {
   const k = decodeURIComponent(location.hash.slice(1));
   if (k === key || !ARENAS[k]) return;
-  if (dirty && !(await ask("Hay cambios sin guardar en esta arena. ¿Cambiar igual y perderlos?", { ok: "Cambiar" }))) { history.replaceState(null, "", "#" + key); return; }
-  openArena(k, ARENAS[k]);
+  openArena(k);
 });
 
 /* ---------- arranque ---------- */
@@ -1325,21 +1926,16 @@ buildEnv();
 (async () => {
   ARENAS = BUILT;
   if (SERVED) { try { ARENAS = await (await fetch("/api/arenas")).json(); } catch (err) { toast("Sin servidor: arenas de cuando se armó el editor"); } }
+  if (SERVED) { try { KITS = await (await fetch("/api/kits")).json(); } catch (err) { /* los de cuando se armó */ } }
+  DISK = new Map(Object.entries(ARENAS).map(([k, a]) => [k, JSON.stringify(normalize(clean(a)))]));
+  migrateWip();
+  for (const d of drafts()) if (!ARENAS[d.key]) ARENAS[d.key] = clean(d.arena);   // nuevas que todavía no se guardaron
   const want = decodeURIComponent(location.hash.slice(1));
-  let wip = null; try { wip = JSON.parse(localStorage.getItem(WIP) || "null"); } catch (err) { /* nada */ }
   resize();
-  if (wip && wip.arena && wip.key && (!want || want === wip.key || !ARENAS[want])) {   // lo que quedó sin guardar
-    const disk = ARENAS[wip.key];
-    if (!disk) ARENAS[wip.key] = clean(wip.arena);
-    // lo que en disco se le agregó después a una pieza (las patas) completa la del borrador
-    for (const [n, p] of Object.entries((disk && disk.pieces) || {})) { const q = wip.arena.pieces && wip.arena.pieces[n]; if (q) for (const f in p) if (!(f in q)) q[f] = p[f]; }
-    openArena(wip.key, wip.arena);
-    saved = disk ? JSON.stringify(normalize(clean(disk))) : ""; dirty = JSON.stringify(A) !== saved; keepWip(); topbar(); status();
-    if (dirty) toast("Volvieron los cambios sin guardar de la otra vez");
-    return;
-  }
-  const k = ARENAS[want] ? want : ARENAS.refineria ? "refineria" : Object.keys(ARENAS)[0];
-  if (k) openArena(k, ARENAS[k]);
+  // la de la dirección; si no hay, la del último borrador; si no, la Refinería low-poly (la de fábrica del juego)
+  const last = drafts().sort((a, b) => b.t - a.t)[0];
+  const k = ARENAS[want] ? want : last && ARENAS[last.key] ? last.key : ARENAS.refineria_lowpoly ? "refineria_lowpoly" : Object.keys(ARENAS)[0];
+  if (k) openArena(k);
 })();
 </script>
 </body>

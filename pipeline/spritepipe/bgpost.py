@@ -112,7 +112,7 @@ def key_out(img: np.ndarray, color: str) -> tuple[np.ndarray, dict]:
     wanted = chroma.parse_hex(color)
     k = estimate_key(rgb, wanted)
     # Los mismos valores por defecto que [key] de un personaje, en modo global
-    params = SimpleNamespace(key_method="chroma", key_mode="global", key_tolerance=(0.12, 0.80), min_island_px=64,
+    params = SimpleNamespace(key_method="chroma", key_mode="global", floor_streak=False, key_tolerance=(0.12, 0.80), min_island_px=64,
                              hole_max_frac=0.0, despill=1.0, despill_band_px=3)
     rgba, k, method, _ = key.key_frame(img[..., :3], params, k)
     return rgba, {"key_color": "#" + "".join(f"{round(c * 255):02X}" for c in k), "method": method}
@@ -140,7 +140,9 @@ def alpha_report(rgba: np.ndarray, expect: str, key_color: str | None = None) ->
     a = rgba[..., 3]
     transparent, opaque = float((a == 0).mean()), float((a == 255).mean())
     edges = {"top": a[0], "bottom": a[-1], "left": a[:, 0], "right": a[:, -1]}
-    border = {k: round(float((v == 0).mean()), 3) for k, v in edges.items()}
+    # borde transparente: lo que no cuenta como contenido (alfa < ALPHA_ON), como al recortar; un halo de alfa 1-7
+    # que el modelo deja en el borde no es contenido cortado
+    border = {k: round(float((v < ALPHA_ON).mean()), 3) for k, v in edges.items()}
     flags = []
     if expect == "opaque":
         if opaque < 0.999:

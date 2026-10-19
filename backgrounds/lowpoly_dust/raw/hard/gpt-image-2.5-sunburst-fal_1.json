@@ -1,0 +1,141 @@
+{
+  "set": "lowpoly_dust",
+  "asset": "hard",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game dust cloud sprites in the style of the grey smoke puffs in the reference images: rounded puffs built from big faceted polygons with flat per-face shading, clean geometric shapes, no black outlines, no soft airbrushed glow around them, no blur, no texture noise, no particles. Strictly neutral grey with no color tint at all (no blue, no brown, no warm tones): light grey facets in the light from the top left, mid grey, and a darker grey in the shadow, never black, so the game can tint it. Orthographic side view at ground level.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA sprite sheet of one low-poly heavy landing dust animation for a 2D platformer character falling from very high, in four frames in one row, left to right in time order, all drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges. Every frame rests on its own flat invisible ground line: its bottom edge is flat and horizontal, and it is symmetric around its own vertical center. Each frame is one single connected shape: the big faceted puffs overlap each other, no detached puffs, pebbles or specks.\nFrame 1: a wide flat shockwave of dust hugging the ground, very wide and low.\nFrame 2: the biggest frame, two tall billowing walls of big faceted dust puffs on the left and on the right, joined along the ground by a low band of dust.\nFrame 3: the dust walls rolling further out and rising, thinner, still joined along the ground.\nFrame 4: a low line of small faceted puffs, the last frame before it disappears, still one connected shape.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowdust",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_dust/refs/e6_3086b4f6_FFFFFF.png",
+      "sha256": "08eb82947897a256e36f30122b2ceca095d9ec89c34ae2b91ea8bc9a9a73a6fb"
+    },
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_grenade/post/explosion/gpt-image-2.5-sunburst-fal_2/e6.png",
+      "sha256": "3086b4f6a635d4c88936feb76840ddcd4368df9313cb28f67345de6e0e5c6818"
+    },
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1709,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a150ae-b637-70a3-b9f9-c1f6cbb2f8c0",
+  "created": "2026-10-18T20:23:46+00:00",
+  "sha256": "c56b0985213d6ce560c667a3b5e26aa919b3c939c58cd42cade7523e27390564",
+  "post": {
+    "file": "backgrounds/lowpoly_dust/post/hard/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8822,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.995,
+        "left": 0.985,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "h1": [
+        51,
+        854,
+        646,
+        977
+      ],
+      "h2": [
+        697,
+        573,
+        1333,
+        977
+      ],
+      "h3": [
+        1424,
+        618,
+        1993,
+        977
+      ],
+      "h4": [
+        2062,
+        902,
+        2497,
+        977
+      ]
+    },
+    "trim": {
+      "h1": [
+        0,
+        0,
+        595,
+        123
+      ],
+      "h2": [
+        0,
+        0,
+        636,
+        404
+      ],
+      "h3": [
+        0,
+        0,
+        569,
+        359
+      ],
+      "h4": [
+        0,
+        0,
+        435,
+        75
+      ]
+    },
+    "files": {
+      "h1": {
+        "file": "h1.png",
+        "w": 595,
+        "h": 123
+      },
+      "h2": {
+        "file": "h2.png",
+        "w": 636,
+        "h": 404
+      },
+      "h3": {
+        "file": "h3.png",
+        "w": 569,
+        "h": 359
+      },
+      "h4": {
+        "file": "h4.png",
+        "w": 435,
+        "h": 75
+      }
+    }
+  }
+}

@@ -1,0 +1,303 @@
+{
+ "pasarela_punta_izq": {
+  "w": 113,
+  "h": 200,
+  "pies": 16,
+  "escala": 0.42009,
+  "hoja": 2,
+  "corte_post_px": 269
+ },
+ "pasarela_medio_a": {
+  "w": 256,
+  "h": 200,
+  "pies": 16,
+  "escala": 0.42009,
+  "hoja": 2
+ },
+ "pasarela_medio_b": {
+  "w": 256,
+  "h": 200,
+  "pies": 16,
+  "escala": 0.42009,
+  "hoja": 2
+ },
+ "pasarela_punta_der": {
+  "w": 113,
+  "h": 200,
+  "pies": 16,
+  "escala": 0.42009,
+  "hoja": 2,
+  "corte_post_px": 98
+ },
+ "columna_angosta": {
+  "w": 69,
+  "h": 200,
+  "pies": null,
+  "escala": 0.22249,
+  "hoja": 1
+ },
+ "columna_ancha": {
+  "w": 113,
+  "h": 200,
+  "pies": 16,
+  "escala": 0.2201,
+  "hoja": 1
+ },
+ "bloque": {
+  "w": 129,
+  "h": 200,
+  "pies": 16,
+  "escala": 0.22249,
+  "hoja": 1
+ },
+ "pared": {
+  "w": 76,
+  "h": 200,
+  "pies": 16,
+  "escala": 0.2266,
+  "hoja": 1
+ },
+ "guia_ascensor": {
+  "w": 45,
+  "h": 200,
+  "pies": null,
+  "escala": 0.22249,
+  "hoja": 1
+ },
+ "flotante_200": {
+  "w": 200,
+  "h": 80,
+  "pies": 8,
+  "escala": 0.36735,
+  "hoja": 1,
+  "ancho_sin_ajuste": 241,
+  "columnas_post": [
+   [
+    [
+     166,
+     194
+    ],
+    -13
+   ],
+   [
+    [
+     220,
+     254
+    ],
+    -15
+   ],
+   [
+    [
+     266,
+     388
+    ],
+    -56
+   ],
+   [
+    [
+     401,
+     439
+    ],
+    -17
+   ],
+   [
+    [
+     460,
+     486
+    ],
+    -12
+   ]
+  ]
+ },
+ "flotante_300": {
+  "w": 300,
+  "h": 80,
+  "pies": 8,
+  "escala": 0.36735,
+  "hoja": 1,
+  "ancho_sin_ajuste": 319,
+  "columnas_post": [
+   [
+    [
+     183,
+     253
+    ],
+    -9
+   ],
+   [
+    [
+     282,
+     326
+    ],
+    -6
+   ],
+   [
+    [
+     341,
+     356
+    ],
+    -2
+   ],
+   [
+    [
+     370,
+     489
+    ],
+    -16
+   ],
+   [
+    [
+     502,
+     519
+    ],
+    -2
+   ],
+   [
+    [
+     534,
+     578
+    ],
+    -6
+   ],
+   [
+    [
+     607,
+     682
+    ],
+    -10
+   ]
+  ]
+ },
+ "flotante_450": {
+  "w": 450,
+  "h": 80,
+  "pies": 8,
+  "escala": 0.36735,
+  "hoja": 1,
+  "ancho_sin_ajuste": 437,
+  "columnas_post": [
+   [
+    [
+     200,
+     256
+    ],
+    4
+   ],
+   [
+    [
+     301,
+     408
+    ],
+    7
+   ],
+   [
+    [
+     441,
+     480
+    ],
+    3
+   ],
+   [
+    [
+     494,
+     511
+    ],
+    1
+   ],
+   [
+    [
+     555,
+     627
+    ],
+    5
+   ],
+   [
+    [
+     672,
+     687
+    ],
+    1
+   ],
+   [
+    [
+     701,
+     746
+    ],
+    3
+   ],
+   [
+    [
+     774,
+     881
+    ],
+    7
+   ],
+   [
+    [
+     925,
+     982
+    ],
+    5
+   ]
+  ]
+ },
+ "ascensor": {
+  "w": 239,
+  "h": 106,
+  "pies": 8,
+  "escala": 0.36735,
+  "hoja": 1,
+  "ancho_sin_ajuste": 239
+ },
+ "deco_tanque": {
+  "w": 333,
+  "h": 305,
+  "pies": null,
+  "escala": 0.4906,
+  "hoja": 1,
+  "bruma": 0.35
+ },
+ "deco_chimenea": {
+  "w": 119,
+  "h": 516,
+  "pies": null,
+  "escala": 0.4906,
+  "hoja": 1,
+  "bruma": 0.35
+ },
+ "deco_torre": {
+  "w": 294,
+  "h": 600,
+  "pies": null,
+  "escala": 0.4906,
+  "hoja": 1,
+  "bruma": 0.35,
+  "motas_borradas": 308
+ },
+ "deco_cano_h": {
+  "w": 256,
+  "h": 48,
+  "pies": null,
+  "escala": 0.27586,
+  "hoja": 1,
+  "bruma": 0.35,
+  "se_repite": "x"
+ },
+ "deco_cano_v": {
+  "w": 48,
+  "h": 256,
+  "pies": null,
+  "escala": 0.26519,
+  "hoja": 1,
+  "bruma": 0.35,
+  "se_repite": "y"
+ },
+ "deco_codo": {
+  "w": 138,
+  "h": 115,
+  "pies": null,
+  "escala": 0.27042,
+  "hoja": 1,
+  "bruma": 0.35
+ }
+}

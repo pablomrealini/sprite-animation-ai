@@ -1,0 +1,282 @@
+{
+ "name": "Kit low-poly",
+ "origen": "backgrounds/lowpoly_kit/entrega",
+ "nota": "Lo arma prototypes/arena/editor/kit.py; no se edita a mano.",
+ "fondos": [
+  {
+   "src": "kit_lowpoly/fondos/abierta_3.webp",
+   "size": [
+    2496,
+    1404
+   ],
+   "piso": 1264
+  }
+ ],
+ "pieces": {
+  "pasarela_punta_izq": {
+   "src": "kit_lowpoly/pasarela_punta_izq.png",
+   "w": 113,
+   "h": 200,
+   "grupo": "Pasarelas",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 7,
+     "y": 16,
+     "w": 106
+    }
+   ],
+   "legs": [
+    90,
+    144
+   ],
+   "legsGap": -8,
+   "espejo": "pasarela_punta_der"
+  },
+  "pasarela_medio_a": {
+   "src": "kit_lowpoly/pasarela_medio_a.png",
+   "w": 256,
+   "h": 200,
+   "grupo": "Pasarelas",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 0,
+     "y": 16,
+     "w": 256
+    }
+   ],
+   "legs": [
+    90,
+    145
+   ],
+   "legsGap": -8,
+   "espejo": "mismo",
+   "tramo": "x"
+  },
+  "pasarela_medio_b": {
+   "src": "kit_lowpoly/pasarela_medio_b.png",
+   "w": 256,
+   "h": 200,
+   "grupo": "Pasarelas",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 0,
+     "y": 16,
+     "w": 256
+    }
+   ],
+   "espejo": "mismo",
+   "tramo": "x"
+  },
+  "pasarela_punta_der": {
+   "src": "kit_lowpoly/pasarela_punta_der.png",
+   "w": 113,
+   "h": 200,
+   "grupo": "Pasarelas",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 0,
+     "y": 16,
+     "w": 105
+    }
+   ],
+   "legs": [
+    90,
+    144
+   ],
+   "legsGap": -8,
+   "espejo": "pasarela_punta_izq"
+  },
+  "flotante_200": {
+   "src": "kit_lowpoly/flotante_200.png",
+   "w": 200,
+   "h": 80,
+   "grupo": "Flotantes",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 7,
+     "y": 8,
+     "w": 186
+    }
+   ],
+   "espejo": "mismo"
+  },
+  "flotante_300": {
+   "src": "kit_lowpoly/flotante_300.png",
+   "w": 300,
+   "h": 80,
+   "grupo": "Flotantes",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 8,
+     "y": 8,
+     "w": 284
+    }
+   ],
+   "espejo": "mismo"
+  },
+  "flotante_450": {
+   "src": "kit_lowpoly/flotante_450.png",
+   "w": 450,
+   "h": 80,
+   "grupo": "Flotantes",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 7,
+     "y": 8,
+     "w": 436
+    }
+   ],
+   "espejo": "mismo"
+  },
+  "ascensor": {
+   "src": "kit_lowpoly/ascensor.png",
+   "w": 239,
+   "h": 106,
+   "grupo": "Flotantes",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 7,
+     "y": 8,
+     "w": 226
+    }
+   ],
+   "espejo": "mismo"
+  },
+  "columna_ancha": {
+   "src": "kit_lowpoly/columna_ancha.png",
+   "w": 113,
+   "h": 200,
+   "grupo": "Columnas y bloques",
+   "solids": [
+    {
+     "kind": "bridge",
+     "x": 3,
+     "y": 16,
+     "w": 108
+    }
+   ],
+   "legs": [
+    61,
+    130
+   ],
+   "legsGap": -8,
+   "espejo": "mismo"
+  },
+  "columna_angosta": {
+   "src": "kit_lowpoly/columna_angosta.png",
+   "w": 69,
+   "h": 200,
+   "grupo": "Columnas y bloques",
+   "legs": [
+    51,
+    154
+   ],
+   "legsGap": -8,
+   "espejo": "mismo"
+  },
+  "bloque": {
+   "src": "kit_lowpoly/bloque.png",
+   "w": 129,
+   "h": 200,
+   "grupo": "Columnas y bloques",
+   "solids": [
+    {
+     "kind": "walk",
+     "x": 9,
+     "y": 16,
+     "w": 111,
+     "h": 184
+    }
+   ],
+   "espejo": "mismo"
+  },
+  "pared": {
+   "src": "kit_lowpoly/pared.png",
+   "w": 76,
+   "h": 200,
+   "grupo": "Columnas y bloques",
+   "solids": [
+    {
+     "kind": "walk",
+     "x": 5,
+     "y": 16,
+     "w": 66,
+     "h": 184
+    }
+   ],
+   "espejo": "mismo"
+  },
+  "guia_ascensor": {
+   "src": "kit_lowpoly/guia_ascensor.png",
+   "w": 45,
+   "h": 200,
+   "grupo": "Columnas y bloques",
+   "legs": [
+    114,
+    173
+   ],
+   "legsGap": -8,
+   "espejo": "mismo",
+   "deco": true
+  },
+  "deco_tanque": {
+   "src": "kit_lowpoly/deco_tanque.png",
+   "w": 333,
+   "h": 305,
+   "grupo": "Decorado",
+   "deco": true
+  },
+  "deco_chimenea": {
+   "src": "kit_lowpoly/deco_chimenea.png",
+   "w": 119,
+   "h": 516,
+   "grupo": "Decorado",
+   "deco": true
+  },
+  "deco_torre": {
+   "src": "kit_lowpoly/deco_torre.png",
+   "w": 294,
+   "h": 600,
+   "grupo": "Decorado",
+   "deco": true
+  },
+  "deco_codo": {
+   "src": "kit_lowpoly/deco_codo.png",
+   "w": 138,
+   "h": 115,
+   "grupo": "Decorado",
+   "deco": true
+  },
+  "deco_cano_h": {
+   "src": "kit_lowpoly/deco_cano_h.png",
+   "w": 256,
+   "h": 48,
+   "grupo": "Decorado",
+   "espejo": "mismo",
+   "deco": true,
+   "tramo": "x"
+  },
+  "deco_cano_v": {
+   "src": "kit_lowpoly/deco_cano_v.png",
+   "w": 48,
+   "h": 256,
+   "grupo": "Decorado",
+   "legs": [
+    2,
+    254
+   ],
+   "legsGap": -8,
+   "espejo": "mismo",
+   "deco": true,
+   "tramo": "y"
+  }
+ }
+}

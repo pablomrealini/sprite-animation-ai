@@ -1,0 +1,77 @@
+{
+  "attempts": [
+    {
+      "id": "abierta/nano-banana-2.1_3",
+      "asset": "abierta",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 3,
+      "seed": 9,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_fondos/refs/guia_abierta.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15109-c9da-70a3-a060-25af4f0165de",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a15109-c9da-70a3-a060-25af4f0165de/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a15109-c9da-70a3-a060-25af4f0165de"
+      },
+      "submitted": "2026-10-18T22:02:37+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:03:03+00:00"
+    },
+    {
+      "id": "abierta/nano-banana-2.1_1",
+      "asset": "abierta",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 1,
+      "seed": 7,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_fondos/refs/guia_abierta.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15109-ca70-7811-ac16-6aedfa451fd0",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a15109-ca70-7811-ac16-6aedfa451fd0/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a15109-ca70-7811-ac16-6aedfa451fd0"
+      },
+      "submitted": "2026-10-18T22:02:38+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:03:05+00:00"
+    },
+    {
+      "id": "abierta/nano-banana-2.1_2",
+      "asset": "abierta",
+      "model": "nano-banana-2.1",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/google/nano-banana-2.1/edit",
+      "k": 2,
+      "seed": 8,
+      "size": "16:9 2K",
+      "usd_estimate": 0.061,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_fondos/refs/guia_abierta.webp"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15109-cb1e-7ac0-b749-902065196218",
+        "status_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a15109-cb1e-7ac0-b749-902065196218/status",
+        "response_url": "https://queue.fal.run/google/nano-banana-2.1/requests/01a15109-cb1e-7ac0-b749-902065196218"
+      },
+      "submitted": "2026-10-18T22:02:38+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-18T22:03:04+00:00"
+    }
+  ],
+  "qa": {}
+}

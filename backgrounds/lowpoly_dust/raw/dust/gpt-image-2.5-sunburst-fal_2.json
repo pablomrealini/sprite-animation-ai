@@ -1,0 +1,209 @@
+{
+  "set": "lowpoly_dust",
+  "asset": "dust",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game dust cloud sprites in the style of the grey smoke puffs in the reference images: rounded puffs built from big faceted polygons with flat per-face shading, clean geometric shapes, no black outlines, no soft airbrushed glow around them, no blur, no texture noise, no particles. Strictly neutral grey with no color tint at all (no blue, no brown, no warm tones): light grey facets in the light from the top left, mid grey, and a darker grey in the shadow, never black, so the game can tint it. Orthographic side view at ground level.\n\nNo text, letters, numbers, logos, frames, grid lines or labels anywhere.\n\nA sprite sheet of two low-poly dust animations for a 2D platformer character, in two rows of four frames, each row left to right in time order, all drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges. Every frame rests on its own flat invisible ground line: its bottom edge is flat and horizontal, and it is symmetric around its own vertical center. Each frame is one single connected shape: the puffs overlap each other, no detached puffs, pebbles or specks.\nTop row, the jump take-off, small: a puff of dust kicked out sideways at the feet as the character jumps straight up.\nFrame 1: a small, low, flat cluster of four faceted puffs.\nFrame 2: wider, the puffs pushed out to both sides and a little up, a dip in the middle.\nFrame 3: wider and lower, the puffs smaller.\nFrame 4: a few small flat puffs along the ground, still touching each other.\nBottom row, the landing, wider than the take-off: dust pushed out along the ground on both sides of where the character lands.\nFrame 1: a flat, wide burst hugging the ground, much wider than tall.\nFrame 2: two rolling clusters of puffs on the left and on the right, joined by a low band of dust in the middle.\nFrame 3: the side clusters bigger, further apart and rising, the middle band thinner but still joining them.\nFrame 4: small low puffs, the last frame before it disappears, still one connected shape.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowdust",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_dust/refs/e6_3086b4f6_FFFFFF.png",
+      "sha256": "08eb82947897a256e36f30122b2ceca095d9ec89c34ae2b91ea8bc9a9a73a6fb"
+    },
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_grenade/post/explosion/gpt-image-2.5-sunburst-fal_2/e6.png",
+      "sha256": "3086b4f6a635d4c88936feb76840ddcd4368df9313cb28f67345de6e0e5c6818"
+    },
+    {
+      "file": "prototypes/arena/refs/refineria_lowpoly.webp",
+      "sha256": "f43f8c69e08d02351754c00648a7e8cd19badef314e54090b020fb93c348bc03"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1714,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a150ae-bb14-7c93-89da-431805883954",
+  "created": "2026-10-18T20:23:56+00:00",
+  "sha256": "e6cca76cd46c0cfa7452239c5711e6fbd4af81a93dbd8bd1d74589ab9e4bcf3b",
+  "post": {
+    "file": "backgrounds/lowpoly_dust/post/dust/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.9058,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 0.992,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "t1": [
+        161,
+        427,
+        456,
+        548
+      ],
+      "t2": [
+        738,
+        402,
+        1192,
+        548
+      ],
+      "t3": [
+        1404,
+        460,
+        1853,
+        548
+      ],
+      "t4": [
+        2105,
+        483,
+        2436,
+        549
+      ],
+      "l1": [
+        65,
+        1020,
+        626,
+        1121
+      ],
+      "l2": [
+        712,
+        975,
+        1240,
+        1121
+      ],
+      "l3": [
+        1318,
+        926,
+        1957,
+        1121
+      ],
+      "l4": [
+        2050,
+        1062,
+        2495,
+        1121
+      ]
+    },
+    "trim": {
+      "t1": [
+        0,
+        0,
+        295,
+        121
+      ],
+      "t2": [
+        0,
+        0,
+        454,
+        146
+      ],
+      "t3": [
+        0,
+        0,
+        449,
+        88
+      ],
+      "t4": [
+        0,
+        0,
+        331,
+        66
+      ],
+      "l1": [
+        0,
+        0,
+        561,
+        101
+      ],
+      "l2": [
+        0,
+        0,
+        528,
+        146
+      ],
+      "l3": [
+        0,
+        0,
+        639,
+        195
+      ],
+      "l4": [
+        0,
+        0,
+        445,
+        59
+      ]
+    },
+    "files": {
+      "t1": {
+        "file": "t1.png",
+        "w": 295,
+        "h": 121
+      },
+      "t2": {
+        "file": "t2.png",
+        "w": 454,
+        "h": 146
+      },
+      "t3": {
+        "file": "t3.png",
+        "w": 449,
+        "h": 88
+      },
+      "t4": {
+        "file": "t4.png",
+        "w": 331,
+        "h": 66
+      },
+      "l1": {
+        "file": "l1.png",
+        "w": 561,
+        "h": 101
+      },
+      "l2": {
+        "file": "l2.png",
+        "w": 528,
+        "h": 146
+      },
+      "l3": {
+        "file": "l3.png",
+        "w": 639,
+        "h": 195
+      },
+      "l4": {
+        "file": "l4.png",
+        "w": 445,
+        "h": 59
+      }
+    }
+  }
+}

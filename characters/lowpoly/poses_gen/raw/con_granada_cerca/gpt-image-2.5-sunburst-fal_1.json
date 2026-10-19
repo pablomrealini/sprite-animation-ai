@@ -1,0 +1,84 @@
+{
+  "set": "poses_gen",
+  "asset": "con_granada_cerca",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "Use the attached image as the exact reference for the character: the same chunky low-poly 3D character, same design, same proportions, same colors, the same faceted flat-shaded low-poly rendering and the same soft studio lighting. Full body, side view facing right, the same pose, size and framing as the reference.\n\nNo text, letters, numbers or logos.\n\nChange only the hands. The right hand, the near hand on the viewer's side of the body, now holds the hand grenade shown in the second reference image (the same grenade, same shape and colors, about the size of the fist) at chest height in front of the body, the fingers wrapped around it and the red ring pull on top, fully visible against the background. The left hand, the far hand behind the body, now holds the same dark pistol at chest height, pointing forward to the right, its barrel showing in front of the chest just above the grenade. Everything else stays identical: the helmet, the red belt, the legs and the stance. Matte flat colors with no shine and no reflections.\n\nThe character in the reference image is the hero of this game: draw the character exactly as shown there (same design, colors and proportions).\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "same",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "characters/lowpoly/poses_gen/refs/perfil_apagada_concept_dfb65660_C0C3CC.png",
+      "sha256": "a60d6170675fca42eda8bec8aeb0824397ec86db27ac4b4c3265d4b5bf7f1144"
+    },
+    {
+      "file": "characters/lowpoly/poses_gen/refs/granada_10ce8b75_C0C3CC.png",
+      "sha256": "4e9704edecd9b0cfb3395dd016f577137a869616ae30b32c9afc4b264c385233"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "characters/lowpoly/poses/perfil_apagada_concept.png",
+      "sha256": "dfb656604a369a16e3581fea67ad953438b97f358394bb2a58a19220ca8e0bd1"
+    },
+    {
+      "file": "characters/lowpoly/poses/granada.png",
+      "sha256": "10ce8b75fb598cf00c901b79922b08d8cd6b268d489af90b7a572ad048019398"
+    }
+  ],
+  "background": "native",
+  "size_requested": "1440×2160",
+  "size": [
+    1440,
+    2160
+  ],
+  "seed": 7,
+  "quality": null,
+  "usd_estimate": 0.1737,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a150b9-4ddd-7c52-a4f7-66dd4bf1379d",
+  "created": "2026-10-18T20:35:22+00:00",
+  "sha256": "c78e0b110873ecdb01aeccc612d155ad545369e7180bdb9c4bb9e29aa93412c4",
+  "post": {
+    "file": "characters/lowpoly/poses_gen/post/con_granada_cerca/gpt-image-2.5-sunburst-fal_1.png",
+    "source": {
+      "w": 1440,
+      "h": 2160
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.5216,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 0.917,
+        "left": 0.989,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (bottom): puede estar cortado"
+      ]
+    },
+    "trim": {
+      "image": [
+        45,
+        93,
+        1392,
+        2064
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_1.png",
+        "w": 1347,
+        "h": 1971
+      }
+    }
+  }
+}

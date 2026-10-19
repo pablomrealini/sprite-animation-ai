@@ -1,0 +1,109 @@
+{
+  "set": "lowpoly_shield",
+  "asset": "bubble",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly game prop render in the exact style of the reference images: flat-shaded polygons with soft per-face lighting, clean faceted geometry, a few large facets rather than many small ones, saturated toy-like colors, soft studio light from the top left, no black outlines, no texture noise, no photographic detail.\n\nNo text, letters, numbers, logos, frames, circles, badges, borders, grid lines or labels anywhere.\n\nTwo separate low-poly energy shield bubbles for a 2D arena shooter, the protective force field that surrounds a character, in one row, the same size, with wide empty space between them, not touching each other or the image edges, seen from the front, empty inside (no character, nothing inside). Each one is a single faceted geodesic sphere, slightly taller than wide, made of big flat triangular glass facets: a translucent pale cyan-blue tint, mostly see-through in the middle, the facets brighter and more opaque near the rim, thin bright cyan-white edges between the facets, a few facets on the top left catching a white highlight. No soft airbrushed glow outside it, no sparkles, no particles.\n1. The intact bubble.\n2. The same bubble about to break: a few facets missing or cracked with jagged bright cracks across it, but still one single connected shape, no detached shards.\n\nUse the reference image only as a style guide for line weight, outline color, flat colors and rendering; do not draw the character or any element of the reference.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowpoly",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_shield/refs/hp_9948f701_FFFFFF.png",
+      "sha256": "062737c5f6be2b9ad78b6f2c962f01fe7404b7691ce07f7b1f31a4c0dbf766fb"
+    },
+    {
+      "file": "backgrounds/lowpoly_shield/refs/i2_2073ad38_FFFFFF.png",
+      "sha256": "137c7ed0b95d74b9bb45c8c436ffc3abbc2e01d72b40310f7153da960aa7f1b9"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_pickups/post/pickups/gpt-image-2.5-sunburst-fal_1/hp.png",
+      "sha256": "9948f701340ea9cdeddbdd43acd8b45534330ab0ab89aa79d3907dffcc1c9d17"
+    },
+    {
+      "file": "backgrounds/lowpoly_fx/post/impact/gpt-image-2.5-sunburst-fal_2/i2.png",
+      "sha256": "2073ad38b1d56095be3a3d76c415c31c4995cd952318bff2c96922f5c42a5925"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1705,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a150ad-fe7e-7a71-be45-d5d9e0aa2771",
+  "created": "2026-10-18T20:23:05+00:00",
+  "sha256": "92a05c32741c27612106b49783f6c3f51e1cc514a169e34ab4b3c7579d773f6d",
+  "post": {
+    "file": "backgrounds/lowpoly_shield/post/bubble/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "warn",
+      "transparent": 0.4843,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 0.982,
+        "bottom": 0.843,
+        "left": 0.915,
+        "right": 1.0
+      },
+      "flags": [
+        "el contenido toca el borde (bottom, left): puede estar cortado"
+      ]
+    },
+    "pieces": {
+      "dome": [
+        105,
+        164,
+        1173,
+        1275
+      ],
+      "crack": [
+        1390,
+        164,
+        2456,
+        1275
+      ]
+    },
+    "trim": {
+      "dome": [
+        0,
+        0,
+        1068,
+        1111
+      ],
+      "crack": [
+        0,
+        0,
+        1066,
+        1111
+      ]
+    },
+    "files": {
+      "dome": {
+        "file": "dome.png",
+        "w": 1068,
+        "h": 1111
+      },
+      "crack": {
+        "file": "crack.png",
+        "w": 1066,
+        "h": 1111
+      }
+    }
+  }
+}

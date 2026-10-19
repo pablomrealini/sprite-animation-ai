@@ -1,0 +1,83 @@
+{
+  "attempts": [
+    {
+      "clip": "kling-o3-std_throw_cerca_1.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "throw_cerca",
+      "n": 1,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150d4-9c8e-74a0-8dbe-995bbab2a05f",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150d4-9c8e-74a0-8dbe-995bbab2a05f/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150d4-9c8e-74a0-8dbe-995bbab2a05f"
+      },
+      "submitted": "2026-10-18T21:04:33+00:00",
+      "detail": "",
+      "finished": "2026-10-18T21:06:17+00:00"
+    },
+    {
+      "clip": "kling-o3-std_throw_cerca_2.mp4",
+      "model": "kling-o3-std",
+      "provider": "fal",
+      "endpoint": "fal-ai/kling-video/o3/standard/image-to-video",
+      "animation": "throw_cerca",
+      "n": 2,
+      "seed": null,
+      "duration_s": 4,
+      "usd_estimate": 0.336,
+      "refs": [],
+      "status": "done",
+      "handle": {
+        "request_id": "01a150d4-9eb2-74d0-b873-1ec5957a394f",
+        "status_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150d4-9eb2-74d0-b873-1ec5957a394f/status",
+        "response_url": "https://queue.fal.run/fal-ai/kling-video/requests/01a150d4-9eb2-74d0-b873-1ec5957a394f"
+      },
+      "submitted": "2026-10-18T21:04:34+00:00",
+      "detail": "",
+      "finished": "2026-10-18T21:06:20+00:00"
+    }
+  ],
+  "qa": {
+    "kling-o3-std_throw_cerca_1.mp4": {
+      "model": "kling-o3-std",
+      "animation": "throw_cerca",
+      "n": 1,
+      "usd": 0.336,
+      "qa": "warn",
+      "drift_pct": 16.3,
+      "zoom_pct": 0.7,
+      "edge_frames": 0,
+      "pose_mad": 1.88,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "fondo poco plano (desvío 9.28): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 97 fr"
+    },
+    "kling-o3-std_throw_cerca_2.mp4": {
+      "model": "kling-o3-std",
+      "animation": "throw_cerca",
+      "n": 2,
+      "usd": 0.336,
+      "qa": "warn",
+      "drift_pct": 14.9,
+      "zoom_pct": 1.4,
+      "edge_frames": 3,
+      "pose_mad": 1.86,
+      "loop_score": null,
+      "loop_quality": null,
+      "flags": [
+        "el personaje toca el borde del cuadro en 3 frames (arma o capa cortada)",
+        "fondo poco plano (desvío 9.43): el key va a necesitar más tolerancia"
+      ],
+      "video": "1280×720 24 fps 97 fr"
+    }
+  }
+}

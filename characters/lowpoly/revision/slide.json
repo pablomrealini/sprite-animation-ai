@@ -1,0 +1,117 @@
+{
+ "titulo": "Deslizamiento (tanda 5, slide_3): slide_in, slide y slide_out entre cuadros de run_gun, a 12 fps y a tamaño de juego",
+ "filas": [
+  {
+   "titulo": "1. Entra: corre (run_gun), se junta, aterriza sentado y se acomoda; el slide (n63) se sostiene lo que dure",
+   "cuadros": [
+    [
+     "run_gun",
+     0,
+     83,
+     "corre"
+    ],
+    [
+     "slide_in",
+     0,
+     83,
+     "n41 corre"
+    ],
+    [
+     "slide_in",
+     1,
+     83,
+     "n43 se junta"
+    ],
+    [
+     "slide_in",
+     2,
+     83,
+     "n46 aterriza"
+    ],
+    [
+     "slide_in",
+     3,
+     83,
+     "n47 se acomoda"
+    ],
+    [
+     "slide",
+     0,
+     83,
+     "n63 sostenido"
+    ],
+    [
+     "slide",
+     0,
+     83,
+     "…"
+    ]
+   ]
+  },
+  {
+   "titulo": "2. Sale: se incorpora, se para y vuelve a la zancada del arranque (n84 ≈ run_gun 0)",
+   "cuadros": [
+    [
+     "slide",
+     0,
+     83,
+     "sostenido"
+    ],
+    [
+     "slide_out",
+     0,
+     83,
+     "n75 se incorpora"
+    ],
+    [
+     "slide_out",
+     1,
+     83,
+     "n76"
+    ],
+    [
+     "slide_out",
+     2,
+     83,
+     "n77"
+    ],
+    [
+     "slide_out",
+     3,
+     83,
+     "n78"
+    ],
+    [
+     "slide_out",
+     4,
+     83,
+     "n79 parado"
+    ],
+    [
+     "slide_out",
+     5,
+     83,
+     "n80 paso"
+    ],
+    [
+     "slide_out",
+     6,
+     83,
+     "n82"
+    ],
+    [
+     "slide_out",
+     7,
+     83,
+     "n84 zancada"
+    ],
+    [
+     "run_gun",
+     0,
+     83,
+     "corre"
+    ]
+   ]
+  }
+ ]
+}

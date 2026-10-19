@@ -74,6 +74,21 @@ LOWFX_ART = {   # elegidas el 2026-10-17: la 2 de cada hoja (el impacto 1 salió
     "muzzle": ("gpt-image-2.5-sunburst-fal_2", "m1", "w", 128),
     "impact": ("gpt-image-2.5-sunburst-fal_2", "i2", "w", 128),
 }
+# el escudo low-poly (backgrounds/lowpoly_shield): el power-up (va con los otros, en PICKUP_DATA.pickups.shield) y la
+# burbuja, entera (dome) y rajada (crack). En px del archivo, el doble del juego: el power-up flota a 46 de alto como los
+# otros y la burbuja mide 126 × 130
+SHIELD_SET = ROOT / "backgrounds" / "lowpoly_shield"
+SHIELD_ART = {   # elegidas el 2026-10-18 (backgrounds/lowpoly_shield/revision.png): el escudo de la hoja 1, la burbuja de la 2
+    "pickup": ("gpt-image-2.5-sunburst-fal_1", "shield", "h", 96),
+    "bubble": ("gpt-image-2.5-sunburst-fal_2", "dome", "h", 260),
+}
+# el polvo low-poly (backgrounds/lowpoly_dust), en gris neutro (~116 de luma; el juego lo tiñe con el color de la arena):
+# despegue t1–t4 y aterrizaje l1–l4 (l2 mide 77 de ancho en el juego) y caída fuerte h1–h4 (h2, 150). Al doble
+DUST_SET = ROOT / "backgrounds" / "lowpoly_dust"
+DUST_ART = {   # elegidas el 2026-10-18 (backgrounds/lowpoly_dust/revision.png): la hoja 1 de las dos
+    "dust": ("gpt-image-2.5-sunburst-fal_1", "l2", "w", 154),
+    "hard": ("gpt-image-2.5-sunburst-fal_1", "h2", "w", 300),
+}
 EXPORT = 1         # px de las piezas por px del juego: con la cámara al 50% y pantalla 2x, uno a uno
 VIEW_H = 540       # alto de la pantalla del juego
 LAYER_SCALE = 2    # las capas, a 2 px por px de pantalla
@@ -148,9 +163,10 @@ def color_lut() -> dict:
     return mod.lut_payload(mod.fit_lut(HERE / "refs" / "refineria.webp", HERE / "refs" / "refineria_paleta_pablo.webp"))
 
 
-def export_hud(pb, dist: Path, set_dir: Path = HUD_SET, art: dict = HUD_ART, prefix: str = "hud") -> dict:
+def export_hud(pb, dist: Path, set_dir: Path = HUD_SET, art: dict = HUD_ART, prefix: str = "hud", only: dict | None = None) -> dict:
     """Achica las piezas de la hoja elegida de cada asset de `art` (de backgrounds/<set>) a dist/kit/<prefix>-…; devuelve
-    su tamaño en px del archivo. Sirve para el retrato del HUD y para los power-ups."""
+    su tamaño en px del archivo. Sirve para el retrato del HUD, los power-ups, el escudo y el polvo. only: {asset: [piezas]}
+    para exportar sólo esas (sin él, todas)."""
     data = {}
     for asset, (stem, anchor, axis, size) in art.items():
         if stem is None:
@@ -159,6 +175,8 @@ def export_hud(pb, dist: Path, set_dir: Path = HUD_SET, art: dict = HUD_ART, pre
         k = size / post["files"][anchor][axis]
         data[asset] = {}
         for piece, f in post["files"].items():
+            if only and asset in only and piece not in only[asset]:
+                continue
             dst = dist / "kit" / f"{prefix}-{asset}-{piece}.png"
             pb.export_image(set_dir / "post" / asset / stem / f["file"], dst, k)
             data[asset][piece] = {"src": f"kit/{dst.name}", "w": round(f["w"] * k, 2), "h": round(f["h"] * k, 2)}
@@ -208,6 +226,10 @@ def main() -> None:
     hud = export_hud(pb, dist)
     pick = export_hud(pb, dist, PICKUP_SET, PICKUP_ART, "pick")
     lowfx = export_hud(pb, dist, LOWFX_SET, LOWFX_ART, "lfx")
+    shield = export_hud(pb, dist, SHIELD_SET, SHIELD_ART, "shield", only={"pickup": ["shield"]})
+    if "pickup" in shield:   # el power-up del escudo va con los otros dos
+        pick.setdefault("pickups", {})["shield"] = shield.pop("pickup")["shield"]
+    dust = export_hud(pb, dist, DUST_SET, DUST_ART, "dust")
     arenas = {p.stem: json.loads(p.read_text()) for p in sorted((HERE / "arenas").glob("*.json"))}
     # las arenas pintadas: su lámina y sus piezas pintadas (`pieces`, pueden estar en una subcarpeta de arenas/) van al
     # lado de la página
@@ -220,7 +242,7 @@ def main() -> None:
     html = (HERE / "src.html").read_text(encoding="utf-8")
     # la graduación de color (color.js, la misma que usa el editor) va adentro de la página, con la paleta de Pablo
     html = html.replace("__COLOR_JS__", (HERE / "color.js").read_text(encoding="utf-8"))
-    for key, val in (("__CHAR_DATA__", chars), ("__KIT_DATA__", kit), ("__FX_DATA__", fx), ("__ARENA_DATA__", arenas), ("__GRENADE_DATA__", gren), ("__HUD_DATA__", hud), ("__PICKUP_DATA__", pick), ("__LOWFX_DATA__", lowfx),
+    for key, val in (("__CHAR_DATA__", chars), ("__KIT_DATA__", kit), ("__FX_DATA__", fx), ("__ARENA_DATA__", arenas), ("__GRENADE_DATA__", gren), ("__HUD_DATA__", hud), ("__PICKUP_DATA__", pick), ("__LOWFX_DATA__", lowfx), ("__SHIELD_DATA__", shield), ("__DUST_DATA__", dust),
                      ("__COLOR_LUT__", color_lut())):
         html = html.replace(key, json.dumps(val, separators=(",", ":"), ensure_ascii=False))
     (dist / "index.html").write_text(html, encoding="utf-8")

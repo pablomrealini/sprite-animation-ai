@@ -1,0 +1,66 @@
+{
+  "name": "Borrador con el kit low-poly",
+  "note": "Borrador de Editor de niveles (2026-10-18): el kit low-poly de Arte sobre su fondo de 2496 × 1404, para probar el kit en el editor y en el juego. No es una arena oficial: está en arenas/borradores/ y no va al menú del juego.",
+  "size": [2496, 1404],
+  "seed": 1,
+  "plate": {
+    "src": "kit_lowpoly/fondos/abierta_3.webp",
+    "solid": []
+  },
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 1264, "w": 2576, "h": 200, "fill": "full"}
+  ],
+  "objects": [
+    {"piece": "deco_tanque", "x": 1082, "y": 959},
+    {"piece": "deco_chimenea", "x": 700, "y": 748},
+    {"piece": "deco_chimenea", "x": 1677, "y": 748, "flip": true},
+    {"piece": "guia_ascensor", "x": 124, "y": 512, "stretch": 560},
+    {"piece": "guia_ascensor", "x": 2320, "y": 560, "stretch": 512},
+    {"piece": "pasarela_punta_izq", "x": 280, "y": 1068, "tira": "tmveecpp5rd", "stretch": 4},
+    {"piece": "pasarela_punta_der", "x": 2103, "y": 1068, "tira": "tmveecpp8gd", "stretch": 4},
+    {"piece": "pasarela_medio_a", "x": 391, "y": 1068, "tira": "tmveecpp5rd", "stretch": 4},
+    {"piece": "pasarela_medio_a", "x": 1849, "y": 1068, "tira": "tmveecpp8gd", "stretch": 4},
+    {"piece": "pasarela_medio_b", "x": 645, "y": 1068, "tira": "tmveecpp5rd"},
+    {"piece": "pasarela_medio_b", "x": 1595, "y": 1068, "tira": "tmveecpp8gd"},
+    {"piece": "pasarela_punta_der", "x": 899, "y": 1068, "tira": "tmveecpp5rd", "stretch": 4},
+    {"piece": "pasarela_punta_izq", "x": 1485, "y": 1068, "tira": "tmveecpp8gd", "stretch": 4},
+    {"piece": "pasarela_punta_izq", "x": 687, "y": 888, "tira": "tmveecpp9kt", "stretch": 4},
+    {"piece": "pasarela_medio_a", "x": 798, "y": 888, "tira": "tmveecpp9kt", "stretch": 4},
+    {"piece": "pasarela_medio_b", "x": 1052, "y": 888, "tira": "tmveecpp9kt"},
+    {"piece": "pasarela_medio_a", "x": 1306, "y": 888, "tira": "tmveecpp9kt", "stretch": 184},
+    {"piece": "pasarela_punta_der", "x": 1560, "y": 888, "tira": "tmveecpp9kt", "stretch": 4},
+    {"piece": "flotante_450", "x": 1008, "y": 696},
+    {"piece": "flotante_300", "x": 560, "y": 536},
+    {"piece": "flotante_300", "x": 1636, "y": 536},
+    {"piece": "flotante_200", "x": 250, "y": 356},
+    {"piece": "flotante_200", "x": 1968, "y": 360},
+    {"piece": "ascensor", "x": 30, "y": 1192, "move": {"path": [[30, 1192], [25, 504]], "speed": 80, "wait": 1.2}},
+    {"piece": "ascensor", "x": 2226, "y": 1192, "move": {"path": [[2226, 1192], [2225, 552]], "speed": 80, "wait": 1.2}},
+    {"piece": "flotante_300", "x": 1076, "y": 280}
+  ],
+  "spawns": [
+    [420, 1264],
+    [2076, 1264],
+    [832, 904],
+    [1976, 1084],
+    [688, 544],
+    [1478, 904],
+    [352, 364],
+    [2064, 368]
+  ],
+  "decor": [],
+  "pipes": [],
+  "pieces": {
+    "pasarela_punta_izq": {"src": "kit_lowpoly/pasarela_punta_izq.png", "w": 113, "h": 200, "solids": [{"kind": "bridge", "x": 7, "y": 16, "w": 106}], "legs": [90, 144], "legsGap": -8, "espejo": "pasarela_punta_der"},
+    "pasarela_medio_a": {"src": "kit_lowpoly/pasarela_medio_a.png", "w": 256, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 256}], "legs": [90, 145], "legsGap": -8, "espejo": "mismo", "tramo": "x"},
+    "pasarela_medio_b": {"src": "kit_lowpoly/pasarela_medio_b.png", "w": 256, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 256}], "espejo": "mismo", "tramo": "x"},
+    "pasarela_punta_der": {"src": "kit_lowpoly/pasarela_punta_der.png", "w": 113, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 105}], "legs": [90, 144], "legsGap": -8, "espejo": "pasarela_punta_izq"},
+    "flotante_450": {"src": "kit_lowpoly/flotante_450.png", "w": 450, "h": 80, "solids": [{"kind": "bridge", "x": 7, "y": 8, "w": 436}], "espejo": "mismo"},
+    "flotante_300": {"src": "kit_lowpoly/flotante_300.png", "w": 300, "h": 80, "solids": [{"kind": "bridge", "x": 8, "y": 8, "w": 284}], "espejo": "mismo"},
+    "flotante_200": {"src": "kit_lowpoly/flotante_200.png", "w": 200, "h": 80, "solids": [{"kind": "bridge", "x": 7, "y": 8, "w": 186}], "espejo": "mismo"},
+    "ascensor": {"src": "kit_lowpoly/ascensor.png", "w": 239, "h": 106, "solids": [{"kind": "bridge", "x": 7, "y": 8, "w": 226}], "espejo": "mismo"},
+    "guia_ascensor": {"src": "kit_lowpoly/guia_ascensor.png", "w": 45, "h": 200, "legs": [114, 173], "legsGap": -8, "espejo": "mismo", "deco": true},
+    "deco_chimenea": {"src": "kit_lowpoly/deco_chimenea.png", "w": 119, "h": 516, "deco": true},
+    "deco_tanque": {"src": "kit_lowpoly/deco_tanque.png", "w": 333, "h": 305, "deco": true}
+  }
+}

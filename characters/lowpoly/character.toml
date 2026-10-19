@@ -28,6 +28,17 @@ sharpen = 0.3             # unsharp después de reducir: el render de Kling (720
 [key]
 color = "auto"
 method = "distance"       # fondo magenta apagado y personaje rojo: con chroma se va el rojo
+hole_max_frac = 0.001    # los huecos de fondo encerrados que quedan opacos (ruido, brillos): hasta el 0,1% del personaje.
+                         # Con el 1% de siempre, el hueco entre el pecho y el arma (0,8%) quedaba rosa (Pablo, 2026-10-18);
+                         # con 0,4%, los bolsillos entre el mentón, el brazo y el arma (slide, run_gun: 0,2–0,3%) y entre
+                         # las manos (hang_two: 0,34%). Los huecos de verdad del personaje miden ≤ 25 px a 720p (≤ 0,06%);
+                         # una mota rodeada de blanco (el casco) se rellena igual hasta el 1% (hang_in 6)
+hole_inpaint = true      # y los huecos rellenos toman el color de alrededor en vez del magenta (las motas rosas)
+floor_streak = true      # la sombra del piso deja una raya fina y oscura junto a las botas (el salto): se borra
+edge_unmix = true        # el contorno rosa de 1 px que se veía sobre fondos oscuros (el halo claro del render y el borde
+                         # mezclado con el fondo, que el key por distancia deja opacos): se desmezcla contra el color de
+                         # adentro. Tinte del borde (azul − verde del anillo contra el de adentro) de ~33 a ~16
+                         # (revisión del 2026-10-18, revision/borde_rosa.png)
 
 [output]
 extra_scales = [0.5]
@@ -60,25 +71,41 @@ pose = "poses/perfil_dullmagenta_16x9.png"
 
 # run_gun: Kling O3, toma 2 de correr (generate_correr.toml), desde la zancada con el casco a la misma escala que el
 # idle (505 px de alto; parado mediría 518). Kling dispara corriendo sin que se lo pidan: apagar_video.py --sin-rayos.
+# Ese apagado pintaba de gris también el halo del cañón prendido y la tapa de la boca "saltaba" en 8 de los 14 cuadros
+# (revision/para_pablo/arma_correr.md): tapa_correr.py pega en todos la tapa del cuadro 14, que está bien (aprobado por
+# Pablo, 2026-10-18; correrlo antes del run). El loop queda fijo en el que elegía solo (14–41) para no cambiar cuadros.
 [[animation]]
 name = "run_gun"
-clip = "clips/apagado/correr_a_2.mp4"
+clip = "clips/retocado/correr_a_2_tapa.mp4"
 kind = "cycle"
-loop_seconds = [0.5, 2.0]
+loop_start = 14
+loop_length = 28
 model = "kling-o3-std"
 prompt = "prompts/correr_a.txt"
 pose = "poses/correr_dullmagenta_16x9.png"
 pose_body_height_px = 518
 
-# salto: set toma 1, un salto entero (cuadros 4-24); en 26 arranca el segundo, que dispara.
-[[animation]]
-name = "jump"
-clip = "clips/apagado/jump_1.mp4"
-kind = "oneshot"
-trim = [4, 24]
+# salto: set toma 1, un salto entero (cuadros 4-24); en 26 arranca el segundo, que dispara. La raya de la sombra del
+# piso la saca [key] floor_streak (la limpieza previa del clip también la sacaba, pero agujereaba los reflejos rosados
+# del casco).
+[[clip]]
+name = "salto"
+file = "clips/apagado/jump_1.mp4"
 model = "kling-o3-std"
 prompt = "prompts/jump.txt"
 pose = "poses/salto_dullmagenta_16x9.png"
+
+# cuadros a mano, uno de cada dos (24 → 12 fps) salvo donde Kling los corre: 14 en vez de 13 (sube borroso) y 18 en vez
+# de 17 (mancha en la pierna de atrás) (revisión del 2026-10-18, revision/jump_cuadros.png). La caída (el 8) es el 21:
+# el juego la sostiene hasta tocar el piso (~200 ms) y en el 22 la cara y el brazo salen movidos; en el 21 las botas se
+# juntan, pero a tamaño de juego no se nota (revision/caida_tamano_juego.png). En la arena, cada cuadro tiene su fase
+# (RIG.lowpoly.jump en prototypes/arena/src.html): 0–2 parado y agachándose (no se usan: despega al toque), 3 el
+# empujón, 4–5 sube, 6 ápice, 7 empieza a caer, 8 cae, 9 aterriza
+[[animation]]
+name = "jump"
+clip = "salto"
+kind = "oneshot"
+frames = [5, 7, 9, 11, 14, 15, 18, 19, 21, 23]
 
 # doble salto: set toma 2, el primer mortal (22-42). Provisorio: el plan es la bolita (poses/bolita.png) girada por la
 # arena, porque Kling deforma al personaje en el medio de la vuelta.
@@ -87,6 +114,20 @@ name = "double_jump"
 clip = "clips/apagado/double_jump_2.mp4"
 kind = "oneshot"
 trim = [22, 42]
+model = "kling-o3-std"
+prompt = "prompts/double_jump.txt"
+pose = "poses/salto_dullmagenta_16x9.png"
+
+# doble salto limpio (2026-10-18, revision/double_jump_fix.png): los mismos cuadros que double_jump donde estaban
+# bien y, en vez de los rotos, nativos limpios del mismo clip. Mismo orden y largo (9) que el que usa la arena, para que
+# RIG.lowpoly.flip cambie poco: 0 n23 parado, 1 n24 (dibujado a 3°), 2 n27 (24°), 3 n28 (44°, en vez del n29 con las
+# piernas hechas humo), 4 n31 (181°), 5 n35 (226°, en vez del n33 deshecho), 6 n36 (256°), 7 n37 (292°), 8 n39 (347°,
+# la caída). Ángulos medidos: casco contra el centro del cuerpo, en sentido horario desde arriba.
+[[animation]]
+name = "double_jump_fix"
+clip = "clips/apagado/double_jump_2.mp4"
+kind = "oneshot"
+frames = [23, 24, 27, 28, 31, 35, 36, 37, 39]
 model = "kling-o3-std"
 prompt = "prompts/double_jump.txt"
 pose = "poses/salto_dullmagenta_16x9.png"
@@ -146,6 +187,23 @@ clip = "clips/apagado/throw_2.mp4"
 kind = "oneshot"
 trim = [30, 78]
 trim_static_tail = false
+model = "kling-o3-std"
+prompt = "prompts/throw.txt"
+pose = "poses/perfil_dullmagenta_16x9.png"
+
+# granada limpia (2026-10-18, revision/throw_fix.png): el tiro que usa la arena salía de throw 18–24 (nativos 67–77),
+# con el cuadro que sostiene mientras carga (19, n68) con el puño hecho una mancha naranja y la vuelta (22–24, n75–77)
+# dando un paso adelante y girando de perfil (la cabeza avanza 26 + 7 + 6 px de 1x, ~32 px de juego, y vuelve de golpe
+# al idle; el 24 sale borroso). Acá, sólo nativos en el lugar y sin manchas: 0 n64 lleva el puño atrás, 1 n67 el puño
+# atrás de la cabeza (el de la carga), 2 n71 el brazo estirado (sale), 3 n72 el brazo estirado, 4 n73 empieza a
+# bajarlo, 5 n63 el puño contra el pecho (los que lo recogen de verdad, n69 y n70, dejan una estela rosa detrás del
+# puño). Lo que no se arregla sin otra toma: en todo el clip está agachado y girado a 3/4 (230–243 px de alto contra
+# 256 del idle, de perfil), así que entrar y salir del idle salta igual; el brazo pega una trompada, no tira por arriba.
+[[animation]]
+name = "throw_fix"
+clip = "clips/apagado/throw_2.mp4"
+kind = "oneshot"
+frames = [64, 67, 71, 72, 73, 63]
 model = "kling-o3-std"
 prompt = "prompts/throw.txt"
 pose = "poses/perfil_dullmagenta_16x9.png"
@@ -240,3 +298,102 @@ frames = [8, 12, 16, 20]
 model = "kling-o3-std"
 prompt = "prompts/salto_apuntando_quieto.txt"
 pose = "poses/salto_apuntando_apagada_dullmagenta_16x9.png"
+
+# --- tanda 3 (generate_tanda3.toml, Kling O3 std, leídas directo de fal: BT.601) -------------------------------------
+
+# deslizamiento: tanda 5 toma 3 (generate_tanda5.toml; aprobado por Pablo, 2026-10-18: "Sí, aprobado así como está"),
+# desde la zancada de correr apagada (como run_gun: parado mediría 518 px en la pose). Corre (28–41), se tira con los
+# pies adelante (42–46; 42, 44 y 45 movidos), se desliza sentado con los ojos cerrados (46–73; así lo aprobó Pablo), se
+# levanta (74–79; 74 y 75 movidos) y vuelve a la zancada del arranque (80–96). Mientras se desliza, Kling baja el
+# apoyo 45 px y lo lleva ~200 px para atrás: retocar_slide.py (correrlo antes del run) lo fija al piso de correr y
+# con el casco donde está corriendo. Las tres van con el piso del frame 0 del clip (ground_from_clip): el de correr.
+# Reemplaza al de la tanda 3 (toma 2), que no se aprobó.
+[[clip]]
+name = "slide"
+file = "clips/retocado/slide_3.mp4"
+model = "kling-o3-std"
+prompt = "prompts/slide_directo.txt"
+pose = "poses/correr_apagada_dullmagenta_16x9.png"
+pose_body_height_px = 518
+
+[[animation]]
+name = "slide_in"
+clip = "slide"
+kind = "oneshot"
+frames = [41, 43, 46, 47]
+ground_from_clip = true
+
+[[animation]]
+name = "slide"
+clip = "slide"
+kind = "oneshot"
+loop = true
+frames = [63]          # el más nítido del sostenido (49–72 casi no se mueve: la cabeza ±1 px de 1x)
+ground_from_clip = true
+
+[[animation]]
+name = "slide_out"
+clip = "slide"
+kind = "oneshot"
+frames = [75, 76, 77, 78, 79, 80, 82, 84]   # el 75 a tamaño de juego se lee bien; el 84 es la zancada del 0 (run_gun)
+ground_from_clip = true
+
+# doble salto en bolita: toma 1, el primer salto. Sube (16–20), se encoge (21–22), sostiene la bolita (23–41) y se
+# abre (43–45) a la caída (47). Los dos tramos arrancan en el aire: ground_from_clip los deja a su altura sobre el piso
+# del clip (sin eso, el 43 iba con los pies en el piso, el 47 quedaba 197 px abajo y el canvas crecía de 624 a 788).
+[[clip]]
+name = "bolita"
+file = "clips/tanda3/kling-o3-std_double_jump_1.mp4"
+color_matrix = "bt601"
+model = "kling-o3-std"
+prompt = "prompts/doble_salto_bolita.txt"
+pose = "poses/salto_apagada_dullmagenta_16x9.png"
+
+[[animation]]
+name = "double_jump_in"
+clip = "bolita"
+kind = "oneshot"
+frames = [16, 18, 20, 21, 22]
+ground_from_clip = true
+
+[[animation]]
+name = "double_jump_out"
+clip = "bolita"
+kind = "oneshot"
+frames = [43, 44, 45, 47]
+ground_from_clip = true
+
+# la bolita sostenida: poses/bolita.png (la gira el juego), no la del video, donde el casco crece ~30 % y pierde la
+# franja roja. bolita_clip.py la pone sobre el magenta del clip a la escala del video (el auricular del casco mide lo
+# mismo que en los nativos 20–21): el clip se rehace con ese script antes del run.
+[[animation]]
+name = "double_jump_ball"
+clip = "clips/bolita/bolita.mp4"
+kind = "oneshot"
+loop = true
+frames = [0]
+
+# --- tanda 3b: el tiro de granada (aprobado por Pablo, 2026-10-18: "la granada ok, pero en el juego quizás tiene que ser
+# más rápida") -----------------------------------------------------------------------------------------------------------
+
+# toma 2 (clips/tanda3b/kling-o3-std_throw_cerca_2.mp4), retocada por retocar_throw2.py (correrlo antes del run): en los
+# cuadros con la granada en la mano va pegada la del juego (la blanca y roja de backgrounds/lowpoly_grenade, a su tamaño
+# en la arena) en vez de la gris de Kling, y en 51–56 queda sólo el personaje (la granada que vuela la pone el juego; la
+# explosión de Kling no va). El retocado sale en BT.709 con tag.
+[[clip]]
+name = "throw_cerca"
+file = "clips/retocado/throw_cerca_2.mp4"
+model = "kling-o3-std"
+prompt = "prompts/tirar_granada_cerca.txt"
+pose = "poses/con_granada_cerca_dullmagenta_16x9.png"
+pose_body_height_px = 518   # la granada levantada estira la pose a 532 px; el casco (243 px) es el de perfil
+
+# cuadros a mano (notas de Animación en revision/tanda3b/): anticipación con la granada a la vista 24, 28, 36, 44 (sin
+# el 22 movido, el 29–30 con una mancha roja arriba del casco ni el 33–34 con una chispa); tiro 45, 47, 49, 50 (sin el
+# 48 movido; el 50 es el último con la granada en la mano); suelta 51; seguimiento 52, 56, 60, 62; vuelta 64, 66, 68,
+# 72, 76, que termina en la pose de perfil. Pablo la quiere más rápida en el juego: la velocidad la pone RIG.
+[[animation]]
+name = "throw2"
+clip = "throw_cerca"
+kind = "oneshot"
+frames = [24, 28, 36, 44, 45, 47, 49, 50, 51, 52, 56, 60, 62, 64, 66, 68, 72, 76]
