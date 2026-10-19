@@ -145,7 +145,7 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
         <dt><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></dt><dd><b>Teclado derecho.</b> Saltar con ↑, agacharse con ↓. Disparar con <kbd>.</kbd> o Num 1, deslizarse con <kbd>-</kbd> o Num 2, granada con <kbd>,</kbd> o Num 3, golpe con <kbd>M</kbd> o Num 4</dd>
         <dt><kbd>Stick</kbd><kbd>A</kbd><kbd>X</kbd><kbd>B</kbd></dt><dd><b>Joystick.</b> A salta, X o RT dispara, B o RB se desliza, Y o LB tira una granada, LT golpea (en PlayStation: X salta, Cuadrado o R2 dispara, Círculo o R1 se desliza, Triángulo o L1 granada, L2 golpea; en Switch, A o R se desliza y ZL golpea). El primero maneja al Rojo junto con el teclado izquierdo; en el menú, los demás se suman apretando un botón. Start empieza</dd>
         <dt><kbd>Abajo</kbd>+<kbd>saltar</kbd></dt><dd>Bajar atravesando el puente, las plataformas flotantes y las repisas</dd>
-        <dt><kbd>Deslizarse</kbd></dt><dd>Con el low-poly, sólo corriendo (parado o agachado no hace nada): se tira sentado con un envión hacia donde corre, con la caja de golpe baja: los tiros de pie y del aire le pasan por arriba (el agachado, el golpe y la granada le pegan) y se levanta corriendo. Mientras se desliza no dispara. Saltar lo corta y sale saltando con el envión</dd>
+        <dt><kbd>Deslizarse</kbd></dt><dd>Con el low-poly, sólo corriendo (parado o agachado no hace nada): se tira sentado con un envión hacia donde corre, con la caja de golpe baja: los tiros de pie y del aire le pasan por arriba (el agachado, el golpe y la granada le pegan) y se levanta corriendo. Si toca a otro, le pega como el golpe de cerca (una vez por rival) y sigue de largo. Mientras se desliza no dispara. Saltar lo corta y sale saltando con el envión</dd>
         <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 3 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y matan de una a cualquiera en el radio, también al que la tiró. Ojo: con la barra llena, si no la soltás en 1,75 s te explota en la mano (titila, se pone roja y pita cada vez más rápido)</dd>
         <dt><kbd>Golpe</kbd></dt><dd>Un puñetazo corto hacia adelante, a la altura del cuerpo, en el piso o en el aire: saca un golpe, empuja fuerte y aturde un momento. Sirve pegado al otro, donde la bala sale de largo y no le pega. Uno cada medio segundo</dd>
         <dt><kbd>C</kbd></dt><dd>Cambiar de personaje: el ranger 2D o el low-poly (también se elige en el menú). Anda en medio de la partida, para compararlos jugando</dd>
@@ -516,7 +516,9 @@ const FALL = { h: 560, dmg: 1, minHp: 1, stun: 0.3, land: 0.38 };
 // se pueda hacer estando parado"): en el piso, sin agacharse, apretando hacia un lado y yendo para ese lado a run × la
 // velocidad de correr o más (canSlide); parado o agachado, el botón no hace nada. Abajo es agacharse y bajar, como antes
 // del slide. Arranca a boost × la velocidad de correr y frena parejo hasta end × en dur s (con un toque alcanza: dura
-// eso; Pablo, 2026-10-19: "que el slide en sí dure un poquito más", 0,45 → 0,6 s, ~176 px, lo mismo que corriendo);
+// eso; Pablo, 2026-10-19: "que el slide en sí dure un poquito más", 0,45 → 0,6 s, y "que el slide dure un 50% más",
+// 0,6 → 0,9 s; y "aumenta la velocidad del slide un 30%": toda la curva × 1,3, de 1,69 a 0,845 × la velocidad de correr,
+// 507 → 254 px/s, ~342 px en los 0,9 s, más que corriendo, 270); el cuadro sostenido es el que dura más;
 // se corta con salto (sale saltando con el envión; abajo + saltar sobre algo
 // que se atraviesa, baja). Mientras está abajo, la caja de golpe es baja y larga, con las piernas adelante:
 // hurt del alto y back px para atrás y front para adelante de los pies (el dibujo va de −26 a +70; de pie, de −28 a +42
@@ -525,11 +527,12 @@ const FALL = { h: 560, dmg: 1, minHp: 1, stun: 0.3, land: 0.38 };
 // 56,6–61) y le pasan por arriba (6 px de margen); agachado, a 42–43,6 (el ranger, 40,8–42,6) y le pegan (el
 // contragolpe). Las balas van siempre derechas: una más baja (de alguien que salta y tira bajando, o desde más abajo)
 // le pega si pasa por debajo de los 49. El golpe de cerca y la granada le pegan igual.
+// Pega como el golpe de cerca (Pablo, 2026-10-19: "que con el slide sea como un hit melee"): ver slideHits.
 // Al levantarse, si sigue la dirección, sale corriendo. Después, cd s sin poder tirarse de nuevo (0,4 → 0,1, Pablo,
 // 2026-10-19: "que se pueda volver a hacer un poco más rápido"; "bajá el enfriamiento a 0,1 s": 1,03 s de un slide al
 // siguiente). Sin disparar, granada ni golpe mientras dura. Los
 // cuadros, en RIG (slide)
-const SLIDE = { boost: 1.3, end: 0.65, dur: 0.6, cd: 0.1, run: 0.5, hurt: 0.55, back: 16, front: 60 };   // end 0,65: en los 0,6 s recorre ~176 px, como corriendo (180)
+const SLIDE = { boost: 1.69, end: 0.845, dur: 0.9, cd: 0.1, run: 0.5, hurt: 0.55, back: 16, front: 60 };   // 1,3 × (1,3 → 0,65): en los 0,9 s recorre ~342 px
 // ¿se puede tirar? En el piso, sin agacharse, apretando hacia dir y yendo para ese lado a SLIDE.run × RUN_SPEED o más
 const canSlide = (Q, dir) => !!SLIDE_SEQ && Q.onGround && !Q.jump && !Q.slide && Q.slideCD <= 0 && Q.crouch === "none" &&
   dir !== 0 && Math.sign(Q.vx) === dir && Math.abs(Q.vx) >= RUN_SPEED * SLIDE.run;
@@ -824,6 +827,7 @@ const hurtH = Q => (Q.slide?.low ? BODY_H * SLIDE.hurt : Q.crouch === "hold" || 
 
 /* ---------- efectos ---------- */
 const bullets = [], fx = [], impacts = [], booms = [], beams = [];   // booms: la onda de una muerte; beams: el haz donde alguien vuelve
+const BEAM_FADE = 0.35;   // lo que tarda el haz en apagarse después de llegar (ahí aparece lo que trae)
 const grenades = [], blasts = [];   // granadas en vuelo y explosiones
 // el tiro: cuadros de "throw" y cuánto dura cada uno (RIG del personaje, useChar). En el ranger (clip g11, ver
 // characters/ranger/character.toml) 0–1 es el puño atrás de la cabeza, 2 la estela, 3 el brazo adelante (ahí sale la
@@ -870,6 +874,30 @@ function meleeHits() {
     G.hitStop = Math.max(G.hitStop, MELEE.hitStop);
     P.vx *= 0.3; rumble(P, 90, 0.7, 0.4);   // el que pega frena en seco
   }
+}
+// el slide pega como el golpe de cerca (Pablo, 2026-10-19: "que si le pegamos al player... con el slide sea como un hit
+// melee"): mientras va abajo (la caja baja), las piernas (slideBox: de los pies a SLIDE.front adelante, del alto de la
+// caja baja) contra la caja de otro le dan el golpe de cerca entero (MELEE: daño, empujón hacia donde va el slide, lo
+// que levanta y lo que aturde, la estrella, el sonido y la congelada), una vez por rival en cada slide. El que se
+// desliza sigue de largo, sin frenar (aunque pegue en un escudo). El escudo lo para como al golpe. Si los dos se
+// deslizan uno contra el otro, se pegan los dos a la vez (antes de que el golpe le corte el slide al otro)
+function slideBox(Q) { const a = Q.x, b = Q.x + Q.facing * SLIDE.front; return { x0: Math.min(a, b), x1: Math.max(a, b), y0: Q.y - BODY_H * SLIDE.hurt, y1: Q.y + 2 }; }
+const boxesTouch = (A, B) => A.x0 < B.x1 && A.x1 > B.x0 && A.y0 < B.y1 && A.y1 > B.y0;
+function slideHits() {
+  for (const Q of players) {
+    if (!P.slide) return;   // le pegaron a él (los dos deslizándose)
+    if (Q === P || !Q.alive || Q.ctrl === "off" || Q.invT > 0 || P.slide.hit.has(Q.slot) || !boxesTouch(slideBox(P), hurtBox(Q))) continue;
+    const both = !!Q.slide?.low && !Q.slide.hit.has(P.slot) && boxesTouch(slideBox(Q), hurtBox(P));
+    P.slide.hit.add(Q.slot); if (both) Q.slide.hit.add(P.slot);
+    slideHit(P, Q); if (both) slideHit(Q, P);
+  }
+}
+function slideHit(A, Q) {   // A le pega a Q con el slide
+  const hy = Q.y - Math.min(hurtH(Q), BODY_H * SLIDE.hurt) + 14;
+  if (Q.shieldT > 0) { shieldPing(Q, Q.x - A.facing * SHIELD.r * 0.8, hy, A.facing); return; }   // pega en la burbuja
+  hitPlayer(Q, { vx: A.facing, x: Q.x - A.facing * HALF_W, y: hy, power: MELEE.dmg, owner: A.slot, glow: A.team.glow },
+            { knock: MELEE.knock, lift: MELEE.lift, stun: MELEE.stun, melee: true });
+  G.hitStop = Math.max(G.hitStop, MELEE.hitStop); rumble(A, 90, 0.7, 0.4);
 }
 // los dibujos de la explosión, en orden (el post los numera por lectura); los seis primeros
 const BLAST_FRAMES = GREN.explosion ? Object.keys(GREN.explosion).sort((a, b) => parseInt(a.replace(/\D/g, "")) - parseInt(b.replace(/\D/g, ""))).slice(0, 6).map(k => GREN.explosion[k]) : [];
@@ -1461,7 +1489,7 @@ function update(dt) {
   if (P.slide && (!P.onGround || P.jump)) { P.slide = null; P.slideCD = SLIDE.cd; }
   if (ctl && I.sl && canSlide(P, dir) && G.state !== "count" && !throwing && !meleeing) {
     P.facing = dir;   // hacia donde corre
-    P.slide = { t: 0, phase: "in", out: 0, low: false, dustT: 0 }; P.crouch = "none"; P.aim = "none"; P.landT = 0;
+    P.slide = { t: 0, phase: "in", out: 0, low: false, dustT: 0, hit: new Set() }; P.crouch = "none"; P.aim = "none"; P.landT = 0;
     P.vx = P.facing * RUN_SPEED * SLIDE.boost; squash(1.12, 0.9);
     lpDust(P.x, P.y, "takeoff", -P.facing * 80); sfx("slide", 0.7);
   }
@@ -1639,6 +1667,7 @@ function update(dt) {
   setDraw(name, idx, centered ? centered.x : P.x, drawY);
   P.draw.k = drawK; P.draw.rot = drawRot; P.draw.center = drawCenter;
   if (meleeing && P.meleeT >= MELEE_T.hit0 && P.meleeT < MELEE_T.hit1 && G.state === "play") meleeHits();
+  if (P.slide?.low && G.state === "play") slideHits();
 
   // disparo: sale de la boca del frame que se está mostrando. En la cuenta regresiva no se dispara. La cadencia es la de
   // FEEL a cualquier fps: lo que sobró del cuadro pasa al tiro siguiente (hasta un cuadro) y 1e-6 absorbe el redondeo de
@@ -1688,7 +1717,7 @@ function updateWorld(dt) {
     if (moveGrenade(Gr, dt) || Gr.t >= GRENADE.fuse) { grenades.splice(i, 1); explode(Gr); }
     else if (Gr.t > GRENADE.fuse * 0.55 && before !== Gr.tick) { Gr.tick = before; sfx("tick", 0.5); }   // el pitido se apura al final
   }
-  for (let i = beams.length - 1; i >= 0; i--) if ((beams[i].t += dt) > (beams[i].dur ?? RESPAWN.beam) + 0.35) beams.splice(i, 1);
+  for (let i = beams.length - 1; i >= 0; i--) if ((beams[i].t += dt) > (beams[i].dur ?? RESPAWN.beam) + BEAM_FADE) beams.splice(i, 1);
   for (let i = labels.length - 1; i >= 0; i--) if ((labels[i].t += dt) > 1.1) labels.splice(i, 1);
   if (G.toast && (G.toast.t -= dt) <= 0) G.toast = null;
   for (let b = bullets.length - 1; b >= 0; b--) {
@@ -1936,6 +1965,11 @@ function botInput(Q, dt) {
     else if ((B.pauseT -= dt) <= 0) B.burstT = L.burst * (0.6 + Math.random() * 0.8);
   }
   // pegado al otro y a la misma altura, golpe (ahí la bala sale más adelante y no le pega), con el tiempo de reacción
+  // el slide como golpe: corriendo hacia el otro, en el mismo piso y a menos de lo que recorre, a veces se tira (~2 por
+  // segundo mientras se da)
+  if (canSlide(Q, Math.sign(dx)) && T.onGround && Math.abs(dy) < 12 && adx > 90 && adx < 240 && !immune(T) && Math.random() < 2 * dt) {
+    In.sl = true; B.slideDir = Math.sign(dx); B.slideT = 0.1;
+  }
   const close = adx < 2 * HALF_W + MELEE.reach - 8 && Math.abs(dy) < 40 && !immune(T);
   B.meleeT = close ? (B.meleeT || 0) + dt : 0;
   if (close && B.meleeT > L.react * 0.5 && Q.meleeCD <= 0 && !Q.charging && !(Q.throwT > 0)) { In.mp = true; In.face = Math.sign(dx) || Q.facing; In.fire1 = false; }
@@ -1991,7 +2025,7 @@ function respawns(dt) {
   for (const p of active()) {
     if (p.alive || p.out || p.respawnT <= 0) continue;
     p.respawnT -= dt;
-    if (!p.beam && p.respawnT < RESPAWN.beam) { p.spawnPt = pickSpawn(p); p.beam = true; beams.push({ x: p.spawnPt[0], y: p.spawnPt[1], t: 0, glow: p.team.glow }); sfx("spawn"); }
+    if (!p.beam && p.respawnT < RESPAWN.beam) { p.spawnPt = pickSpawn(p); p.beam = true; beams.push({ x: p.spawnPt[0], y: p.spawnPt[1], t: 0, glow: p.team.glow, who: p }); sfx("spawn"); }
     if (p.respawnT <= 0) {
       resetPlayer(p, p.spawnPt || pickSpawn(p), RESPAWN.inv);
       burst(p.x, p.y - BODY_H / 2, p.team.color, 18, 380, 0.5, 8); burst(p.x, p.y - BODY_H / 2, "#ffffff", 10, 300, 0.35, 6);
@@ -2832,7 +2866,7 @@ function drawThrowPreview(Q, test) {
 // el haz donde alguien vuelve: una columna de luz del color del equipo que baja, se ensancha y se apaga
 // (el de un power-up: dur es lo que tarda en aparecer y w, el ancho, más angosto)
 function drawBeam(Bm) {
-  const dur = Bm.dur ?? RESPAWN.beam, k = Bm.t / dur, a = k < 1 ? Math.min(1, k * 1.5) : Math.max(0, 1 - (Bm.t - dur) / 0.35), w = (26 + 50 * Math.min(1, k)) * (Bm.w ?? 1);
+  const dur = Bm.dur ?? RESPAWN.beam, k = Bm.t / dur, a = k < 1 ? Math.min(1, k * 1.5) : Math.max(0, 1 - (Bm.t - dur) / BEAM_FADE), w = (26 + 50 * Math.min(1, k)) * (Bm.w ?? 1);
   ctx.save(); ctx.globalAlpha = a;
   const g = ctx.createLinearGradient(Bm.x - w, 0, Bm.x + w, 0);   // del color del equipo, con el centro blanco
   g.addColorStop(0, `rgba(${Bm.glow},0)`); g.addColorStop(0.3, `rgba(${Bm.glow},0.75)`); g.addColorStop(0.5, "rgba(255,255,255,1)");
@@ -2967,12 +3001,11 @@ function render() {
   ctx.setTransform(DS * W2S, 0, 0, DS * W2S, ox, oy);
   const live = players.filter(p => p.alive && p.ctrl !== "off");
   drawObjects(true);   // objetos de fondo (no chocan, oscurecidos) y el cuerpo de las pintadas que se mueven
-  for (const Bm of beams) drawBeam(Bm);
   for (const Q of live) if (Q.state === "hang") drawSprite(Q);   // colgados: detrás del canto
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(baked.solid, ox, oy);
   ctx.setTransform(DS * W2S, 0, 0, DS * W2S, ox, oy);
   drawObjects(false);  // los que chocan: cajas y plataformas, delante de lo pintado
-  for (const K of pickups) drawPickup(K);
+  for (const K of pickups) if (!pickFresh(K)) drawPickup(K);   // los recién aparecidos van con su haz, delante de todo
   for (const E of fx) if (E.sheet && E.back) drawDustSheet(E);   // el polvo fuerte, detrás de los personajes
   if (ready) {
     for (const Q of live) drawShadow(Q);
@@ -3124,8 +3157,21 @@ function render() {
     ctx.strokeStyle = "rgba(255,230,0,0.8)"; for (const s of solids) if (!s.bound) ctx.strokeRect(s.x, s.y, s.w, Math.min(s.h, 40));
   }
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(baked.front, ox, oy);
+  // el haz de un power-up o de uno que vuelve: delante de todas las plataformas y del frente (Pablo, 2026-10-19: "el
+  // efecto cuando aparece un power up ... tiene que ir por delante de todas"; baja desde arriba del mundo y si no lo
+  // tapaba cualquier pasarela de encima). Lo que trae, mientras el haz se apaga, encima del haz: el power-up recién
+  // aparecido y el personaje que acaba de volver (ese rato, también delante del frente)
+  if (beams.length) {
+    ctx.setTransform(DS * W2S, 0, 0, DS * W2S, ox, oy);
+    for (const Bm of beams) drawBeam(Bm);
+    for (const K of pickups) if (pickFresh(K)) drawPickup(K);
+    if (ready) for (const Bm of beams) if (Bm.who && Bm.who.alive && Bm.t >= (Bm.dur ?? RESPAWN.beam)) drawSprite(Bm.who);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
   drawHud();
 }
+// el power-up que acaba de aparecer: su haz todavía se está apagando
+const pickFresh = K => K.t < PICKUP.warn + BEAM_FADE;
 
 /* ---------- loop ---------- */
 function resize() {
