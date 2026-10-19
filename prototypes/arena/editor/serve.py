@@ -15,7 +15,8 @@ arena al juego por localStorage. Además:
                      de cada arena; la carpeta se ignora sola en git)
   GET  /api/game     si el juego está armado (dist/index.html)
   POST /api/build    arma el juego (prototypes/arena/build.py)
-  /dist/arenas/<x>   si el build todavía no copió una imagen nueva (una pieza recién recortada), sale de arenas/<x>
+  /dist/arenas/<x>   sale siempre de arenas/<x>: Probar muestra las láminas y piezas de ahora aunque el juego no se haya
+                     vuelto a armar (dist/arenas/ es la copia del último build: con piezas nuevas del kit quedaba vieja)
 """
 import argparse
 import json
@@ -112,7 +113,7 @@ class Handler(SimpleHTTPRequestHandler):
         if path == "/api/game":
             game = ARENA / "dist" / "index.html"
             return self._json({"built": game.exists(), "mtime": game.stat().st_mtime if game.exists() else None})
-        if path.startswith("/dist/arenas/") and not (ARENA / path.lstrip("/")).exists():
+        if path.startswith("/dist/arenas/") and (ARENAS / path[len("/dist/arenas/"):]).exists():
             self.path = path.replace("/dist/arenas/", "/arenas/", 1)
         return super().do_GET()
 

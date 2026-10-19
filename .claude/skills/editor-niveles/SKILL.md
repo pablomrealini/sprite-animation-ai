@@ -110,12 +110,27 @@ El servidor es `serve.py` en el puerto 8772 (`.claude/launch.json`, "arena-edito
   `uv run --project pipeline python prototypes/arena/editor/kit.py`: copia todo a `prototypes/arena/arenas/kit_lowpoly/`
   y arma `kit.json` (colisión, franja que se estira medida en el alfa, `espejo`, `deco`, `tramo`). La config de cada
   pieza está en `PIEZAS`, en `kit.py`. Mirar la salida: la franja de cada pieza y el alfa de los bordes que empalman.
-- Las patas apoyan 8 px adentro de la cara de arriba de lo de abajo (`APOYO = −8`). Revisarlo de cerca con `cap(...,
-  región)`: con el 16 de la revisión de Arte, una pasarela sobre otra quedaba flotando.
+- Las patas bajan por detrás, como las viejas de la Refinería low-poly (cortadas en recto, terminan en el borde de
+  atrás de lo de abajo): del pie de cada pata asoman sólo `PIE_VISIBLE` = 14 px sobre el contorno de lo de abajo, un
+  remate chico como el de las viejas (~18 px, 3–4 px más ancho por lado); legsGap = 3 − alto del pie + 14, −13 en las
+  pasarelas. El resto del pie (la placa ancha) lo tapa la capa de adelante del juego (`bakePlate`: `plate.solid` y los `front` de las
+  piezas, dibujados encima de todo lo pintado). Por eso las piezas del kit traen `front` (de arriba al fondo de la losa)
+  y el fondo trae "frente" (el piso desde su contorno) que va a `plate.solid`. Pablo, 2026-10-19: con −8 y con +2
+  "apoyan muy adelante". Ojo: una pata que cae en la punta de una pasarela asoma el pie del lado de afuera: `exposedFeet()` (y "Pies a la
+  vista" en el panel de la arena) lo encuentra mirando el alfa. Revisarlo de
+  cerca en el juego (captura a 3840 desde Probar) contra las viejas. Después de correr kit.py, "Actualizar del kit" en
+  cada arena que lo usa.
 - Uniones: los tramos se enciman `OVERLAP` = 2 px (alfa del borde 252). Para comprobar que no se ven: captura del juego
   a 1920 y a 3840 (en el iframe de Probar: `cv.width = 3840; cv.height = 2160; DS = cv.width / VIEW_W; needBake = true;
   render()` y `cv.toDataURL()` al receptor) y, en cada junta, el salto de color entre columnas vecinas en las filas de
   la losa contra la mediana. Medido el 2026-10-18: encimadas, 0,6–2,7 niveles (igual que el ruido); pegadas justo, 14–37.
+- Probar (y el juego en 8772) toma las láminas y piezas de `arenas/`: `serve.py` sirve `/dist/arenas/<x>` desde
+  `arenas/<x>` (desde el 2026-10-19). El juego armado en `dist/` tiene la copia del último build: hasta que Programación
+  lo vuelva a armar, abierto por otro servidor (8767) muestra las piezas viejas.
+- Si en el navegador hay un borrador sin guardar de otro en la arena que hay que actualizar, no abrirla con su nombre
+  (cargaría o borraría su borrador): abrir la versión de disco con un nombre temporal (`ARENAS.tmp_x = disco;
+  DISK.set("tmp_x", …); openArena("tmp_x", disco, true)`), aplicar el cambio, guardar con `/api/save` y la clave de
+  verdad (deja el respaldo), y borrar `arena-editor-wip:tmp_x`. Avisar que su borrador sigue con lo viejo.
 - Un borrador que no es arena oficial se guarda en `arenas/borradores/<nombre>.json` (no va al menú del juego).
   `borradores/kit_prueba` es el del kit.
 - Ojo con el panel oculto: los diálogos del editor (`ask`) tardan en cerrar; esperar 1–2 s entre un Enter y el próximo.
@@ -125,8 +140,8 @@ El servidor es `serve.py` en el puerto 8772 (`.claude/launch.json`, "arena-edito
 - Alcance: todo verde desde el piso, cuántos saltos hasta lo más alto, lo que depende de un solo camino (`link` entre
   pares), y que los bots lleguen de verdad (`llegar`, `partidas`: % del tiempo por altura).
 - Simetría: cada pieza de la izquierda con su pareja espejada (`x' = AW − x − w` en las pintadas, `flip` opuesto).
-- Pisos cada ~200 px (el simple llega a 192); caídas de 560 px o más sacan vida; el HUD con 4 jugadores tapa ~620 ×
-  195 px arriba a la derecha en las de 2496; power-ups a 90 px de las paredes.
+- Pisos cada ~200 px (el simple llega a 192); caídas de 560 px o más sacan vida; el HUD con 4 jugadores tapa 451 ×
+  138 px arriba a la derecha en las de 2496 (347 × 106 en las de 1920; `HUD2.k` = 0,7); power-ups a 90 px de las paredes.
 - Que la lámina mida el `size` de la arena (`capas.py` corta con error si no).
 
 ## Reportes

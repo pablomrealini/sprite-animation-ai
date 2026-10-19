@@ -5,14 +5,16 @@
   "pies": 16,
   "escala": 0.42009,
   "hoja": 2,
-  "corte_post_px": 269
+  "corte_post_px": 269,
+  "patas": "poste de pasarela_medio_der de la Refinería low-poly (patas_viejas.py)"
  },
  "pasarela_medio_a": {
   "w": 256,
   "h": 200,
   "pies": 16,
   "escala": 0.42009,
-  "hoja": 2
+  "hoja": 2,
+  "patas": "poste de pasarela_medio_der de la Refinería low-poly (patas_viejas.py)"
  },
  "pasarela_medio_b": {
   "w": 256,
@@ -27,21 +29,24 @@
   "pies": 16,
   "escala": 0.42009,
   "hoja": 2,
-  "corte_post_px": 98
+  "corte_post_px": 98,
+  "patas": "poste de pasarela_medio_der de la Refinería low-poly (patas_viejas.py)"
  },
  "columna_angosta": {
-  "w": 69,
+  "w": 64,
   "h": 200,
   "pies": null,
   "escala": 0.22249,
-  "hoja": 1
+  "hoja": 1,
+  "patas": "poste de pasarela_medio_der de la Refinería low-poly (patas_viejas.py)"
  },
  "columna_ancha": {
   "w": 113,
   "h": 200,
   "pies": 16,
   "escala": 0.2201,
-  "hoja": 1
+  "hoja": 1,
+  "patas": "poste de pasarela_medio_der de la Refinería low-poly (patas_viejas.py)"
  },
  "bloque": {
   "w": 129,

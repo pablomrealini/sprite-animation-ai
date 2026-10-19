@@ -13,8 +13,13 @@ arena). kit.json es lo que muestra el editor en "Kit low-poly"; al poner una pie
 - solids: la colisión, con la y en la línea de los pies y el ancho de lo que se ve de la cara de arriba;
 - legs: la franja que se estira a lo alto (patas, pilares, el caño vertical), medida en el alfa: la tira más larga de
   filas iguales (sólo cosas verticales), con 2 filas de margen. legsGap: cuántos px por encima de la línea de los pies de
-  lo de abajo terminan: APOYO = −8, 8 px adentro de la cara de arriba de lo de abajo, así la base la pisa (con el 16 de
-  la revisión de Arte, una pasarela sobre otra quedaba 13 px flotando sobre la losa);
+  lo de abajo terminan. Como las de la Refinería low-poly (cortadas en recto, terminan en el borde de atrás de lo de
+  abajo y parecen meterse detrás): el pie de la pata (las filas de abajo donde se ensancha) queda por debajo del
+  contorno de arriba de lo de abajo (CONTORNO px sobre su línea de los pies), salvo PIE_VISIBLE px que asoman como un
+  remate chico, y lo de abajo tapa el resto (front de las piezas y "frente" de los fondos, ver abajo). Pablo, 2026-10-19:
+  con −8 y con +2 "apoyan muy adelante";
+- front: lo que se dibuja encima de todo lo pintado (la capa de adelante del juego, bakePlate): de arriba de la pieza
+  hasta el fondo de la losa. Es lo que tapa el pie de las patas de lo que se apoya encima;
 - espejo (sólo del editor): con qué se hace la copia del otro lado. "mismo": la misma pieza sin espejar (las simétricas,
   así la luz sigue viniendo de la izquierda); otra pieza: la del otro lado (las puntas). Sin espejo: se espeja (flip);
 - deco (sólo del editor): decorado sin colisión, que se pone detrás de todo;
@@ -30,33 +35,37 @@ import numpy as np
 from PIL import Image
 
 HERE = Path(__file__).resolve().parent
-APOYO = -8   # legsGap de lo que se apoya (ver arriba)
+CONTORNO = 3   # el contorno de arriba de lo que se pisa, sobre su línea de los pies (fila 13 de la losa con los pies en 16)
+# cuánto del pie asoma sobre ese contorno: el bisel y la parte de arriba del collar, como el remate chico de las patas
+# viejas (~18 px de alto, 3–4 px más ancho por lado). La placa ancha de abajo queda tapada. Pablo, 2026-10-19: con el pie
+# escondido entero "la base está bueno que tenga ese detalle que tenía antes, pero sutil"
+PIE_VISIBLE = 14
 ARENA = HERE.parent
 ROOT = ARENA.parent.parent
 OUT = ARENA / "arenas" / "kit_lowpoly"
 
 # grupo de la paleta, colisión (bridge se atraviesa desde abajo; walk es bloque), si se estira y cómo se espeja
 PIEZAS = {
-    "pasarela_punta_izq": dict(grupo="Pasarelas", solido="bridge", patas=True, gap=APOYO, espejo="pasarela_punta_der"),
-    "pasarela_medio_a": dict(grupo="Pasarelas", solido="bridge", patas=True, gap=APOYO, espejo="mismo", tramo="x"),
+    "pasarela_punta_izq": dict(grupo="Pasarelas", solido="bridge", patas=True, espejo="pasarela_punta_der"),
+    "pasarela_medio_a": dict(grupo="Pasarelas", solido="bridge", patas=True, espejo="mismo", tramo="x"),
     "pasarela_medio_b": dict(grupo="Pasarelas", solido="bridge", espejo="mismo", tramo="x"),
-    "pasarela_punta_der": dict(grupo="Pasarelas", solido="bridge", patas=True, gap=APOYO, espejo="pasarela_punta_izq"),
+    "pasarela_punta_der": dict(grupo="Pasarelas", solido="bridge", patas=True, espejo="pasarela_punta_izq"),
     "flotante_200": dict(grupo="Flotantes", solido="bridge", espejo="mismo"),
     "flotante_300": dict(grupo="Flotantes", solido="bridge", espejo="mismo"),
     "flotante_450": dict(grupo="Flotantes", solido="bridge", espejo="mismo"),
     "ascensor": dict(grupo="Flotantes", solido="bridge", espejo="mismo"),
-    "columna_ancha": dict(grupo="Columnas y bloques", solido="bridge", patas=True, gap=APOYO, espejo="mismo"),
-    "columna_angosta": dict(grupo="Columnas y bloques", patas=True, gap=APOYO, espejo="mismo"),
+    "columna_ancha": dict(grupo="Columnas y bloques", solido="bridge", patas=True, espejo="mismo"),
+    "columna_angosta": dict(grupo="Columnas y bloques", patas=True, espejo="mismo"),
     # bloque y pared frenan balas (walk): no se estiran, porque el juego no le suma el estirado al alto de la colisión
     "bloque": dict(grupo="Columnas y bloques", solido="walk", espejo="mismo"),
     "pared": dict(grupo="Columnas y bloques", solido="walk", espejo="mismo"),
-    "guia_ascensor": dict(grupo="Columnas y bloques", patas=True, gap=APOYO, espejo="mismo", deco=True),
+    "guia_ascensor": dict(grupo="Columnas y bloques", patas=True, espejo="mismo", deco=True),
     "deco_tanque": dict(grupo="Decorado", deco=True),
     "deco_chimenea": dict(grupo="Decorado", deco=True),
     "deco_torre": dict(grupo="Decorado", deco=True),
     "deco_codo": dict(grupo="Decorado", deco=True),
     "deco_cano_h": dict(grupo="Decorado", deco=True, espejo="mismo", tramo="x"),
-    "deco_cano_v": dict(grupo="Decorado", deco=True, patas="todo", gap=APOYO, espejo="mismo", tramo="y"),
+    "deco_cano_v": dict(grupo="Decorado", deco=True, patas="todo", espejo="mismo", tramo="y"),
 }
 
 
@@ -74,6 +83,26 @@ def band(alpha: np.ndarray, start: int) -> list[int] | None:
                 best = (run0, end)
             run0 = None
     return [best[0] + 2, best[1] - 2] if best[1] - best[0] >= 12 else None
+
+
+def foot_height(alpha: np.ndarray, L: list[int]) -> int:
+    """Las filas de abajo donde la pata se ensancha (el pie): desde abajo, hasta la primera fila del ancho de la franja."""
+    m = alpha > 128
+    shaft = int(m[(L[0] + L[1]) // 2].sum())
+    for y in range(m.shape[0] - 1, L[1] - 1, -1):
+        if abs(int(m[y].sum()) - shaft) <= 1:
+            return m.shape[0] - 1 - y
+    return 0
+
+
+def slab_bottom(alpha: np.ndarray, feet: int) -> int:
+    """El fondo de la losa: la primera fila debajo de la línea de los pies con menos del 60% de lo más lleno de la losa."""
+    op = (alpha > 128).mean(1)
+    top = op[feet:feet + 30].max()
+    for y in range(feet, alpha.shape[0]):
+        if op[y] < 0.6 * top:
+            return y
+    return alpha.shape[0]
 
 
 def top_span(alpha: np.ndarray, feet: int) -> tuple[int, int]:
@@ -110,11 +139,14 @@ def main() -> None:
                 s["h"] = m["h"] - feet
             p["solids"] = [s]
         if cfg.get("patas") == "todo":
-            p["legs"], p["legsGap"] = [2, m["h"] - 2], cfg.get("gap", 0)
+            p["legs"], p["legsGap"] = [2, m["h"] - 2], CONTORNO
         elif cfg.get("patas"):
             L = band(a, (feet or 0) + 40)
             if L:
-                p["legs"], p["legsGap"] = L, cfg.get("gap", 0)
+                fh = foot_height(a, L)
+                p["legs"], p["legsGap"] = L, CONTORNO - fh + min(PIE_VISIBLE, fh)
+        if cfg.get("solido") and feet is not None:
+            p["front"] = [[0, 0, m["w"], slab_bottom(a, feet)]]
         for k in ("espejo", "deco", "tramo"):
             if cfg.get(k):
                 p[k] = cfg[k]
@@ -129,7 +161,10 @@ def main() -> None:
         im = Image.open(fp)
         (OUT / "fondos").mkdir(exist_ok=True)
         shutil.copy2(fp, OUT / "fondos" / fp.name)
-        fondos.append({"src": f"kit_lowpoly/fondos/{fp.name}", "size": list(im.size), "piso": im.size[1] - 140})
+        piso = im.size[1] - 140
+        # "frente": lo del fondo que va encima de lo pintado (plate.solid de la arena): el piso, desde su contorno de arriba
+        fondos.append({"src": f"kit_lowpoly/fondos/{fp.name}", "size": list(im.size), "piso": piso,
+                       "frente": [[0, piso - CONTORNO, im.size[0], im.size[1] - piso + CONTORNO]]})
     kit = {"name": "Kit low-poly", "origen": args.entrega, "nota": "Lo arma prototypes/arena/editor/kit.py; no se edita a mano.",
            "fondos": fondos, "pieces": pieces}
     (OUT / "kit.json").write_text(json.dumps(kit, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

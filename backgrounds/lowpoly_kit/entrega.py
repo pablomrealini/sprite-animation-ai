@@ -279,6 +279,10 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # las patas finas (aprobadas por Pablo el 2026-10-19): el poste de las pasarelas viejas en las patas y las columnas
+    import subprocess
+    import sys as _sys
+    subprocess.run([_sys.executable, str(KIT / "patas_viejas.py"), "--entregar"], check=True)
 
 
 # --- revisión ---------------------------------------------------------------------------------------------------

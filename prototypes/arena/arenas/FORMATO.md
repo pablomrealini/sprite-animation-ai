@@ -93,4 +93,4 @@ Una pasarela por tramos son piezas sueltas encimadas 2 px (los bordes tienen alf
 
 - Paredes a los costados (`x < 0` y `x > ancho`) y un techo, invisibles.
 - Los power-ups: al azar sobre caras de arriba de 60 px o más, a 90 px de las paredes, o en un spawn (`pickupSpot`).
-- El HUD: arriba a la derecha, en px de pantalla. Con 4 jugadores tapa ~620 × 195 px del mundo en las de 2496.
+- El HUD: arriba a la derecha, en px de pantalla. Con 4 jugadores (al 70%, `HUD2.k`) tapa 451 × 138 px del mundo en las de 2496 y 347 × 106 en las de 1920.

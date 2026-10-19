@@ -1,0 +1,75 @@
+{
+  "name": "Kit · B: con pared",
+  "note": "Borrador de Editor de niveles (2026-10-18): el kit low-poly de Arte sobre su fondo de 2496 × 1404, para probar el kit en el editor y en el juego. No es una arena oficial: está en arenas/borradores/ y no va al menú del juego.",
+  "size": [2496, 1404],
+  "seed": 1,
+  "plate": {
+    "src": "kit_lowpoly/fondos/abierta_3.webp",
+    "solid": [
+      [0, 1261, 2496, 143]
+    ]
+  },
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 1264, "w": 2576, "h": 200, "fill": "full"}
+  ],
+  "objects": [
+    {"piece": "deco_tanque", "x": 1082, "y": 959},
+    {"piece": "deco_chimenea", "x": 540, "y": 684},
+    {"piece": "deco_chimenea", "x": 1677, "y": 748, "flip": true},
+    {"piece": "guia_ascensor", "x": 127, "y": 690, "stretch": 374},
+    {"piece": "guia_ascensor", "x": 2324, "y": 690, "stretch": 374},
+    {"piece": "pasarela_punta_izq", "x": 592, "y": 1068, "tira": "tmveecpp5rd", "stretch": 9},
+    {"piece": "pasarela_punta_der", "x": 2103, "y": 1056, "tira": "tmveecpp8gd", "stretch": 21},
+    {"piece": "pasarela_medio_a", "x": 703, "y": 1068, "tira": "tmveecpp5rd", "stretch": 9},
+    {"piece": "pasarela_medio_a", "x": 1849, "y": 1056, "tira": "tmveecpp8gd", "stretch": 21},
+    {"piece": "pasarela_medio_b", "x": 957, "y": 1068, "tira": "tmveecpp5rd"},
+    {"piece": "pasarela_medio_b", "x": 1595, "y": 1056, "tira": "tmveecpp8gd"},
+    {"piece": "pasarela_punta_der", "x": 1211, "y": 1068, "tira": "tmveecpp5rd", "stretch": 9},
+    {"piece": "pasarela_punta_izq", "x": 1485, "y": 1056, "tira": "tmveecpp8gd", "stretch": 21},
+    {"piece": "pasarela_punta_izq", "x": 689, "y": 888, "tira": "tmveecpp9kt", "stretch": 9},
+    {"piece": "pasarela_medio_a", "x": 800, "y": 888, "tira": "tmveecpp9kt", "stretch": 9},
+    {"piece": "pasarela_medio_b", "x": 1054, "y": 888, "tira": "tmveecpp9kt"},
+    {"piece": "pasarela_medio_a", "x": 1308, "y": 888, "tira": "tmveecpp9kt", "stretch": 189},
+    {"piece": "pasarela_punta_der", "x": 1562, "y": 888, "tira": "tmveecpp9kt", "stretch": -3},
+    {"piece": "flotante_450", "x": 977, "y": 465},
+    {"piece": "flotante_300", "x": 428, "y": 611},
+    {"piece": "flotante_300", "x": 1630, "y": 605},
+    {"piece": "flotante_200", "x": 250, "y": 356},
+    {"piece": "flotante_200", "x": 2046, "y": 356},
+    {"piece": "ascensor", "x": 31, "y": 1192, "move": {"path": [[31, 1192], [31, 716]], "speed": 80, "wait": 1.2}},
+    {"piece": "ascensor", "x": 2226, "y": 1192, "move": {"path": [[2226, 1192], [2226, 716]], "speed": 80, "wait": 1.2}},
+    {"piece": "flotante_200", "x": 779, "y": 243},
+    {"piece": "flotante_200", "x": 1401, "y": 248},
+    {"piece": "pared", "x": 1143, "y": 700}
+  ],
+  "spawns": [
+    [858, 1264],
+    [2076, 1264],
+    [800, 904],
+    [1584, 904],
+    [604, 619],
+    [1770, 613],
+    [352, 364],
+    [2176, 364]
+  ],
+  "decor": [],
+  "pipes": [],
+  "pieces": {
+    "pasarela_punta_izq": {"src": "kit_lowpoly/pasarela_punta_izq.png", "w": 113, "h": 200, "solids": [{"kind": "bridge", "x": 7, "y": 16, "w": 106}], "legs": [98, 167], "legsGap": -13, "front": [[0, 0, 113, 72]], "espejo": "pasarela_punta_der"},
+    "pasarela_medio_a": {"src": "kit_lowpoly/pasarela_medio_a.png", "w": 256, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 256}], "legs": [98, 167], "legsGap": -13, "front": [[0, 0, 256, 71]], "espejo": "mismo", "tramo": "x"},
+    "pasarela_medio_b": {"src": "kit_lowpoly/pasarela_medio_b.png", "w": 256, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 256}], "front": [[0, 0, 256, 72]], "espejo": "mismo", "tramo": "x"},
+    "pasarela_punta_der": {"src": "kit_lowpoly/pasarela_punta_der.png", "w": 113, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 105}], "legs": [98, 167], "legsGap": -13, "front": [[0, 0, 113, 72]], "espejo": "pasarela_punta_izq"},
+    "flotante_450": {"src": "kit_lowpoly/flotante_450.png", "w": 450, "h": 80, "solids": [{"kind": "bridge", "x": 7, "y": 8, "w": 436}], "front": [[0, 0, 450, 58]], "espejo": "mismo"},
+    "flotante_300": {"src": "kit_lowpoly/flotante_300.png", "w": 300, "h": 80, "solids": [{"kind": "bridge", "x": 8, "y": 8, "w": 284}], "front": [[0, 0, 300, 69]], "espejo": "mismo"},
+    "flotante_200": {"src": "kit_lowpoly/flotante_200.png", "w": 200, "h": 80, "solids": [{"kind": "bridge", "x": 7, "y": 8, "w": 186}], "front": [[0, 0, 200, 61]], "espejo": "mismo"},
+    "ascensor": {"src": "kit_lowpoly/ascensor.png", "w": 239, "h": 106, "solids": [{"kind": "bridge", "x": 7, "y": 8, "w": 226}], "front": [[0, 0, 239, 70]], "espejo": "mismo"},
+    "guia_ascensor": {"src": "kit_lowpoly/guia_ascensor.png", "w": 45, "h": 200, "legs": [114, 173], "legsGap": -6, "espejo": "mismo", "deco": true},
+    "deco_chimenea": {"src": "kit_lowpoly/deco_chimenea.png", "w": 119, "h": 516, "deco": true},
+    "deco_tanque": {"src": "kit_lowpoly/deco_tanque.png", "w": 333, "h": 305, "deco": true},
+    "deco_cano_h": {"src": "kit_lowpoly/deco_cano_h.png", "w": 256, "h": 48, "espejo": "mismo", "deco": true, "tramo": "x"},
+    "pasarela_arriba_izq": {"src": "refineria_lowpoly/pasarela_arriba_izq.png", "w": 522, "h": 192, "cut": [0, 328], "solids": [{"kind": "bridge", "x": 0, "y": 12, "w": 520, "ledge": "both"}], "front": [[0, 5, 522, 58]], "legs": [77, 175], "legsGap": 13},
+    "pasarela_arriba_der": {"src": "refineria_lowpoly/pasarela_arriba_der.png", "w": 521, "h": 192, "cut": [1399, 328], "solids": [{"kind": "bridge", "x": 1, "y": 12, "w": 520, "ledge": "both"}], "front": [[0, 5, 521, 58]], "legs": [77, 175], "legsGap": 13},
+    "pasarela_medio_der": {"src": "refineria_lowpoly/pasarela_medio_der.png", "w": 435, "h": 194, "cut": [1116, 516], "solids": [{"kind": "bridge", "x": 12, "y": 16, "w": 421, "ledge": "both"}], "front": [[10, 8, 425, 58]], "legs": [69, 179], "legsGap": 15},
+    "pared": {"src": "kit_lowpoly/pared.png", "w": 76, "h": 200, "solids": [{"kind": "walk", "x": 5, "y": 16, "w": 66, "h": 184}], "front": [[0, 0, 76, 200]], "espejo": "mismo"}
+  }
+}

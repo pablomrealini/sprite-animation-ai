@@ -763,6 +763,25 @@ function legged(src, d, L, s) {
   }
   return m.get(k);
 }
+// la capa de adelante del juego (bakePlate): encima de todo lo pintado van los recortes de la lámina (plate.solid) y el
+// front de cada pieza pintada. Es lo que tapa el pie de las patas de lo que se apoya encima (el piso, la losa de abajo)
+function drawFrontLayer() {
+  if (A.plate && A.plate.src) {
+    const e = img(ARENA_DIR + A.plate.src);
+    if (e.ok) {
+      const fg = graded(e, "plataformas"), kx = (fg.naturalWidth || fg.width) / AW, ky = (fg.naturalHeight || fg.height) / AH;
+      for (const [x, y, w, h] of A.plate.solid || []) g.drawImage(fg, x * kx, y * ky, w * kx, h * ky, x, y, w, h);
+    }
+  }
+  for (const o of A.objects) {
+    const d = def(o.piece); if (!d || !d.painted || !(d.p.front || []).length) continue;
+    const e = img(d.url); if (!e.ok) continue;
+    const src = graded(e, "plataformas"), qx = (src.naturalWidth || src.width) / d.w, qy = (src.naturalHeight || src.height) / d.h, [ax, ay] = objAt(o);
+    g.save(); if (o.flip) { g.translate(ax + d.w, ay); g.scale(-1, 1); } else g.translate(ax, ay);
+    for (const [x, y, w, h] of d.p.front) g.drawImage(src, x * qx, y * qy, w * qx, h * qy, x, y, w, h);
+    g.restore();
+  }
+}
 function text(s, x, y, color = "#fff", size = 11, align = "left") {
   g.save(); g.font = `600 ${size / view.k}px -apple-system, system-ui, sans-serif`; g.textAlign = align; g.lineJoin = "round";
   g.lineWidth = 3 / view.k; g.strokeStyle = "rgba(5,8,14,.85)"; g.strokeText(s, x, y); g.fillStyle = color; g.fillText(s, x, y); g.restore();
@@ -788,18 +807,14 @@ function render() {
       plateWarned.add(e.im.src); toast(`La lámina mide ${e.im.naturalWidth} × ${e.im.naturalHeight} y la arena ${AW} × ${AH}: el juego la estira`);
     }
     if (e.ok) {
-      const bg = graded(e, "fondo"), fg = graded(e, "plataformas");
-      g.drawImage(bg, 0, 0, AW, AH);
-      if (fg !== bg) {   // los recortes de plate.solid (lo que se pisa de la lámina) son de las plataformas, como en el juego
-        const kx = (fg.naturalWidth || fg.width) / AW, ky = (fg.naturalHeight || fg.height) / AH;
-        for (const [x, y, w, h] of A.plate.solid || []) g.drawImage(fg, x * kx, y * ky, w * kx, h * ky, x, y, w, h);
-      }
+      g.drawImage(graded(e, "fondo"), 0, 0, AW, AH);   // los recortes de plate.solid van en la capa de adelante (drawFrontLayer)
     }
   }
   // el orden del juego: piezas pintadas (en el orden del JSON), objetos de atrás (oscurecidos) y los de adelante
   const objs = A.objects.map((o, i) => [o, i]);
   for (const [o] of objs) if (isPainted(o)) drawPiece(o, objAt(o));
   for (const [o] of objs) if (!isPainted(o) && (o.layer === "back" || o.solid === false) && def(o.piece)) drawPiece(o, objAt(o), 1, "rgba(14,24,52,0.35)");
+  drawFrontLayer();
   for (const [o] of objs) if (!isPainted(o) && !(o.layer === "back" || o.solid === false)) drawPiece(o, objAt(o));
   for (const p of A.platforms || []) {
     const K = KIT.pieces["platforms/" + p.piece]; if (!K) continue;
@@ -839,8 +854,8 @@ function drawGrid() {
 // las guías de la escala: los pisos cada guideStep desde el piso, lo que tapa el HUD, el margen de los power-ups y las
 // caídas que sacan vida (FALL_H o más, desde un borde o atravesando hacia abajo)
 function mainFloor(Wd = W) { const g0 = Wd.solids.filter(s => s.ground && !s.moving).sort((a, b) => b.w - a.w)[0]; return g0 ? g0.y : AH - 140; }
-function hudRect(n = 4) {   // el HUD chico con n jugadores (drawMiniHud de src.html), de la vista de 960 al mundo
-  const s = AW / 960, R = HUD2.r + HUD2.ring, w = HUD2.right + 2 * R + (n - 1) * HUD2.gap + 10, h = HUD2.top + 12 + 2 * HUD2.r + 3 + 17;
+function hudRect(n = 4) {   // el HUD chico con n jugadores (drawMiniHud de src.html), de la vista de 960 al mundo, a HUD2.k desde la esquina
+  const s = AW / 960 * (HUD2.k || 1), R = HUD2.r + HUD2.ring, w = HUD2.right + 2 * R + (n - 1) * HUD2.gap + 10, h = HUD2.top + 12 + 2 * HUD2.r + 3 + 17;
   return { x: AW - w * s, y: 0, w: w * s, h: h * s };
 }
 function falls(Wd = W) {
@@ -1366,6 +1381,78 @@ function buildTira(kind) {
   rebind(made); changedSel();
   if (!made.length) toast("Falta alguna pieza del kit (¿se corrió editor/kit.py?)");
 }
+// las piezas de esta arena que vienen de un kit (por la imagen) y cuya definición ya no es la del kit (kit.py se corrió
+// de nuevo: otro apoyo, otra franja, piezas nuevas de Arte). "Actualizar del kit" copia la de ahora; si cambió la línea
+// de los pies, corre la pieza para que lo que se pisa quede donde estaba, y vuelve a apoyar las patas que estaban apoyadas
+const canon = v => (Array.isArray(v) ? v.map(canon) : v && typeof v === "object" ? Object.fromEntries(Object.keys(v).sort().map(k => [k, canon(v[k])])) : v);
+// el fondo de la arena, si es de un kit, y su frente si a plate.solid le falta
+function plateFront() {
+  if (!A || !A.plate || !A.plate.src) return null;
+  const fo = Object.values(KITS).flatMap(k => k.fondos || []).find(f => f.src === A.plate.src);
+  if (!fo || !fo.frente) return null;
+  const have = new Set((A.plate.solid || []).map(r => r.join(",")));
+  const miss = fo.frente.filter(r => !have.has(r.join(",")));
+  return miss.length ? miss : null;
+}
+function kitStale() {
+  const bySrc = new Map();
+  for (const kit of Object.values(KITS)) for (const p of Object.values(kit.pieces || {})) bySrc.set(p.src, p);
+  const out = [];
+  for (const [n, p] of Object.entries((A && A.pieces) || {})) {
+    const k = bySrc.get(p.src); if (!k) continue;
+    const q = clean(k); delete q.grupo;
+    if (JSON.stringify(canon(q)) !== JSON.stringify(canon(p))) out.push([n, q]);
+  }
+  return out;
+}
+function updateFromKit() {
+  const stale = kitStale(), pf = plateFront(); if (!stale.length && !pf) return toast("Las piezas del kit de esta arena ya están al día");
+  const resting = new Set(standing()), names = new Set(stale.map(([n]) => n)), feet = d => ((d.solids || [])[0] || {}).y;
+  let relaid = 0;
+  edit(() => {
+    if (pf) { A.plate.solid = A.plate.solid || []; A.plate.solid.push(...clean(pf)); }   // el frente del piso del fondo
+    for (const [n, q] of stale) {
+      const f0 = feet(A.pieces[n]), f1 = feet(q); A.pieces[n] = q;
+      if (f0 == null || f1 == null || f0 === f1) continue;
+      for (const o of A.objects) if (o.piece === n) {
+        if (moving(o)) { o.move.path = o.move.path.map(([x, y]) => [x, y + f0 - f1]); [o.x, o.y] = o.move.path[0]; } else o.y += f0 - f1;
+      }
+    }
+    A.objects.forEach((o, i) => { if (resting.has(i) && names.has(o.piece) && !moving(o)) { const r = groundStretch(i); if (r) { setStretch(o, r.s); relaid++; } } });
+  }, { raw: true });
+  toast(`${stale.length} ${stale.length === 1 ? "pieza" : "piezas"} al día con el kit; ${relaid} ${relaid === 1 ? "apoyada" : "apoyadas"} de nuevo${pf ? "; el piso del fondo va adelante (tapa el pie de las patas)" : ""}`);
+}
+// los pies a la vista: patas apoyadas cuyo pie (lo que baja por debajo del contorno de lo que pisan) no queda tapado
+// por la capa de adelante (el front de las pintadas, con su alfa, y los recortes de la lámina). Pasa cuando una pata cae
+// en la punta de una pasarela o fuera de ella
+function frontCovers(x, y) {
+  for (const [rx, ry, rw, rh] of (A.plate && A.plate.solid) || []) if (x >= rx && x < rx + rw && y >= ry && y < ry + rh) return true;
+  for (const o of A.objects) {
+    const d = def(o.piece); if (!d || !d.painted || !(d.p.front || []).length) continue;
+    const [ax, ay] = objAt(o); let u = x - ax; const v = y - ay; if (o.flip) u = d.w - u;
+    if (!d.p.front.some(([fx, fy, fw, fh]) => u >= fx && u < fx + fw && v >= fy && v < fy + fh)) continue;
+    const e = img(d.url); if (!e.alpha) return true;
+    const px = Math.min(e.alpha.w - 1, Math.floor(u / d.w * e.alpha.w)), py = Math.min(e.alpha.h - 1, Math.floor(v / d.h * e.alpha.h));
+    if (e.alpha.a[py * e.alpha.w + px] > 128) return true;
+  }
+  return false;
+}
+function exposedFeet() {
+  if (!A) return [];
+  const Wd = world(), out = [];
+  A.objects.forEach((o, i) => {
+    const d = def(o.piece), L = legsOf(d); if (!L || moving(o) || d.p.deco) return;
+    const r = groundStretch(i, Wd); if (!r || r.s !== stretchOf(o, d)) return;   // sólo las que están apoyadas
+    const bottom = o.y + d.h + stretchOf(o, d), top = r.on.y - 3;                 // del contorno de lo de abajo a la base
+    let bad = 0, x0 = Infinity, x1 = -Infinity;
+    for (let x = Math.floor(o.x); x < o.x + d.w; x += 2) for (let y = top + 2; y < bottom; y += 3) {
+      if (!hitObj(o, x, y) || frontCovers(x, y)) continue;
+      bad++; x0 = Math.min(x0, x); x1 = Math.max(x1, x);
+    }
+    if (bad > 2) out.push({ ref: { t: "obj", i }, name: `${objName(o)} · x ${Math.round(x0)}–${Math.round(x1 + 2)}, sobre ${r.on.name}` });
+  });
+  return out;
+}
 // las de la misma tira que o (para elegirlas juntas)
 const tiraOf = o => (o && o.tira ? A.objects.map((q, i) => (q.tira === o.tira ? { t: "obj", i } : null)).filter(Boolean) : null);
 function addSpawn() { edit(() => { const [x, y] = viewCenter(); A.spawns = A.spawns || []; A.spawns.push([snapV(x), Math.round(y)]); selectOnly({ t: "spawn", i: A.spawns.length - 1 }); settleSpawn(sel.i); }, { raw: true }); }
@@ -1524,8 +1611,15 @@ function arenaPanel(box) {
     el("div", { class: "row" }, btn("+ Spawn", addSpawn), btn("+ Sólido", addSolid, "un puente para calcar algo fijo de la lámina"), HANG_ON ? btn("+ Recorte delante", addFront) : null));
   if (dirty) box.append(el("div", { class: "row" }, el("span", { class: "kv" }, DISK.has(key) ? "Cambios sin guardar (quedan en este navegador)." : "Arena nueva, sin guardar."),
     el("button", { class: "warn", onclick: discard, title: DISK.has(key) ? "volver a lo que está en disco" : "sacarla de la lista" }, "Descartar cambios")));
+  const stale = kitStale(), pf = plateFront();
+  if (stale.length || pf) box.append(el("div", { class: "row" }, el("span", { class: "kv" }, [stale.length ? `${stale.length} ${stale.length === 1 ? "pieza del kit cambió" : "piezas del kit cambiaron"} (${stale.map(([n]) => n).join(", ")}).` : "", pf ? "Falta el frente del piso del fondo." : ""].filter(Boolean).join(" ")),
+    btn("Actualizar del kit", updateFromKit, "copiar la definición de ahora de cada pieza del kit (apoyo, franja, colisión) y volver a apoyar sus patas")));
   const pcs = Object.keys(A.pieces || {});
   if (pcs.length) box.append(el("div", { class: "note" }, "Piezas pintadas: " + pcs.map(p => `${p} (${used(p)})`).join(", ")));
+  // los pies a la vista (una pata que cae en la punta de una pasarela o afuera)
+  const ef = exposedFeet();
+  if (ef.length) box.append(el("h4", {}, "Pies a la vista"), el("div", { class: "note" }, `${ef.length} ${ef.length === 1 ? "pata asoma" : "patas asoman"} el pie: lo de abajo no la tapa.`),
+    el("div", { class: "reach sym" }, ef.map(r => el("div", { class: "bad", onclick: () => { selectOnly(r.ref); changedSel(); } }, el("i"), el("span", {}, r.name)))));
   // la simetría: lo que no tiene pareja del otro lado (con Espejo, marcado en violeta en el lienzo)
   const un = unpaired();
   box.append(el("h4", {}, "Simetría"), el("div", { class: "note" }, un.length ? `${un.length} sin pareja del otro lado:` : "Todo tiene su pareja del otro lado (o está en el eje)."));
@@ -1796,7 +1890,7 @@ async function newArena() {
   const src = (await ask(`La lámina: una imagen de ${size.join(" × ")} en prototypes/arena/arenas/ (vacío: sin lámina, con el kit 2D del ranger).${fondos.length ? ` De los kits: ${fondos.map(f => `${f.src} (${f.size.join(" × ")})`).join(", ")}.` : ""}`, { input: fit0 ? fit0.src : "", ok: "Crear" })) ?? "";
   const fo = fondos.find(f => f.src === src);
   const gy = fo && fo.piso ? fo.piso : size[1] - 140;   // el piso, a 140 del borde de abajo (940 en 1080; 1264 en 1404)
-  const a = { name: k, note: "", size, seed: 1, ...(src ? { plate: { src, solid: [] } } : {}), solids: [{ kind: "walk", x: -40, y: gy, w: size[0] + 80, h: 200, fill: "full" }], objects: [], spawns: [[Math.round(size[0] / 4), gy], [Math.round(size[0] * 3 / 4), gy]], decor: [], pipes: [] };
+  const a = { name: k, note: "", size, seed: 1, ...(src ? { plate: { src, solid: fo && fo.frente ? clean(fo.frente) : [] } } : {}), solids: [{ kind: "walk", x: -40, y: gy, w: size[0] + 80, h: 200, fill: "full" }], objects: [], spawns: [[Math.round(size[0] / 4), gy], [Math.round(size[0] * 3 / 4), gy]], decor: [], pipes: [] };
   ARENAS[k] = a; openArena(k, a, true); topbar();
 }
 // guardar: escribe arenas/<nombre>.json (la que está abierta). Guardar como: con otro nombre, una arena nueva

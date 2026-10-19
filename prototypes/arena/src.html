@@ -145,7 +145,7 @@ kbd { font: 500 12px/1 var(--font-mono); color: var(--fg); background: var(--bg)
         <dt><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></dt><dd><b>Teclado derecho.</b> Saltar con ↑, agacharse con ↓. Disparar con <kbd>.</kbd> o Num 1, deslizarse con <kbd>-</kbd> o Num 2, granada con <kbd>,</kbd> o Num 3, golpe con <kbd>M</kbd> o Num 4</dd>
         <dt><kbd>Stick</kbd><kbd>A</kbd><kbd>X</kbd><kbd>B</kbd></dt><dd><b>Joystick.</b> A salta, X o RT dispara, B o RB se desliza, Y o LB tira una granada, LT golpea (en PlayStation: X salta, Cuadrado o R2 dispara, Círculo o R1 se desliza, Triángulo o L1 granada, L2 golpea; en Switch, A o R se desliza y ZL golpea). El primero maneja al Rojo junto con el teclado izquierdo; en el menú, los demás se suman apretando un botón. Start empieza</dd>
         <dt><kbd>Abajo</kbd>+<kbd>saltar</kbd></dt><dd>Bajar atravesando el puente, las plataformas flotantes y las repisas</dd>
-        <dt><kbd>Deslizarse</kbd></dt><dd>Con el low-poly, en el piso: se tira sentado con un envión hacia donde apretás (sin dirección, hacia donde mira), con la caja de golpe baja: los tiros de pie y del aire le pasan por arriba (el agachado, el golpe y la granada le pegan) y se levanta corriendo. Mientras se desliza no dispara. Saltar lo corta y sale saltando con el envión</dd>
+        <dt><kbd>Deslizarse</kbd></dt><dd>Con el low-poly, sólo corriendo (parado o agachado no hace nada): se tira sentado con un envión hacia donde corre, con la caja de golpe baja: los tiros de pie y del aire le pasan por arriba (el agachado, el golpe y la granada le pegan) y se levanta corriendo. Mientras se desliza no dispara. Saltar lo corta y sale saltando con el envión</dd>
         <dt><kbd>Granada</kbd> mantenida</dt><dd>Carga el tiro: mientras más la mantenés, más lejos va (se ve la barra y la curva); al soltar, sale. Hay 3 por vida, las que quedan se ven debajo de la barra (en la prueba, sin límite: ∞). Explotan a los 1,3 s, o al tocar a otro, y matan de una a cualquiera en el radio, también al que la tiró. Ojo: con la barra llena, si no la soltás en 1,75 s te explota en la mano (titila, se pone roja y pita cada vez más rápido)</dd>
         <dt><kbd>Golpe</kbd></dt><dd>Un puñetazo corto hacia adelante, a la altura del cuerpo, en el piso o en el aire: saca un golpe, empuja fuerte y aturde un momento. Sirve pegado al otro, donde la bala sale de largo y no le pega. Uno cada medio segundo</dd>
         <dt><kbd>C</kbd></dt><dd>Cambiar de personaje: el ranger 2D o el low-poly (también se elige en el menú). Anda en medio de la partida, para compararlos jugando</dd>
@@ -293,15 +293,16 @@ const RUN = () => (SPR.anims.run_gun ? "run_gun" : "run");
 const IDLE = () => (SPR.anims.idle_combat ? "idle_combat" : "idle");
 const FLIP_DUR = 0.32, DOUBLE_V = 0.9;
 // el deslizamiento del low-poly: prendido de fábrica desde que Pablo aprobó el slide nuevo (tanda 5, 2026-10-18); false
-// vuelve a lo de antes (abajo corriendo frena y se agacha). El doble salto en bolita sigue apagado (no aprobado): sin
-// él, el mortal (double_jump_fix)
-const SLIDE_ON = true, BALL_ON = false;
+// vuelve a lo de antes (abajo corriendo frena y se agacha). El doble salto en bolita, de fábrica desde que Pablo la
+// probó jugando (2026-10-19: "probemos esa, está mejor"); sin ella, el mortal (double_jump_fix). El ranger 2D no tiene
+// bolita: sigue con su mortal
+const SLIDE_ON = true, BALL_ON = true;
 // el disparo a dos manos: SACADO (Pablo, 2026-10-18: "saquemos el disparo a dos manos"). Con false nadie lo tiene, ni
 // jugadores ni bots; sus teclas y el botón del joystick pasaron al slide. true lo devuelve (hay que darle otras teclas)
 const TWO_HAND_ON = false;
-// para que Pablo la pruebe jugando sin cambiar la de fábrica: con ?bolita=1 en la dirección, la bolita se prende en esa
-// página (y se ve el cartel "bolita de prueba" abajo a la izquierda). Sin el parámetro, el mortal
-const BALL_TRY = (() => { try { return new URLSearchParams(location.search).get("bolita") === "1"; } catch (e) { return false; } })();
+// para volver al mortal y compararlo jugando sin cambiar la de fábrica: con ?mortal=1 en la dirección, esa página va con
+// el mortal (double_jump_fix) en vez de la bolita
+const MORTAL_TRY = (() => { try { return new URLSearchParams(location.search).get("mortal") === "1"; } catch (e) { return false; } })();
 const JFX = { micro: 0.3, hard: 2.8, takeoff: [0.87, 1.15], dbl: [0.84, 1.19], land: [0.18, 0.15], back: 0.8, bump: 9, bumpDecay: 0.85, vy: [-590, -180, 300, 840], dblScale: 1.05, takeoffT: 0.05, turn: [120, 500] };
 // los pies se hunden en el contorno negro de arriba de la pasarela (si no, parece que flota)
 const FOOT_SINK = 3;
@@ -325,7 +326,7 @@ const FOOT_SINK = 3;
 //   throwAnim, flipAnim: la animación del tiro (y del golpe) y la del mortal, si no son "throw" y "double_jump"
 //   slide: el deslizamiento, [cuadro, duración] de slide_in (in) y de slide_out (out); en el medio, el cuadro de slide
 //          sostenido. low: desde qué paso de in y hasta qué paso de out la caja de golpe va baja
-//   ball: el doble salto en bolita (con BALL_ON): los pasos de double_jump_in (in), la vuelta de double_jump_ball (spin s,
+//   ball: el doble salto en bolita (con BALL_ON, sin ?mortal=1): los pasos de double_jump_in (in), la vuelta de double_jump_ball (spin s,
 //         con el easing del mortal) y los de double_jump_out (out; el de duración 0 se sostiene hasta tocar el piso)
 //   hud: el retrato del HUD es el dibujo de backgrounds/ranger_hud (true) o la cabeza del primer cuadro de idle (false),
 //        recortada con crop (x, y, ancho y alto, en fracciones del cuadro)
@@ -366,7 +367,7 @@ const RIG = {
     // sentado, 3 se acomoda (0,12 s; a 12 fps eran 0,33); el sostenido; slide_out entero a 40 ms (0,32 s): 0–3 se
     // levanta, 4 parado, 5–7 los pasos del arranque, que empalman con run_gun 0. La caja va baja desde el 2 de la entrada
     // hasta el 1 de la salida (miden 75 y 74 entrando, 70 el sostenido, 81 y 87 saliendo; el idle, 105).
-    // La bolita (con BALL_ON): después de lo que se encoge (double_jump_in 0, 2, 3, 4) y la caída en el 3 de out
+    // La bolita (de fábrica; con ?mortal=1, el mortal): después de lo que se encoge (double_jump_in 0, 2, 3, 4) y la caída en el 3 de out
     slide: { in: [[1, 0.04], [2, 0.04], [3, 0.04]], out: [[0, 0.04], [1, 0.04], [2, 0.04], [3, 0.04], [4, 0.04], [5, 0.04], [6, 0.04], [7, 0.04]], low: [1, 1] },
     ball: { in: [[0, 0.03], [2, 0.03], [3, 0.03], [4, 0.04]], spin: 0.3, out: [[0, 0.05], [1, 0.05], [2, 0.05], [3, 0]] },
     hud: false, crop: [0.0, 0.0, 0.8, 0.52],
@@ -398,7 +399,7 @@ function useChar(key) {
   // el deslizamiento y la bolita, si el personaje los tiene (el ranger 2D, no)
   const has = (...n) => n.every(a => SPR.anims[a]);
   SLIDE_SEQ = SLIDE_ON && RIGNOW.slide && has("slide_in", "slide", "slide_out") ? { ...RIGNOW.slide, inT: seqDur(RIGNOW.slide.in), outT: seqDur(RIGNOW.slide.out) } : null;
-  DBL_BALL = (BALL_ON || BALL_TRY) && RIGNOW.ball && has("double_jump_in", "double_jump_ball", "double_jump_out") ? (() => {
+  DBL_BALL = BALL_ON && !MORTAL_TRY && RIGNOW.ball && has("double_jump_in", "double_jump_ball", "double_jump_out") ? (() => {
     const B = RIGNOW.ball, inT = seqDur(B.in), outT = seqDur(B.out);
     // dónde está el centro del cuerpo (respecto de los pies) en el último cuadro de la entrada y en el primero de la salida,
     // dibujados con los pies donde está el jugador: la bolita va de uno al otro mientras gira, así no salta
@@ -475,9 +476,12 @@ const immune = Q => Q.invT > 0 || Q.shieldT > 0;
 // invulnerabilidad de volver o el escudo, el aterrizaje fuerte sin daño
 const FALL = { h: 560, dmg: 1, minHp: 1, stun: 0.3, land: 0.38 };
 // deslizarse (SLIDE_ON; el low-poly, con slide_in, slide y slide_out): con su botón (Pablo, 2026-10-18: O en el
-// DualSense; ver KB y padState), en el piso, corriendo o parado, hacia donde aprieta (sin dirección, hacia donde mira).
-// Abajo es agacharse y bajar, como antes del slide. Arranca a boost × la velocidad de correr y frena parejo hasta end ×
-// en dur s (con un toque alcanza: dura eso); se corta con salto (sale saltando con el envión; abajo + saltar sobre algo
+// DualSense; ver KB y padState), sólo corriendo (Pablo, 2026-10-19: "que solo se pueda hacer si estamos corriendo, que no
+// se pueda hacer estando parado"): en el piso, sin agacharse, apretando hacia un lado y yendo para ese lado a run × la
+// velocidad de correr o más (canSlide); parado o agachado, el botón no hace nada. Abajo es agacharse y bajar, como antes
+// del slide. Arranca a boost × la velocidad de correr y frena parejo hasta end × en dur s (con un toque alcanza: dura
+// eso; Pablo, 2026-10-19: "que el slide en sí dure un poquito más", 0,45 → 0,6 s, ~176 px, lo mismo que corriendo);
+// se corta con salto (sale saltando con el envión; abajo + saltar sobre algo
 // que se atraviesa, baja). Mientras está abajo, la caja de golpe es baja y larga, con las piernas adelante:
 // hurt del alto y back px para atrás y front para adelante de los pies (el dibujo va de −26 a +70; de pie, de −28 a +42
 // contra la caja de ±16). El alto (Pablo, 2026-10-18: "si hacemos slide esquivamos los disparos, deberíamos de pasarle
@@ -485,9 +489,14 @@ const FALL = { h: 560, dmg: 1, minHp: 1, stun: 0.3, land: 0.38 };
 // 56,6–61) y le pasan por arriba (6 px de margen); agachado, a 42–43,6 (el ranger, 40,8–42,6) y le pegan (el
 // contragolpe). Las balas van siempre derechas: una más baja (de alguien que salta y tira bajando, o desde más abajo)
 // le pega si pasa por debajo de los 49. El golpe de cerca y la granada le pegan igual.
-// Al levantarse, si sigue la dirección, sale corriendo. Después, cd s sin poder tirarse de nuevo. Sin disparar, granada
-// ni golpe mientras dura. Los cuadros, en RIG (slide)
-const SLIDE = { boost: 1.3, end: 0.65, dur: 0.45, cd: 0.4, hurt: 0.55, back: 16, front: 60 };   // end 0,65: en los 0,45 s recorre ~132 px, como corriendo
+// Al levantarse, si sigue la dirección, sale corriendo. Después, cd s sin poder tirarse de nuevo (0,4 → 0,1, Pablo,
+// 2026-10-19: "que se pueda volver a hacer un poco más rápido"; "bajá el enfriamiento a 0,1 s": 1,03 s de un slide al
+// siguiente). Sin disparar, granada ni golpe mientras dura. Los
+// cuadros, en RIG (slide)
+const SLIDE = { boost: 1.3, end: 0.65, dur: 0.6, cd: 0.1, run: 0.5, hurt: 0.55, back: 16, front: 60 };   // end 0,65: en los 0,6 s recorre ~176 px, como corriendo (180)
+// ¿se puede tirar? En el piso, sin agacharse, apretando hacia dir y yendo para ese lado a SLIDE.run × RUN_SPEED o más
+const canSlide = (Q, dir) => !!SLIDE_SEQ && Q.onGround && !Q.jump && !Q.slide && Q.slideCD <= 0 && Q.crouch === "none" &&
+  dir !== 0 && Math.sign(Q.vx) === dir && Math.abs(Q.vx) >= RUN_SPEED * SLIDE.run;
 const SET = { hp: 3, lives: 3, bot: "normal", count: 4 };   // count: cuántos juegan, de 2 a 4
 // react: cuánto tiene que tenerlo en línea antes de disparar; burst y pause: ráfagas; dodge: probabilidad de esquivar una
 // bala que viene; think: cada cuánto revisa a quién perseguir
@@ -1414,8 +1423,8 @@ function update(dt) {
   // (slide_out). Se termina en el aire (se cayó de un borde o saltó), al terminar de levantarse o si le pegan
   if (P.slideCD > 0) P.slideCD -= dt;
   if (P.slide && (!P.onGround || P.jump)) { P.slide = null; P.slideCD = SLIDE.cd; }
-  if (!P.slide && SLIDE_SEQ && ctl && I.sl && P.onGround && !P.jump && P.slideCD <= 0 && G.state !== "count" && !throwing && !meleeing) {
-    if (dir) P.facing = dir;   // hacia donde aprieta; sin dirección, hacia donde mira (también parado o agachado)
+  if (ctl && I.sl && canSlide(P, dir) && G.state !== "count" && !throwing && !meleeing) {
+    P.facing = dir;   // hacia donde corre
     P.slide = { t: 0, phase: "in", out: 0, low: false, dustT: 0 }; P.crouch = "none"; P.aim = "none"; P.landT = 0;
     P.vx = P.facing * RUN_SPEED * SLIDE.boost; squash(1.12, 0.9);
     lpDust(P.x, P.y, "takeoff", -P.facing * 80); sfx("slide", 0.7);
@@ -1872,8 +1881,8 @@ function botInput(Q, dt) {
     if (Math.sign(b.vx) !== Math.sign(Q.x - b.x) || Math.abs(Q.x - b.x) > 280 || b.y < Q.y - BODY_H - 6 || b.y > Q.y) continue;
     B.seen.add(b);
     if (Q.onGround && Math.random() < L.dodge) {
-      // si tiene slide y la bala pasa por arriba de su caja baja, se tira hacia el que tiró (le pasa por abajo y se acerca)
-      if (SLIDE_SEQ && Q.slideCD <= 0 && !Q.slide && b.y < Q.y - BODY_H * SLIDE.hurt - 3) { In.sl = true; B.slideDir = Math.sign(b.x - Q.x) || Q.facing; B.slideT = 0.1; }
+      // si viene corriendo y la bala pasa por arriba de su caja baja, se tira hacia donde corre (le pasa por abajo)
+      if (canSlide(Q, Math.sign(Q.vx)) && b.y < Q.y - BODY_H * SLIDE.hurt - 3) { In.sl = true; B.slideDir = Math.sign(Q.vx); B.slideT = 0.1; }
       else if (b.y < Q.y - BODY_H * COMBAT.crouchH - 4) B.crouchT = 0.35; else { In.jp = true; B.holdJ = 0.25; }
     }
   }
@@ -2801,8 +2810,11 @@ function drawShadow(Q) {
   const shY = supportAt(Q.x, Q.y, Q) ? Q.y : (landingTop(Q.x, Q.y, AH + 1) ?? AH), hgt = Math.max(0, shY - Q.y), w = 30 * S.char * Math.max(0.4, 1 - hgt / 220);
   ctx.fillStyle = "rgba(10,10,20,0.35)"; ctx.beginPath(); ctx.ellipse(Q.x, shY + FOOT_SINK - 1, w, 5 * w / 30, 0, 0, Math.PI * 2); ctx.fill();
 }
-// el HUD de arriba a la derecha: ver drawHud. HUD2: medidas en px de pantalla (960 × 540)
-const HUD2 = { r: 18, gap: 60, right: 14, top: 8, ring: 4, segGap: 0.12 };
+// el HUD de arriba a la derecha: ver drawHud. HUD2: medidas en px de pantalla (960 × 540), antes de k; k: el tamaño de
+// todo el HUD (retratos, arco de vida, número, vidas, granadas, escudo y márgenes), escalado desde la esquina de arriba a
+// la derecha (Pablo, 2026-10-19: "achicá todo el HUD 30%"). Lo que tapa: (right + 2(r + ring) + (n − 1) gap + 10) × k de
+// ancho y (top + 12 + 2r + 20) × k de alto (el editor lo lee de acá)
+const HUD2 = { r: 18, gap: 60, right: 14, top: 8, ring: 4, segGap: 0.12, k: 0.7 };
 // el retrato: el dibujo de backgrounds/ranger_hud (HUDART.portrait), recoloreado por equipo como el atlas, con la cara
 // según el momento: golpeado un rato después de cada golpe (hudHitT), fuera de combate esperando volver o afuera. Sin el
 // dibujo (o con el low-poly, que no tiene), la cabeza del primer cuadro de idle del atlas, recortada con RIG.crop.
@@ -2832,6 +2844,7 @@ function drawPortrait(g, Q, cx, cy, R) {
 }
 function drawMiniHud() {
   const act = active(), R = HUD2.r, n = SET.hp;
+  ctx.save(); ctx.translate(VIEW_W, 0); ctx.scale(HUD2.k, HUD2.k); ctx.translate(-VIEW_W, 0);   // todo a k, desde la esquina
   act.forEach((Q, k) => {
     const cx = VIEW_W - HUD2.right - R - HUD2.ring - (act.length - 1 - k) * HUD2.gap, cy = HUD2.top + 12 + R;
     const alive = Q.alive || G.state === "lobby", waiting = !Q.alive && !Q.out && G.state === "play";
@@ -2864,17 +2877,19 @@ function drawMiniHud() {
     const lx = cx - R + 1, ly = cy + R + 3;
     ctx.strokeStyle = "#0b0e18"; ctx.strokeText(String(Q.lives), lx, ly);
     ctx.fillStyle = Q.lives > 0 || G.state === "lobby" ? "#ffffff" : "#5a6378"; ctx.fillText(String(Q.lives), lx, ly);
-    // las granadas: chiquitas, abajo a la derecha; en la prueba, una con ∞
+    // las granadas: chiquitas, abajo a la derecha; en la prueba, una con ∞. No menos de 7 px de alto en la vista de 960
+    // (14 en 1080p): con el HUD al 70% quedaban de 5,6 y no se contaban
     if (alive) {
-      const inf = G.mode === "test" && G.state !== "lobby", ih = 8, iw = GREN_HUD ? ih * GREN_HUD.w / GREN_HUD.h : ih * 0.9, st = iw + 1;
+      const inf = G.mode === "test" && G.state !== "lobby", ih = Math.max(8, 7 / HUD2.k), iw = GREN_HUD ? ih * GREN_HUD.w / GREN_HUD.h : ih * 0.9, st = iw + 1;
       const cnt = inf ? 1 : GRENADE.count, gx = cx + 2, gy = cy + R - 1, flash = Q.hudGrenT > 0 && Math.floor(Q.hudGrenT / 0.08) % 2;
       for (let gI = 0; gI < cnt; gI++) grenIcon(ctx, gx + gI * st, gy, ih, inf || gI < Q.grenades, flash);
       if (inf) {
-        ctx.font = "700 10px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.lineWidth = 3;
+        ctx.font = `700 ${Math.round(Math.max(10, 9 / HUD2.k))}px 'Chakra Petch', Arial Narrow, sans-serif`; ctx.textAlign = "left"; ctx.lineWidth = 3;   // no menos de 9 px en la vista
         ctx.strokeStyle = "#0b0e18"; ctx.strokeText("∞", gx + iw + 1, gy + ih - 0.5); ctx.fillStyle = "#ffd23a"; ctx.fillText("∞", gx + iw + 1, gy + ih - 0.5);
       }
     }
   });
+  ctx.restore();
   ctx.globalAlpha = 1;
 }
 function drawHud() {
@@ -2895,11 +2910,6 @@ function drawHud() {
   else if (G.state === "match") {
     const w = G.winner, kills = active().map(p => `${p.team.name} ${p.kills}`).join(" · ");
     banner(w >= 0 ? `¡${TEAM[w].name} gana!` : "Empate", G.t > 1.2 ? `Bajas: ${kills}. Saltar, disparar o Enter: volver al menú` : `Bajas: ${kills}`, w >= 0 ? TEAM[w].color : "#ffffff");
-  }
-  if (BALL_TRY) {   // el aviso de la prueba de la bolita (?bolita=1)
-    ctx.font = "700 13px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.textAlign = "left"; ctx.lineJoin = "round"; ctx.lineWidth = 4;
-    const txt = DBL_BALL ? "bolita de prueba (?bolita=1)" : "bolita de prueba: este personaje no la tiene";
-    ctx.strokeStyle = "#0b0e18"; ctx.strokeText(txt, 10, VIEW_H - 10); ctx.fillStyle = "#ffd23a"; ctx.fillText(txt, 10, VIEW_H - 10); ctx.textAlign = "center";
   }
   if (G.toast) {
     ctx.globalAlpha = Math.min(1, G.toast.t / 0.3); ctx.font = "700 20px 'Chakra Petch', Arial Narrow, sans-serif"; ctx.lineJoin = "round"; ctx.lineWidth = 6; ctx.strokeStyle = "#0b0e18";

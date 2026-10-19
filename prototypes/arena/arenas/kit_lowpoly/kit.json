@@ -9,7 +9,15 @@
     2496,
     1404
    ],
-   "piso": 1264
+   "piso": 1264,
+   "frente": [
+    [
+     0,
+     1261,
+     2496,
+     143
+    ]
+   ]
   }
  ],
  "pieces": {
@@ -27,10 +35,18 @@
     }
    ],
    "legs": [
-    90,
-    144
+    98,
+    167
    ],
-   "legsGap": -8,
+   "legsGap": -13,
+   "front": [
+    [
+     0,
+     0,
+     113,
+     72
+    ]
+   ],
    "espejo": "pasarela_punta_der"
   },
   "pasarela_medio_a": {
@@ -47,10 +63,18 @@
     }
    ],
    "legs": [
-    90,
-    145
+    98,
+    167
    ],
-   "legsGap": -8,
+   "legsGap": -13,
+   "front": [
+    [
+     0,
+     0,
+     256,
+     71
+    ]
+   ],
    "espejo": "mismo",
    "tramo": "x"
   },
@@ -66,6 +90,14 @@
      "y": 16,
      "w": 256
     }
+   ],
+   "front": [
+    [
+     0,
+     0,
+     256,
+     72
+    ]
    ],
    "espejo": "mismo",
    "tramo": "x"
@@ -84,10 +116,18 @@
     }
    ],
    "legs": [
-    90,
-    144
+    98,
+    167
    ],
-   "legsGap": -8,
+   "legsGap": -13,
+   "front": [
+    [
+     0,
+     0,
+     113,
+     72
+    ]
+   ],
    "espejo": "pasarela_punta_izq"
   },
   "flotante_200": {
@@ -102,6 +142,14 @@
      "y": 8,
      "w": 186
     }
+   ],
+   "front": [
+    [
+     0,
+     0,
+     200,
+     61
+    ]
    ],
    "espejo": "mismo"
   },
@@ -118,6 +166,14 @@
      "w": 284
     }
    ],
+   "front": [
+    [
+     0,
+     0,
+     300,
+     69
+    ]
+   ],
    "espejo": "mismo"
   },
   "flotante_450": {
@@ -133,6 +189,14 @@
      "w": 436
     }
    ],
+   "front": [
+    [
+     0,
+     0,
+     450,
+     58
+    ]
+   ],
    "espejo": "mismo"
   },
   "ascensor": {
@@ -147,6 +211,14 @@
      "y": 8,
      "w": 226
     }
+   ],
+   "front": [
+    [
+     0,
+     0,
+     239,
+     70
+    ]
    ],
    "espejo": "mismo"
   },
@@ -164,22 +236,30 @@
     }
    ],
    "legs": [
-    61,
-    130
+    76,
+    167
    ],
-   "legsGap": -8,
+   "legsGap": -13,
+   "front": [
+    [
+     0,
+     0,
+     113,
+     48
+    ]
+   ],
    "espejo": "mismo"
   },
   "columna_angosta": {
    "src": "kit_lowpoly/columna_angosta.png",
-   "w": 69,
+   "w": 64,
    "h": 200,
    "grupo": "Columnas y bloques",
    "legs": [
-    51,
-    154
+    62,
+    167
    ],
-   "legsGap": -8,
+   "legsGap": -13,
    "espejo": "mismo"
   },
   "bloque": {
@@ -195,6 +275,14 @@
      "w": 111,
      "h": 184
     }
+   ],
+   "front": [
+    [
+     0,
+     0,
+     129,
+     200
+    ]
    ],
    "espejo": "mismo"
   },
@@ -212,6 +300,14 @@
      "h": 184
     }
    ],
+   "front": [
+    [
+     0,
+     0,
+     76,
+     200
+    ]
+   ],
    "espejo": "mismo"
   },
   "guia_ascensor": {
@@ -223,7 +319,7 @@
     114,
     173
    ],
-   "legsGap": -8,
+   "legsGap": -6,
    "espejo": "mismo",
    "deco": true
   },
@@ -273,7 +369,7 @@
     2,
     254
    ],
-   "legsGap": -8,
+   "legsGap": 3,
    "espejo": "mismo",
    "deco": true,
    "tramo": "y"

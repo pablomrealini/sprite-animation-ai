@@ -39,6 +39,12 @@
 # Las piezas a px del juego las arma entrega.py en entrega/: piezas, medidas.json (tamaño, línea de los pies, escala) y
 # las hojas de revisión (revision_pasarela.png, revision_piezas.jpg y revision_arena.jpg, una arena de prueba sobre el
 # fondo elegido).
+# Patas finas (Pablo, 2026-10-19: las columnas del kit le parecieron "medio grotescas"; las aprobó el mismo día).
+# entrega.py corre al final patas_viejas.py --entregar, que pone el poste de las pasarelas viejas de la Refinería
+# low-poly (pasarela_medio_der: fuste 40, capitel 50, base 50/63) en las patas de la punta izquierda, el medio a y la
+# punta derecha, y en las dos columnas: la angosta (64 × 200) con el capitel rojo del kit y la ancha (113 × 200) con su
+# tope sobre el poste ensanchado a 48. Antes, las patas tenían zapatas de 83–103 px. El fuste, lo único que se estira,
+# va de la fila 92 a la 169. Hojas: patas_antes_despues.jpg y entrega/revision_patas.png.
 
 [gen]
 models = ["gpt-image-2.5-sunburst-fal"]

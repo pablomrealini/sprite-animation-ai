@@ -44,13 +44,16 @@ la caída o el HUD en `src.html`, volver a armar el editor: los lee de ahí.
   vertical. El bloque y la pared no se estiran: el juego no le suma el estirado al alto de su colisión. Las piezas
   simétricas no se espejan en la copia simétrica (la luz sigue viniendo de la izquierda) y las puntas se cambian por la
   del otro lado. El decorado va detrás de todo. "＋ Nueva…" propone el fondo del kit (2496 × 1404, piso en 1264).
-  Cuando Arte entrega de nuevo: `uv run --project pipeline python prototypes/arena/editor/kit.py` (las arenas que ya
-  usan una pieza guardan su copia de la definición).
+  Cuando Arte entrega de nuevo: `uv run --project pipeline python prototypes/arena/editor/kit.py`. Las arenas que ya
+  usan una pieza guardan su copia de la definición: en el panel de la arena aparece "Actualizar del kit", que copia la
+  de ahora, corre la pieza si cambió la línea de los pies y vuelve a apoyar las patas que estaban apoyadas.
+- **Pies a la vista** (panel de la arena): las patas apoyadas cuyo pie no tapa lo de abajo (una pata que cae en la
+  punta de una pasarela o afuera), con dónde; clic para elegirla.
 - **Guías** (en "Ver"): pisos cada 200 px desde el piso (se cambia en el panel del alcance), lo que tapa el HUD con 4
   jugadores, el margen de 90 px de los power-ups y, en rojo, las caídas que sacan vida (560 px o más).
 - **Alcance**: desde el piso, con la física del juego integrada igual que el juego (trapecio): simple 192, doble 348, a
   cualquier frecuencia de pantalla. Con `HANG_ON` apagado no aparece nada del colgado.
-- **Probar** (P): el juego encima del lienzo, en "probar arena solo", desde el spawn elegido; Esc vuelve. ⇧ + clic, en
+- **Probar** (P): el juego encima del lienzo (con las láminas y piezas de `arenas/`, aunque el juego no se haya vuelto a armar), en "probar arena solo", desde el spawn elegido; Esc vuelve. ⇧ + clic, en
   otra pestaña (con bots).
 - **Lo no guardado** queda en este navegador, un borrador por arena: cambiar de arena o recargar no lo pierde (la lista
   marca con • las que tienen cambios). "Descartar cambios", en el panel de la arena, vuelve a lo de disco.
@@ -61,8 +64,10 @@ la caída o el HUD en `src.html`, volver a armar el editor: los lee de ahí.
 ## Los otros scripts
 
 - `kit.py`: pasa la entrega de Arte (`backgrounds/lowpoly_kit/entrega` y el fondo) a `arenas/kit_lowpoly/` con su
-  `kit.json`: la colisión, la franja que se estira (medida en el alfa) y cómo se espeja cada pieza. Las patas pisan
-  8 px adentro de la cara de arriba de lo de abajo (`APOYO`).
+  `kit.json`: la colisión, la franja que se estira (medida en el alfa) y cómo se espeja cada pieza. Como las de la
+  Refinería low-poly, las patas bajan por detrás: del pie (donde se ensancha) asoman sólo 14 px sobre el contorno de lo
+  de abajo, como un remate chico (`PIE_VISIBLE`), y el resto lo tapa la capa de adelante del juego (`front` de las piezas y "frente" del piso del fondo, que va a
+  `plate.solid`). El editor dibuja esa capa igual que el juego.
 
 - `capas.py`: pasa una arena de lámina entera a lámina en capas (fondo + cada pasarela como pieza). Las zonas de cada
   pieza están escritas a mano por arena (`LEFT`); ver la propuesta (E11).

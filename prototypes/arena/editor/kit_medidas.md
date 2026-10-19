@@ -112,7 +112,8 @@ parezca pisable.
   los costados (hasta ~300 px de cada borde) pueden estar, como en la Refinería, sin caras de arriba claras.
 - Entre el piso y y ~300 van las pasarelas del kit: ahí el fondo con contraste medio-bajo y bruma, para que las piezas
   se lean adelante.
-- **Arriba a la derecha** (x > 1876, y < 195) va el HUD con 4 jugadores: cielo o algo liso.
+- **Arriba a la derecha** (x > 2045, y < 138) va el HUD con 4 jugadores: cielo o algo liso. (Hasta el 2026-10-18 el HUD
+  era más grande: x > 1876, y < 195.)
 - **Casi simétrico** (las arenas son simétricas).
 - Sin personajes, HUD ni texto. Dos o tres opciones. En WebP, ~150–300 KB (la de `prueba_2496` pesa 159 KB).
 
