@@ -79,6 +79,9 @@ se puede alcanzar, el editor tiene que decir lo mismo (`HANG_ON` y `PHYS` en `ed
 - La escala: el tamaño del mundo es el `size` de cada arena (`setWorld` en `src.html`, `[AW, AH] = A.size` en el editor,
   `capas.py` lo lee de la arena). Nada de lo jugable se escala con números; lo que se lee sobre la cabeza va por
   `HEAD_K`. Lo nuevo que se dibuje sobre la cabeza, también.
+- El receptor de capturas (`recibir.py`, puerto 8799) lo usan otras sesiones del estudio: si está ocupado, levantar el
+  tuyo en otro puerto (`recibir.py <carpeta> 8797`, y `window.RECIBIR = 8797` en la página) y apagarlo por su PID, nunca
+  con `pkill` por nombre (mata los de las otras sesiones).
 - El error de consola "AudioContext encountered an error" es del panel sin audio, no del juego.
 - Una partida con un solo jugador (los otros en "off") termina en el acto: para probar algo de uno, poner otro quieto
   lejos (`kb2`) o usar `startTest()`.

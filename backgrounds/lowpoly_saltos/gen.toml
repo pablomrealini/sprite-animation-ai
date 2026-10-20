@@ -1,0 +1,145 @@
+# Los efectos de los saltos en el estilo del concepto de Pablo (2026-10-20: "revisaria los efectos de aterrizaje,
+# despegue de saltos etc.... cambiaria tmb el de doble salto"). El concepto es suyo, con nuestro personaje; de
+# referencia van sólo las dos tiras de efectos, sin el personaje: refs/concepto_aterrizaje.png y refs/concepto_doble.png
+# (recortes de conceptos/efectos_salto_pablo.webp). Reemplaza a backgrounds/lowpoly_dust (DUST_ART en build.py,
+# DUST_SEQ en src.html) y al anillo de código del doble salto.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/lowpoly_saltos/gen.toml --dry-run
+#
+# Qué es cada cosa. Tamaños en px del juego, el ancho del cuadro más ancho; el personaje mide ~105 de alto. Salen del
+# concepto: ahí las nubes del aterrizaje miden 1,84 veces el alto del personaje y el anillo del doble salto, 0,73.
+#   - aterrizaje: arriba el aterrizaje normal en 3 cuadros (l1 estrella de esquirlas en el piso, l2 nubes facetadas a
+#     los dos lados, l3 las nubes que se deshacen), ~190 de ancho; abajo el despegue (t1–t3), de la misma familia,
+#     ~120 de ancho. En la misma hoja, para que queden a la misma escala.
+#   - fuerte: el aterrizaje de muy alto en 4 cuadros (h1–h4), ~270 de ancho, más grande y más violento.
+#   - doble: el doble salto en 3 cuadros (d1–d3), un anillo de esquirlas de cristal con una punta hacia abajo y
+#     destellos, que se abre y se rompe; ~108 de ancho, centrado en los pies.
+#
+# Decisiones (revisión antes de generar, con los recortes del concepto a esos tamaños: revision_concepto.jpg):
+#   - Dos capas por cuadro, alineadas: la que va detrás del personaje y la que va delante. Las parte el post
+#     (capas.py), no el modelo: lo que cae en la ventana del cuerpo (44 px de ancho, por encima de los 14 px de abajo) va
+#     detrás, y el resto, los costados y la franja que pisa las botas, va delante. La de adelante nunca le tapa la cara.
+#     En el doble salto, el arco de atrás del anillo queda detrás de los pies y el de adelante, delante.
+#   - Color: el polvo, en gris neutro muy claro, y el juego lo tiñe con el color de la arena, como hoy (dustImg).
+#     El concepto tiene las nubes crema, pero en otra arena ese crema no pega. El doble salto, en blanco y celeste fijo,
+#     como el concepto: es el aire del salto, no un tiro, y el color de cada equipo ya está en el cuerpo, las balas y
+#     los fogonazos. De la misma hoja sale gratis una versión en blanco, para teñirla por equipo si Pablo lo prefiere.
+#   - Piedritas: por código, como hoy (DUSTK.chips). Con física rebotan en el piso y cambian en cada aterrizaje; las
+#     dibujadas saltarían de cuadro en cuadro. El fuerte lleva más. Los destellos del doble salto, en cambio, van
+#     dibujados.
+# Modelo: GPT Image 2.5 Sunburst, con alfa nativo (las nubes translúcidas y el brillo no se keyean de un verde).
+# El aterrizaje y el fuerte piden cada cuadro como una sola mancha (las dos nubes unidas por el piso); el doble no
+# puede, porque se rompe en pedazos. La entrega junta las manchas de cada cuadro por su columna en la hoja.
+#
+# Generadas el 2026-10-20 (US$0,69). El post dio más piezas que cuadros en el aterrizaje y el fuerte: fragmentos y
+# esquirlas sueltas, como en el concepto. entrega.py arma los cuadros desde la hoja cruda cortando por los huecos de
+# columnas más anchos, que en las seis hojas separan bien los cuadros. Elegidas (revision_hojas.jpg):
+#   - aterrizaje: la hoja 1, la más limpia, con el despegue más chico (88–131 px contra 145–193 del aterrizaje).
+#   - fuerte: la hoja 1. Tiene la onda plana en el piso que se pidió y crece de cuadro en cuadro (256, 270 y 220 × 104,
+#     cuando las nubes suben); en la 2, la estrella es más ancha que las nubes.
+#   - doble: la hoja 2, con el destello de cuatro puntas del primer cuadro como en el concepto.
+# Entrega en entrega/: cada cuadro en <cuadro>_atras.png y <cuadro>_adelante.png, al doble del juego, con medidas.json
+# (tamaño y ancla en px del juego). El doble salto, también en blanco (_blanco). El polvo nuevo es mucho más claro que
+# el de hoy (luma mediana ~215 contra 116): dustImg tiene que usar esa referencia. Revisión contra el concepto y el
+# polvo de hoy, sobre verde y sobre la Refinería con el teñido del juego: revision.jpg.
+#
+# En piezas (2026-10-20). Pablo vio los cuadros "medias duras y poco smooth", así que el código anima cada pedazo a
+# 60 fps. piezas.py saca los pedazos del cuadro más completo (t2, l2, h2, d2) y la estrella o el destello del primero
+# (t1, l1, h1, d1), cada uno en su PNG al doble del juego, con piezas/piezas.json: centro respecto de los pies, tamaño,
+# capa, tipo y cuadro de origen. Quedan 5 piezas en el despegue y en el aterrizaje, 4 en el fuerte (las nubes de h2,
+# cortadas al medio por la banda del piso) y 9 en el doble. Revisión numerada: revision_piezas.jpg.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por asset para elegir
+max_usd = 2
+max_parallel = 3
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+lowdust = """
+3D low-poly video game visual effect sprites in the exact style of the effects in the reference image: crisp faceted \
+polygons with flat per-face shading, soft light from the top left, clean geometric shapes, translucent thin facets \
+where the dust fades, no black outlines, no soft airbrushed smoke, no blur, no texture noise. Side view at ground \
+level, slightly from above, so the effect lies on a flat floor. Strictly neutral colors with no tint: very light grey, \
+almost white, with soft mid-grey shading on the faces away from the light; no cream, no blue, no warm tones, so the \
+game can tint it.
+"""
+lowcrystal = """
+3D low-poly video game visual effect sprites in the exact style of the double jump effect in the reference image: \
+crisp faceted crystal shards with flat per-face shading, glowing white and pale cyan, a soft cyan glow, a white-hot \
+flash, no black outlines, no blur, no texture noise.
+"""
+no_debris = "No pebbles, rocks or loose debris: the game adds them."
+no_text = "No text, letters, numbers, logos, frames, grid lines, characters or floor anywhere."
+
+[[asset]]
+name = "aterrizaje"       # arriba el aterrizaje normal (l1–l3), abajo el despegue (t1–t3), a la misma escala
+style = ["lowdust", "no_debris", "no_text"]
+prompt = """
+A sprite sheet of two low-poly dust effect animations for a 2D platformer character, like the landing effect in the \
+reference image, in two rows of three frames, each row left to right in time order, all drawn at the same scale, with \
+wide empty space between the frames, not touching each other or the image edges. Every frame lies on its own flat \
+invisible floor line and is centered on its own vertical axis, where the character's feet are. Each frame is one \
+single connected shape: its parts are joined along the floor by a thin flat band of shards.
+Top row, the landing:
+Frame 1: a flat starburst of sharp light shards lying on the floor and opening outward from the feet, wide and low, \
+about four times wider than tall.
+Frame 2: two faceted dust clouds bursting out to the left and to the right, low over the floor, joined along the floor \
+by a thin flat band of shards with a few small shards in the middle; wider than frame 1, about three times wider \
+than tall.
+Frame 3: the two clouds breaking apart into thin translucent facets, lower and fading, still joined along the floor.
+Bottom row, the jump take-off, the same family but smaller, about two thirds of the landing:
+Frame 1: a small flat starburst of shards on the floor.
+Frame 2: two small low clouds pushed out to the sides, joined along the floor.
+Frame 3: the small clouds fading into thin translucent facets along the floor.
+"""
+refs = ["refs/concepto_aterrizaje.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["l1", "l2", "l3", "t1", "t2", "t3"]
+
+[[asset]]
+name = "fuerte"           # el aterrizaje de muy alto, h1–h4
+style = ["lowdust", "no_debris", "no_text"]
+prompt = """
+A sprite sheet of one low-poly heavy landing impact animation for a 2D platformer character falling from very high, \
+in four frames in one row, left to right in time order, all drawn at the same scale, with wide empty space between \
+the frames, not touching each other or the image edges. The same family as the landing in the reference image, but \
+bigger and more violent. Every frame lies on its own flat invisible floor line and is centered on its own vertical \
+axis, where the character's feet are. Each frame is one single connected shape: its parts are joined along the floor \
+by a flat band of shards.
+Frame 1: a big flat starburst of long sharp light shards lying on the floor, with a flat faceted shockwave ring around \
+it, about five times wider than tall.
+Frame 2: two big faceted dust clouds blasting out to the left and to the right, about a third as tall as they are \
+wide, joined along the floor by a flat band of shards.
+Frame 3: the clouds rolling further out and rising, breaking into big translucent facets.
+Frame 4: thin translucent facets fading along the floor.
+"""
+refs = ["refs/concepto_aterrizaje.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"
+split = ["h1", "h2", "h3", "h4"]
+
+[[asset]]
+name = "doble"            # el doble salto, d1–d3 (se rompe en pedazos: la entrega junta cada cuadro por su columna)
+style = ["lowcrystal", "no_text"]
+prompt = """
+A sprite sheet of one low-poly double jump effect animation for a 2D platformer character, exactly like the double \
+jump effect in the reference image, in three frames in one row, left to right in time order, all drawn at the same \
+scale, with wide empty space between the frames, not touching each other or the image edges, each centered on its \
+own point, where the character's feet are: a ring of crystal shards seen slightly from above, a flat horizontal \
+ellipse about three times wider than tall, with one long crystal spike pointing straight down from its center and \
+small diamond sparkles around it.
+Frame 1: a small bright ring with a white flash at its center, the downward spike and two sparkles.
+Frame 2: the ring wider, breaking into separate curved shards, the spike thinner, two sparkles.
+Frame 3: a few curved shards of the broken ring drifting apart and fading, two or three small sparkles.
+"""
+refs = ["refs/concepto_doble.png"]
+ref_role = "level"
+aspect = "16:9"
+alpha = "cutout"

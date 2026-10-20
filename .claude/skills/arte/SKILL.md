@@ -97,4 +97,18 @@ Medidas de referencia, en px del juego (la cámara está al 50%: en pantalla mid
   exacto, las puntas se cortan en la losa lisa y el tono de los bordes se empareja. Las flotantes se llevan a su ancho
   sacando o duplicando columnas lisas. El decorado lleva bruma y el fondo se recorta y pasa a WebP. Escribe además
   `medidas.json` y una arena de prueba armada sobre el fondo, que es la mejor revisión.
+- Efectos: `backgrounds/lowpoly_saltos` es el modelo.
+  - `entrega.py` arma los cuadros desde la hoja cruda, cortando por los huecos de columnas, porque el post parte los
+    efectos en fragmentos.
+  - `capas.py` separa cada cuadro en lo que va detrás y lo que va delante del personaje.
+  - `piezas.py` saca cada pedazo suelto, con su centro respecto de los pies, para que el código lo anime a 60 fps.
+  - Pablo prefiere el movimiento por código a pocos cuadros dibujados.
+- Efectos de luz (fogonazo, impacto): `backgrounds/disparo_estilos` es el modelo.
+  - Se generan sobre negro puro y sin alfa.
+  - Para el juego van en dos capas: `_alfa`, con el alfa sacado del brillo y el color des-multiplicado, que se dibuja
+    normal, y `_nucleo`, que se suma a 0,5.
+  - Sumado solo (lighter) quema los colores cálidos sobre las arenas claras.
+  - Si el arte es blanco para teñir, el tinte va sobre la luz (color × alfa), no sobre el color.
+  - `revision.py` reproduce el gradado de noche de una arena (paleta, saturación, contraste, brillo y bruma de su
+    JSON) para revisar sobre oscuro.
 - `post/` está en `.gitignore`: al commitear, las elegidas van con `git add -f`. Commitear sólo si lo piden.

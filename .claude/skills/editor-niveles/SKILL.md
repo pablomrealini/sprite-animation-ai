@@ -135,6 +135,35 @@ El servidor es `serve.py` en el puerto 8772 (`.claude/launch.json`, "arena-edito
   `borradores/kit_prueba` es el del kit.
 - Ojo con el panel oculto: los diálogos del editor (`ask`) tardan en cerrar; esperar 1–2 s entre un Enter y el próximo.
 
+## Armar una arena por código (con las funciones del editor)
+
+Para armar varias arenas rápido, en la página del editor (8772, sin borradores de otros en esas claves): crear la arena
+como "＋ Nueva…" con el fondo del kit (`plate.solid` = su `frente`) y usar los mismos ayudantes que los botones:
+- `buildTira("pasarela")` con `tiraN`/`tiraMedios` y después `nudge(dx, dy)` para llevarla a su lugar (las patas siguen);
+- `addPiece(name, viewCenter(), {kit: "kit_lowpoly"})` y `nudge`; `mirrorCopy()` para la pareja del otro lado;
+- `o.move = {path, speed, wait}` para lo que se mueve; los spawns de a pares (los 4 primeros son las salidas de la
+  partida: repartirlos en las cuatro esquinas);
+- al final, todas las patas apoyadas (`groundStretch` + `setStretch`) y revisar: alcance (`reach`), `falls()`,
+  `exposedFeet()`, `unpaired()`, spawns sobre algo y nada en `hudRect()`. Las patas que caen sobre flotantes chicas o en
+  una punta asoman el pie: dejar los escalones entre pilares.
+- Paredes bajas de cobertura: `pared`/`bloque` hundidos en el piso (el frente del piso tapa lo de abajo). Los bots
+  saltan solos lo que asoma menos de 170 px; con más, empujan hasta destrabarse.
+- Bots: en el juego, 4 bots 2 min con 3 vidas (`SLOTS[i].ctrl = "bot"`, `startMatch()`, `step(1/60)`): partidas que
+  terminan, trabados (3 s en 40 px queriendo moverse) y % del tiempo por altura. Hoy suben de a un piso: los pisos altos
+  de una torre casi no los usan.
+- Vistas previas a 1 px por px del mundo: en el juego `cv.width = AW; cv.height = AH; DS = cv.width / VIEW_W;
+  needBake = true; render()`, al receptor, y a JPG en `prototypes/arena/editor/vistas_previas/`. Para mirar mientras se
+  arma, sin guardar: en el editor, apagar `show`, poner `cv.width/height` a `AW·k × AH·k`, `view = {k: k / dpr, x: 0,
+  y: 0}`, `render()`, `toDataURL` al receptor y volver todo como estaba.
+- Lo que Pablo pidió (2026-10-20, "no uso toda la pantalla... pocos doble salto y lugares de difícil acceso"): usar toda
+  la altura (lo más alto entre 280 y 320; el techo invisible está en −140 y el doble sube 348), 4 o 5 niveles, varios
+  lugares a los que se llega sólo con doble (subir 200–340, o un hueco en el aire de 230–400 a la misma altura), nidos
+  altos con salida (los power-ups salen 30% en las salidas y si no en cualquier superficie, así que muchas flotantes
+  altas = power-ups arriba), decorado del kit atrás y delante de las patas (`deco_*` va al principio de `objects`; para
+  ponerlo delante de las patas, moverlo al final: lo de `front` lo sigue tapando) y piezas variadas (pasarelas de 224 a
+  986, flotantes de 200/300/450, columnas, ascensores). "Sólo con doble": el alcance con `PHYS.h2 = -1` y `ENV.X2`
+  vacío; lo que queda sin llegar.
+
 ## Qué mirar en una arena grande
 
 - Alcance: todo verde desde el piso, cuántos saltos hasta lo más alto, lo que depende de un solo camino (`link` entre

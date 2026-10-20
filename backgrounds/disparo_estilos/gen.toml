@@ -1,0 +1,121 @@
+# Referencias de estilo para el fogonazo y el impacto del disparo (Pablo, 2026-10-20: "hoy es un efecto low poly pero
+# queda mal, quizas lo mejor es tener efectos de disparo mas reales... probaria hacer referencias con gpt para elegir
+# y despues animarlo"). Es el paso 1: elegir una dirección. Animarla es el paso 2, con el costo propuesto aparte.
+# Hoy: la estrella low-poly de backgrounds/lowpoly_fx (m1–m3, teñida por equipo), más un halo radial por código
+# (drawFlash en src.html). Mide ~62 px del juego desde la boca (FX.muzzle.len 26 × FXK 1,5 × 1,6). El blaster del
+# personaje es rojo y negro, con la punta cian.
+# Desde la raíz del repo:
+#   uv run --project pipeline spritepipe gen-images backgrounds/disparo_estilos/gen.toml --dry-run
+#
+# Cuatro direcciones, dos hojas de cada una. Cada hoja tiene dos filas: arriba el fogonazo en 4 momentos (se abre, el
+# pico, se rompe, se apaga) y abajo el impacto de la bala en 4 (destello, estallido, se rompe, se apaga).
+#   a_fuego:   realista de arma de fuego, naranja y amarillo, en estrella, con chispas y algo de humo. Color fijo.
+#   b_plasma:  realista de energía de blaster, cian y blanco, con filamentos y chispas. Color fijo, del cian de la
+#              punta del arma.
+#   c_pintado: VFX pintado de juego mobile, con luz y volumen. En rojo con el centro blanco, como hoy: el juego le
+#              cambia el tono por equipo (recolor).
+#   d_3d:      lo que creo que mejor pega con el personaje: VFX 3D estilizado y limpio, como el render del personaje
+#              (brillo suave, rayos rectos, chispas facetadas que hacen eco del low-poly). En blanco y grises, sólo
+#              luz, para teñirlo por equipo. Lleva de referencia de estilo las vistas del arma del personaje.
+# Fondo negro puro y opaco: es luz, en el juego va sumado (lighter) y no hace falta alfa. El humo de a_fuego es la
+# excepción: sumado no se ve sobre un fondo claro, así que si se elige va aparte, con alfa o por código.
+# Referencias: sólo imágenes propias (las vistas del arma del low-poly). a, b y c van sin referencia, para que la de
+# estilo no las tire al low-poly.
+#
+# Generadas el 2026-10-20 (US$0,57), las 8 como se pidieron. Revisión (revision.py): revision_corta.jpg tiene el pico
+# de cada estilo en la boca, sobre la Refinería (clara) y sobre Low-poly · Duelo (de noche), al lado del de hoy; el
+# detalle de los 4 momentos y el impacto está en revision.jpg.
+# Mezclas: sumado (lighter, como hoy) quema los colores cálidos sobre lo claro: el fuego queda blanco y el rojo, rosa.
+# Screen hace casi lo mismo. Lo que anda sobre claro y sobre oscuro es la mezcla normal, con alfa sacado del brillo
+# (el canal más alto) y el color des-multiplicado, más la mitad de la luz sumada en el núcleo ("normal + núcleo").
+# Recomendación (falta que elija Pablo): b_plasma, hoja 2, con normal + núcleo. Es más real, pega con el blaster de
+# punta cian y se lee en las dos arenas. Teñido por equipo rotando el tono, con el núcleo blanco: el rojo está en la
+# última fila de revision_corta.jpg. Si quiere arma de fuego, a_fuego hoja 2, con color fijo.
+# Elegido por Pablo (2026-10-20): d_3d, hoja 2, teñido por equipo, con normal + núcleo ("me gusta diseño 3d teñido de
+# rojo hoja 2"). Se anima por código en piezas, como los saltos. piezas.py saca del pico del fogonazo 20 piezas (1
+# núcleo, 11 rayos y 8 chispas) y del pico del impacto 33 (1 núcleo, 12 rayos y 20 chispas). Cada pieza va en _alfa
+# (normal) y _nucleo (sumado a 0,5), en blanco y grises, con piezas/piezas.json: centro desde la boca o desde el
+# impacto, tamaño, tipo y ángulo. El teñido va sobre la luz (color × alfa), no sobre el color. Revisión:
+# revision_piezas.jpg. Si no convence animado, la hoja de 8 cuadros con esta hoja de referencia sale ~US$0,23.
+
+[gen]
+models = ["gpt-image-2.5-sunburst-fal"]
+images_per_asset = 2      # dos hojas por dirección para elegir
+max_usd = 2
+max_parallel = 4
+quality = "high"
+resolution = "2K"
+ref_bg = "#FFFFFF"
+
+[styles]
+hoja = """
+A visual effects sprite sheet for a 2D side-view arena shooter game, on a pure flat black background (#000000) \
+everywhere, with no vignette, no gradient, no floor and no haze filling the frame: the effects will be blended \
+additively over the game. Two rows, all drawn at the same scale, every frame separated from its neighbors by wide \
+black space, nothing touching the image edges.
+Top row: a muzzle flash in four frames, left to right in time order. Every frame points to the right and starts at \
+its left edge, where the gun barrel is (do not draw the gun), all on the same horizontal center line.
+Frame 1: the flash opening, small and very bright. Frame 2: the peak, the biggest and brightest. Frame 3: breaking up, \
+thinner and dimmer. Frame 4: fading out.
+Bottom row: the bullet impact of the same shot in four frames, each centered on its own point, the shot coming from \
+the left. Frame 1: a tiny bright flash. Frame 2: the biggest burst, with sparks spraying back up and to the left. \
+Frame 3: breaking up. Frame 4: a few fading sparks.
+"""
+no_text = "No text, letters, numbers, logos, frames, grid lines, characters, guns or hands anywhere."
+
+[[asset]]
+name = "a_fuego"
+style = ["hoja", "no_text"]
+prompt = """
+Style: photorealistic firearm muzzle flash and bullet impact, like high-speed photography of a real gunshot: a \
+white-hot core, bright yellow and orange flame petals opening in a star shape, sharp incandescent orange sparks, and a \
+little grey smoke only in the last frame of each row. Realistic fire colors.
+"""
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "b_plasma"
+style = ["hoja", "no_text"]
+prompt = """
+Style: realistic sci-fi energy blaster discharge and energy impact, like a high-end visual effects render: a blinding \
+white core, electric cyan and pale blue plasma, thin crackling lightning filaments, sharp glowing cyan sparks and a \
+soft bloom; no smoke, the last frames are fading glowing embers. Cyan, to match the glowing cyan tip of the \
+character's blaster.
+"""
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "c_pintado"
+style = ["hoja", "no_text"]
+prompt = """
+Style: stylized hand-painted visual effects of a polished mobile action game: bold readable shapes, crisp painted \
+flame and energy petals with bright highlights, a soft glow and a sense of light and volume, a clean white core, \
+small painted sparks and a small painted smoke puff in the last frames; no photographic detail. Colors from the inside \
+out: white core, hot pink-white, saturated red, deep crimson at the edges.
+"""
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"
+
+[[asset]]
+name = "d_3d"
+style = ["hoja", "no_text"]
+prompt = """
+Style: clean stylized 3D game visual effects that match the glossy low-poly toy-like 3D look of the reference image: a \
+white-hot core with a soft bloom, a few sharp straight light streaks, small angular faceted sparks, simple bold \
+silhouettes and smooth gradients of light; no smoke. Rendered only in pure white and neutral greys, light only, with \
+no hue at all, so the game can tint it with each team's color.
+"""
+refs = ["../../characters/lowpoly/refs/arma_vistas_alfa.png"]
+ref_role = "style"
+aspect = "16:9"
+alpha = "opaque"
+trim = false
+seam = "none"

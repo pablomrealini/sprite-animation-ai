@@ -1,0 +1,537 @@
+{
+ "_nota": "Px del juego. x, y: el centro de la pieza desde la boca del arma (fogonazo) o desde el punto del impacto (impacto), para arriba y negativo; el fogonazo, con el pico a 62 de largo y el impacto a 60 de ancho. w, h: su tamaño. ang: hacia dónde apunta, en grados, 0 = adelante del tiro (+x), positivo hacia abajo. src (_alfa) se dibuja normal y nucleo (_nucleo) se suma (lighter) a 0,5; los dos en blanco y grises, para teñir con el color del equipo. El teñido va sobre la luz l = luma(color) × alfa / 255, no sobre el color: luz teñida = equipo × l + (blanco - equipo) × l × clamp((l - 0,88) / 0,12), y se guarda dividida por alfa. Del pico de d_3d, hoja 2 (backgrounds/disparo_estilos).",
+ "fogonazo": [
+  {
+   "src": "piezas/fogonazo_01_nucleo_alfa.png",
+   "nucleo": "piezas/fogonazo_01_nucleo_nucleo.png",
+   "x": 22.8,
+   "y": 1.4,
+   "w": 36.5,
+   "h": 30.0,
+   "tipo": "nucleo",
+   "ang": 0.0
+  },
+  {
+   "src": "piezas/fogonazo_02_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_02_rayo_nucleo.png",
+   "x": 20.1,
+   "y": -15.5,
+   "w": 11.0,
+   "h": 10.0,
+   "tipo": "rayo",
+   "ang": -176.7
+  },
+  {
+   "src": "piezas/fogonazo_03_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_03_rayo_nucleo.png",
+   "x": 44.7,
+   "y": -9.2,
+   "w": 24.0,
+   "h": 9.0,
+   "tipo": "rayo",
+   "ang": -16.9
+  },
+  {
+   "src": "piezas/fogonazo_04_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_04_rayo_nucleo.png",
+   "x": 27.6,
+   "y": -10.1,
+   "w": 9.0,
+   "h": 8.0,
+   "tipo": "rayo",
+   "ang": -37.4
+  },
+  {
+   "src": "piezas/fogonazo_05_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_05_rayo_nucleo.png",
+   "x": 41.2,
+   "y": -3.9,
+   "w": 7.5,
+   "h": 4.0,
+   "tipo": "rayo",
+   "ang": -16.7
+  },
+  {
+   "src": "piezas/fogonazo_06_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_06_rayo_nucleo.png",
+   "x": 50.9,
+   "y": 1.4,
+   "w": 22.5,
+   "h": 10.0,
+   "tipo": "rayo",
+   "ang": -0.9
+  },
+  {
+   "src": "piezas/fogonazo_07_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_07_rayo_nucleo.png",
+   "x": 2.9,
+   "y": 1.2,
+   "w": 6.0,
+   "h": 10.5,
+   "tipo": "rayo",
+   "ang": 90.5
+  },
+  {
+   "src": "piezas/fogonazo_08_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_08_rayo_nucleo.png",
+   "x": 40.8,
+   "y": 7.9,
+   "w": 8.5,
+   "h": 6.5,
+   "tipo": "rayo",
+   "ang": 6.1
+  },
+  {
+   "src": "piezas/fogonazo_09_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_09_rayo_nucleo.png",
+   "x": 27.1,
+   "y": 11.2,
+   "w": 5.0,
+   "h": 5.5,
+   "tipo": "rayo",
+   "ang": 88.8
+  },
+  {
+   "src": "piezas/fogonazo_10_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_10_rayo_nucleo.png",
+   "x": 24.0,
+   "y": 15.8,
+   "w": 9.5,
+   "h": 8.5,
+   "tipo": "rayo",
+   "ang": 147.3
+  },
+  {
+   "src": "piezas/fogonazo_11_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_11_rayo_nucleo.png",
+   "x": 16.5,
+   "y": 16.5,
+   "w": 6.5,
+   "h": 6.0,
+   "tipo": "rayo",
+   "ang": 47.6
+  },
+  {
+   "src": "piezas/fogonazo_12_rayo_alfa.png",
+   "nucleo": "piezas/fogonazo_12_rayo_nucleo.png",
+   "x": 42.3,
+   "y": 15.7,
+   "w": 26.5,
+   "h": 10.5,
+   "tipo": "rayo",
+   "ang": 18.6
+  },
+  {
+   "src": "piezas/fogonazo_13_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_13_chispa_nucleo.png",
+   "x": 22.9,
+   "y": -19.2,
+   "w": 6.0,
+   "h": 3.5,
+   "tipo": "chispa",
+   "ang": -88.4
+  },
+  {
+   "src": "piezas/fogonazo_14_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_14_chispa_nucleo.png",
+   "x": 33.0,
+   "y": -15.3,
+   "w": 9.0,
+   "h": 9.5,
+   "tipo": "chispa",
+   "ang": -56.2
+  },
+  {
+   "src": "piezas/fogonazo_15_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_15_chispa_nucleo.png",
+   "x": 11.4,
+   "y": -13.0,
+   "w": 7.0,
+   "h": 9.0,
+   "tipo": "chispa",
+   "ang": -126.8
+  },
+  {
+   "src": "piezas/fogonazo_16_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_16_chispa_nucleo.png",
+   "x": 49.3,
+   "y": -5.0,
+   "w": 9.0,
+   "h": 5.5,
+   "tipo": "chispa",
+   "ang": -11.6
+  },
+  {
+   "src": "piezas/fogonazo_17_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_17_chispa_nucleo.png",
+   "x": 50.0,
+   "y": 8.6,
+   "w": 11.0,
+   "h": 7.0,
+   "tipo": "chispa",
+   "ang": 13.8
+  },
+  {
+   "src": "piezas/fogonazo_18_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_18_chispa_nucleo.png",
+   "x": 10.2,
+   "y": 14.2,
+   "w": 7.5,
+   "h": 9.0,
+   "tipo": "chispa",
+   "ang": 133.0
+  },
+  {
+   "src": "piezas/fogonazo_19_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_19_chispa_nucleo.png",
+   "x": 33.2,
+   "y": 17.9,
+   "w": 8.5,
+   "h": 6.5,
+   "tipo": "chispa",
+   "ang": 57.3
+  },
+  {
+   "src": "piezas/fogonazo_20_chispa_alfa.png",
+   "nucleo": "piezas/fogonazo_20_chispa_nucleo.png",
+   "x": 26.5,
+   "y": 18.5,
+   "w": 6.0,
+   "h": 5.0,
+   "tipo": "chispa",
+   "ang": 75.5
+  }
+ ],
+ "impacto": [
+  {
+   "src": "piezas/impacto_01_nucleo_alfa.png",
+   "nucleo": "piezas/impacto_01_nucleo_nucleo.png",
+   "x": 0.3,
+   "y": 1.2,
+   "w": 20.0,
+   "h": 23.5,
+   "tipo": "nucleo",
+   "ang": 0.0
+  },
+  {
+   "src": "piezas/impacto_02_rayo_alfa.png",
+   "nucleo": "piezas/impacto_02_rayo_nucleo.png",
+   "x": 2.1,
+   "y": -17.8,
+   "w": 7.5,
+   "h": 17.0,
+   "tipo": "rayo",
+   "ang": -86.5
+  },
+  {
+   "src": "piezas/impacto_03_rayo_alfa.png",
+   "nucleo": "piezas/impacto_03_rayo_nucleo.png",
+   "x": 12.4,
+   "y": -10.3,
+   "w": 12.5,
+   "h": 14.5,
+   "tipo": "rayo",
+   "ang": -50.0
+  },
+  {
+   "src": "piezas/impacto_04_rayo_alfa.png",
+   "nucleo": "piezas/impacto_04_rayo_nucleo.png",
+   "x": -5.5,
+   "y": -12.1,
+   "w": 9.0,
+   "h": 11.5,
+   "tipo": "rayo",
+   "ang": -115.6
+  },
+  {
+   "src": "piezas/impacto_05_rayo_alfa.png",
+   "nucleo": "piezas/impacto_05_rayo_nucleo.png",
+   "x": 6.5,
+   "y": -9.6,
+   "w": 5.0,
+   "h": 7.0,
+   "tipo": "rayo",
+   "ang": -74.6
+  },
+  {
+   "src": "piezas/impacto_06_rayo_alfa.png",
+   "nucleo": "piezas/impacto_06_rayo_nucleo.png",
+   "x": -13.7,
+   "y": -5.3,
+   "w": 13.5,
+   "h": 12.5,
+   "tipo": "rayo",
+   "ang": -137.1
+  },
+  {
+   "src": "piezas/impacto_07_rayo_alfa.png",
+   "nucleo": "piezas/impacto_07_rayo_nucleo.png",
+   "x": 16.4,
+   "y": -3.9,
+   "w": 17.0,
+   "h": 12.0,
+   "tipo": "rayo",
+   "ang": -21.1
+  },
+  {
+   "src": "piezas/impacto_08_rayo_alfa.png",
+   "nucleo": "piezas/impacto_08_rayo_nucleo.png",
+   "x": -15.7,
+   "y": 4.6,
+   "w": 17.0,
+   "h": 8.0,
+   "tipo": "rayo",
+   "ang": 174.3
+  },
+  {
+   "src": "piezas/impacto_09_rayo_alfa.png",
+   "nucleo": "piezas/impacto_09_rayo_nucleo.png",
+   "x": 11.4,
+   "y": 4.8,
+   "w": 7.0,
+   "h": 6.5,
+   "tipo": "rayo",
+   "ang": 26.1
+  },
+  {
+   "src": "piezas/impacto_10_rayo_alfa.png",
+   "nucleo": "piezas/impacto_10_rayo_nucleo.png",
+   "x": 11.6,
+   "y": 10.3,
+   "w": 12.5,
+   "h": 9.0,
+   "tipo": "rayo",
+   "ang": 29.4
+  },
+  {
+   "src": "piezas/impacto_11_rayo_alfa.png",
+   "nucleo": "piezas/impacto_11_rayo_nucleo.png",
+   "x": -5.7,
+   "y": 9.6,
+   "w": 5.5,
+   "h": 6.0,
+   "tipo": "rayo",
+   "ang": 166.2
+  },
+  {
+   "src": "piezas/impacto_12_rayo_alfa.png",
+   "nucleo": "piezas/impacto_12_rayo_nucleo.png",
+   "x": 0.3,
+   "y": 11.2,
+   "w": 5.0,
+   "h": 5.5,
+   "tipo": "rayo",
+   "ang": 16.7
+  },
+  {
+   "src": "piezas/impacto_13_rayo_alfa.png",
+   "nucleo": "piezas/impacto_13_rayo_nucleo.png",
+   "x": -16.3,
+   "y": -26.5,
+   "w": 16.5,
+   "h": 22.0,
+   "tipo": "rayo",
+   "ang": -120.8
+  },
+  {
+   "src": "piezas/impacto_14_chispa_alfa.png",
+   "nucleo": "piezas/impacto_14_chispa_nucleo.png",
+   "x": -16.2,
+   "y": -32.7,
+   "w": 5.5,
+   "h": 7.5,
+   "tipo": "chispa",
+   "ang": -117.3
+  },
+  {
+   "src": "piezas/impacto_15_chispa_alfa.png",
+   "nucleo": "piezas/impacto_15_chispa_nucleo.png",
+   "x": -9.9,
+   "y": -28.5,
+   "w": 8.5,
+   "h": 14.5,
+   "tipo": "chispa",
+   "ang": -110.1
+  },
+  {
+   "src": "piezas/impacto_16_chispa_alfa.png",
+   "nucleo": "piezas/impacto_16_chispa_nucleo.png",
+   "x": -33.5,
+   "y": -27.7,
+   "w": 3.5,
+   "h": 5.0,
+   "tipo": "chispa",
+   "ang": -140.7
+  },
+  {
+   "src": "piezas/impacto_17_chispa_alfa.png",
+   "nucleo": "piezas/impacto_17_chispa_nucleo.png",
+   "x": -28.0,
+   "y": -25.9,
+   "w": 9.0,
+   "h": 9.0,
+   "tipo": "chispa",
+   "ang": -138.0
+  },
+  {
+   "src": "piezas/impacto_18_chispa_alfa.png",
+   "nucleo": "piezas/impacto_18_chispa_nucleo.png",
+   "x": 9.1,
+   "y": -20.2,
+   "w": 9.0,
+   "h": 14.5,
+   "tipo": "chispa",
+   "ang": -67.7
+  },
+  {
+   "src": "piezas/impacto_19_chispa_alfa.png",
+   "nucleo": "piezas/impacto_19_chispa_nucleo.png",
+   "x": -16.1,
+   "y": -19.8,
+   "w": 5.0,
+   "h": 6.5,
+   "tipo": "chispa",
+   "ang": -127.4
+  },
+  {
+   "src": "piezas/impacto_20_chispa_alfa.png",
+   "nucleo": "piezas/impacto_20_chispa_nucleo.png",
+   "x": -20.5,
+   "y": -17.0,
+   "w": 12.0,
+   "h": 13.0,
+   "tipo": "chispa",
+   "ang": -140.7
+  },
+  {
+   "src": "piezas/impacto_21_chispa_alfa.png",
+   "nucleo": "piezas/impacto_21_chispa_nucleo.png",
+   "x": -27.6,
+   "y": -18.9,
+   "w": 5.5,
+   "h": 6.5,
+   "tipo": "chispa",
+   "ang": -144.5
+  },
+  {
+   "src": "piezas/impacto_22_chispa_alfa.png",
+   "nucleo": "piezas/impacto_22_chispa_nucleo.png",
+   "x": -3.3,
+   "y": -18.0,
+   "w": 6.5,
+   "h": 9.5,
+   "tipo": "chispa",
+   "ang": -98.4
+  },
+  {
+   "src": "piezas/impacto_23_chispa_alfa.png",
+   "nucleo": "piezas/impacto_23_chispa_nucleo.png",
+   "x": -11.9,
+   "y": -11.8,
+   "w": 6.5,
+   "h": 8.0,
+   "tipo": "chispa",
+   "ang": -136.8
+  },
+  {
+   "src": "piezas/impacto_24_chispa_alfa.png",
+   "nucleo": "piezas/impacto_24_chispa_nucleo.png",
+   "x": -23.8,
+   "y": -8.1,
+   "w": 8.0,
+   "h": 9.0,
+   "tipo": "chispa",
+   "ang": -161.4
+  },
+  {
+   "src": "piezas/impacto_25_chispa_alfa.png",
+   "nucleo": "piezas/impacto_25_chispa_nucleo.png",
+   "x": 16.0,
+   "y": -7.8,
+   "w": 8.0,
+   "h": 6.0,
+   "tipo": "chispa",
+   "ang": -23.9
+  },
+  {
+   "src": "piezas/impacto_26_chispa_alfa.png",
+   "nucleo": "piezas/impacto_26_chispa_nucleo.png",
+   "x": -17.8,
+   "y": -6.9,
+   "w": 4.5,
+   "h": 4.0,
+   "tipo": "chispa",
+   "ang": -157.6
+  },
+  {
+   "src": "piezas/impacto_27_chispa_alfa.png",
+   "nucleo": "piezas/impacto_27_chispa_nucleo.png",
+   "x": -7.8,
+   "y": -6.9,
+   "w": 3.5,
+   "h": 3.0,
+   "tipo": "chispa",
+   "ang": -142.4
+  },
+  {
+   "src": "piezas/impacto_28_chispa_alfa.png",
+   "nucleo": "piezas/impacto_28_chispa_nucleo.png",
+   "x": -17.6,
+   "y": -1.4,
+   "w": 12.0,
+   "h": 8.5,
+   "tipo": "chispa",
+   "ang": -175.4
+  },
+  {
+   "src": "piezas/impacto_29_chispa_alfa.png",
+   "nucleo": "piezas/impacto_29_chispa_nucleo.png",
+   "x": 15.1,
+   "y": 2.3,
+   "w": 7.0,
+   "h": 5.5,
+   "tipo": "chispa",
+   "ang": 8.5
+  },
+  {
+   "src": "piezas/impacto_30_chispa_alfa.png",
+   "nucleo": "piezas/impacto_30_chispa_nucleo.png",
+   "x": 21.3,
+   "y": 1.6,
+   "w": 6.0,
+   "h": 5.5,
+   "tipo": "chispa",
+   "ang": 6.7
+  },
+  {
+   "src": "piezas/impacto_31_chispa_alfa.png",
+   "nucleo": "piezas/impacto_31_chispa_nucleo.png",
+   "x": 19.5,
+   "y": 7.8,
+   "w": 10.5,
+   "h": 8.0,
+   "tipo": "chispa",
+   "ang": 19.6
+  },
+  {
+   "src": "piezas/impacto_32_chispa_alfa.png",
+   "nucleo": "piezas/impacto_32_chispa_nucleo.png",
+   "x": -12.2,
+   "y": 10.6,
+   "w": 9.5,
+   "h": 7.5,
+   "tipo": "chispa",
+   "ang": 139.6
+  },
+  {
+   "src": "piezas/impacto_33_chispa_alfa.png",
+   "nucleo": "piezas/impacto_33_chispa_nucleo.png",
+   "x": -3.5,
+   "y": 12.4,
+   "w": 7.5,
+   "h": 6.0,
+   "tipo": "chispa",
+   "ang": 105.4
+  }
+ ]
+}

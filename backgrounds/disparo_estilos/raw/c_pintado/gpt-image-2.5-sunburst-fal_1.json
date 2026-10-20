@@ -1,0 +1,56 @@
+{
+  "set": "disparo_estilos",
+  "asset": "c_pintado",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/text-to-image",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "A visual effects sprite sheet for a 2D side-view arena shooter game, on a pure flat black background (#000000) everywhere, with no vignette, no gradient, no floor and no haze filling the frame: the effects will be blended additively over the game. Two rows, all drawn at the same scale, every frame separated from its neighbors by wide black space, nothing touching the image edges.\nTop row: a muzzle flash in four frames, left to right in time order. Every frame points to the right and starts at its left edge, where the gun barrel is (do not draw the gun), all on the same horizontal center line.\nFrame 1: the flash opening, small and very bright. Frame 2: the peak, the biggest and brightest. Frame 3: breaking up, thinner and dimmer. Frame 4: fading out.\nBottom row: the bullet impact of the same shot in four frames, each centered on its own point, the shot coming from the left. Frame 1: a tiny bright flash. Frame 2: the biggest burst, with sparks spraying back up and to the left. Frame 3: breaking up. Frame 4: a few fading sparks.\n\nNo text, letters, numbers, logos, frames, grid lines, characters, guns or hands anywhere.\n\nStyle: stylized hand-painted visual effects of a polished mobile action game: bold readable shapes, crisp painted flame and energy petals with bright highlights, a soft glow and a sense of light and volume, a clean white core, small painted sparks and a small painted smoke puff in the last frames; no photographic detail. Colors from the inside out: white core, hot pink-white, saturated red, deep crimson at the edges.",
+  "styles": [
+    "hoja",
+    "no_text"
+  ],
+  "refs": [],
+  "refs_source": [],
+  "background": "opaque",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.0572,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15a49-17cc-7ff3-8831-3757d2b2e91e",
+  "created": "2026-10-20T17:08:57+00:00",
+  "sha256": "d5ad10dadecfd88c64568affad012331abbf0a60dc0d056a68af1edbd74f817a",
+  "post": {
+    "file": "backgrounds/disparo_estilos/post/c_pintado/gpt-image-2.5-sunburst-fal_1.png",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.0,
+      "opaque": 1.0,
+      "border_transparent": {
+        "top": 0.0,
+        "bottom": 0.0,
+        "left": 0.0,
+        "right": 0.0
+      },
+      "flags": []
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_1.png",
+        "w": 2560,
+        "h": 1440
+      }
+    }
+  }
+}

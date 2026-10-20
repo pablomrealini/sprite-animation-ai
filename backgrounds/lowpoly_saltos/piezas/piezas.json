@@ -1,0 +1,249 @@
+{
+ "_nota": "Px del juego: x, y es el centro de la pieza respecto del ancla de los pies (para arriba, y negativo); w, h, su tamaño al tamaño de hoy del dibujo. Los PNG van al doble. capa: atras se dibuja antes del personaje, adelante después. junto: las dos mitades (atrás y adelante) de la estrella o del destello, que se mueven juntas. de: el cuadro de donde sale (hoja elegida de entrega.ELEGIDAS).",
+ "despegue": [
+  {
+   "src": "piezas/despegue_01_estrella.png",
+   "x": 0.1,
+   "y": -18.0,
+   "w": 50.0,
+   "h": 14.5,
+   "capa": "atras",
+   "tipo": "estrella",
+   "de": "t1",
+   "junto": "despegue_estrella"
+  },
+  {
+   "src": "piezas/despegue_02_estrella.png",
+   "x": 0.0,
+   "y": -12.5,
+   "w": 88.5,
+   "h": 25.0,
+   "capa": "adelante",
+   "tipo": "estrella",
+   "de": "t1",
+   "junto": "despegue_estrella"
+  },
+  {
+   "src": "piezas/despegue_03_nube.png",
+   "x": -34.4,
+   "y": -15.1,
+   "w": 62.0,
+   "h": 31.5,
+   "capa": "adelante",
+   "tipo": "nube",
+   "de": "t2"
+  },
+  {
+   "src": "piezas/despegue_04_esquirla.png",
+   "x": -2.8,
+   "y": -8.8,
+   "w": 12.0,
+   "h": 9.0,
+   "capa": "adelante",
+   "tipo": "esquirla",
+   "de": "t2"
+  },
+  {
+   "src": "piezas/despegue_05_nube.png",
+   "x": 34.1,
+   "y": -14.4,
+   "w": 62.5,
+   "h": 30.0,
+   "capa": "adelante",
+   "tipo": "nube",
+   "de": "t2"
+  }
+ ],
+ "aterrizaje": [
+  {
+   "src": "piezas/aterrizaje_01_estrella.png",
+   "x": 0.1,
+   "y": -21.7,
+   "w": 50.0,
+   "h": 22.0,
+   "capa": "atras",
+   "tipo": "estrella",
+   "de": "l1",
+   "junto": "aterrizaje_estrella"
+  },
+  {
+   "src": "piezas/aterrizaje_02_estrella.png",
+   "x": 0.0,
+   "y": -17.3,
+   "w": 145.0,
+   "h": 34.5,
+   "capa": "adelante",
+   "tipo": "estrella",
+   "de": "l1",
+   "junto": "aterrizaje_estrella"
+  },
+  {
+   "src": "piezas/aterrizaje_03_nube.png",
+   "x": -48.8,
+   "y": -24.2,
+   "w": 95.5,
+   "h": 51.0,
+   "capa": "adelante",
+   "tipo": "nube",
+   "de": "l2"
+  },
+  {
+   "src": "piezas/aterrizaje_04_esquirla.png",
+   "x": -1.5,
+   "y": -13.8,
+   "w": 16.5,
+   "h": 13.5,
+   "capa": "adelante",
+   "tipo": "esquirla",
+   "de": "l2"
+  },
+  {
+   "src": "piezas/aterrizaje_05_nube.png",
+   "x": 51.3,
+   "y": -23.9,
+   "w": 90.5,
+   "h": 50.5,
+   "capa": "adelante",
+   "tipo": "nube",
+   "de": "l2"
+  }
+ ],
+ "fuerte": [
+  {
+   "src": "piezas/fuerte_01_estrella.png",
+   "x": 0.2,
+   "y": -33.9,
+   "w": 50.0,
+   "h": 46.5,
+   "capa": "atras",
+   "tipo": "estrella",
+   "de": "h1",
+   "junto": "fuerte_estrella"
+  },
+  {
+   "src": "piezas/fuerte_02_estrella.png",
+   "x": 0.0,
+   "y": -27.9,
+   "w": 255.5,
+   "h": 59.0,
+   "capa": "adelante",
+   "tipo": "estrella",
+   "de": "h1",
+   "junto": "fuerte_estrella"
+  },
+  {
+   "src": "piezas/fuerte_03_nube.png",
+   "x": -66.3,
+   "y": -35.5,
+   "w": 137.5,
+   "h": 71.0,
+   "capa": "adelante",
+   "tipo": "nube",
+   "de": "h2"
+  },
+  {
+   "src": "piezas/fuerte_04_nube.png",
+   "x": 68.7,
+   "y": -35.5,
+   "w": 132.5,
+   "h": 71.0,
+   "capa": "adelante",
+   "tipo": "nube",
+   "de": "h2"
+  }
+ ],
+ "doble": [
+  {
+   "src": "piezas/doble_01_destello.png",
+   "x": 0.1,
+   "y": -9.4,
+   "w": 40.5,
+   "h": 21.0,
+   "capa": "atras",
+   "tipo": "destello",
+   "de": "d1",
+   "junto": "doble_destello"
+  },
+  {
+   "src": "piezas/doble_02_destello.png",
+   "x": 0.1,
+   "y": 2.3,
+   "w": 40.5,
+   "h": 14.5,
+   "capa": "adelante",
+   "tipo": "destello",
+   "de": "d1",
+   "junto": "doble_destello"
+  },
+  {
+   "src": "piezas/doble_03_anillo.png",
+   "x": -33.2,
+   "y": 0.1,
+   "w": 41.5,
+   "h": 29.0,
+   "capa": "adelante",
+   "tipo": "anillo",
+   "de": "d2"
+  },
+  {
+   "src": "piezas/doble_04_destello.png",
+   "x": -25.2,
+   "y": 19.7,
+   "w": 15.5,
+   "h": 16.5,
+   "capa": "adelante",
+   "tipo": "destello",
+   "de": "d2"
+  },
+  {
+   "src": "piezas/doble_05_anillo.png",
+   "x": -9.4,
+   "y": -6.2,
+   "w": 26.0,
+   "h": 14.0,
+   "capa": "atras",
+   "tipo": "anillo",
+   "de": "d2"
+  },
+  {
+   "src": "piezas/doble_06_esquirla.png",
+   "x": -3.3,
+   "y": 19.7,
+   "w": 28.5,
+   "h": 43.0,
+   "capa": "adelante",
+   "tipo": "esquirla",
+   "de": "d2"
+  },
+  {
+   "src": "piezas/doble_07_anillo.png",
+   "x": 14.2,
+   "y": 6.9,
+   "w": 15.5,
+   "h": 13.5,
+   "capa": "adelante",
+   "tipo": "anillo",
+   "de": "d2"
+  },
+  {
+   "src": "piezas/doble_08_destello.png",
+   "x": 24.6,
+   "y": 19.5,
+   "w": 15.5,
+   "h": 17.0,
+   "capa": "adelante",
+   "tipo": "destello",
+   "de": "d2"
+  },
+  {
+   "src": "piezas/doble_09_anillo.png",
+   "x": 35.9,
+   "y": 0.2,
+   "w": 36.0,
+   "h": 25.5,
+   "capa": "adelante",
+   "tipo": "anillo",
+   "de": "d2"
+  }
+ ]
+}

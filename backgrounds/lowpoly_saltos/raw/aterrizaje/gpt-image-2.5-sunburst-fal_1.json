@@ -1,0 +1,272 @@
+{
+  "set": "lowpoly_saltos",
+  "asset": "aterrizaje",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game visual effect sprites in the exact style of the effects in the reference image: crisp faceted polygons with flat per-face shading, soft light from the top left, clean geometric shapes, translucent thin facets where the dust fades, no black outlines, no soft airbrushed smoke, no blur, no texture noise. Side view at ground level, slightly from above, so the effect lies on a flat floor. Strictly neutral colors with no tint: very light grey, almost white, with soft mid-grey shading on the faces away from the light; no cream, no blue, no warm tones, so the game can tint it.\n\nNo pebbles, rocks or loose debris: the game adds them.\n\nNo text, letters, numbers, logos, frames, grid lines, characters or floor anywhere.\n\nA sprite sheet of two low-poly dust effect animations for a 2D platformer character, like the landing effect in the reference image, in two rows of three frames, each row left to right in time order, all drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges. Every frame lies on its own flat invisible floor line and is centered on its own vertical axis, where the character's feet are. Each frame is one single connected shape: its parts are joined along the floor by a thin flat band of shards.\nTop row, the landing:\nFrame 1: a flat starburst of sharp light shards lying on the floor and opening outward from the feet, wide and low, about four times wider than tall.\nFrame 2: two faceted dust clouds bursting out to the left and to the right, low over the floor, joined along the floor by a thin flat band of shards with a few small shards in the middle; wider than frame 1, about three times wider than tall.\nFrame 3: the two clouds breaking apart into thin translucent facets, lower and fading, still joined along the floor.\nBottom row, the jump take-off, the same family but smaller, about two thirds of the landing:\nFrame 1: a small flat starburst of shards on the floor.\nFrame 2: two small low clouds pushed out to the sides, joined along the floor.\nFrame 3: the small clouds fading into thin translucent facets along the floor.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowdust",
+    "no_debris",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png",
+      "sha256": "5f6ef7a215647a81e05c386c0f3d2b1248792d236421011cf32b015736f4fea4"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png",
+      "sha256": "5f6ef7a215647a81e05c386c0f3d2b1248792d236421011cf32b015736f4fea4"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.115,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15989-fd58-77d3-9bb3-a2d8de89b032",
+  "created": "2026-10-20T13:40:23+00:00",
+  "sha256": "cc429e3e7d02f17db863fc0ba71c099761c2808526867a8834948b6150f78c20",
+  "post": {
+    "file": "backgrounds/lowpoly_saltos/post/aterrizaje/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [
+      "salieron 12 piezas y se esperaban 6 (l1, l2, l3, t1, t2, t3): quedan numeradas"
+    ],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8895,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "pieza_1": [
+        845,
+        406,
+        1756,
+        646
+      ],
+      "pieza_2": [
+        1960,
+        464,
+        2087,
+        580
+      ],
+      "pieza_3": [
+        2311,
+        457,
+        2438,
+        574
+      ],
+      "pieza_4": [
+        56,
+        477,
+        740,
+        640
+      ],
+      "pieza_5": [
+        1889,
+        544,
+        2194,
+        636
+      ],
+      "pieza_6": [
+        2223,
+        552,
+        2505,
+        636
+      ],
+      "pieza_7": [
+        195,
+        1052,
+        613,
+        1171
+      ],
+      "pieza_8": [
+        981,
+        1025,
+        1599,
+        1174
+      ],
+      "pieza_9": [
+        1949,
+        1061,
+        2046,
+        1121
+      ],
+      "pieza_10": [
+        1919,
+        1099,
+        2155,
+        1168
+      ],
+      "pieza_11": [
+        2264,
+        1046,
+        2351,
+        1117
+      ],
+      "pieza_12": [
+        2187,
+        1106,
+        2404,
+        1168
+      ]
+    },
+    "trim": {
+      "pieza_1": [
+        0,
+        0,
+        911,
+        240
+      ],
+      "pieza_2": [
+        0,
+        0,
+        127,
+        116
+      ],
+      "pieza_3": [
+        0,
+        0,
+        127,
+        117
+      ],
+      "pieza_4": [
+        0,
+        0,
+        684,
+        163
+      ],
+      "pieza_5": [
+        0,
+        0,
+        305,
+        92
+      ],
+      "pieza_6": [
+        0,
+        0,
+        282,
+        84
+      ],
+      "pieza_7": [
+        0,
+        0,
+        418,
+        119
+      ],
+      "pieza_8": [
+        0,
+        0,
+        618,
+        149
+      ],
+      "pieza_9": [
+        0,
+        0,
+        97,
+        60
+      ],
+      "pieza_10": [
+        0,
+        0,
+        236,
+        69
+      ],
+      "pieza_11": [
+        0,
+        0,
+        87,
+        71
+      ],
+      "pieza_12": [
+        0,
+        0,
+        217,
+        62
+      ]
+    },
+    "files": {
+      "pieza_1": {
+        "file": "pieza_1.png",
+        "w": 911,
+        "h": 240
+      },
+      "pieza_2": {
+        "file": "pieza_2.png",
+        "w": 127,
+        "h": 116
+      },
+      "pieza_3": {
+        "file": "pieza_3.png",
+        "w": 127,
+        "h": 117
+      },
+      "pieza_4": {
+        "file": "pieza_4.png",
+        "w": 684,
+        "h": 163
+      },
+      "pieza_5": {
+        "file": "pieza_5.png",
+        "w": 305,
+        "h": 92
+      },
+      "pieza_6": {
+        "file": "pieza_6.png",
+        "w": 282,
+        "h": 84
+      },
+      "pieza_7": {
+        "file": "pieza_7.png",
+        "w": 418,
+        "h": 119
+      },
+      "pieza_8": {
+        "file": "pieza_8.png",
+        "w": 618,
+        "h": 149
+      },
+      "pieza_9": {
+        "file": "pieza_9.png",
+        "w": 97,
+        "h": 60
+      },
+      "pieza_10": {
+        "file": "pieza_10.png",
+        "w": 236,
+        "h": 69
+      },
+      "pieza_11": {
+        "file": "pieza_11.png",
+        "w": 87,
+        "h": 71
+      },
+      "pieza_12": {
+        "file": "pieza_12.png",
+        "w": 217,
+        "h": 62
+      }
+    }
+  }
+}

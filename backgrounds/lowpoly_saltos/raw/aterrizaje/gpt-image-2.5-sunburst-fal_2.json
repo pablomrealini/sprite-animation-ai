@@ -1,0 +1,341 @@
+{
+  "set": "lowpoly_saltos",
+  "asset": "aterrizaje",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game visual effect sprites in the exact style of the effects in the reference image: crisp faceted polygons with flat per-face shading, soft light from the top left, clean geometric shapes, translucent thin facets where the dust fades, no black outlines, no soft airbrushed smoke, no blur, no texture noise. Side view at ground level, slightly from above, so the effect lies on a flat floor. Strictly neutral colors with no tint: very light grey, almost white, with soft mid-grey shading on the faces away from the light; no cream, no blue, no warm tones, so the game can tint it.\n\nNo pebbles, rocks or loose debris: the game adds them.\n\nNo text, letters, numbers, logos, frames, grid lines, characters or floor anywhere.\n\nA sprite sheet of two low-poly dust effect animations for a 2D platformer character, like the landing effect in the reference image, in two rows of three frames, each row left to right in time order, all drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges. Every frame lies on its own flat invisible floor line and is centered on its own vertical axis, where the character's feet are. Each frame is one single connected shape: its parts are joined along the floor by a thin flat band of shards.\nTop row, the landing:\nFrame 1: a flat starburst of sharp light shards lying on the floor and opening outward from the feet, wide and low, about four times wider than tall.\nFrame 2: two faceted dust clouds bursting out to the left and to the right, low over the floor, joined along the floor by a thin flat band of shards with a few small shards in the middle; wider than frame 1, about three times wider than tall.\nFrame 3: the two clouds breaking apart into thin translucent facets, lower and fading, still joined along the floor.\nBottom row, the jump take-off, the same family but smaller, about two thirds of the landing:\nFrame 1: a small flat starburst of shards on the floor.\nFrame 2: two small low clouds pushed out to the sides, joined along the floor.\nFrame 3: the small clouds fading into thin translucent facets along the floor.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowdust",
+    "no_debris",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png",
+      "sha256": "5f6ef7a215647a81e05c386c0f3d2b1248792d236421011cf32b015736f4fea4"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png",
+      "sha256": "5f6ef7a215647a81e05c386c0f3d2b1248792d236421011cf32b015736f4fea4"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.115,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15989-fd36-7a83-a08f-0ee05ba75ee5",
+  "created": "2026-10-20T13:40:08+00:00",
+  "sha256": "287501b86100696fc04e9ec5e0752709fcfeaeb86464737ebdabbc181646c8c4",
+  "post": {
+    "file": "backgrounds/lowpoly_saltos/post/aterrizaje/gpt-image-2.5-sunburst-fal_2",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [
+      "2 manchas chicas descartadas",
+      "salieron 16 piezas y se esperaban 6 (l1, l2, l3, t1, t2, t3): quedan numeradas"
+    ],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.9088,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "pieza_1": [
+        66,
+        472,
+        703,
+        643
+      ],
+      "pieza_2": [
+        834,
+        415,
+        1258,
+        651
+      ],
+      "pieza_3": [
+        1235,
+        537,
+        1280,
+        610
+      ],
+      "pieza_4": [
+        1296,
+        444,
+        1699,
+        651
+      ],
+      "pieza_5": [
+        1925,
+        443,
+        2016,
+        542
+      ],
+      "pieza_6": [
+        2026,
+        531,
+        2076,
+        585
+      ],
+      "pieza_7": [
+        2242,
+        452,
+        2387,
+        582
+      ],
+      "pieza_8": [
+        1843,
+        564,
+        2148,
+        639
+      ],
+      "pieza_9": [
+        2188,
+        577,
+        2449,
+        638
+      ],
+      "pieza_10": [
+        225,
+        967,
+        658,
+        1081
+      ],
+      "pieza_11": [
+        987,
+        941,
+        1263,
+        1089
+      ],
+      "pieza_12": [
+        1310,
+        950,
+        1572,
+        1089
+      ],
+      "pieza_13": [
+        1889,
+        1022,
+        2118,
+        1081
+      ],
+      "pieza_14": [
+        1956,
+        965,
+        2070,
+        1050
+      ],
+      "pieza_15": [
+        2216,
+        946,
+        2308,
+        1036
+      ],
+      "pieza_16": [
+        2162,
+        1032,
+        2381,
+        1081
+      ]
+    },
+    "trim": {
+      "pieza_1": [
+        0,
+        0,
+        637,
+        171
+      ],
+      "pieza_2": [
+        0,
+        0,
+        424,
+        236
+      ],
+      "pieza_3": [
+        0,
+        0,
+        45,
+        73
+      ],
+      "pieza_4": [
+        0,
+        0,
+        403,
+        207
+      ],
+      "pieza_5": [
+        0,
+        0,
+        91,
+        99
+      ],
+      "pieza_6": [
+        0,
+        0,
+        50,
+        54
+      ],
+      "pieza_7": [
+        0,
+        0,
+        145,
+        130
+      ],
+      "pieza_8": [
+        0,
+        0,
+        305,
+        75
+      ],
+      "pieza_9": [
+        0,
+        0,
+        261,
+        61
+      ],
+      "pieza_10": [
+        0,
+        0,
+        433,
+        114
+      ],
+      "pieza_11": [
+        0,
+        0,
+        276,
+        148
+      ],
+      "pieza_12": [
+        0,
+        0,
+        262,
+        139
+      ],
+      "pieza_13": [
+        0,
+        0,
+        229,
+        59
+      ],
+      "pieza_14": [
+        0,
+        0,
+        114,
+        85
+      ],
+      "pieza_15": [
+        0,
+        0,
+        92,
+        90
+      ],
+      "pieza_16": [
+        0,
+        0,
+        219,
+        49
+      ]
+    },
+    "files": {
+      "pieza_1": {
+        "file": "pieza_1.png",
+        "w": 637,
+        "h": 171
+      },
+      "pieza_2": {
+        "file": "pieza_2.png",
+        "w": 424,
+        "h": 236
+      },
+      "pieza_3": {
+        "file": "pieza_3.png",
+        "w": 45,
+        "h": 73
+      },
+      "pieza_4": {
+        "file": "pieza_4.png",
+        "w": 403,
+        "h": 207
+      },
+      "pieza_5": {
+        "file": "pieza_5.png",
+        "w": 91,
+        "h": 99
+      },
+      "pieza_6": {
+        "file": "pieza_6.png",
+        "w": 50,
+        "h": 54
+      },
+      "pieza_7": {
+        "file": "pieza_7.png",
+        "w": 145,
+        "h": 130
+      },
+      "pieza_8": {
+        "file": "pieza_8.png",
+        "w": 305,
+        "h": 75
+      },
+      "pieza_9": {
+        "file": "pieza_9.png",
+        "w": 261,
+        "h": 61
+      },
+      "pieza_10": {
+        "file": "pieza_10.png",
+        "w": 433,
+        "h": 114
+      },
+      "pieza_11": {
+        "file": "pieza_11.png",
+        "w": 276,
+        "h": 148
+      },
+      "pieza_12": {
+        "file": "pieza_12.png",
+        "w": 262,
+        "h": 139
+      },
+      "pieza_13": {
+        "file": "pieza_13.png",
+        "w": 229,
+        "h": 59
+      },
+      "pieza_14": {
+        "file": "pieza_14.png",
+        "w": 114,
+        "h": 85
+      },
+      "pieza_15": {
+        "file": "pieza_15.png",
+        "w": 92,
+        "h": 90
+      },
+      "pieza_16": {
+        "file": "pieza_16.png",
+        "w": 219,
+        "h": 49
+      }
+    }
+  }
+}

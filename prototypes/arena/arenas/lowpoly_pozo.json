@@ -1,0 +1,79 @@
+{
+  "name": "Low-poly · Pozo",
+  "note": "Editor de niveles, 2026-10-20 (rehecha el mismo día a lo alto). Abajo, el pozo: dos paredes que se saltan (asoman 164) y un techo de pasarela sobre patas, un cuarto de 780 px para slides y pelea de cerca. Del techo sale el tiro: una flotante que sube y baja de 880 a 480 por el medio, con dos nidos a los costados (360) y el premio arriba de todo (280), los tres con doble salto. A los costados, mesetas de dos pisos (1000 y 760) y flotantes en 560. Caerse de arriba al pozo saca vida. Calor y óxido.",
+  "size": [2496, 1404],
+  "seed": 1,
+  "plate": {
+    "src": "kit_lowpoly/fondos/abierta_3.webp",
+    "solid": [
+      [0, 1261, 2496, 143]
+    ]
+  },
+  "solids": [
+    {"kind": "walk", "x": -40, "y": 1264, "w": 2576, "h": 200, "fill": "full"}
+  ],
+  "objects": [
+    {"piece": "guia_ascensor", "x": 1225, "y": 440, "stretch": 624},
+    {"piece": "deco_chimenea", "x": 600, "y": 748},
+    {"piece": "deco_chimenea", "x": 1777, "y": 748, "flip": true},
+    {"piece": "deco_tanque", "x": 120, "y": 959},
+    {"piece": "deco_tanque", "x": 2043, "y": 959, "flip": true},
+    {"piece": "deco_torre", "x": 1101, "y": 664},
+    {"piece": "pared", "x": 780, "y": 1084},
+    {"piece": "pared", "x": 1640, "y": 1084},
+    {"piece": "pasarela_punta_izq", "x": 1009, "y": 928, "tira": "tmvgy4z1vm9", "stretch": 149},
+    {"piece": "pasarela_medio_a", "x": 1120, "y": 928, "tira": "tmvgy4z1vm9", "stretch": 149},
+    {"piece": "pasarela_punta_der", "x": 1374, "y": 928, "tira": "tmvgy4z1vm9", "stretch": 149},
+    {"piece": "pasarela_punta_izq", "x": 0, "y": 984, "tira": "tmvgy4z1y1j", "stretch": 93},
+    {"piece": "pasarela_punta_der", "x": 2383, "y": 984, "tira": "tmvgy4z21w", "stretch": 93},
+    {"piece": "pasarela_medio_a", "x": 111, "y": 984, "tira": "tmvgy4z1y1j", "stretch": 93},
+    {"piece": "pasarela_medio_a", "x": 2129, "y": 984, "tira": "tmvgy4z21w", "stretch": 93},
+    {"piece": "pasarela_punta_der", "x": 365, "y": 984, "tira": "tmvgy4z1y1j", "stretch": 93},
+    {"piece": "pasarela_punta_izq", "x": 2019, "y": 984, "tira": "tmvgy4z21w", "stretch": 93},
+    {"piece": "flotante_200", "x": 520, "y": 1102},
+    {"piece": "flotante_200", "x": 1776, "y": 1102},
+    {"piece": "pasarela_punta_izq", "x": 60, "y": 744, "tira": "tmvgy4z26rv", "stretch": 69},
+    {"piece": "pasarela_punta_der", "x": 2323, "y": 744, "tira": "tmvgy4z2alg", "stretch": 69},
+    {"piece": "pasarela_punta_der", "x": 171, "y": 744, "tira": "tmvgy4z26rv", "stretch": 69},
+    {"piece": "pasarela_punta_izq", "x": 2213, "y": 744, "tira": "tmvgy4z2alg", "stretch": 69},
+    {"piece": "flotante_300", "x": 340, "y": 552},
+    {"piece": "flotante_300", "x": 1856, "y": 552},
+    {"piece": "flotante_200", "x": 1148, "y": 872, "move": {"path": [[1148, 872], [1148, 472]], "speed": 90, "wait": 1}},
+    {"piece": "flotante_200", "x": 700, "y": 352},
+    {"piece": "flotante_200", "x": 1596, "y": 352},
+    {"piece": "flotante_300", "x": 1098, "y": 272}
+  ],
+  "spawns": [
+    [150, 1264],
+    [2346, 1264],
+    [170, 760],
+    [2326, 760],
+    [300, 1000],
+    [2196, 1000],
+    [1000, 1264],
+    [1496, 1264],
+    [800, 360],
+    [1696, 360],
+    [1180, 280],
+    [1316, 280]
+  ],
+  "decor": [],
+  "pipes": [],
+  "color": {
+    "fondo": {"paleta": 0.8, "saturacion": 1.15, "contraste": 1.1, "brillo": 0.9, "bruma": 0.3},
+    "plataformas": {"paleta": 0.5, "saturacion": 1.1, "contraste": 1.1, "brillo": 0.95, "bruma": 0.08},
+    "bruma_color": "#c8643c"
+  },
+  "pieces": {
+    "deco_torre": {"src": "kit_lowpoly/deco_torre.png", "w": 294, "h": 600, "deco": true},
+    "deco_tanque": {"src": "kit_lowpoly/deco_tanque.png", "w": 333, "h": 305, "deco": true},
+    "deco_chimenea": {"src": "kit_lowpoly/deco_chimenea.png", "w": 119, "h": 516, "deco": true},
+    "guia_ascensor": {"src": "kit_lowpoly/guia_ascensor.png", "w": 45, "h": 200, "legs": [114, 173], "legsGap": -6, "espejo": "mismo", "deco": true},
+    "pared": {"src": "kit_lowpoly/pared.png", "w": 76, "h": 200, "solids": [{"kind": "walk", "x": 5, "y": 16, "w": 66, "h": 184}], "front": [[0, 0, 76, 200]], "espejo": "mismo"},
+    "pasarela_punta_izq": {"src": "kit_lowpoly/pasarela_punta_izq.png", "w": 113, "h": 200, "solids": [{"kind": "bridge", "x": 7, "y": 16, "w": 106}], "legs": [98, 167], "legsGap": -13, "front": [[0, 0, 113, 72]], "espejo": "pasarela_punta_der"},
+    "pasarela_medio_a": {"src": "kit_lowpoly/pasarela_medio_a.png", "w": 256, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 256}], "legs": [98, 167], "legsGap": -13, "front": [[0, 0, 256, 71]], "espejo": "mismo", "tramo": "x"},
+    "pasarela_punta_der": {"src": "kit_lowpoly/pasarela_punta_der.png", "w": 113, "h": 200, "solids": [{"kind": "bridge", "x": 0, "y": 16, "w": 105}], "legs": [98, 167], "legsGap": -13, "front": [[0, 0, 113, 72]], "espejo": "pasarela_punta_izq"},
+    "flotante_200": {"src": "kit_lowpoly/flotante_200.png", "w": 200, "h": 80, "solids": [{"kind": "bridge", "x": 7, "y": 8, "w": 186}], "front": [[0, 0, 200, 61]], "espejo": "mismo"},
+    "flotante_300": {"src": "kit_lowpoly/flotante_300.png", "w": 300, "h": 80, "solids": [{"kind": "bridge", "x": 8, "y": 8, "w": 284}], "front": [[0, 0, 300, 69]], "espejo": "mismo"}
+  }
+}

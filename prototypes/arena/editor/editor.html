@@ -444,7 +444,9 @@ function link(a, b) {
   if (dy <= 0) {
     if (dy < -4 && d === 0 && !a.oneWay && sb[0] >= sa[0] && sb[1] <= sa[1]) return null;   // abajo de un bloque, sin asomar
     // caer cuesta más que saltar derecho: así la flecha muestra cómo se sube, si se puede
-    return d <= envAt(ENV.X1, dy) ? { c: dy < -4 ? 1.5 : 1, how: dy < -4 ? "cae" : "simple" } : null;
+    if (d <= envAt(ENV.X1, dy)) return { c: dy < -4 ? 1.5 : 1, how: dy < -4 ? "cae" : "simple" };
+    // un hueco en el aire a la misma altura (o hacia abajo) más largo que el simple: con el doble llega más lejos
+    return d <= envAt(ENV.X2, dy) ? { c: 1.8, how: "doble" } : null;
   }
   if (dy <= PHYS.h1 && d <= envAt(ENV.X1, dy)) return { c: 1, how: "simple" };
   if (dy <= PHYS.hang) for (const [ok, cx, dir] of [[b.hangL, b.x, -1], [b.hangR, b.x + b.w, 1]]) {

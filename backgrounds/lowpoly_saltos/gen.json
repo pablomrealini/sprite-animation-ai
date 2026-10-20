@@ -1,0 +1,149 @@
+{
+  "attempts": [
+    {
+      "id": "fuerte/gpt-image-2.5-sunburst-fal_1",
+      "asset": "fuerte",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1147,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15989-fd36-7b70-a178-93a6c7afd45d",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15989-fd36-7b70-a178-93a6c7afd45d/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15989-fd36-7b70-a178-93a6c7afd45d"
+      },
+      "submitted": "2026-10-20T13:39:37+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-20T13:40:12+00:00"
+    },
+    {
+      "id": "aterrizaje/gpt-image-2.5-sunburst-fal_2",
+      "asset": "aterrizaje",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.115,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15989-fd36-7a83-a08f-0ee05ba75ee5",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15989-fd36-7a83-a08f-0ee05ba75ee5/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15989-fd36-7a83-a08f-0ee05ba75ee5"
+      },
+      "submitted": "2026-10-20T13:39:37+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-20T13:40:08+00:00"
+    },
+    {
+      "id": "aterrizaje/gpt-image-2.5-sunburst-fal_1",
+      "asset": "aterrizaje",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.115,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a15989-fd58-77d3-9bb3-a2d8de89b032",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15989-fd58-77d3-9bb3-a2d8de89b032/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a15989-fd58-77d3-9bb3-a2d8de89b032"
+      },
+      "submitted": "2026-10-20T13:39:37+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-20T13:40:23+00:00"
+    },
+    {
+      "id": "fuerte/gpt-image-2.5-sunburst-fal_2",
+      "asset": "fuerte",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.1147,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1598a-790c-7b20-9c6a-647aa7a2e254",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a1598a-790c-7b20-9c6a-647aa7a2e254/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a1598a-790c-7b20-9c6a-647aa7a2e254"
+      },
+      "submitted": "2026-10-20T13:40:08+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-20T13:40:40+00:00"
+    },
+    {
+      "id": "doble/gpt-image-2.5-sunburst-fal_1",
+      "asset": "doble",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 1,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.114,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_saltos/refs/concepto_doble.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1598a-8b9b-7963-bd7b-12556c98ca2d",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a1598a-8b9b-7963-bd7b-12556c98ca2d/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a1598a-8b9b-7963-bd7b-12556c98ca2d"
+      },
+      "submitted": "2026-10-20T13:40:13+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-20T13:40:52+00:00"
+    },
+    {
+      "id": "doble/gpt-image-2.5-sunburst-fal_2",
+      "asset": "doble",
+      "model": "gpt-image-2.5-sunburst-fal",
+      "provider": "fal",
+      "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+      "k": 2,
+      "seed": null,
+      "size": "2560×1440",
+      "usd_estimate": 0.114,
+      "refs": [
+        "/Users/litowork/Documents/Games/sprite-animation-ai/backgrounds/lowpoly_saltos/refs/concepto_doble.png"
+      ],
+      "status": "done",
+      "handle": {
+        "request_id": "01a1598a-b159-7a13-adb7-e601d3076386",
+        "status_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a1598a-b159-7a13-adb7-e601d3076386/status",
+        "response_url": "https://queue.fal.run/openai/gpt-image-2.5/requests/01a1598a-b159-7a13-adb7-e601d3076386"
+      },
+      "submitted": "2026-10-20T13:40:23+00:00",
+      "detail": "",
+      "usage": null,
+      "finished": "2026-10-20T13:40:58+00:00"
+    }
+  ],
+  "qa": {}
+}

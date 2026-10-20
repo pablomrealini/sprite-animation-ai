@@ -97,7 +97,7 @@ window.hoja = (escena, tomas, acciones, gx, gy, gw) => {
 };
 window.addEventListener("resize", () => { if (window.__hoja) { alto(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(window.__hoja, 0, 0, cv.width, cv.height); } });
 window.guardar = async (nombre, c = window.__hoja || cv) =>
-  (await fetch(`http://127.0.0.1:8799/save?name=${nombre}`, { method: "POST", headers: { "Content-Type": "text/plain" }, body: c.toDataURL("image/png") })).status;
+  (await fetch(`http://127.0.0.1:${window.RECIBIR || 8799}/save?name=${nombre}`, { method: "POST", headers: { "Content-Type": "text/plain" }, body: c.toDataURL("image/png") })).status;
 // una caída: el jugador 4 suelto en el aire en (x, y0) como si viniera de pisar y0 (FALL se mide desde ahí). Devuelve la
 // vida antes y después, el tipo de aterrizaje y el texto que sube. Ej.: caer(340) en la Refinería low-poly saca 1
 window.caer = (y0, x = 1100, extra = {}) => {

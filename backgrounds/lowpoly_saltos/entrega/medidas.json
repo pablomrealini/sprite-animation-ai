@@ -1,0 +1,211 @@
+{
+ "_nota": "px del juego; los archivos van al doble. Ancla: los pies (x al medio; y en el piso, o en la fila del anillo en el doble salto), desde arriba a la izquierda del PNG. Cada cuadro en dos capas del mismo tamaño: <cuadro>_atras.png va antes del personaje y <cuadro>_adelante.png después. El doble salto también en blanco (_blanco), para teñir por equipo.",
+ "l1": {
+  "asset": "aterrizaje",
+  "hoja": 1,
+  "w": 145.0,
+  "h": 34.5,
+  "ancla": [
+   72.5,
+   34.5
+  ],
+  "archivo": [
+   290,
+   69
+  ],
+  "luma_mediana": 221.0,
+  "saturacion": 12.9
+ },
+ "l2": {
+  "asset": "aterrizaje",
+  "hoja": 1,
+  "w": 193.0,
+  "h": 51.0,
+  "ancla": [
+   96.5,
+   49.6
+  ],
+  "archivo": [
+   386,
+   102
+  ],
+  "luma_mediana": 208.3,
+  "saturacion": 10.3
+ },
+ "l3": {
+  "asset": "aterrizaje",
+  "hoja": 1,
+  "w": 130.5,
+  "h": 38.0,
+  "ancla": [
+   65.3,
+   38.8
+  ],
+  "archivo": [
+   261,
+   76
+  ],
+  "luma_mediana": 223.6,
+  "saturacion": 8.7
+ },
+ "t1": {
+  "asset": "aterrizaje",
+  "hoja": 1,
+  "w": 88.5,
+  "h": 25.0,
+  "ancla": [
+   44.3,
+   25.2
+  ],
+  "archivo": [
+   177,
+   50
+  ],
+  "luma_mediana": 222.5,
+  "saturacion": 13.4
+ },
+ "t2": {
+  "asset": "aterrizaje",
+  "hoja": 1,
+  "w": 131.0,
+  "h": 31.5,
+  "ancla": [
+   65.5,
+   30.9
+  ],
+  "archivo": [
+   262,
+   63
+  ],
+  "luma_mediana": 210.2,
+  "saturacion": 11.3
+ },
+ "t3": {
+  "asset": "aterrizaje",
+  "hoja": 1,
+  "w": 102.5,
+  "h": 26.0,
+  "ancla": [
+   51.4,
+   26.5
+  ],
+  "archivo": [
+   205,
+   52
+  ],
+  "luma_mediana": 225.8,
+  "saturacion": 12.0
+ },
+ "h1": {
+  "asset": "fuerte",
+  "hoja": 1,
+  "w": 255.5,
+  "h": 59.0,
+  "ancla": [
+   127.8,
+   57.4
+  ],
+  "archivo": [
+   511,
+   118
+  ],
+  "luma_mediana": 217.7,
+  "saturacion": 6.5
+ },
+ "h2": {
+  "asset": "fuerte",
+  "hoja": 1,
+  "w": 270.0,
+  "h": 71.0,
+  "ancla": [
+   135.0,
+   71.0
+  ],
+  "archivo": [
+   540,
+   142
+  ],
+  "luma_mediana": 208.8,
+  "saturacion": 6.3
+ },
+ "h3": {
+  "asset": "fuerte",
+  "hoja": 1,
+  "w": 220.5,
+  "h": 104.5,
+  "ancla": [
+   110.2,
+   104.6
+  ],
+  "archivo": [
+   441,
+   209
+  ],
+  "luma_mediana": 215.0,
+  "saturacion": 5.8
+ },
+ "h4": {
+  "asset": "fuerte",
+  "hoja": 1,
+  "w": 197.0,
+  "h": 72.0,
+  "ancla": [
+   98.5,
+   71.4
+  ],
+  "archivo": [
+   394,
+   144
+  ],
+  "luma_mediana": 214.4,
+  "saturacion": 4.7
+ },
+ "d1": {
+  "asset": "doble",
+  "hoja": 2,
+  "w": 83.0,
+  "h": 63.5,
+  "ancla": [
+   41.5,
+   21.6
+  ],
+  "archivo": [
+   166,
+   127
+  ],
+  "luma_mediana": 243.7,
+  "saturacion": 48.3
+ },
+ "d2": {
+  "asset": "doble",
+  "hoja": 2,
+  "w": 108.0,
+  "h": 56.0,
+  "ancla": [
+   54.0,
+   14.9
+  ],
+  "archivo": [
+   216,
+   112
+  ],
+  "luma_mediana": 234.4,
+  "saturacion": 49.9
+ },
+ "d3": {
+  "asset": "doble",
+  "hoja": 2,
+  "w": 94.0,
+  "h": 47.0,
+  "ancla": [
+   47.0,
+   19.4
+  ],
+  "archivo": [
+   188,
+   94
+  ],
+  "luma_mediana": 213.3,
+  "saturacion": 65.6
+ }
+}

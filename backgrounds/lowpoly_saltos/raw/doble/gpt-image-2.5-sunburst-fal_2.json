@@ -1,0 +1,74 @@
+{
+  "set": "lowpoly_saltos",
+  "asset": "doble",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game visual effect sprites in the exact style of the double jump effect in the reference image: crisp faceted crystal shards with flat per-face shading, glowing white and pale cyan, a soft cyan glow, a white-hot flash, no black outlines, no blur, no texture noise.\n\nNo text, letters, numbers, logos, frames, grid lines, characters or floor anywhere.\n\nA sprite sheet of one low-poly double jump effect animation for a 2D platformer character, exactly like the double jump effect in the reference image, in three frames in one row, left to right in time order, all drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges, each centered on its own point, where the character's feet are: a ring of crystal shards seen slightly from above, a flat horizontal ellipse about three times wider than tall, with one long crystal spike pointing straight down from its center and small diamond sparkles around it.\nFrame 1: a small bright ring with a white flash at its center, the downward spike and two sparkles.\nFrame 2: the ring wider, breaking into separate curved shards, the spike thinner, two sparkles.\nFrame 3: a few curved shards of the broken ring drifting apart and fading, two or three small sparkles.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowcrystal",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_doble.png",
+      "sha256": "a4cf32fc1d55a5aaf7e28d61c3b1ddc6dd0f0b349a5df4eb51a1a47a987875ed"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_doble.png",
+      "sha256": "a4cf32fc1d55a5aaf7e28d61c3b1ddc6dd0f0b349a5df4eb51a1a47a987875ed"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.114,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a1598a-b159-7a13-adb7-e601d3076386",
+  "created": "2026-10-20T13:40:58+00:00",
+  "sha256": "e0fd9cd550bcdf2a8a2961305d06ac60084e9d1053a27dde9f20d3d3ecdb6684",
+  "post": {
+    "file": "backgrounds/lowpoly_saltos/post/doble/gpt-image-2.5-sunburst-fal_2.png",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.8446,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "trim": {
+      "image": [
+        87,
+        520,
+        2496,
+        992
+      ]
+    },
+    "files": {
+      "image": {
+        "file": "gpt-image-2.5-sunburst-fal_2.png",
+        "w": 2409,
+        "h": 472
+      }
+    }
+  }
+}

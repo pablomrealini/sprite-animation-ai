@@ -1,7 +1,9 @@
 """Recibe capturas del lienzo del juego (el panel del navegador integrado oculto saca capturas viejas y chicas): POST
 /save?name=x.png con el data: URL en el cuerpo; las guarda en la carpeta del argumento (por defecto, caps/ al lado).
 
-uso: python3 .claude/skills/programacion/recibir.py <carpeta>   (en segundo plano; escucha en 127.0.0.1:8799)
+uso: python3 .claude/skills/programacion/recibir.py <carpeta> [puerto]   (en segundo plano; escucha en 127.0.0.1:8799 o el
+puerto dado). Ojo: otras sesiones del estudio usan el mismo receptor; si el 8799 está ocupado, usar otro puerto (y
+window.RECIBIR = puerto en la página) y no matar procesos de otros (pkill por nombre mata los de todas las sesiones).
 En la página: await guardar("nombre.png") de pruebas.js."""
 import base64, re, sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -16,4 +18,4 @@ class H(BaseHTTPRequestHandler):
         (OUT / name).write_bytes(base64.b64decode(body.split(",", 1)[1]))
         self.send_response(200); self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(b"ok")
     def log_message(self, *a): pass
-HTTPServer(("127.0.0.1", 8799), H).serve_forever()
+HTTPServer(("127.0.0.1", int(sys.argv[2]) if len(sys.argv) > 2 else 8799), H).serve_forever()

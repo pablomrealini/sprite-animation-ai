@@ -1,0 +1,171 @@
+{
+  "set": "lowpoly_saltos",
+  "asset": "fuerte",
+  "model": "gpt-image-2.5-sunburst-fal",
+  "provider": "fal",
+  "endpoint": "https://queue.fal.run/openai/gpt-image-2.5/sunburst/edit",
+  "model_docs": "https://fal.ai/models/openai/gpt-image-2.5/sunburst/edit/api",
+  "prompt": "3D low-poly video game visual effect sprites in the exact style of the effects in the reference image: crisp faceted polygons with flat per-face shading, soft light from the top left, clean geometric shapes, translucent thin facets where the dust fades, no black outlines, no soft airbrushed smoke, no blur, no texture noise. Side view at ground level, slightly from above, so the effect lies on a flat floor. Strictly neutral colors with no tint: very light grey, almost white, with soft mid-grey shading on the faces away from the light; no cream, no blue, no warm tones, so the game can tint it.\n\nNo pebbles, rocks or loose debris: the game adds them.\n\nNo text, letters, numbers, logos, frames, grid lines, characters or floor anywhere.\n\nA sprite sheet of one low-poly heavy landing impact animation for a 2D platformer character falling from very high, in four frames in one row, left to right in time order, all drawn at the same scale, with wide empty space between the frames, not touching each other or the image edges. The same family as the landing in the reference image, but bigger and more violent. Every frame lies on its own flat invisible floor line and is centered on its own vertical axis, where the character's feet are. Each frame is one single connected shape: its parts are joined along the floor by a flat band of shards.\nFrame 1: a big flat starburst of long sharp light shards lying on the floor, with a flat faceted shockwave ring around it, about five times wider than tall.\nFrame 2: two big faceted dust clouds blasting out to the left and to the right, about a third as tall as they are wide, joined along the floor by a flat band of shards.\nFrame 3: the clouds rolling further out and rising, breaking into big translucent facets.\nFrame 4: thin translucent facets fading along the floor.\n\nThe reference images are the art direction of this game: the hero character and a full style frame of this level. Match their line weight, outline color, flat colors and palette, and make this element look like the matching part of the style frame. Do not draw the character.\n\nTransparent background: only the described elements, everything else fully transparent.",
+  "styles": [
+    "lowdust",
+    "no_debris",
+    "no_text"
+  ],
+  "refs": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png",
+      "sha256": "5f6ef7a215647a81e05c386c0f3d2b1248792d236421011cf32b015736f4fea4"
+    }
+  ],
+  "refs_source": [
+    {
+      "file": "backgrounds/lowpoly_saltos/refs/concepto_aterrizaje.png",
+      "sha256": "5f6ef7a215647a81e05c386c0f3d2b1248792d236421011cf32b015736f4fea4"
+    }
+  ],
+  "background": "native",
+  "size_requested": "2560×1440",
+  "size": [
+    2560,
+    1440
+  ],
+  "seed": null,
+  "quality": null,
+  "usd_estimate": 0.1147,
+  "price_note": "GPT Image 2.5 Sunburst servido por fal, con FAL_KEY: los mismos tokens que en OpenAI (US$30/M de imagen de salida, 8/M de entrada, 5/M de texto), redondeado al centésimo de centavo. Las referencias se estiman en 7.079 tokens cada una",
+  "usage": null,
+  "request_id": "01a15989-fd36-7b70-a178-93a6c7afd45d",
+  "created": "2026-10-20T13:40:12+00:00",
+  "sha256": "ec2d7ebecd27c70bcb42572f46ad0a57115beaa7acc02848172917308f6754f2",
+  "post": {
+    "file": "backgrounds/lowpoly_saltos/post/fuerte/gpt-image-2.5-sunburst-fal_1",
+    "source": {
+      "w": 2560,
+      "h": 1440
+    },
+    "notes": [
+      "1 manchas chicas descartadas",
+      "salieron 6 piezas y se esperaban 4 (h1, h2, h3, h4): quedan numeradas"
+    ],
+    "alpha": {
+      "verdict": "ok",
+      "transparent": 0.9302,
+      "opaque": 0.0,
+      "border_transparent": {
+        "top": 1.0,
+        "bottom": 1.0,
+        "left": 1.0,
+        "right": 1.0
+      },
+      "flags": []
+    },
+    "pieces": {
+      "pieza_1": [
+        19,
+        787,
+        642,
+        931
+      ],
+      "pieza_2": [
+        700,
+        754,
+        1358,
+        927
+      ],
+      "pieza_3": [
+        1399,
+        672,
+        1936,
+        927
+      ],
+      "pieza_4": [
+        2036,
+        782,
+        2286,
+        928
+      ],
+      "pieza_5": [
+        2297,
+        857,
+        2513,
+        927
+      ],
+      "pieza_6": [
+        2354,
+        753,
+        2516,
+        879
+      ]
+    },
+    "trim": {
+      "pieza_1": [
+        0,
+        0,
+        623,
+        144
+      ],
+      "pieza_2": [
+        0,
+        0,
+        658,
+        173
+      ],
+      "pieza_3": [
+        0,
+        0,
+        537,
+        255
+      ],
+      "pieza_4": [
+        0,
+        0,
+        250,
+        146
+      ],
+      "pieza_5": [
+        0,
+        0,
+        216,
+        70
+      ],
+      "pieza_6": [
+        0,
+        0,
+        162,
+        126
+      ]
+    },
+    "files": {
+      "pieza_1": {
+        "file": "pieza_1.png",
+        "w": 623,
+        "h": 144
+      },
+      "pieza_2": {
+        "file": "pieza_2.png",
+        "w": 658,
+        "h": 173
+      },
+      "pieza_3": {
+        "file": "pieza_3.png",
+        "w": 537,
+        "h": 255
+      },
+      "pieza_4": {
+        "file": "pieza_4.png",
+        "w": 250,
+        "h": 146
+      },
+      "pieza_5": {
+        "file": "pieza_5.png",
+        "w": 216,
+        "h": 70
+      },
+      "pieza_6": {
+        "file": "pieza_6.png",
+        "w": 162,
+        "h": 126
+      }
+    }
+  }
+}
